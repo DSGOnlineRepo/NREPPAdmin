@@ -71,5 +71,6 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />
+    <None Include="Scripts\AddUsers.sql" />
   </ItemGroup>
 </Project>

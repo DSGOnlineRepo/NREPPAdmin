@@ -10,5 +10,19 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-INSERT INTO Roles (RoleName) VALUES ('Admin');
-INSERT INTO Roles (RoleName) VALUES ('User');
+-- This script adds users and roles on the database itself
+
+-- TODO: Get these to work right (Pre-Deployment Script)?
+
+CREATE LOGIN nrAdmin WITH PASSWORD = 'nr!Admin123456';
+GO
+
+CREATE LOGIN nrAgent WITH PASSWORD = 'nr!Agent123456';
+GO
+
+CREATE USER [nrAdmin] FOR LOGIN nrAdmin
+EXEC sp_addrolemember N'db_owner', N'nrAdmin'
+GO
+
+CREATE USER [nrAgent] FOR LOGIN nrAgent;
+GRANT EXECUTE ON SCHEMA :: dbo To nrAgent;
