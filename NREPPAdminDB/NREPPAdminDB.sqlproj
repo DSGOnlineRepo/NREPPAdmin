@@ -58,6 +58,8 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="Stored Procedures" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NREPPAdminDB.publish.xml" />
@@ -65,5 +67,9 @@
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
     <Build Include="Tables\Roles.sql" />
+    <Build Include="Stored Procedures\NREPPAdminRegisterUser.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\InitRoles.sql" />
   </ItemGroup>
 </Project>

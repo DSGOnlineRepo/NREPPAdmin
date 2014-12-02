@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[Roles]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [RoleName] VARCHAR(50) NULL
 )

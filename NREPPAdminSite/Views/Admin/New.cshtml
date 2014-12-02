@@ -1,0 +1,26 @@
+﻿@model NREPPAdminSite.Models.RegisterViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    @using(Html.BeginForm("Register", "Admin", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken();
+        <div>
+            <span style="padding-right: 10px;">@Html.LabelFor(m => m.UserName)</span>
+            <span>@Html.TextBoxFor(m => m.UserName)</span>
+        </div>
+    
+        <div>
+            <span style="padding-right: 10px;">@Html.LabelFor(m => m.Password1)</span>
+            <span>@Html.TextBoxFor(m => m.Password1)</span>
+        </div>
+        
+        <input type="submit" value="Register" />
+    }
+</div>
+
