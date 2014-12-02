@@ -21,16 +21,21 @@ namespace NREPPAdminSite
 
         public NrepServ(string ConnectionString)
         {
-            conn.ConnectionString = ConnectionString;
+            conn = new SqlConnection(ConnectionString);
         }
 
         #endregion
 
         #region Service-Like Methods
 
-        public bool registerUser(string uName, string passwd)
+        public int registerUser(string uName, string passwd)
         {
-            return true;
+            CheckConn();
+
+            SqlCommand cmd = new SqlCommand("NREPPAdminRegisterUser", conn);
+            int returnValue = cmd.ExecuteNonQuery();
+
+            return returnValue;
         }
 
         public Tuple<string, string> DoHash(string inPwd)
@@ -42,6 +47,18 @@ namespace NREPPAdminSite
         #endregion
 
         #region Helper Functions
+
+        /// <summary>
+        /// Check to see if the connection is open. If it is not, it opens it
+        /// </summary>
+        protected void CheckConn()
+        {
+            if (conn == null)
+                throw new Exception("There is no SQL Connection String!"); // TODO: Make own version of an exception to go here
+
+            if (conn.State != System.Data.ConnectionState.Open)
+                conn.Open();
+        }
 
         #endregion
     }
