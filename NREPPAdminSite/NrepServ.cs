@@ -10,7 +10,23 @@ namespace NREPPAdminSite
 {
     public class NrepServ
     {
-        private SqlConnection conn;
+        private SqlConnection conn; // There is a better way to do this for the time being, but let's assume that this will be replaced with something much better.
+
+        #region Constructors
+
+        public NrepServ() // Dummy Method
+        {
+            conn = null;
+        }
+
+        public NrepServ(string ConnectionString)
+        {
+            conn.ConnectionString = ConnectionString;
+        }
+
+        #endregion
+
+        #region Service-Like Methods
 
         public bool registerUser(string uName, string passwd)
         {
@@ -22,6 +38,12 @@ namespace NREPPAdminSite
             string someSalt = Convert.ToBase64String(PasswordHash.getSalt());
             return Tuple.Create(someSalt, PasswordHash.HashMe(inPwd, someSalt));
         }
+
+        #endregion
+
+        #region Helper Functions
+
+        #endregion
     }
 
     public class PasswordHash
