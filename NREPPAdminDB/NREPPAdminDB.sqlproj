@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NREPPAdminDB.publish.xml" />
+    <None Include="Scripts\DBUserSetup.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
@@ -71,6 +72,5 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />
-    <None Include="Scripts\AddUsers.sql" />
   </ItemGroup>
 </Project>
