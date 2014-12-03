@@ -20,10 +20,13 @@ namespace NREPPAdminSite.Controllers
         {
             /*RegisterViewModel nModel = new RegisterViewModel();
             ViewBag.message = "Registered Ok!";*/
-            NrepServ localService = new NrepServ();
-            ViewBag.SomeValue = localService.DoHash(model.Password1).Item1; // Tuple together the hash and salt because we will need both
-            //ViewBag.OldPass = model.Password1;
-            return View(model);
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            //ViewBag.SomeValue = localService.DoHash(model.Password1).Item1; // Tuple together the hash and salt because we will need both
+
+            int retValue = localService.registerUser(model.UserName, "Patrick", "Taylor", model.Password1, 2);
+
+            
+            return View(retValue);
         }
 
         public ActionResult New()

@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[SPAdminRegisterUser]
 	@userName varchar(30),
-	@fname varchar(50),
-	@lname varchar(50),
+	@fname varchar(50) = NULL,
+	@lname varchar(50) = NULL,
 	@hash varchar(100),
 	@salt varchar(100),
 	@RoleId int

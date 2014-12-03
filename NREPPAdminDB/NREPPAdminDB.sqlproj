@@ -68,7 +68,7 @@
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
     <Build Include="Tables\Roles.sql" />
-    <Build Include="Stored Procedures\NREPPAdminRegisterUser.sql" />
+    <Build Include="Stored Procedures\SPAdminRegisterUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

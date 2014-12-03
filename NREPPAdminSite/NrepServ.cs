@@ -5,6 +5,7 @@ using System.Web;
 using System.Security.Cryptography;
 using System.Text;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace NREPPAdminSite
 {
@@ -28,11 +29,39 @@ namespace NREPPAdminSite
 
         #region Service-Like Methods
 
-        public int registerUser(string uName, string passwd)
+        /// <summary>
+        /// Registers a user
+        /// </summary>
+        /// <param name="uName">User Name</param>
+        /// <param name="fname">First Name (null allowed)</param>
+        /// <param name="lname">Last Name (null allowed)</param>
+        /// <param name="passwd">Password Desired</param>
+        /// <param name="RoleId">RoleId</param>
+        /// <returns></returns>
+        public int registerUser(string uName, string fname, string lname, string passwd, int RoleId)
         {
             CheckConn();
 
-            SqlCommand cmd = new SqlCommand("NREPPAdminRegisterUser", conn);
+            SqlCommand cmd = new SqlCommand("SPAdminRegisterUser", conn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            Tuple<string, string> saltedResult = DoHash(passwd);
+            
+            // Parameters
+            cmd.Parameters.Add("@userName", System.Data.SqlDbType.VarChar);
+            cmd.Parameters.Add("@fname", System.Data.SqlDbType.VarChar);
+            cmd.Parameters.Add("@lname", System.Data.SqlDbType.VarChar);
+            cmd.Parameters.Add("@hash", System.Data.SqlDbType.VarChar);
+            cmd.Parameters.Add("@salt", System.Data.SqlDbType.VarChar);
+            cmd.Parameters.Add("@RoleId", System.Data.SqlDbType.Int);
+
+            cmd.Parameters["@userName"].Value = uName;
+            cmd.Parameters["@fname"].Value = fname;
+            cmd.Parameters["@lname"].Value = lname;
+            cmd.Parameters["@hash"].Value = saltedResult.Item2;
+            cmd.Parameters["@salt"].Value = saltedResult.Item1;
+            cmd.Parameters["@RoleId"].Value = RoleId;
+            
             int returnValue = cmd.ExecuteNonQuery();
 
             return returnValue;
@@ -58,6 +87,16 @@ namespace NREPPAdminSite
 
             if (conn.State != System.Data.ConnectionState.Open)
                 conn.Open();
+        }
+
+        public static string ConnString
+        {
+            get
+            {
+                string currentEnv = ConfigurationManager.AppSettings[Constants.ENV_SETTING];
+                return ConfigurationManager.ConnectionStrings[currentEnv].ConnectionString;
+
+            }
         }
 
         #endregion
@@ -97,5 +136,28 @@ namespace NREPPAdminSite
 
             return Convert.ToBase64String(oPassBytes);
         }
+
+        public bool ValidateMe(string inText, string hash, string salt)
+        {
+            SHA256 Hasher = SHA256.Create();
+            string salted = string.Concat(salt, inText);
+            UTF8Encoding encoder = new UTF8Encoding();
+
+            byte[] tPassBytes = Hasher.ComputeHash(encoder.GetBytes(salted));
+            string result = Convert.ToBase64String(tPassBytes);
+
+            return result.Equals(hash);
+        }
     }
+
+    #region Constants
+
+    public class Constants
+    {
+        public const string ENV_SETTING = "Environment";
+        public const string LOCAL_ENV = "LocalDev";
+        public const string REMOTE_ENV = "RemoteDev";
+    }
+
+    #endregion
 }
