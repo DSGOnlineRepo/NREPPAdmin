@@ -33,5 +33,18 @@ namespace NREPPAdminSite.Controllers
         {
             return View();
         }
+
+        // GET: Login Page
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public void Login(LoginViewModel model)
+        {
+
+        }
+
     }
 }

@@ -1,0 +1,22 @@
+﻿@model NREPPAdminSite.Models.LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    <div>
+        @using (Html.BeginForm("Login", "Admin"))
+        {
+            @Html.LabelFor(m => m.UserName)
+            @Html.TextBoxFor(m => m.UserName);
+            <br />
+            
+            @Html.LabelFor(m => m.Password)
+            @Html.TextBoxFor(m => m.Password);
+            <br />
+            
+            <input type="submit" value="Login" />
+        }
+    </div>
+}
+
+
