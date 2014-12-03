@@ -72,12 +72,11 @@ namespace NREPPAdminSite.Models
     public class LoginViewModel
     {
         [Required]
-        [Required]
         [Display(Name = "User Name")]
         public string UserName { get; set; }
 
         [Required]
-        [Display(Name = "Choose a Password")]
+        [Display(Name = "Enter your password")]
         public string Password { get; set; }
     }
 }

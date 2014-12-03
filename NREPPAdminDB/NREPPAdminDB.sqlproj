@@ -70,6 +70,7 @@
     <Build Include="Tables\Roles.sql" />
     <Build Include="Stored Procedures\SPAdminRegisterUser.sql" />
     <Build Include="Stored Procedures\SPGetLogonCreds.sql" />
+    <Build Include="Stored Procedures\SPGetUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using NREPPAdminSite.Models;
+using System.Data;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -41,9 +42,12 @@ namespace NREPPAdminSite.Controllers
         }
 
         [HttpPost]
-        public void Login(LoginViewModel model)
+        public ActionResult Login(LoginViewModel model)
         {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            DataSet uds = localService.LoginUser(model.UserName, model.Password); // This step needs to move into the service.
 
+            return View();
         }
 
     }
