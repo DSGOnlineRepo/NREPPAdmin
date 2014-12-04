@@ -80,7 +80,7 @@ namespace NREPPAdminSite
         {
             DataSet outUser = null;
             SqlCommand cmdGetCreds = new SqlCommand("SPGetLogonCreds", conn);
-            SqlCommand cmdGetUser = new SqlCommand("SPGetUSer", conn);
+            SqlCommand cmdGetUser = new SqlCommand("SPGetUser", conn);
 
             try 
             {
@@ -99,6 +99,7 @@ namespace NREPPAdminSite
                 
                 if (PasswordHash.ValidateMe(password, dr["hash"].ToString(), dr["salt"].ToString()))
                 {
+                    dr.Close();
                     outUser = new DataSet();
                     cmdGetUser.Parameters.Add("@userName", SqlDbType.VarChar);
                     cmdGetUser.Parameters["@userName"].Value = username;
