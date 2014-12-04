@@ -47,7 +47,11 @@ namespace NREPPAdminSite.Controllers
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             DataSet uds = localService.LoginUser(model.UserName, model.Password); // This step needs to move into the service.
 
-            return View();
+            NreppUser oUser = new NreppUser(1, uds.Tables[0].Rows[0]["Username"].ToString(), "Patrick", "Taylor"); // This should actually go into the session.
+
+            return RedirectToAction("Programs", "Home");
+
+            //return View();
         }
 
     }

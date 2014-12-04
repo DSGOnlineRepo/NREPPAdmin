@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using NREPPAdminSite.Models;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -25,6 +26,13 @@ namespace NREPPAdminSite.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult Programs()
+        {
+            ViewBag.Message = "Some Message Here";
+            NreppUser usr = new NreppUser(1, "ptaylor", "Patrick", "Taylor");
+            return View(usr);
         }
     }
 }

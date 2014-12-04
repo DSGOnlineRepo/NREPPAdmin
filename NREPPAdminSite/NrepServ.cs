@@ -103,6 +103,7 @@ namespace NREPPAdminSite
                     outUser = new DataSet();
                     cmdGetUser.Parameters.Add("@userName", SqlDbType.VarChar);
                     cmdGetUser.Parameters["@userName"].Value = username;
+                    cmdGetUser.CommandType = CommandType.StoredProcedure;
 
                     SqlDataAdapter da = new SqlDataAdapter();
                     da.SelectCommand = cmdGetUser;

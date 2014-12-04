@@ -49,6 +49,15 @@ namespace NREPPAdminSite.Models
             Lastname = lname;
         }
 
+        public NreppUser(int id, string uname, string fname, string lname)
+        {
+            userRole = null;
+            Id = id;
+            Firstname = fname;
+            UserName = uname;
+            Lastname = lname;
+        }
+
         public bool hasPermission(string permission)
         {
             return userRole.hasPermission(permission);

@@ -10,5 +10,26 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-INSERT INTO Roles (RoleName) VALUES ('Admin');
-INSERT INTO Roles (RoleName) VALUES ('User');
+INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
+					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
+					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
+					('Data Entry', 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
+					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
+					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
+					('Editor', 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0);
+
+INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
+					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
+					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
+					('Principal Investigator', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0);
+
+INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
+					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
+					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
+					('Quality Control', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
