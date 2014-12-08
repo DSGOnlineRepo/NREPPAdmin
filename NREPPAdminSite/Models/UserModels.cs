@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
-
+using System.Security.Principal;
+using System.Web.Script.Serialization;
 
 namespace NREPPAdminSite.Models
 {
@@ -29,16 +30,40 @@ namespace NREPPAdminSite.Models
         {
             return permissions[inAction];
         }
+
+        public Dictionary<string, bool> RoleList
+        {
+            get
+            {
+                return permissions;
+            }
+        }
     }
 
     public class NreppUser
     {
         private int Id;
         private Role userRole;
+        private bool isAuth = false;
 
         public string UserName { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
+        public string RoleName
+        {
+            get
+            {
+                return userRole.RoleName;
+            }
+        }
+
+        public Role UserRole
+        {
+            get
+            {
+                return userRole;
+            }
+        }
 
         public NreppUser(int id, Role inRole, string uname, string fname, string lname)
         {
@@ -47,6 +72,14 @@ namespace NREPPAdminSite.Models
             Firstname = fname;
             UserName = uname;
             Lastname = lname;
+        }
+
+        public NreppUser()
+        {
+            userRole = null;
+            Id = -1;
+            Firstname = "";
+            Lastname = "";
         }
 
         public NreppUser(int id, string uname, string fname, string lname)
@@ -62,7 +95,52 @@ namespace NREPPAdminSite.Models
         {
             return userRole.hasPermission(permission);
         }
+
+
+        public void Authenticate(bool setStatus) // function callback? or have I been writing too much JS?
+        {
+            isAuth = setStatus;
+        }
+
+        public string MakeJSON()
+        {
+            string JSONString = "";
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            JSONString = serializer.Serialize(this);
+
+            return JSONString;
+        }
+
     }
+
+    /*public class ContextUserWrapper : IPrincipal
+    {
+        private NreppUser user;
+
+        public IIdentity Identity // There has to be a way to fake this...
+        {
+            get { return user;  }
+        }
+
+        public bool IsInRole(string role)
+        {
+            return user.RoleName == role;
+        }
+
+        public NreppUser User
+        {
+            get
+            {
+                return user;
+            }
+        }
+
+        public ContextUserWrapper(NreppUser inUser)
+        {
+            user = inUser;
+        }
+    }*/
 
     public class RegisterViewModel
     {

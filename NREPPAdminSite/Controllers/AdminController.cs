@@ -45,11 +45,19 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Login(LoginViewModel model)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            DataSet uds = localService.LoginUser(model.UserName, model.Password); // This step needs to move into the service.
+            /*DataSet uds = localService.LoginUser(model.UserName, model.Password); // This step needs to move into the service.
 
-            NreppUser oUser = new NreppUser(1, uds.Tables[0].Rows[0]["Username"].ToString(), "Patrick", "Taylor"); // This should actually go into the session.
+            NreppUser oUser = new NreppUser(1, uds.Tables[0].Rows[0]["Username"].ToString(), "Patrick", "Taylor"); // This should actually go into the session.*/
+            //HttpContext.User = localService.LoginComplete(model.UserName, model.Password);
 
-            return RedirectToAction("Programs", "Home");
+            NreppUser oUser = localService.LoginComplete(model.UserName, model.Password);
+            string someJSON = oUser.MakeJSON();
+            HttpCookie loginCookie = new HttpCookie(Constants.USR_COOKIE, someJSON);
+
+            //loginCookie.Expires = DateTime.Now.AddHours(1d);
+            Response.Cookies.Add(loginCookie);
+
+            return RedirectToAction("Index", "Home");
 
             //return View();
         }

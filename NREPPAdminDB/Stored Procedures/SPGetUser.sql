@@ -6,7 +6,7 @@ AS
 
 	SELECT @RoleID = RoleID from Users
 
-	SELECT Username, Firstname, Lastname, RoleID  FROM Users
+	SELECT Id, Username, Firstname, Lastname, RoleID  FROM Users
 	WHERE Username = @userName
 
 	SELECT Id as RoleId, RoleName, ViewInterventions, ViewAllUsers, ViewPendingInterventions, CreateUser,

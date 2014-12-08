@@ -14,14 +14,14 @@ INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					('Data Entry', 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+					('Data Entry', 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
 					('Editor', 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0);
-
+							   
 INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,

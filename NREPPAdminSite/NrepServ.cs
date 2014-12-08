@@ -7,6 +7,9 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using NREPPAdminSite.Models;
+using System.Security.Principal;
+using System.Web.Script.Serialization;
 
 namespace NREPPAdminSite
 {
@@ -131,6 +134,55 @@ namespace NREPPAdminSite
             return outUser;
         }
 
+        /*public IPrincipal LoginComplete(string username, string password)
+        {
+            DataSet rawUser = LoginUser(username, password);
+            Dictionary<string, bool> roleStatus = new Dictionary<string, bool>();
+            DataRow UserRow = rawUser.Tables[0].Rows[0], RoleRow = rawUser.Tables[1].Rows[0];
+
+            foreach(DataColumn col in rawUser.Tables[1].Columns)
+            {
+                if (col.ColumnName != "RoleId" && col.ColumnName != "RoleName")
+                    roleStatus.Add(col.ColumnName, (bool)RoleRow[col]); // This is totally clear. :D
+            }
+
+            Role userRole = new Role((int)RoleRow["RoleId"], RoleRow["RoleName"].ToString(), roleStatus);
+
+            NreppUser currentUser = new NreppUser((int)UserRow["Id"], userRole, UserRow["Username"].ToString(), UserRow["Firstname"].ToString(), UserRow["Lastname"].ToString());
+            
+            currentUser.Authenticate(true);
+
+            return new ContextUserWrapper(currentUser);
+
+        }*/
+
+        public NreppUser LoginComplete(string username, string password)
+        {
+            DataSet rawUser = LoginUser(username, password);
+            Dictionary<string, bool> roleStatus = new Dictionary<string, bool>();
+            DataRow UserRow = rawUser.Tables[0].Rows[0], RoleRow = rawUser.Tables[1].Rows[0];
+
+            foreach(DataColumn col in rawUser.Tables[1].Columns)
+            {
+                if (col.ColumnName != "RoleId" && col.ColumnName != "RoleName")
+                    roleStatus.Add(col.ColumnName, (bool)RoleRow[col]); // This is totally clear. :D
+            }
+
+            Role userRole = new Role((int)RoleRow["RoleId"], RoleRow["RoleName"].ToString(), roleStatus);
+
+            NreppUser currentUser = new NreppUser((int)UserRow["Id"], userRole, UserRow["Username"].ToString(), UserRow["Firstname"].ToString(), UserRow["Lastname"].ToString());
+            
+            currentUser.Authenticate(true);
+
+            return currentUser;
+
+        }
+
+        public static NreppUser GetFromCookie(HttpCookie inCookie)
+        {
+            return (new JavaScriptSerializer()).Deserialize<NreppUser>(inCookie.Value);
+        }
+
         /// <summary>
         /// Hashes Passwords during Registration
         /// </summary>
@@ -168,8 +220,12 @@ namespace NREPPAdminSite
             }
         }
 
+        
+
         #endregion
     }
+
+    #region Other Global Tools
 
     public class PasswordHash
     {
@@ -226,6 +282,8 @@ namespace NREPPAdminSite
         }
     }
 
+    #endregion
+
     #region Constants
 
     public class Constants
@@ -235,6 +293,7 @@ namespace NREPPAdminSite
         public const string REMOTE_ENV = "RemoteDev";
         public const string ERR_TABLE = "Errors";
         public const string ERR_MSG_COL = "ErrMsg";
+        public const string USR_COOKIE = "currentUser";
     }
 
     #endregion

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using NREPPAdminSite.Models;
+using System.Web.Script.Serialization;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -11,6 +12,20 @@ namespace NREPPAdminSite.Controllers
     {
         public ActionResult Index()
         {
+            HttpCookie usrStuff = Request.Cookies.Get(Constants.USR_COOKIE);
+            NreppUser usr;
+
+            if (usrStuff.Value != "")
+            {
+                try
+                {
+                    usr = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
+                } catch (Exception)
+                {
+                    Request.Cookies.Remove(Constants.USR_COOKIE);
+                }
+            }
+            //ViewBag.UserName = Username;
             return View();
         }
 
