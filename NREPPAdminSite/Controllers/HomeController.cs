@@ -12,20 +12,7 @@ namespace NREPPAdminSite.Controllers
     {
         public ActionResult Index()
         {
-            HttpCookie usrStuff = Request.Cookies.Get(Constants.USR_COOKIE);
-            NreppUser usr;
-
-            if (usrStuff.Value != "")
-            {
-                try
-                {
-                    usr = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
-                } catch (Exception)
-                {
-                    Request.Cookies.Remove(Constants.USR_COOKIE);
-                }
-            }
-            //ViewBag.UserName = Username;
+            //NreppUser usr = ReadCookie(Request);
             return View();
         }
 
@@ -46,8 +33,37 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Programs()
         {
             ViewBag.Message = "Some Message Here";
-            NreppUser usr = new NreppUser(1, "ptaylor", "Patrick", "Taylor");
-            return View(usr);
+            NreppUser usr = ReadCookie(Request);
+            ViewBag.Fname = usr.Firstname;
+
+            return View();
         }
+
+        #region Helper Functions
+
+        protected NreppUser ReadCookie(HttpRequestBase req)
+        {
+            NreppUser outUser = new NreppUser();
+
+            HttpCookie usrStuff = req.Cookies.Get(Constants.USR_COOKIE);
+            //NreppUser usr;
+
+            if (usrStuff.Value != "")
+            {
+                try
+                {
+                    outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
+                }
+                catch (Exception)
+                {
+                    Request.Cookies.Remove(Constants.USR_COOKIE);
+                    outUser = null;
+                }
+            }
+
+            return outUser;
+        }
+
+        #endregion
     }
 }

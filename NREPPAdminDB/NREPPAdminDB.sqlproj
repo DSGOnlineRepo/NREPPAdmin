@@ -72,6 +72,7 @@
     <Build Include="Stored Procedures\SPGetLogonCreds.sql" />
     <Build Include="Stored Procedures\SPGetUser.sql" />
     <Build Include="Tables\Interventions.sql" />
+    <Build Include="Stored Procedures\SPGetInterventionList.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

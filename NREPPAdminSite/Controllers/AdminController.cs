@@ -57,7 +57,7 @@ namespace NREPPAdminSite.Controllers
             //loginCookie.Expires = DateTime.Now.AddHours(1d);
             Response.Cookies.Add(loginCookie);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Programs", "Home");
 
             //return View();
         }
