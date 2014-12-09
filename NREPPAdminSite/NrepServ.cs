@@ -183,7 +183,11 @@ namespace NREPPAdminSite
             return (new JavaScriptSerializer()).Deserialize<NreppUser>(inCookie.Value);
         }
 
-        public List<Intervention> GetInterventions() // This 
+        /// <summary>
+        /// Generically gets the interventions list
+        /// </summary>
+        /// <returns></returns>
+        public List<Intervention> GetInterventions() // This needs to take some parameters, so there should be a bunch of functions for it
         {
             List<Intervention> interventions = new List<Intervention>();
             SqlCommand cmdGetInterventions = new SqlCommand("SPGetInterventionList", conn);
@@ -197,7 +201,7 @@ namespace NREPPAdminSite
 
                 foreach(DataRow dr in interVs.Rows)
                 {
-                    interventions.Add(new Intervention((int)dr["Id"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), Convert.ToDateTime(dr["SubmitDate"]),
+                    interventions.Add(new Intervention((int)dr["InterventionId"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), NullDate(dr["PublishDate"]),
                         Convert.ToDateTime(dr["UpdateDate"])));
                 }
 
@@ -247,7 +251,13 @@ namespace NREPPAdminSite
             }
         }
 
-        
+        public DateTime? NullDate(object inObj)
+        {
+            if (inObj == DBNull.Value)
+                return null;
+            else
+                return Convert.ToDateTime(inObj);
+        }
 
         #endregion
     }

@@ -36,7 +36,12 @@ namespace NREPPAdminSite.Controllers
             NreppUser usr = ReadCookie(Request);
             ViewBag.Fname = usr.Firstname;
 
-            return View();
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            List<Intervention> interventionList = localService.GetInterventions();
+
+
+            return View(interventionList);
         }
 
         #region Helper Functions

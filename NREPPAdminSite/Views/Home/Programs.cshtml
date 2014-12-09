@@ -1,4 +1,5 @@
 ﻿<!-- You will need to change the model once the programs become available -->
+@model List<NREPPAdminSite.Models.Intervention>
 
 @{
     ViewBag.Title = "Programs";
@@ -8,5 +9,25 @@
 <h2>Welcome, @ViewBag.Fname</h2>
 
 <div>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Full Description</th>
+            <th>Updated Date</th>
+            <th>Submitter</th>
+        </tr>
 
+        @{
+            foreach(NREPPAdminSite.Models.Intervention inv in Model)
+            {
+                <tr>
+                    <!-- <td>@inv.Title</td> -->
+                    <td>@Html.ActionLink(inv.Title, "View", "Program", new {InvId = inv.Id }, new {id = "link" + inv.Id.ToString() }) </td>
+                    <td>@inv.FullDescription</td>
+                    <td>@inv.UpdatedDate.ToShortDateString()</td>
+                    <td>@inv.Submitter</td>
+                </tr>
+            }
+        }
+    </table>
 </div>
