@@ -6,5 +6,7 @@
     [Submitter] INT NOT NULL, 
     [UpdateDate] DATETIME NULL, 
     [PublishDate] DATE NULL, 
-    CONSTRAINT [FK_Interventions_Users] FOREIGN KEY ([Id]) REFERENCES [Users]([Id]) 
+    [Status] INT NULL, 
+    CONSTRAINT [FK_Interventions_Users] FOREIGN KEY ([Submitter]) REFERENCES [Users]([Id]), 
+    CONSTRAINT [FK_Interventions_InterventionStatus] FOREIGN KEY ([Status]) REFERENCES [InterventionStatus]([Id]) 
 )

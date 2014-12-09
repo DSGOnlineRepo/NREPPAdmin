@@ -10,6 +10,8 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
+-- Roles
+
 INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
@@ -33,3 +35,8 @@ INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
 					('Quality Control', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- Statuses
+
+INSERT INTO InterventionStatus (StatusName) VALUES ('Submitted')
+INSERT INTO InterventionStatus (StatusName) VALUES ('Under Review')

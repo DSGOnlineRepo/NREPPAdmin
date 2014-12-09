@@ -183,6 +183,33 @@ namespace NREPPAdminSite
             return (new JavaScriptSerializer()).Deserialize<NreppUser>(inCookie.Value);
         }
 
+        public List<Intervention> GetInterventions() // This 
+        {
+            List<Intervention> interventions = new List<Intervention>();
+            SqlCommand cmdGetInterventions = new SqlCommand("SPGetInterventionList", conn);
+
+            try
+            {
+                CheckConn();
+                DataTable interVs = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmdGetInterventions);
+                da.Fill(interVs);
+
+                foreach(DataRow dr in interVs.Rows)
+                {
+                    interventions.Add(new Intervention((int)dr["Id"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), Convert.ToDateTime(dr["SubmitDate"]),
+                        Convert.ToDateTime(dr["UpdateDate"])));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now));
+            }
+
+            return interventions;
+        }
+
         /// <summary>
         /// Hashes Passwords during Registration
         /// </summary>

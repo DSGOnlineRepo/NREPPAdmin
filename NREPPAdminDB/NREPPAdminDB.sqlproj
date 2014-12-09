@@ -64,6 +64,7 @@
   <ItemGroup>
     <None Include="NREPPAdminDB.publish.xml" />
     <None Include="Scripts\DBUserSetup.sql" />
+    <None Include="Scripts\DummyData.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
@@ -73,6 +74,7 @@
     <Build Include="Stored Procedures\SPGetUser.sql" />
     <Build Include="Tables\Interventions.sql" />
     <Build Include="Stored Procedures\SPGetInterventionList.sql" />
+    <Build Include="Tables\InterventionStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />
