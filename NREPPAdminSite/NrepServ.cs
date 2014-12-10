@@ -189,8 +189,18 @@ namespace NREPPAdminSite
         /// <returns></returns>
         public List<Intervention> GetInterventions() // This needs to take some parameters, so there should be a bunch of functions for it
         {
+            List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
+            return this.GetInterventions(nullParams);
+        }
+
+        public List<Intervention> GetInterventions(List<SqlParameter> parameters)
+        {
             List<Intervention> interventions = new List<Intervention>();
             SqlCommand cmdGetInterventions = new SqlCommand("SPGetInterventionList", conn);
+            cmdGetInterventions.CommandType = CommandType.StoredProcedure;
+
+            foreach (SqlParameter param in parameters)
+                cmdGetInterventions.Parameters.Add(param);
 
             try
             {
@@ -199,7 +209,7 @@ namespace NREPPAdminSite
                 SqlDataAdapter da = new SqlDataAdapter(cmdGetInterventions);
                 da.Fill(interVs);
 
-                foreach(DataRow dr in interVs.Rows)
+                foreach (DataRow dr in interVs.Rows)
                 {
                     interventions.Add(new Intervention((int)dr["InterventionId"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), NullDate(dr["PublishDate"]),
                         Convert.ToDateTime(dr["UpdateDate"])));
