@@ -36,6 +36,7 @@ namespace NREPPAdminSite.Models
             FullDescription = fullDescription;
             Submitter = submitter;
             PublishDate = publishDate;
+            UpdatedDate = updateDate;
 
         }
 

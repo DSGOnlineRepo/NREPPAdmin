@@ -24,7 +24,7 @@ namespace NREPPAdminSite.Controllers
 
             List<Intervention> interventionList = localService.GetInterventions(parameters);
             Intervention theIntervention = interventionList[0];
-            return View();
+            return View(theIntervention);
         }
     }
 }
