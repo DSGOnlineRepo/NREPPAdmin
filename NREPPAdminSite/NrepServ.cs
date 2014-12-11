@@ -134,6 +134,17 @@ namespace NREPPAdminSite
             return outUser;
         }
 
+        /// <summary>
+        /// Hashes Passwords during Registration
+        /// </summary>
+        /// <param name="inPwd">Desired Password to be hashed</param>
+        /// <returns></returns>
+        public Tuple<string, string> DoHash(string inPwd)
+        {
+            string someSalt = Convert.ToBase64String(PasswordHash.getSalt());
+            return Tuple.Create(someSalt, PasswordHash.HashMe(inPwd, someSalt));
+        }
+
         /*public IPrincipal LoginComplete(string username, string password)
         {
             DataSet rawUser = LoginUser(username, password);
@@ -183,6 +194,8 @@ namespace NREPPAdminSite
             return (new JavaScriptSerializer()).Deserialize<NreppUser>(inCookie.Value);
         }
 
+        #region Intervention Functionality
+
         /// <summary>
         /// Generically gets the interventions list
         /// </summary>
@@ -193,6 +206,13 @@ namespace NREPPAdminSite
             return this.GetInterventions(nullParams);
         }
 
+        // TODO: Generalize the parameter passing better? I need something that will be easier to maintain
+
+        /// <summary>
+        /// Gets a specific list of interventions
+        /// </summary>
+        /// <param name="parameters">A List of parameters to govern which records you want</param>
+        /// <returns>A List if intervention objects</returns>
         public List<Intervention> GetInterventions(List<SqlParameter> parameters)
         {
             List<Intervention> interventions = new List<Intervention>();
@@ -212,28 +232,26 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in interVs.Rows)
                 {
                     interventions.Add(new Intervention((int)dr["InterventionId"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), NullDate(dr["PublishDate"]),
-                        Convert.ToDateTime(dr["UpdateDate"])));
+                        Convert.ToDateTime(dr["UpdateDate"]), (int)dr["SubmitterId"]));
                 }
 
             }
             catch (Exception ex)
             {
-                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now));
+                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1));
             }
 
             return interventions;
         }
 
-        /// <summary>
-        /// Hashes Passwords during Registration
-        /// </summary>
-        /// <param name="inPwd">Desired Password to be hashed</param>
-        /// <returns></returns>
-        public Tuple<string, string> DoHash(string inPwd)
-        {
-            string someSalt = Convert.ToBase64String(PasswordHash.getSalt());
-            return Tuple.Create(someSalt, PasswordHash.HashMe(inPwd, someSalt));
+        public bool SaveIntervention(Intervention inData) {
+
+            return true;
         }
+
+
+
+        #endregion
 
         #endregion
 

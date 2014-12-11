@@ -75,6 +75,7 @@
     <Build Include="Tables\Interventions.sql" />
     <Build Include="Stored Procedures\SPGetInterventionList.sql" />
     <Build Include="Tables\InterventionStatus.sql" />
+    <Build Include="Stored Procedures\SPUpdateIntervention.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

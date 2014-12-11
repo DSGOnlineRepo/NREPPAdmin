@@ -1,0 +1,44 @@
+﻿CREATE PROCEDURE [dbo].[SPUpdateIntervention]
+	@IntervId int = -1,
+	@title varchar(50),
+	@fulldescription ntext,
+	@submitter int,
+	@updateDate DateTime,
+	@publishDate DateTime = NULL,
+	@status int
+AS SET NOCOUNT ON
+
+	BEGIN TRANSACTION
+
+	-- Do the insert portion first
+	IF @IntervId = -1 BEGIN
+
+		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, Submitter, Status) VALUES
+			(@title, @fulldescription, @publishDate, @updateDate, @submitter, @status)
+
+		if @@error <> 0
+		BEGIN
+			ROLLBACK TRANSACTION
+			RETURN -1
+		END
+	END
+	ELSE BEGIN
+		-- Now do update portion
+		UPDATE Interventions
+			SET title = @title,
+			FullDescription = @fulldescription,
+			PublishDate = @publishDate,
+			UpdateDate = @updateDate,
+			Submitter = @submitter,
+			Status = @status
+		WHERE Id = @IntervId
+
+		IF @@ERROR <> 0 BEGIN
+			ROLLBACK TRANSACTION
+			RETURN -2
+		END
+	END
+
+	COMMIT TRANSACTION
+	
+RETURN 0

@@ -9,6 +9,7 @@ namespace NREPPAdminSite.Models
     {
         private int id;
         public string Title { get; set; }
+        public int SubmitterId { get; set; }
         public string FullDescription { get; set; }
         public string Submitter { get; set; }
         public DateTime UpdatedDate { get; set; }
@@ -29,7 +30,7 @@ namespace NREPPAdminSite.Models
             UpdatedDate = DateTime.Now;
         }
 
-        public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate)
+        public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate, int submitterId)
         {
             id = inId;
             Title = title;
@@ -37,6 +38,7 @@ namespace NREPPAdminSite.Models
             Submitter = submitter;
             PublishDate = publishDate;
             UpdatedDate = updateDate;
+            SubmitterId = submitterId;
 
         }
 
