@@ -25,5 +25,26 @@
         </span>
         <span style="float: left; clear: right; margin-left: 5px;">@(Model.PublishDate.HasValue ? Model.PublishDate.GetValueOrDefault().ToShortDateString() : "Not Published")</span>
     </div>
+
+    <div>
+        @using(Html.BeginForm("Edit", "Program"))
+        {
+            @Html.HiddenFor(m => m.Id);
+            @Html.HiddenFor(m => m.SubmitterId);
+            @Html.HiddenFor(m => m.StatusId);
+            
+            @Html.LabelFor(m => m.Title, new { style = "margin-right: 5px;" });
+            @Html.TextBoxFor(m => m.Title);
+            <br /><br />
+            
+            @Html.LabelFor(m => m.FullDescription);
+            <br />
+            @Html.TextAreaFor(m => m.FullDescription, new {cols = "150", rows = "5"}) ;
+            <br /><br />
+            
+            <input type="submit" value="Update" />
+             
+        }
+    </div>
 </div>
 

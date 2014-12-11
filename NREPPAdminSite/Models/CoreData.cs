@@ -2,43 +2,59 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace NREPPAdminSite.Models
 {
     public class Intervention
     {
-        private int id;
+        //private int id;
+        
+        [Display(Name = "Title")]
         public string Title { get; set; }
         public int SubmitterId { get; set; }
+
+        [Display(Name = "Full Description")]
         public string FullDescription { get; set; }
+
+        [Display(Name = "Submitter")]
         public string Submitter { get; set; }
         public DateTime UpdatedDate { get; set; }
         public DateTime? PublishDate { get; set; }
 
-        public int Id
-        {
+        [Display(Name = "Status")]
+        public string Status { get; set; }
+        public int StatusId { get; set; }
+
+        public int Id {get; set;}
+        /*{
             get { return id; }
-        }
+        }*/
 
         public Intervention()
         {
-            id = -1;
+            Id = -1;
             Title = "";
             FullDescription = "";
             Submitter = "";
+            SubmitterId = 0;
             PublishDate = DateTime.Now;
             UpdatedDate = DateTime.Now;
+            Status = "Submitted";
+            StatusId = 1;
         }
 
-        public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate, int submitterId)
+        public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate, int submitterId, string status, int statusId)
         {
-            id = inId;
+            Id = inId;
             Title = title;
             FullDescription = fullDescription;
             Submitter = submitter;
             PublishDate = publishDate;
             UpdatedDate = updateDate;
             SubmitterId = submitterId;
+            Status = status;
+            StatusId = statusId;
 
         }
 

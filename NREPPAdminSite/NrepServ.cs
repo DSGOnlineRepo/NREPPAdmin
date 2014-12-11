@@ -214,21 +214,51 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in interVs.Rows)
                 {
                     interventions.Add(new Intervention((int)dr["InterventionId"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), NullDate(dr["PublishDate"]),
-                        Convert.ToDateTime(dr["UpdateDate"]), (int)dr["SubmitterId"]));
+                        Convert.ToDateTime(dr["UpdateDate"]), (int)dr["SubmitterId"], dr["StatusName"].ToString(), (int)dr["StatusId"] ));
                 }
 
             }
             catch (Exception ex)
             {
-                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1));
+                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1, "Submitted", 1));
             }
 
             return interventions;
         }
 
+        /// <summary>
+        /// Save or Create a New Intervention
+        /// </summary>
+        /// <param name="inData">The intervention to be saved or added to the database</param>
+        /// <returns>True if save is valid, false if it is not</returns>
         public bool SaveIntervention(Intervention inData) {
 
-            return true;
+            bool returnValue = false;
+            SqlCommand cmdUpdate = new SqlCommand("SPUpdateIntervention", conn);
+            cmdUpdate.CommandType = CommandType.StoredProcedure;
+
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@IntervId", SqlDbType = SqlDbType.Int, Value = inData.Id });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@title", SqlDbType = SqlDbType.VarChar, Value = inData.Title });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@fulldescription", SqlDbType = SqlDbType.NText, Value = inData.FullDescription });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@submitter", SqlDbType = SqlDbType.Int, Value = inData.SubmitterId });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@updateDate", SqlDbType = SqlDbType.DateTime, Value = inData.UpdatedDate });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@publishDate", SqlDbType = SqlDbType.DateTime, Value = inData.PublishDate });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@status", SqlDbType = SqlDbType.Int, Value = inData.StatusId });
+
+            try
+            {
+                CheckConn();
+                returnValue = cmdUpdate.ExecuteNonQuery() == 0;
+
+            } catch (Exception ex) // Just in here for error handling reasons
+            {
+                throw new Exception(ex.Message);
+            }
+
+
+            //cmdUpdate.Parameters["@RETURN_VALUE"].Direction = ParameterDirection.Output;
+
+            return returnValue;
         }
 
 

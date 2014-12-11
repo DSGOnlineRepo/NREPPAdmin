@@ -30,8 +30,10 @@ namespace NREPPAdminSite.Controllers
         [HttpPost]
         public ActionResult Edit(Intervention inInterv)
         {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            localService.SaveIntervention(inInterv);
 
-            return RedirectToAction("Program", inInterv.Id);
+            return RedirectToAction("View", new { InvId = inInterv.Id });
         }
     }
 }
