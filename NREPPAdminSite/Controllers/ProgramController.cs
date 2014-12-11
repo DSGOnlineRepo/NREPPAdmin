@@ -26,5 +26,12 @@ namespace NREPPAdminSite.Controllers
             Intervention theIntervention = interventionList[0];
             return View(theIntervention);
         }
+
+        [HttpPost]
+        public ActionResult Edit(Intervention inInterv)
+        {
+
+            return RedirectToAction("Program", inInterv.Id);
+        }
     }
 }

@@ -33,6 +33,8 @@ namespace NREPPAdminSite
 
         #region Service-Like Methods
 
+        #region Login Functionality
+
         /// <summary>
         /// Registers a user
         /// </summary>
@@ -145,28 +147,6 @@ namespace NREPPAdminSite
             return Tuple.Create(someSalt, PasswordHash.HashMe(inPwd, someSalt));
         }
 
-        /*public IPrincipal LoginComplete(string username, string password)
-        {
-            DataSet rawUser = LoginUser(username, password);
-            Dictionary<string, bool> roleStatus = new Dictionary<string, bool>();
-            DataRow UserRow = rawUser.Tables[0].Rows[0], RoleRow = rawUser.Tables[1].Rows[0];
-
-            foreach(DataColumn col in rawUser.Tables[1].Columns)
-            {
-                if (col.ColumnName != "RoleId" && col.ColumnName != "RoleName")
-                    roleStatus.Add(col.ColumnName, (bool)RoleRow[col]); // This is totally clear. :D
-            }
-
-            Role userRole = new Role((int)RoleRow["RoleId"], RoleRow["RoleName"].ToString(), roleStatus);
-
-            NreppUser currentUser = new NreppUser((int)UserRow["Id"], userRole, UserRow["Username"].ToString(), UserRow["Firstname"].ToString(), UserRow["Lastname"].ToString());
-            
-            currentUser.Authenticate(true);
-
-            return new ContextUserWrapper(currentUser);
-
-        }*/
-
         public NreppUser LoginComplete(string username, string password)
         {
             DataSet rawUser = LoginUser(username, password);
@@ -193,6 +173,8 @@ namespace NREPPAdminSite
         {
             return (new JavaScriptSerializer()).Deserialize<NreppUser>(inCookie.Value);
         }
+
+        #endregion
 
         #region Intervention Functionality
 
