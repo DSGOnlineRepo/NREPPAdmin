@@ -149,21 +149,32 @@ namespace NREPPAdminSite
 
         public NreppUser LoginComplete(string username, string password)
         {
-            DataSet rawUser = LoginUser(username, password);
+            DataSet rawUser = LoginUser(username, password); // TODO: What happens when this fails?
             Dictionary<string, bool> roleStatus = new Dictionary<string, bool>();
-            DataRow UserRow = rawUser.Tables[0].Rows[0], RoleRow = rawUser.Tables[1].Rows[0];
+            DataRow UserRow = rawUser.Tables[0].Rows[0];
+            NreppUser currentUser;
 
-            foreach(DataColumn col in rawUser.Tables[1].Columns)
+            if (rawUser.Tables[0].Columns.Contains(Constants.ERR_MSG_COL))
             {
-                if (col.ColumnName != "RoleId" && col.ColumnName != "RoleName")
-                    roleStatus.Add(col.ColumnName, (bool)RoleRow[col]); // This is totally clear. :D
+                currentUser = new NreppUser(-1, rawUser.Tables[0].Rows[0][Constants.ERR_MSG_COL].ToString(), "Failed", "Login");
             }
+            else
+            {
 
-            Role userRole = new Role((int)RoleRow["RoleId"], RoleRow["RoleName"].ToString(), roleStatus);
+                DataRow RoleRow = rawUser.Tables[1].Rows[0];
 
-            NreppUser currentUser = new NreppUser((int)UserRow["Id"], userRole, UserRow["Username"].ToString(), UserRow["Firstname"].ToString(), UserRow["Lastname"].ToString());
-            
-            currentUser.Authenticate(true);
+                foreach (DataColumn col in rawUser.Tables[1].Columns)
+                {
+                    if (col.ColumnName != "RoleId" && col.ColumnName != "RoleName")
+                        roleStatus.Add(col.ColumnName, (bool)RoleRow[col]); // This is totally clear. :D
+                }
+
+                Role userRole = new Role((int)RoleRow["RoleId"], RoleRow["RoleName"].ToString(), roleStatus);
+
+                currentUser = new NreppUser((int)UserRow["Id"], userRole, UserRow["Username"].ToString(), UserRow["Firstname"].ToString(), UserRow["Lastname"].ToString());
+
+                currentUser.Authenticate(true);
+            }
 
             return currentUser;
 

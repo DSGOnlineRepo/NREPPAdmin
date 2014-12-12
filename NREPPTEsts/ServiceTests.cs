@@ -9,6 +9,7 @@ namespace NREPPTests
     [TestClass]
     public class ServiceTests
     {
+        public static string ConnString = "server=localhost;database=NREPPAdmin;uid=nrAgent;password=nr!Agent123456";
         [TestMethod]
         public void DummyMethod()
         {
@@ -18,11 +19,23 @@ namespace NREPPTests
         [TestMethod]
         public void TestDB()
         {
-            NrepServ aService = new NrepServ("server=localhost;database=NREPPAdmin;uid=nrAgent;password=nr!Agent123456");
+            NrepServ aService = new NrepServ(ServiceTests.ConnString);
+
             List<Intervention> interVs = aService.GetInterventions();
 
             Assert.IsTrue(interVs.Count > 0);
             
         }
+
+        [TestMethod]
+        public void LoginFailure()
+        {
+            NrepServ aService = new NrepServ(ServiceTests.ConnString);
+            NreppUser someUser = aService.LoginComplete("failusre", "failpass");
+
+            Assert.IsTrue(someUser.Firstname == "Failed");
+
+        }
+
     }
 }
