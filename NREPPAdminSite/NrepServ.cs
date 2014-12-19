@@ -10,6 +10,8 @@ using System.Data;
 using NREPPAdminSite.Models;
 using System.Security.Principal;
 using System.Web.Script.Serialization;
+using System.Data.SqlTypes;
+using System.IO;
 
 namespace NREPPAdminSite
 {
@@ -272,7 +274,58 @@ namespace NREPPAdminSite
             return returnValue;
         }
 
+        /*public void AddDocument(string DocName, int IntervId)
+        {
+            CheckConn();
+            SqlCommand cmd = new SqlCommand();
+            SqlTransaction transaction = conn.BeginTransaction("mainTransaction");
+            cmd.Transaction = transaction;
+            cmd.CommandText = "SELECT GET_FILESTREAM_TRANSACTION_CONTEXT()";
+            Object obj = cmd.ExecuteScalar();
+            byte[] txtContext = (byte[])obj;
 
+            SqlFileStream sqlFileStream = new SqlFileStream(, txtContext, FileAccess.ReadWrite);
+        }*/
+
+        public void SaveFileToDB(byte[] inData, string fileName, int theUser, string MIMEType, int IntervId, bool isDelete, int ItemId, string DisplayName)
+        {
+
+            SqlCommand cmdSaveFile = new SqlCommand("SPAddOrRemoveDoc", conn);
+            cmdSaveFile.CommandType = CommandType.StoredProcedure;
+
+            cmdSaveFile.Parameters.Add(new SqlParameter("@FileName", fileName));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@IntervId", IntervId));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@DisplayName", DisplayName));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@MIMEType", MIMEType));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@IsDelete", isDelete));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@ItemId", ItemId));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderId", theUser));
+
+
+
+            try
+            {
+                // TODO: file name collision
+
+                string nFileName = ConfigurationManager.AppSettings["fileLocation"] + fileName;
+                FileStream someStream = new FileStream(nFileName, FileMode.Append);
+                someStream.Write(inData, 0, inData.Length);
+                someStream.Close();
+
+                // If we successfully save the file...
+                CheckConn();
+
+                cmdSaveFile.Parameters.Add(new SqlParameter("@FileName", nFileName));
+                int retValue = cmdSaveFile.ExecuteNonQuery();
+
+                // TODO: delete the file if the transaction failed.
+
+            }
+            catch (Exception) { }
+            finally {
+                conn.Close();
+            }
+        }
 
         #endregion
 

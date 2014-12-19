@@ -60,4 +60,15 @@ namespace NREPPAdminSite.Models
 
         // private int submitterId; Is this a thing?
     }
+
+    public class InterventionDoc
+    {
+        [Display(Name = "Description")]
+        public string FileDescription { get; set; }
+        public string Link { get; set; }
+
+        [Display(Name = "Uploaded By")]
+        public string Uploader { get; set; }
+
+    }
 }

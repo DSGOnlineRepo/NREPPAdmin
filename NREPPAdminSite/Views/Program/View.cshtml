@@ -8,8 +8,6 @@
 <h3>Submitted by @Model.Submitter</h3>
 
 <div>
-    You are viewing an intervention record. You do NOT have edit permissions.
-
     <div style="padding-top: 10px; padding-bottom: 10px;">
         @Model.FullDescription
     </div>
@@ -43,8 +41,27 @@
             <br /><br />
             
             <input type="submit" value="Update" />
-             
         }
     </div>
+
+    @if(Model.Id > 0)
+    {
+        <div style="margin-top: 20px;">
+            This belongs here...
+
+            @using (Html.BeginForm("Upload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(m => m.Id);
+                @Html.HiddenFor(m => m.SubmitterId);
+                @Html.HiddenFor(m => m.StatusId);
+                //@Html.HiddenFor(m => )
+                
+                <span>File: </span><input type="file" name="UploadedFile" /> <br />
+                <span>Document Title: </span><input type="text" name="FileDescription" />
+                <br /><br />
+                <input type="submit" value="Submit" />
+            }
+        </div>
+    }
 </div>
 

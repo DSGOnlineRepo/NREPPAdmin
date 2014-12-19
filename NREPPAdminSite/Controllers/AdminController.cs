@@ -26,8 +26,8 @@ namespace NREPPAdminSite.Controllers
 
             int retValue = localService.registerUser(model.UserName, "Patrick", "Taylor", model.Password1, 2);
 
-            
-            return View(retValue);
+
+            return RedirectToAction("Login");
         }
 
         public ActionResult New()

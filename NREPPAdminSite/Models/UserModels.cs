@@ -114,34 +114,6 @@ namespace NREPPAdminSite.Models
 
     }
 
-    /*public class ContextUserWrapper : IPrincipal
-    {
-        private NreppUser user;
-
-        public IIdentity Identity // There has to be a way to fake this...
-        {
-            get { return user;  }
-        }
-
-        public bool IsInRole(string role)
-        {
-            return user.RoleName == role;
-        }
-
-        public NreppUser User
-        {
-            get
-            {
-                return user;
-            }
-        }
-
-        public ContextUserWrapper(NreppUser inUser)
-        {
-            user = inUser;
-        }
-    }*/
-
     public class RegisterViewModel
     {
         [Required]

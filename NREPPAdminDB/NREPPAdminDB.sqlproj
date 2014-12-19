@@ -23,7 +23,9 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <DefaultFileStreamFilegroup>MainFG</DefaultFileStreamFilegroup>
+    <DefaultFileStreamFilegroup>
+    </DefaultFileStreamFilegroup>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -77,8 +79,8 @@
     <Build Include="Stored Procedures\SPGetInterventionList.sql" />
     <Build Include="Tables\InterventionStatus.sql" />
     <Build Include="Stored Procedures\SPUpdateIntervention.sql" />
-    <Build Include="MainFG.sql" />
-    <Build Include="Tables\Documents.sql" />
+    <Build Include="Tables\InvervDoc.sql" />
+    <Build Include="Stored Procedures\SPAddOrRemoveDoc.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

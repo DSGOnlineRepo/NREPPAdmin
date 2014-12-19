@@ -7,6 +7,8 @@
     [UpdateDate] DATETIME NULL, 
     [PublishDate] DATE NULL, 
     [Status] INT NULL, 
-    CONSTRAINT [FK_Interventions_Users] FOREIGN KEY ([Submitter]) REFERENCES [Users]([Id]), 
+    [RC1] INT NULL, 
+    [RC2] INT NULL, 
+    [Reviewer] INT NULL, 
     CONSTRAINT [FK_Interventions_InterventionStatus] FOREIGN KEY ([Status]) REFERENCES [InterventionStatus]([Id]) 
 )
