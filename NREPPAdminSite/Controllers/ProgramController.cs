@@ -65,14 +65,8 @@ namespace NREPPAdminSite.Controllers
                     byte[] fileBytes = new byte[file.ContentLength];
                     file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
 
-                    //localService.SaveFileToDB(fileBytes);
                     localService.SaveFileToDB(fileBytes, fileName, 1, "NOT IMPLEMENTED!", int.Parse(Request.Form["Id"]), false,
                         -1, Request.Form["FileDescription"]); // TODO: Add UserId to the Cookie. :|
-
-                    /*string nFileName = ConfigurationManager.AppSettings["fileLocation"] + fileName;
-                    FileStream someStream = new FileStream(nFileName, FileMode.Append);
-                    someStream.Write(fileBytes, 0, fileBytes.Length);
-                    someStream.Close();*/
                 }
             }
 
