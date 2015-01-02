@@ -274,41 +274,32 @@ namespace NREPPAdminSite
             return returnValue;
         }
 
-        /*public void AddDocument(string DocName, int IntervId)
-        {
-            CheckConn();
-            SqlCommand cmd = new SqlCommand();
-            SqlTransaction transaction = conn.BeginTransaction("mainTransaction");
-            cmd.Transaction = transaction;
-            cmd.CommandText = "SELECT GET_FILESTREAM_TRANSACTION_CONTEXT()";
-            Object obj = cmd.ExecuteScalar();
-            byte[] txtContext = (byte[])obj;
-
-            SqlFileStream sqlFileStream = new SqlFileStream(, txtContext, FileAccess.ReadWrite);
-        }*/
-
-        public void SaveFileToDB(byte[] inData, string fileName, int theUser, string MIMEType, int IntervId, bool isDelete, int ItemId, string DisplayName)
+        public int SaveFileToDB(byte[] inData, string fileName, int theUser, string MIMEType, int IntervId, bool isDelete, int ItemId, string DisplayName)
         {
 
             SqlCommand cmdSaveFile = new SqlCommand("SPAddOrRemoveDoc", conn);
+            int retValue = -1;
             cmdSaveFile.CommandType = CommandType.StoredProcedure;
 
-            cmdSaveFile.Parameters.Add(new SqlParameter("@FileName", fileName));
             cmdSaveFile.Parameters.Add(new SqlParameter("@IntervId", IntervId));
             cmdSaveFile.Parameters.Add(new SqlParameter("@DisplayName", DisplayName));
             cmdSaveFile.Parameters.Add(new SqlParameter("@MIMEType", MIMEType));
             cmdSaveFile.Parameters.Add(new SqlParameter("@IsDelete", isDelete));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ItemId", ItemId));
             cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderId", theUser));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@ReviewerId", null));
+            //cmdSaveFile.Parameters.Add(new SqlParameter("@OutPut", null));
 
-
+            SqlParameter OutPut = new SqlParameter("@Output", -1);
+            OutPut.Direction = ParameterDirection.Output;
+            cmdSaveFile.Parameters.Add(OutPut);
 
             try
             {
                 // TODO: file name collision
 
                 string nFileName = ConfigurationManager.AppSettings["fileLocation"] + fileName;
-                FileStream someStream = new FileStream(nFileName, FileMode.Append);
+                FileStream someStream = new FileStream(nFileName, FileMode.OpenOrCreate);
                 someStream.Write(inData, 0, inData.Length);
                 someStream.Close();
 
@@ -316,7 +307,7 @@ namespace NREPPAdminSite
                 CheckConn();
 
                 cmdSaveFile.Parameters.Add(new SqlParameter("@FileName", nFileName));
-                int retValue = cmdSaveFile.ExecuteNonQuery();
+                retValue = cmdSaveFile.ExecuteNonQuery();
 
                 // TODO: delete the file if the transaction failed.
 
@@ -325,6 +316,46 @@ namespace NREPPAdminSite
             finally {
                 conn.Close();
             }
+
+            if (retValue >= 0)
+                return (int)cmdSaveFile.Parameters["@Output"].Value;
+            else
+                return -1;
+        }
+
+        public byte[] GetFileFromDB(int fileNum)
+        {
+            byte[] outFile = null;
+            SqlCommand cmdFileInfo = new SqlCommand("SPGetAFileFromDB", conn);
+            SqlDataAdapter da = new SqlDataAdapter(cmdFileInfo);
+            DataTable dt = new DataTable();
+
+            cmdFileInfo.CommandType = CommandType.StoredProcedure;
+            cmdFileInfo.Parameters.Add(new SqlParameter("@FileId", fileNum));
+
+
+            try
+            {
+                CheckConn();
+                da.Fill(dt);
+                string fileName = dt.Rows[0]["FileName"].ToString();
+                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+                fs.Read(outFile, 0, Convert.ToInt32(fs.Length));
+
+                fs.Close();
+
+            } catch (Exception ex)
+            {
+                outFile = Encoding.ASCII.GetBytes(ex.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return outFile;
+
         }
 
         #endregion

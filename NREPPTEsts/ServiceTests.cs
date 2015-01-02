@@ -39,22 +39,34 @@ namespace NREPPTests
         }
 
         [TestMethod]
-        public void SaveFile()
+        public void SaveInverventionFile()
         {
             NrepServ aService = new NrepServ(ServiceTests.ConnString);
+            string baseFileName = "\\HealerCalcs-141111.xls";
+            string nFileName = @"\nFileName" + (new Random()).Next() + ".xls";
 
-            /*string fileName = file.FileName;
-            string fileContentType = file.ContentType;
-            byte[] fileBytes = new byte[file.ContentLength];
-            file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));*/
-            string fileName = AppDomain.CurrentDomain.BaseDirectory + "\\HealerCalcs-141111.xls";
+
+            string fileName = AppDomain.CurrentDomain.BaseDirectory + baseFileName;
             FileStream fs = new FileStream(fileName, FileMode.Open);
             byte[] fileBytes = new byte[fs.Length];
             fs.Read(fileBytes, 0, fileBytes.Length);
+            fs.Close();
 
-            aService.SaveFileToDB(fileBytes, fileName, 1, "NOT IMPLEMENTED!", 1, false, -1, "Healer Calcs");
+            int fileNum = aService.SaveFileToDB(fileBytes, nFileName, 1, "NOT IMPLEMENTED!", 1, false, -1, "Healer Calcs");
 
-            Assert.IsTrue(true);
+            Assert.IsTrue(fileNum > 0, "No filenumber returned.");
+
+            // Check the file
+
+            byte[] outFile = aService.GetFileFromDB(fileNum);
+
+            Assert.IsTrue(outFile.Length > 0, "Returned SOMETHING");
+
+            // NOW, let's delete the file:
+
+            //int secondNum = aService.SaveFileToDB(fileBytes, nFileName, 1, "NOT IMPLEMENTED!", 1, true, fileNum, "Healer Calcs");
+
+            //Assert.IsTrue(true);
         }
 
     }

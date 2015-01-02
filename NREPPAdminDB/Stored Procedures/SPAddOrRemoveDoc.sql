@@ -1,15 +1,19 @@
 ﻿CREATE PROCEDURE [dbo].[SPAddOrRemoveDoc]
-	@IntervId INT,
+	@IntervId INT= NULL,
+	@ReviewerID INT = NULL,
 	@UploaderId INT,
 	@DisplayName VARCHAR(50) = NULL,
 	@FileName VARCHAR(100) = NULL,
 	@MIMEType VARCHAR(20) = NULL,
 	@IsDelete BIT = 0,
-	@ItemId INT = -1
+	@ItemId INT = -1,
+	@Output INT = -1 OUTPUT
 AS
 	BEGIN TRANSACTION
+
+		IF @ReviewerID IS NULL AND @I
 		IF @IsDelete = 1 BEGIN
-			DELETE FROM IntervDoc
+			DELETE FROM Document
 			WHERE Id = @ItemId
 
 			IF @@ERROR <> 0 BEGIN
@@ -18,7 +22,9 @@ AS
 			END
 		END
 		ELSE BEGIN
-			INSERT INTO IntervDoc VALUES (@DisplayName, @FileName, @MIMEType, @IntervId, @UploaderId)
+			INSERT INTO Document VALUES (@DisplayName, @FileName, @MIMEType, @IntervId, @UploaderId, 1, @ReviewerID)
+
+			SELECT @Output = @@IDENTITY
 
 			IF @@ERROR <> 0 BEGIN
 				ROLLBACK TRANSACTION
