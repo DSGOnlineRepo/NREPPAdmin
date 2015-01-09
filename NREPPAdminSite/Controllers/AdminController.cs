@@ -62,5 +62,13 @@ namespace NREPPAdminSite.Controllers
             //return View();
         }
 
+        public ActionResult Lookups()
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            List<Answer> answerList = localService.GetAnswersByCategory("Y/N/NR").ToList<Answer>();
+
+            return View(answerList);
+        }
+
     }
 }

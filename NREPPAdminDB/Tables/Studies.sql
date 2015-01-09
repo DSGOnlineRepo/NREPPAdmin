@@ -1,7 +1,6 @@
 ﻿CREATE TABLE [dbo].[Studies]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
-    [DocumentId] INT NULL, 
+	[Id] INT NOT NULL PRIMARY KEY,
     [Reference] VARCHAR(100) NULL, 
     [InLitSearch] BIT NOT NULL DEFAULT 0, 
     [Exclusion1] INT NULL, 

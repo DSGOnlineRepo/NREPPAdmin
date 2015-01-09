@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Lookups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<NREPPAdminSite.Models.Answer>
+
+<h2>Lookups</h2>
+
+<div style="height: 300px;">
+    <select id="category" style="float: left;">
+        @foreach (NREPPAdminSite.Models.Answer ans in Model)
+        {
+            <option>@ans.LongAnswer</option>
+        }
+    </select>
+    <select multiple style="float: left; clear: right; margin-left: 10px; width: 150px;">
+       <option>Empty</option>
+    </select>
+</div>
+

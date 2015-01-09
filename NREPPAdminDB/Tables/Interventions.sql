@@ -10,5 +10,7 @@
     [RC1] INT NULL, 
     [RC2] INT NULL, 
     [Reviewer] INT NULL, 
+    [Acronym] VARCHAR(20) NULL, 
+    [ProgramType] INT NULL, 
     CONSTRAINT [FK_Interventions_InterventionStatus] FOREIGN KEY ([Status]) REFERENCES [InterventionStatus]([Id]) 
 )

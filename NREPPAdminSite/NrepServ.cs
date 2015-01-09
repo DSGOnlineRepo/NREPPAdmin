@@ -189,6 +189,50 @@ namespace NREPPAdminSite
 
         #endregion
 
+        #region Misc Functionality
+        
+
+        public IEnumerable<Answer> GetAnswersByCategory(string inCategory)
+        {
+            List<Answer> OutAnswers = new List<Answer>();
+
+            // SQL Stuff
+            SqlCommand GetAnswersByCategory = new SqlCommand("SPGetAnswersByCategory", conn);
+
+            GetAnswersByCategory.CommandType = CommandType.StoredProcedure;
+            GetAnswersByCategory.Parameters.Add(new SqlParameter("@InCategoryName", inCategory));
+
+            SqlDataAdapter da = new SqlDataAdapter(GetAnswersByCategory);
+         
+
+            try
+            {
+                CheckConn();
+
+                DataTable dt = new DataTable();
+                
+
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    OutAnswers.Add(new Answer((int)dr["AnswerId"], dr["ShortAnswer"].ToString(), dr["LongAnswer"].ToString()));
+                }
+
+            } catch (Exception ex)
+            {
+                Answer nAnswer = new Answer();
+                nAnswer.ShortAnswer = "Error!";
+                nAnswer.LongAnswer = ex.Message;
+                nAnswer.AnswerId = -1;
+                OutAnswers.Add(nAnswer);
+            }
+
+            return OutAnswers;
+        }
+
+        #endregion
+
         #region Intervention Functionality
 
         /// <summary>

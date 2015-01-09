@@ -2,7 +2,7 @@
 	@IntervId INT= NULL,
 	@ReviewerID INT = NULL,
 	@UploaderId INT,
-	@DisplayName VARCHAR(50) = NULL,
+	@Description VARCHAR(50) = NULL,
 	@FileName VARCHAR(100) = NULL,
 	@MIMEType VARCHAR(20) = NULL,
 	@IsDelete BIT = 0,
@@ -11,7 +11,7 @@
 AS
 	BEGIN TRANSACTION
 
-		IF @ReviewerID IS NULL AND @I
+		--IF @ReviewerID IS NULL AND @I
 		IF @IsDelete = 1 BEGIN
 			DELETE FROM Document
 			WHERE Id = @ItemId
@@ -22,7 +22,7 @@ AS
 			END
 		END
 		ELSE BEGIN
-			INSERT INTO Document VALUES (@DisplayName, @FileName, @MIMEType, @IntervId, @UploaderId, 1, @ReviewerID)
+			INSERT INTO Document VALUES (@Description, @FileName, @MIMEType, @IntervId, @UploaderId, 1, @ReviewerID)
 
 			SELECT @Output = @@IDENTITY
 

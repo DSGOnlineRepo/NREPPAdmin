@@ -40,3 +40,20 @@ INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
 
 INSERT INTO InterventionStatus (StatusName) VALUES ('Submitted')
 INSERT INTO InterventionStatus (StatusName) VALUES ('Under Review')
+
+-- Answers, Categories, Mapping
+-- TODO: Index off Version
+
+Insert INTO Answers (ShortAnswer, LongAnswer) VALUES ('Y', 'Yes')
+INSERT INTO Answers (ShortAnswer, LongAnswer) VALUES ('N', 'No')
+INSERT INTO Answers (ShortAnswer, LongAnswer) VALUES ('NR', 'Not Reported')
+
+INSERT INTO Category (CategoryName) VALUES ('Yes/No')
+INSERT INTO Category (CategoryName) VALUES ('Y/N/NR')
+
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (1, 1)
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (2, 1)
+
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (1, 2)
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (2, 2)
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (3, 2)

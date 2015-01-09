@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Document]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [DisplayName] VARCHAR(50) NULL, 
+    [Description] VARCHAR(50) NULL, 
     [FileName] VARCHAR(100) NOT NULL, 
     [MIME] VARCHAR(20) NULL, 
     [InterventionId] INT NULL, 

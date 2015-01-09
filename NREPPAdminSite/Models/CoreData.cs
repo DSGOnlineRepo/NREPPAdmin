@@ -71,4 +71,23 @@ namespace NREPPAdminSite.Models
         public string Uploader { get; set; }
 
     }
+
+    public class Answer
+    {
+        public int AnswerId { get; set; }
+        public string LongAnswer { get; set; }
+        public string ShortAnswer { get; set; }
+
+        public Answer(int Id, string Long, string Short)
+        {
+            AnswerId = Id;
+            LongAnswer = Long;
+            ShortAnswer = Short;
+        }
+
+        public Answer()
+        {
+            AnswerId = -1;
+        }
+    }
 }
