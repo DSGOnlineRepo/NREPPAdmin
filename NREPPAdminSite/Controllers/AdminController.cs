@@ -67,7 +67,18 @@ namespace NREPPAdminSite.Controllers
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             List<Answer> answerList = localService.GetAnswersByCategory("Y/N/NR").ToList<Answer>();
 
-            return View(answerList);
+            List<MaskValue> SomeMasks = new List<MaskValue>();
+            SomeMasks.Add(new MaskValue() { Name = "One", Value = 1 });
+            SomeMasks.Add(new MaskValue() { Name = "Two", Value = 2 });
+            SomeMasks.Add(new MaskValue() { Name = "Three", Value = 3 });
+            SomeMasks.Add(new MaskValue() { Name = "Four", Value = 4 });
+
+            
+            List<MaskValue> SomeList2 = MaskValue.SplitMask(SomeMasks, 19).ToList<MaskValue>();
+
+            LookupPageModel model = new LookupPageModel(answerList, null, SomeList2);
+
+            return View(model);
         }
 
     }

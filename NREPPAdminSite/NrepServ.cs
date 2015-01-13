@@ -231,6 +231,46 @@ namespace NREPPAdminSite
             return OutAnswers;
         }
 
+        public IEnumerable<Answer> GetMaskList(string inMaskName)
+        {
+            List<Answer> OutAnswers = new List<Answer>();
+
+            // SQL Stuff
+            SqlCommand cmdGetMasks = new SqlCommand("SPGetMasksByCategory", conn);
+
+            cmdGetMasks.CommandType = CommandType.StoredProcedure;
+            cmdGetMasks.Parameters.Add(new SqlParameter("@InCategoryName", inMaskName));
+
+            SqlDataAdapter da = new SqlDataAdapter(cmdGetMasks);
+
+
+            try
+            {
+                CheckConn();
+
+                DataTable dt = new DataTable();
+
+
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    OutAnswers.Add(new Answer((int)dr["MaskPower"], dr["MaskValueName"].ToString(), "")); // Cheating here
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Answer nAnswer = new Answer();
+                nAnswer.ShortAnswer = "Error!";
+                nAnswer.LongAnswer = ex.Message;
+                nAnswer.AnswerId = -1;
+                OutAnswers.Add(nAnswer);
+            }
+
+            return OutAnswers;
+        }
+
         #endregion
 
         #region Intervention Functionality

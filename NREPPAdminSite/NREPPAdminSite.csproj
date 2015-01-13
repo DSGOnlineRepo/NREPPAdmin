@@ -123,6 +123,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CoreData.cs" />
+    <Compile Include="Models\PageModels.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="NrepServ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

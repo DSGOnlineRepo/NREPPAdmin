@@ -90,4 +90,54 @@ namespace NREPPAdminSite.Models
             AnswerId = -1;
         }
     }
+
+    public class MaskValue
+    {
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+        public int Value { get; set; }
+        public bool Selected { get; set; }
+
+        public static IEnumerable<MaskValue> SplitMask(List<MaskValue> inList, int inMask)
+        {
+            List<MaskValue> outList = new List<MaskValue>();
+
+            int principal = inMask;
+            int powerCounter = 0;
+
+            /*while (principal > 0)
+            {
+                /*if (principal % 2 > 0)
+                {
+                    outList.Add((int)Math.Pow(2, powerCounter));
+                }
+
+                outList.Add(new MaskValue() { Name = inList[powerCounter].Name, Value = inList[powerCounter].Value, Selected = (principal % 2 > 0) });
+
+                if (principal == 1)
+                    break;
+
+                principal = principal >> 1;
+                powerCounter++;
+                //powerCounter += 1;
+            }*/
+
+            for (int i = 0; i < inList.Count; i++ )
+            {
+                int someOtherVal = (int)Math.Pow(2, inList[i].Value);
+                bool someValue = (principal & someOtherVal) > 0;
+
+                outList.Add(new MaskValue()
+                {
+                    Name = inList[i].Name,
+                    Value = inList[i].Value,
+                    Selected =
+                        someValue
+                });
+            }
+
+                return outList;
+        }
+    }
+
 }

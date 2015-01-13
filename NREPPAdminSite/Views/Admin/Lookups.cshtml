@@ -4,13 +4,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@model List<NREPPAdminSite.Models.Answer>
+@model NREPPAdminSite.Models.LookupPageModel
 
 <h2>Lookups</h2>
 
 <div style="height: 300px;">
     <select id="category" style="float: left;">
-        @foreach (NREPPAdminSite.Models.Answer ans in Model)
+        @foreach (NREPPAdminSite.Models.Answer ans in Model.FirstLookup)
         {
             <option>@ans.LongAnswer</option>
         }
@@ -18,5 +18,12 @@
     <select multiple style="float: left; clear: right; margin-left: 10px; width: 150px;">
        <option>Empty</option>
     </select>
+</div>
+<div style="height: 300px;">
+    @foreach (NREPPAdminSite.Models.MaskValue mask in Model.MaskList)
+    {
+        bool isChecked = mask.Selected;
+        @Html.CheckBox(mask.Name, isChecked, new { Value = mask.Value }) @mask.Name <br />
+    }
 </div>
 
