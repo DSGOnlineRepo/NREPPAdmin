@@ -231,15 +231,15 @@ namespace NREPPAdminSite
             return OutAnswers;
         }
 
-        public IEnumerable<Answer> GetMaskList(string inMaskName)
+        public IEnumerable<MaskValue> GetMaskList(string inMaskName)
         {
-            List<Answer> OutAnswers = new List<Answer>();
+            List<MaskValue> OutAnswers = new List<MaskValue>();
 
             // SQL Stuff
             SqlCommand cmdGetMasks = new SqlCommand("SPGetMasksByCategory", conn);
 
             cmdGetMasks.CommandType = CommandType.StoredProcedure;
-            cmdGetMasks.Parameters.Add(new SqlParameter("@InCategoryName", inMaskName));
+            cmdGetMasks.Parameters.Add(new SqlParameter("@InCategory", inMaskName));
 
             SqlDataAdapter da = new SqlDataAdapter(cmdGetMasks);
 
@@ -255,16 +255,17 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    OutAnswers.Add(new Answer((int)dr["MaskPower"], dr["MaskValueName"].ToString(), "")); // Cheating here
+                    OutAnswers.Add(new MaskValue() { Name = dr["MaskValueName"].ToString(), Value = (int)dr["MaskPower"], Selected = false });
                 }
 
             }
             catch (Exception ex)
             {
-                Answer nAnswer = new Answer();
-                nAnswer.ShortAnswer = "Error!";
-                nAnswer.LongAnswer = ex.Message;
-                nAnswer.AnswerId = -1;
+                MaskValue nAnswer = new MaskValue();
+                //nAnswer.Name = "Error!";
+                nAnswer.Name = ex.Message;
+                nAnswer.Value = -1;
+                nAnswer.Selected = false;
                 OutAnswers.Add(nAnswer);
             }
 
@@ -311,13 +312,14 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in interVs.Rows)
                 {
                     interventions.Add(new Intervention((int)dr["InterventionId"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), NullDate(dr["PublishDate"]),
-                        Convert.ToDateTime(dr["UpdateDate"]), (int)dr["SubmitterId"], dr["StatusName"].ToString(), (int)dr["StatusId"] ));
+                        Convert.ToDateTime(dr["UpdateDate"]), (int)dr["SubmitterId"], dr["StatusName"].ToString(), (int)dr["StatusId"],
+                        dr["ProgramType"] == DBNull.Value ? 0 : (int)dr["ProgramType"]));
                 }
 
             }
             catch (Exception ex)
             {
-                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1, "Submitted", 1));
+                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1, "Submitted", 1, 0));
             }
 
             return interventions;
@@ -341,6 +343,7 @@ namespace NREPPAdminSite
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@updateDate", SqlDbType = SqlDbType.DateTime, Value = inData.UpdatedDate });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@publishDate", SqlDbType = SqlDbType.DateTime, Value = inData.PublishDate });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@status", SqlDbType = SqlDbType.Int, Value = inData.StatusId });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@programType", SqlDbType = SqlDbType.Int, Value = inData.ProgramType });
 
             try
             {
@@ -366,7 +369,7 @@ namespace NREPPAdminSite
             cmdSaveFile.CommandType = CommandType.StoredProcedure;
 
             cmdSaveFile.Parameters.Add(new SqlParameter("@IntervId", IntervId));
-            cmdSaveFile.Parameters.Add(new SqlParameter("@DisplayName", DisplayName));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@Description", DisplayName));
             cmdSaveFile.Parameters.Add(new SqlParameter("@MIMEType", MIMEType));
             cmdSaveFile.Parameters.Add(new SqlParameter("@IsDelete", isDelete));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ItemId", ItemId));

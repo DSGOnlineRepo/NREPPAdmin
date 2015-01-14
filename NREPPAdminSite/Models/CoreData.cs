@@ -26,6 +26,9 @@ namespace NREPPAdminSite.Models
         public string Status { get; set; }
         public int StatusId { get; set; }
 
+        [Display(Name = "Program Type")]
+        public int ProgramType { get; set; }
+
         public int Id {get; set;}
         /*{
             get { return id; }
@@ -42,9 +45,11 @@ namespace NREPPAdminSite.Models
             UpdatedDate = DateTime.Now;
             Status = "Submitted";
             StatusId = 1;
+            ProgramType = 0;
         }
 
-        public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate, int submitterId, string status, int statusId)
+        public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate,
+            int submitterId, string status, int statusId, int programType)
         {
             Id = inId;
             Title = title;
@@ -55,7 +60,7 @@ namespace NREPPAdminSite.Models
             SubmitterId = submitterId;
             Status = status;
             StatusId = statusId;
-
+            ProgramType = programType;
         }
 
         // private int submitterId; Is this a thing?

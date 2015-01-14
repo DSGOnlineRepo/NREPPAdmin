@@ -36,4 +36,75 @@ namespace NREPPAdminSite.Models
             maskList = inMasks.ToList<MaskValue>();
         }
     }
+
+    public class IntervPageModel
+    {
+        private Intervention theIntervention;
+        private List<InterventionDoc> documents = new List<InterventionDoc>();
+
+        private List<MaskValue> programType = new List<MaskValue>();
+        private List<Answer> documentType = new List<Answer>();
+
+        #region Constructors
+
+        public IntervPageModel() { } // Default Constructor
+
+        /// <summary>
+        /// This constructor sets up the lookup info
+        /// </summary>
+        /// <param name="inDocuments"></param>
+        /// <param name="inProgTypes"></param>
+        /// <param name="inDocTypes"></param>
+        public IntervPageModel(List<InterventionDoc> inDocuments, List<MaskValue> inProgTypes, List<Answer> inDocTypes)
+        {
+            documents = inDocuments;
+            programType = inProgTypes;
+            documentType = inDocTypes;
+        }
+
+        #endregion
+
+        #region Accessors
+
+        public Intervention TheIntervention
+        {
+            get { return theIntervention; }
+            set { theIntervention = value; }
+        }
+
+        public List<InterventionDoc> Documents
+        {
+            get { return documents; }
+        }
+
+        public List<MaskValue> ProgramType
+        {
+            get { return programType; }
+        }
+
+        public List<Answer> DocumentType
+        {
+            get { return documentType; }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Add a Document to the intervention
+        /// </summary>
+        /// <param name="inDoc"></param>
+        public void AddDocument(InterventionDoc inDoc)
+        {
+            documents.Add(inDoc);
+        }
+
+        /// <summary>
+        /// Remove a document from the intervention
+        /// </summary>
+        /// <param name="index"></param>
+        public void DeleteDocument(int index)
+        {
+            documents.RemoveAt(index);
+        }
+    }
 }

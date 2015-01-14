@@ -44,12 +44,26 @@ INSERT INTO InterventionStatus (StatusName) VALUES ('Under Review')
 -- Answers, Categories, Mapping
 -- TODO: Index off Version
 
-Insert INTO Answers (ShortAnswer, LongAnswer) VALUES ('Y', 'Yes')
-INSERT INTO Answers (ShortAnswer, LongAnswer) VALUES ('N', 'No')
-INSERT INTO Answers (ShortAnswer, LongAnswer) VALUES ('NR', 'Not Reported')
+SET IDENTITY_INSERT Answers ON
 
-INSERT INTO Category (CategoryName) VALUES ('Yes/No')
-INSERT INTO Category (CategoryName) VALUES ('Y/N/NR')
+Insert INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (1, 'Y', 'Yes')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (2, 'N', 'No')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (3, 'NR', 'Not Reported')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (4, 'ProgEval', 'Program Evaluation')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (5, 'Dissem', 'Dissemination Materials')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (6, 'Support', 'Other Supporting Materials')
+
+SET IDENTITY_INSERT Answers OFF
+
+-- Categories
+
+SET IDENTITY_INSERT Category ON
+
+INSERT INTO Category (Id, CategoryName) VALUES (1, 'Yes/No')
+INSERT INTO Category (Id, CategoryName) VALUES (2, 'Y/N/NR')
+INSERT INTO Category (Id, CategoryName) VALUES (3, 'DocumentType')
+
+SET IDENTITY_INSERT Category OFF
 
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (1, 1)
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (2, 1)
@@ -57,3 +71,16 @@ INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (2, 1)
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (1, 2)
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (2, 2)
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (3, 2)
+
+-- Document Types
+
+INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (4, 3)
+INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (5, 3)
+INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (6, 3)
+
+-- Masks
+
+INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (1, 'Mental Health Promotion', 'ProgramType')
+INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (2, 'Mental Health Treatment', 'ProgramType')
+INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (3, 'Substance Use Prevention', 'ProgramType')
+INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (4, 'Mental Health Treatment', 'ProgramType')

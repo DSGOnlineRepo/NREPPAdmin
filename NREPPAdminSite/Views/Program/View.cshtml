@@ -1,59 +1,67 @@
-﻿@model NREPPAdminSite.Models.Intervention
+﻿@model NREPPAdminSite.Models.IntervPageModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Viewing @Model.Title</h2>
-<h3>Submitted by @Model.Submitter</h3>
+<h2>Viewing @Model.TheIntervention.Title</h2>
+<h3>Submitted by @Model.TheIntervention.Submitter</h3>
 
 <div>
     <div style="padding-top: 10px; padding-bottom: 10px;">
-        @Model.FullDescription
+        @Model.TheIntervention.FullDescription
     </div>
 
     <div style="height: 45px;">
         <span style="float: left; clear: left;">
             Last Updated On:
         </span>
-        <span style="float: left; clear: right; margin-left: 5px;">@Model.UpdatedDate.ToShortDateString()</span>
+        <span style="float: left; clear: right; margin-left: 5px;">@Model.TheIntervention.UpdatedDate.ToShortDateString()</span>
 
         <span style="float: left; clear: left;">
             Published On:
         </span>
-        <span style="float: left; clear: right; margin-left: 5px;">@(Model.PublishDate.HasValue ? Model.PublishDate.GetValueOrDefault().ToShortDateString() : "Not Published")</span>
+        <span style="float: left; clear: right; margin-left: 5px;">@(Model.TheIntervention.PublishDate.HasValue ? Model.TheIntervention.PublishDate.GetValueOrDefault().ToShortDateString() : "Not Published")</span>
     </div>
 
     <div>
         @using(Html.BeginForm("Edit", "Program"))
         {
-            @Html.HiddenFor(m => m.Id);
-            @Html.HiddenFor(m => m.SubmitterId);
-            @Html.HiddenFor(m => m.StatusId);
+            @Html.HiddenFor(m => m.TheIntervention.Id);
+            @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
+            @Html.HiddenFor(m => m.TheIntervention.StatusId);
+            @Html.HiddenFor(m => m.TheIntervention.ProgramType, new { Id = "programType" });
             
-            @Html.LabelFor(m => m.Title, new { style = "margin-right: 5px;" });
-            @Html.TextBoxFor(m => m.Title);
+            @Html.LabelFor(m => m.TheIntervention.Title, new { style = "margin-right: 5px;" });
+            @Html.TextBoxFor(m => m.TheIntervention.Title);
             <br /><br />
             
-            @Html.LabelFor(m => m.FullDescription);
+            @Html.LabelFor(m => m.TheIntervention.FullDescription);
             <br />
-            @Html.TextAreaFor(m => m.FullDescription, new {cols = "150", rows = "5"}) ;
+            @Html.TextAreaFor(m => m.TheIntervention.FullDescription, new {cols = "150", rows = "5"}) ;
             <br /><br />
             
+            foreach (NREPPAdminSite.Models.MaskValue mask in Model.ProgramType)
+            {
+                bool isChecked = mask.Selected;
+                @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "programMask" }) @mask.Name <br />
+            }
+            <br /><br />
+
             <input type="submit" value="Update" />
         }
     </div>
 
-    @if(Model.Id > 0)
+    @if (Model.TheIntervention.Id > 0)
     {
         <div style="margin-top: 20px;">
-            This belongs here...
 
             @using (Html.BeginForm("Upload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-                @Html.HiddenFor(m => m.Id);
-                @Html.HiddenFor(m => m.SubmitterId);
-                @Html.HiddenFor(m => m.StatusId);
+                @Html.HiddenFor(m => m.TheIntervention.Id);
+                @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
+                @Html.HiddenFor(m => m.TheIntervention.StatusId);
+                @Html.HiddenFor(m => m.TheIntervention.ProgramType);
                 //@Html.HiddenFor(m => )
                 
                 <span>File: </span><input type="file" name="UploadedFile" /> <br />
@@ -61,6 +69,12 @@
                 <br /><br />
                 <input type="submit" value="Submit" />
             }
+        </div>
+    }
+    else
+    {
+        <div>
+            You may upload files after initially saving 
         </div>
     }
 </div>

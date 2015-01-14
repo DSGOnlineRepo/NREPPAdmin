@@ -37,6 +37,18 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false) <!-- Put the page scripts in here -->
+
+    <script type="text/javascript">
+    $(".programMask").click(function () {
+        var sum = 0;
+        $(".programMask").each(function () {
+            if ($(this).prop("checked"))
+                sum += parseInt($(this).val());
+        });
+
+        $("#programType").val(sum);
+    });
+    </script>
 </body>
 </html>

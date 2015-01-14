@@ -19,33 +19,48 @@ namespace NREPPAdminSite.Controllers
         {
             ViewBag.Title = "Program Title";
             ViewBag.Id = InvId;
+            IntervPageModel pageModel;
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            // Probably don't need to seed these
+
+            List<Answer> docTypez = new List<Answer>(); 
+            List<MaskValue> intervTypez = new List<MaskValue>();
+
             Intervention theIntervention;
+
+            List<Answer> documentTypes = localService.GetAnswersByCategory("DocumentType").ToList<Answer>();
+            List<MaskValue> programTypes = localService.GetMaskList("ProgramType").ToList<MaskValue>();
 
             if (InvId > 0)
             {
-                NrepServ localService = new NrepServ(NrepServ.ConnString);
                 SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(idParam);
-
                 List<Intervention> interventionList = localService.GetInterventions(parameters);
                 theIntervention = interventionList[0];
+
             }
             else
             {
-                theIntervention = new Intervention(-1, "", "", "", null, DateTime.Now, -1, "", -1);
+                theIntervention = new Intervention(-1, "", "", "", null, DateTime.Now, -1, "", -1, 0);
+                pageModel = new IntervPageModel();
             }
 
-            return View(theIntervention);
+            pageModel = new IntervPageModel(new List<InterventionDoc>(), MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
+                docTypez);
+            pageModel.TheIntervention = theIntervention;
+
+            return View(pageModel);
         }
 
         [HttpPost]
-        public ActionResult Edit(Intervention inInterv)
+        public ActionResult Edit(IntervPageModel inInterv)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            localService.SaveIntervention(inInterv);
+            localService.SaveIntervention(inInterv.TheIntervention);
 
-            return RedirectToAction("View", new { InvId = inInterv.Id });
+            return RedirectToAction("View", new { InvId = inInterv.TheIntervention.Id });
         }
 
         [HttpPost]
@@ -65,12 +80,12 @@ namespace NREPPAdminSite.Controllers
                     byte[] fileBytes = new byte[file.ContentLength];
                     file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
 
-                    localService.SaveFileToDB(fileBytes, fileName, 1, "NOT IMPLEMENTED!", int.Parse(Request.Form["Id"]), false,
+                    localService.SaveFileToDB(fileBytes, fileName, 1, "NOT IMPLEMENTED!", int.Parse(Request.Form["TheIntervention.Id"]), false,
                         -1, Request.Form["FileDescription"]); // TODO: Add UserId to the Cookie. :|
                 }
             }
 
-            return RedirectToAction("View", new {InvId = int.Parse(Request.Form["Id"])});
+            return RedirectToAction("View", new {InvId = int.Parse(Request.Form["TheIntervention.Id"])});
         }
 
         public ActionResult UploadFile()
