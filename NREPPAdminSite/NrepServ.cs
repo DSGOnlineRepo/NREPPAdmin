@@ -326,6 +326,50 @@ namespace NREPPAdminSite
         }
 
         /// <summary>
+        /// Gets documents associated with either an intervention or a Reviewer
+        /// </summary>
+        /// <param name="InterventionId">Intervention Id (nullable)</param>
+        /// <param name="ReviewerId">Reviewer Id (nullable)</param>
+        /// <returns></returns>
+        public IEnumerable<InterventionDoc> GetDocuments(int? InterventionId, int? ReviewerId)
+        {
+            List<InterventionDoc> documents = new List<InterventionDoc>();
+            SqlCommand cmdGetDocuments = new SqlCommand("SPGetDocuments", conn);
+            cmdGetDocuments.CommandType = CommandType.StoredProcedure;
+
+            cmdGetDocuments.Parameters.Add(new SqlParameter("@InvId", InterventionId));
+            cmdGetDocuments.Parameters.Add(new SqlParameter("@ReviewerId", ReviewerId));
+
+
+            try
+            {
+                CheckConn();
+                DataTable documentz = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmdGetDocuments);
+                da.Fill(documentz);
+
+                foreach (DataRow dr in documentz.Rows)
+                {
+                    InterventionDoc doc = new InterventionDoc();
+                    doc.FileDescription = dr["Description"].ToString();
+                    doc.Link = dr["FileName"].ToString(); // This needs some work
+                    doc.Uploader = dr["Uploader"].ToString();
+                    doc.SetDocType((int)dr["TypeOfDocument"], dr["Document Type Name"].ToString());
+
+                    documents.Add(doc);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1, "Submitted", 1, 0));
+                documents.Add(new InterventionDoc() { FileDescription = ex.Message, Link = "Error" });
+            }
+
+            return documents;
+        }
+
+        /// <summary>
         /// Save or Create a New Intervention
         /// </summary>
         /// <param name="inData">The intervention to be saved or added to the database</param>

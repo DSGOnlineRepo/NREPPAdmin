@@ -75,6 +75,31 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Uploaded By")]
         public string Uploader { get; set; }
 
+        private string documentTypeName;
+        private int documentType;
+
+        [Display(Name = "Document Type")]
+        public string DocumentTypeName
+        {
+            get { return documentTypeName; }
+        }
+
+        public int DocumentType
+        {
+            get { return documentType; }
+        }
+
+        /// <summary>
+        /// Ensure that you set Document Type Name and Document Type at the same time
+        /// </summary>
+        /// <param name="inDocType"></param>
+        /// <param name="inDocTypeName"></param>
+        public void SetDocType(int inDocType, string inDocTypeName)
+        {
+            documentType = inDocType;
+            documentTypeName = inDocTypeName;
+        }
+
     }
 
     public class Answer

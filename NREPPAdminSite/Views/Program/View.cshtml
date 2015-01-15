@@ -55,6 +55,17 @@
     @if (Model.TheIntervention.Id > 0)
     {
         <div style="margin-top: 20px;">
+           
+            @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
+            {
+                <table>
+                    <tr>
+                        <td><a href="@doc.Link">@doc.FileDescription</a> </td>
+                        <td>@doc.FileDescription</td>
+                        <!-- Need to Add Type -->
+                    </tr>
+                </table>
+            }
 
             @using (Html.BeginForm("Upload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {

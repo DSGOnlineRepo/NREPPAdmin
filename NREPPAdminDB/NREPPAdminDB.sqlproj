@@ -92,6 +92,7 @@
     <Build Include="Tables\Document_Study.sql" />
     <Build Include="Tables\MaskList.sql" />
     <Build Include="Stored Procedures\SPGetMasksByCategory.sql" />
+    <Build Include="Stored Procedures\SPGetDocuments.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

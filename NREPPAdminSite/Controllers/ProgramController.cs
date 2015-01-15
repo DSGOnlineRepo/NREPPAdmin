@@ -31,6 +31,7 @@ namespace NREPPAdminSite.Controllers
 
             List<Answer> documentTypes = localService.GetAnswersByCategory("DocumentType").ToList<Answer>();
             List<MaskValue> programTypes = localService.GetMaskList("ProgramType").ToList<MaskValue>();
+            List<InterventionDoc> documentz;
 
             if (InvId > 0)
             {
@@ -40,14 +41,17 @@ namespace NREPPAdminSite.Controllers
                 List<Intervention> interventionList = localService.GetInterventions(parameters);
                 theIntervention = interventionList[0];
 
+                documentz = localService.GetDocuments(InvId, null).ToList<InterventionDoc>();
+
             }
             else
             {
                 theIntervention = new Intervention(-1, "", "", "", null, DateTime.Now, -1, "", -1, 0);
                 pageModel = new IntervPageModel();
+                documentz = new List<InterventionDoc>();
             }
 
-            pageModel = new IntervPageModel(new List<InterventionDoc>(), MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
+            pageModel = new IntervPageModel(documentz, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
                 docTypez);
             pageModel.TheIntervention = theIntervention;
 
