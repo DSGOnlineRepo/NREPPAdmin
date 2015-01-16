@@ -85,7 +85,7 @@ namespace NREPPAdminSite.Controllers
                     file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
 
                     localService.SaveFileToDB(fileBytes, fileName, 1, "NOT IMPLEMENTED!", int.Parse(Request.Form["TheIntervention.Id"]), false,
-                        -1, Request.Form["FileDescription"]); // TODO: Add UserId to the Cookie. :|
+                        -1, Request.Form["FileDescription"], int.Parse(Request.Form["docTypeDD"])); // TODO: Add UserId to the Cookie. :|
                 }
             }
 

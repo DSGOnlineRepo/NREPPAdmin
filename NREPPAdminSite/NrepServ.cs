@@ -407,7 +407,8 @@ namespace NREPPAdminSite
             return returnValue;
         }
 
-        public int SaveFileToDB(byte[] inData, string fileName, int theUser, string MIMEType, int IntervId, bool isDelete, int ItemId, string DisplayName)
+        public int SaveFileToDB(byte[] inData, string fileName, int theUser, string MIMEType, int IntervId, bool isDelete, int ItemId, string DisplayName,
+            int documentType)
         {
 
             SqlCommand cmdSaveFile = new SqlCommand("SPAddOrRemoveDoc", conn);
@@ -421,6 +422,7 @@ namespace NREPPAdminSite
             cmdSaveFile.Parameters.Add(new SqlParameter("@ItemId", ItemId));
             cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderId", theUser));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ReviewerId", null));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@DocumentTypeId", documentType));
             //cmdSaveFile.Parameters.Add(new SqlParameter("@OutPut", null));
 
             SqlParameter OutPut = new SqlParameter("@Output", -1);
