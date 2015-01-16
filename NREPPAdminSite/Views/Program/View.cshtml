@@ -2,6 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var NumDocs = Model.Documents.Count;
 }
 
 <h2>Viewing @Model.TheIntervention.Title</h2>
@@ -33,7 +34,10 @@
             @Html.HiddenFor(m => m.TheIntervention.ProgramType, new { Id = "programType" });
             
             @Html.LabelFor(m => m.TheIntervention.Title, new { style = "margin-right: 5px;" });
-            @Html.TextBoxFor(m => m.TheIntervention.Title);
+            @Html.TextBoxFor(m => m.TheIntervention.Title);<br />
+            
+            @Html.LabelFor(m => m.TheIntervention.Acronym, new { style = "margin-right: 5px;" });
+            @Html.TextBoxFor(m => m.TheIntervention.Acronym);
             <br /><br />
             
             @Html.LabelFor(m => m.TheIntervention.FullDescription);
@@ -55,6 +59,7 @@
     @if (Model.TheIntervention.Id > 0)
     {
         <div style="margin-top: 20px;">
+            <span class="collapsedText hidden">@NumDocs Documents On this Intervention</span>
             <table style="border: 1px solid;">
                 <tr> <!-- Header -->
                     <th class="withborder" style="text-align: center;">Description</th>

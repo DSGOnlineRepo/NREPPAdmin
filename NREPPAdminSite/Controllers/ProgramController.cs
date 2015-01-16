@@ -41,12 +41,12 @@ namespace NREPPAdminSite.Controllers
                 List<Intervention> interventionList = localService.GetInterventions(parameters);
                 theIntervention = interventionList[0];
 
-                documentz = localService.GetDocuments(InvId, null).ToList<InterventionDoc>();
+                documentz = localService.GetDocuments(InvId, null, null).ToList<InterventionDoc>();
 
             }
             else
             {
-                theIntervention = new Intervention(-1, "", "", "", null, DateTime.Now, -1, "", -1, 0);
+                theIntervention = new Intervention(-1, "", "", "", null, DateTime.Now, -1, "", -1, 0, "");
                 pageModel = new IntervPageModel();
                 documentz = new List<InterventionDoc>();
             }
@@ -96,6 +96,10 @@ namespace NREPPAdminSite.Controllers
 
         public ActionResult DeleteDocument(int DocId, int InvId)
         {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            localService.DeleteDocument(DocId, 1); // TODO: Get User from Cookie
+
             return RedirectToAction("View", new { InvId = InvId });
         }
 

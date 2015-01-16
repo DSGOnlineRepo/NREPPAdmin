@@ -29,6 +29,9 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Program Type")]
         public int ProgramType { get; set; }
 
+        [Display(Name = "Acronym")]
+        public string Acronym { get; set; }
+
         public int Id {get; set;}
         /*{
             get { return id; }
@@ -46,10 +49,11 @@ namespace NREPPAdminSite.Models
             Status = "Submitted";
             StatusId = 1;
             ProgramType = 0;
+            Acronym = "";
         }
 
         public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate,
-            int submitterId, string status, int statusId, int programType)
+            int submitterId, string status, int statusId, int programType, string acronym)
         {
             Id = inId;
             Title = title;
@@ -61,6 +65,7 @@ namespace NREPPAdminSite.Models
             Status = status;
             StatusId = statusId;
             ProgramType = programType;
+            Acronym = acronym;
         }
 
         // private int submitterId; Is this a thing?

@@ -313,13 +313,13 @@ namespace NREPPAdminSite
                 {
                     interventions.Add(new Intervention((int)dr["InterventionId"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), NullDate(dr["PublishDate"]),
                         Convert.ToDateTime(dr["UpdateDate"]), (int)dr["SubmitterId"], dr["StatusName"].ToString(), (int)dr["StatusId"],
-                        dr["ProgramType"] == DBNull.Value ? 0 : (int)dr["ProgramType"]));
+                        dr["ProgramType"] == DBNull.Value ? 0 : (int)dr["ProgramType"], dr["Acronym"].ToString()));
                 }
 
             }
             catch (Exception ex)
             {
-                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1, "Submitted", 1, 0));
+                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1, "Submitted", 1, 0, ""));
             }
 
             return interventions;
@@ -331,7 +331,7 @@ namespace NREPPAdminSite
         /// <param name="InterventionId">Intervention Id (nullable)</param>
         /// <param name="ReviewerId">Reviewer Id (nullable)</param>
         /// <returns></returns>
-        public IEnumerable<InterventionDoc> GetDocuments(int? InterventionId, int? ReviewerId)
+        public IEnumerable<InterventionDoc> GetDocuments(int? InterventionId, int? ReviewerId, int? DocId)
         {
             List<InterventionDoc> documents = new List<InterventionDoc>();
             SqlCommand cmdGetDocuments = new SqlCommand("SPGetDocuments", conn);
@@ -339,6 +339,7 @@ namespace NREPPAdminSite
 
             cmdGetDocuments.Parameters.Add(new SqlParameter("@InvId", InterventionId));
             cmdGetDocuments.Parameters.Add(new SqlParameter("@ReviewerId", ReviewerId));
+            cmdGetDocuments.Parameters.Add(new SqlParameter("@DocumentId", DocId));
 
 
             try
@@ -388,6 +389,7 @@ namespace NREPPAdminSite
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@publishDate", SqlDbType = SqlDbType.DateTime, Value = inData.PublishDate });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@status", SqlDbType = SqlDbType.Int, Value = inData.StatusId });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@programType", SqlDbType = SqlDbType.Int, Value = inData.ProgramType });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@Acronym", SqlDbType = SqlDbType.VarChar, Value = inData.Acronym });
 
             try
             {
@@ -487,6 +489,85 @@ namespace NREPPAdminSite
 
             return outFile;
 
+        }
+
+        public int DeleteDocument(int DocId, int theUser)
+        {
+            SqlCommand cmdSaveFile = new SqlCommand("SPAddOrRemoveDoc", conn);
+            int retValue = -1;
+            cmdSaveFile.CommandType = CommandType.StoredProcedure;
+
+            cmdSaveFile.Parameters.Add(new SqlParameter("@IntervId", -1));
+            //cmdSaveFile.Parameters.Add(new SqlParameter("@Description", DisplayName));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@MIMEType", ""));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@IsDelete", true));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@ItemId", DocId));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderId", theUser));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@ReviewerId", null));
+            //cmdSaveFile.Parameters.Add(new SqlParameter("@OutPut", null));
+
+            SqlParameter OutPut = new SqlParameter("@Output", -1);
+            OutPut.Direction = ParameterDirection.Output;
+            cmdSaveFile.Parameters.Add(OutPut);
+
+            List<InterventionDoc> documents = new List<InterventionDoc>();
+            SqlCommand cmdGetDocuments = new SqlCommand("SPGetDocuments", conn);
+            cmdGetDocuments.CommandType = CommandType.StoredProcedure;
+
+            cmdGetDocuments.Parameters.Add(new SqlParameter("@InvId", null));
+            cmdGetDocuments.Parameters.Add(new SqlParameter("@ReviewerId", null));
+            cmdGetDocuments.Parameters.Add(new SqlParameter("@DocumentId", DocId));
+
+            try
+            {
+                CheckConn();
+
+                // 
+                DataTable documentz = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmdGetDocuments);
+                da.Fill(documentz);
+
+                foreach (DataRow dr in documentz.Rows)
+                {
+                    InterventionDoc doc = new InterventionDoc((int)dr["DocId"]);
+                    doc.FileDescription = dr["Description"].ToString();
+                    doc.Link = dr["FileName"].ToString(); // This needs some work
+                    doc.Uploader = dr["Uploader"].ToString();
+                    doc.SetDocType((int)dr["TypeOfDocument"], dr["Document Type Name"].ToString());
+
+                    documents.Add(doc);
+                }
+
+                File.Delete(documents[0].Link); // This might not work
+
+                CheckConn();
+
+                cmdSaveFile.ExecuteNonQuery();
+
+
+                /*string nFileName = ConfigurationManager.AppSettings["fileLocation"] + fileName;
+                FileStream someStream = new FileStream(nFileName, FileMode.OpenOrCreate);
+                someStream.Write(inData, 0, inData.Length);
+                someStream.Close();
+
+                // If we successfully save the file...
+                CheckConn();
+
+                cmdSaveFile.Parameters.Add(new SqlParameter("@FileName", nFileName));
+                retValue = cmdSaveFile.ExecuteNonQuery();*/
+
+                // TODO: delete the file if the transaction failed.
+
+            }
+            catch (Exception) {
+                retValue = -2; // Indicates some other exception
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return retValue;
         }
 
         #endregion

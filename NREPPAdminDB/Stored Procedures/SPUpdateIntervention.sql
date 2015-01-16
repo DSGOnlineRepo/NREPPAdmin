@@ -6,6 +6,7 @@
 	@updateDate DateTime,
 	@publishDate DateTime = NULL,
 	@programType INT = 0,
+	@Acronym VARCHAR(20) = NULL,
 	@status int
 AS SET NOCOUNT ON
 
@@ -14,8 +15,8 @@ AS SET NOCOUNT ON
 	-- Do the insert portion first
 	IF @IntervId = -1 BEGIN
 
-		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, Submitter, Status, ProgramType) VALUES
-			(@title, @fulldescription, @publishDate, @updateDate, @submitter, @status, @programType)
+		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, Submitter, Status, ProgramType, Acronym) VALUES
+			(@title, @fulldescription, @publishDate, @updateDate, @submitter, @status, @programType, @Acronym)
 
 		if @@error <> 0
 		BEGIN
@@ -32,7 +33,8 @@ AS SET NOCOUNT ON
 			UpdateDate = @updateDate,
 			Submitter = @submitter,
 			Status = @status,
-			ProgramType = @programType
+			ProgramType = @programType,
+			Acronym = @Acronym
 		WHERE Id = @IntervId
 
 		IF @@ERROR <> 0 BEGIN
