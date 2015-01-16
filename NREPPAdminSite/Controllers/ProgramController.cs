@@ -24,7 +24,7 @@ namespace NREPPAdminSite.Controllers
 
             // Probably don't need to seed these
 
-            List<Answer> docTypez = new List<Answer>(); 
+            //List<Answer> docTypez = new List<Answer>(); 
             List<MaskValue> intervTypez = new List<MaskValue>();
 
             Intervention theIntervention;
@@ -52,7 +52,7 @@ namespace NREPPAdminSite.Controllers
             }
 
             pageModel = new IntervPageModel(documentz, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
-                docTypez);
+                documentTypes);
             pageModel.TheIntervention = theIntervention;
 
             return View(pageModel);
@@ -91,6 +91,8 @@ namespace NREPPAdminSite.Controllers
 
             return RedirectToAction("View", new {InvId = int.Parse(Request.Form["TheIntervention.Id"])});
         }
+
+        // TODO: Make sure you have a cookie and rights to delete this document (pretty easy, but you DO need to implement it)
 
         public ActionResult DeleteDocument(int DocId, int InvId)
         {
