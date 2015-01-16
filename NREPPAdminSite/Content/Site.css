@@ -22,3 +22,9 @@ select,
 textarea {
     max-width: 280px;
 }
+
+td.withborder {
+    border: 1px solid;
+    padding-left: 5px;
+    padding-right: 5px;
+}

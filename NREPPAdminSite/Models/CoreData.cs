@@ -77,6 +77,7 @@ namespace NREPPAdminSite.Models
 
         private string documentTypeName;
         private int documentType;
+        private int docId;
 
         [Display(Name = "Document Type")]
         public string DocumentTypeName
@@ -89,6 +90,11 @@ namespace NREPPAdminSite.Models
             get { return documentType; }
         }
 
+        public int DocId
+        {
+            get { return docId; }
+        }
+
         /// <summary>
         /// Ensure that you set Document Type Name and Document Type at the same time
         /// </summary>
@@ -98,6 +104,13 @@ namespace NREPPAdminSite.Models
         {
             documentType = inDocType;
             documentTypeName = inDocTypeName;
+        }
+
+        public InterventionDoc() { }
+
+        public InterventionDoc(int inId)
+        {
+            docId = inId;
         }
 
     }

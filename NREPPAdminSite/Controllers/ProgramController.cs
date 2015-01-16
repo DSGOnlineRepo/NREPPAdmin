@@ -92,6 +92,16 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("View", new {InvId = int.Parse(Request.Form["TheIntervention.Id"])});
         }
 
+        public ActionResult DeleteDocument(int DocId, int InvId)
+        {
+            return RedirectToAction("View", new { InvId = InvId });
+        }
+
+        /*[HttpPost]
+        public ActionResult DeleteDoc()*/
+
+        // Delete document with an object
+
         public ActionResult UploadFile()
         {
             return View();

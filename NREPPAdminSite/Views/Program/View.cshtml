@@ -55,17 +55,22 @@
     @if (Model.TheIntervention.Id > 0)
     {
         <div style="margin-top: 20px;">
-           
-            @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
-            {
-                <table>
+            <table style="border: 1px solid;">
+                <tr> <!-- Header -->
+                    <th class="withborder" style="text-align: center;">Description</th>
+                    <th class="withborder" style="text-align: center;">Type</th>
+                    <th class="withborder" style="text-align: center;">&nbsp;</th>
+                </tr>
+                @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
+                {
                     <tr>
-                        <td><a href="@doc.Link">@doc.FileDescription</a> </td>
-                        <td>@doc.FileDescription</td>
+                        <td class="withborder">@doc.FileDescription</td>
+                        <td class="withborder">@doc.DocumentTypeName</td>
+                        <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = "1", DocId = doc.DocId })</td>
                         <!-- Need to Add Type -->
                     </tr>
-                </table>
-            }
+                }
+            </table>
 
             @using (Html.BeginForm("Upload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {

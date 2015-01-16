@@ -350,7 +350,7 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in documentz.Rows)
                 {
-                    InterventionDoc doc = new InterventionDoc();
+                    InterventionDoc doc = new InterventionDoc((int)dr["DocId"]);
                     doc.FileDescription = dr["Description"].ToString();
                     doc.Link = dr["FileName"].ToString(); // This needs some work
                     doc.Uploader = dr["Uploader"].ToString();

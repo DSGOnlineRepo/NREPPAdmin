@@ -7,6 +7,7 @@
 	@MIMEType VARCHAR(20) = NULL,
 	@IsDelete BIT = 0,
 	@ItemId INT = -1,
+	@DocumentTypeID INT = 4,
 	@Output INT = -1 OUTPUT
 AS
 	BEGIN TRANSACTION
@@ -22,7 +23,7 @@ AS
 			END
 		END
 		ELSE BEGIN
-			INSERT INTO Document VALUES (@Description, @FileName, @MIMEType, @IntervId, @UploaderId, 1, @ReviewerID)
+			INSERT INTO Document VALUES (@Description, @FileName, @MIMEType, @IntervId, @UploaderId, @DocumentTypeID, @ReviewerID)
 
 			SELECT @Output = @@IDENTITY
 
