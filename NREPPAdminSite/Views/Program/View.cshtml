@@ -71,6 +71,14 @@
                     </tr>
                 }
             </table>
+            @{
+                List<SelectListItem> DocTypez = new List<SelectListItem>();
+                
+                foreach(NREPPAdminSite.Models.Answer ans in Model.DocumentType)
+                {
+                    DocTypez.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+                }
+            }
 
             @using (Html.BeginForm("Upload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
@@ -82,6 +90,7 @@
                 
                 <span>File: </span><input type="file" name="UploadedFile" /> <br />
                 <span>Document Title: </span><input type="text" name="FileDescription" />
+                @Html.DropDownList("someDD", DocTypez);
                 <br /><br />
                 <input type="submit" value="Submit" />
             }
