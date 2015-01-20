@@ -5,15 +5,16 @@
     var NumDocs = Model.Documents.Count;
 }
 
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("/Scripts/programview.js")"></script>
+}
+
 <h2>Viewing @Model.TheIntervention.Title</h2>
 <h3>Submitted by @Model.TheIntervention.Submitter</h3>
 
 <div>
-    <div style="padding-top: 10px; padding-bottom: 10px;">
-        @Model.TheIntervention.FullDescription
-    </div>
 
-    <div style="height: 45px;">
+    <div style="height: 100px;">
         <span style="float: left; clear: left;">
             Last Updated On:
         </span>
@@ -23,9 +24,14 @@
             Published On:
         </span>
         <span style="float: left; clear: right; margin-left: 5px;">@(Model.TheIntervention.PublishDate.HasValue ? Model.TheIntervention.PublishDate.GetValueOrDefault().ToShortDateString() : "Not Published")</span>
+
+        <div class="description">
+            <span style="float: left;">@Model.TheIntervention.FullDescription</span>
+            <button id="btnToggleEdit">Edit</button>
+        </div>
     </div>
 
-    <div>
+    <div class="someform hidden">
         @using(Html.BeginForm("Edit", "Program"))
         {
             @Html.HiddenFor(m => m.TheIntervention.Id);
@@ -58,7 +64,7 @@
 
     @if (Model.TheIntervention.Id > 0)
     {
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 20px; clear: both;">
             <span class="collapsedText hidden">@NumDocs Documents On this Intervention</span>
             <table style="border: 1px solid;">
                 <tr> <!-- Header -->

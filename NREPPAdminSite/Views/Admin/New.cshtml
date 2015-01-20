@@ -20,6 +20,13 @@
             <span>@Html.TextBoxFor(m => m.Password1)</span>
         </div>
         
+        <div>
+            <span style="padding-right: 10px;">@Html.LabelFor(m => m.Firstname)</span>
+            <span>@Html.TextBoxFor(m => m.Firstname)</span><br />
+            <span style="padding-right: 10px;">@Html.LabelFor(m => m.Lastname)</span>
+            <span>@Html.TextBoxFor(m => m.Lastname)</span>
+        </div>
+        
         <input type="submit" value="Register" />
     }
 </div>

@@ -24,7 +24,7 @@ namespace NREPPAdminSite.Controllers
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             //ViewBag.SomeValue = localService.DoHash(model.Password1).Item1; // Tuple together the hash and salt because we will need both
 
-            int retValue = localService.registerUser(model.UserName, "Patrick", "Taylor", model.Password1, 2);
+            int retValue = localService.registerUser(model.UserName, model.Firstname, model.Lastname, model.Password1, 2);
 
 
             return RedirectToAction("Login");
