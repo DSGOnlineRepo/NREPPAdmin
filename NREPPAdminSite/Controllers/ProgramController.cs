@@ -62,6 +62,8 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Edit(IntervPageModel inInterv)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
+            NreppUser usr = ReadCookie(Request);
+            inInterv.TheIntervention.SubmitterId = usr.Id;
             localService.SaveIntervention(inInterv.TheIntervention);
 
             return RedirectToAction("View", new { InvId = inInterv.TheIntervention.Id });
@@ -120,6 +122,29 @@ namespace NREPPAdminSite.Controllers
             localService.getFilePath(1);*/
 
             return "Something came out!";
+        }
+
+        protected NreppUser ReadCookie(HttpRequestBase req)
+        {
+            NreppUser outUser = new NreppUser();
+
+            HttpCookie usrStuff = req.Cookies.Get(Constants.USR_COOKIE);
+            //NreppUser usr;
+
+            if (usrStuff.Value != "")
+            {
+                try
+                {
+                    outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
+                }
+                catch (Exception)
+                {
+                    Request.Cookies.Remove(Constants.USR_COOKIE);
+                    outUser = null;
+                }
+            }
+
+            return outUser;
         }
     }
 }

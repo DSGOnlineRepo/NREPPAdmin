@@ -7,10 +7,13 @@
 	@publishDate DateTime = NULL,
 	@programType INT = 0,
 	@Acronym VARCHAR(20) = NULL,
-	@status int
+	@status int,
+	@Output INT OUTPUT
 AS SET NOCOUNT ON
 
 	BEGIN TRANSACTION
+
+	SET @Output = @IntervId
 
 	-- Do the insert portion first
 	IF @IntervId = -1 BEGIN
@@ -23,6 +26,8 @@ AS SET NOCOUNT ON
 			ROLLBACK TRANSACTION
 			RETURN -1
 		END
+
+		SELECT @Output = @@IDENTITY
 	END
 	ELSE BEGIN
 		-- Now do update portion

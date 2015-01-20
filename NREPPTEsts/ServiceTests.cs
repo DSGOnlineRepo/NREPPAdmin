@@ -52,7 +52,7 @@ namespace NREPPTests
             fs.Read(fileBytes, 0, fileBytes.Length);
             fs.Close();
 
-            int fileNum = aService.SaveFileToDB(fileBytes, nFileName, 1, "NOT IMPLEMENTED!", 1, false, -1, "Healer Calcs");
+            int fileNum = aService.SaveFileToDB(fileBytes, nFileName, 1, "NOT IMPLEMENTED!", 1, false, -1, "Healer Calcs", 4);
 
             Assert.IsTrue(fileNum > 0, "No filenumber returned.");
 

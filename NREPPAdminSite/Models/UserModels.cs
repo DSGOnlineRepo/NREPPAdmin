@@ -42,7 +42,8 @@ namespace NREPPAdminSite.Models
 
     public class NreppUser
     {
-        private int Id;
+        public int Id {get; set;}
+
         private Role userRole;
         private bool isAuth = false;
 
