@@ -12,3 +12,8 @@ $("#btnToggleEdit").click(function () {
     $(".someform").removeClass("hidden");
     $(".description").addClass("hidden");
 });
+
+$("#DocButton").click(function () {
+    $(".numOfDocs").addClass("hidden");
+    $(".upload-div").removeClass("hidden");
+});

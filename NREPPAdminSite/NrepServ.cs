@@ -375,9 +375,9 @@ namespace NREPPAdminSite
         /// </summary>
         /// <param name="inData">The intervention to be saved or added to the database</param>
         /// <returns>True if save is valid, false if it is not</returns>
-        public bool SaveIntervention(Intervention inData) {
+        public int SaveIntervention(Intervention inData) {
 
-            bool returnValue = false;
+            int returnValue = -1;
             SqlCommand cmdUpdate = new SqlCommand("SPUpdateIntervention", conn);
             cmdUpdate.CommandType = CommandType.StoredProcedure;
 
@@ -391,10 +391,19 @@ namespace NREPPAdminSite
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@programType", SqlDbType = SqlDbType.Int, Value = inData.ProgramType });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@Acronym", SqlDbType = SqlDbType.VarChar, Value = inData.Acronym });
 
+            SqlParameter OutPut = new SqlParameter("@Output", -1);
+            OutPut.Direction = ParameterDirection.Output;
+            cmdUpdate.Parameters.Add(OutPut);
+
             try
             {
                 CheckConn();
-                returnValue = cmdUpdate.ExecuteNonQuery() == 0;
+                returnValue = cmdUpdate.ExecuteNonQuery();
+
+                if (returnValue >= 0)
+                    return (int)cmdUpdate.Parameters["@Output"].Value;
+                else
+                    return -1;
 
             } catch (Exception ex) // Just in here for error handling reasons
             {

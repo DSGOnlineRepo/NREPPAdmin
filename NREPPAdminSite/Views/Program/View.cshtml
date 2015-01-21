@@ -64,7 +64,12 @@
 
     @if (Model.TheIntervention.Id > 0)
     {
-        <div style="margin-top: 20px; clear: both;">
+        <div class="numOfDocs">
+            <span>@Model.Documents.Count Documents Attached to This Program</span>
+            <button id="DocButton">View Documents</button>
+        </div>
+        
+        <div class="upload-div hidden">
             <span class="collapsedText hidden">@NumDocs Documents On this Intervention</span>
             <table style="border: 1px solid;">
                 <tr> <!-- Header -->

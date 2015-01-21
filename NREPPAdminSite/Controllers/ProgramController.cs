@@ -64,9 +64,9 @@ namespace NREPPAdminSite.Controllers
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             NreppUser usr = ReadCookie(Request);
             inInterv.TheIntervention.SubmitterId = usr.Id;
-            localService.SaveIntervention(inInterv.TheIntervention);
+            int returnValue = localService.SaveIntervention(inInterv.TheIntervention);
 
-            return RedirectToAction("View", new { InvId = inInterv.TheIntervention.Id });
+            return RedirectToAction("View", new { InvId = returnValue });
         }
 
         [HttpPost]

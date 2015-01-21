@@ -35,6 +35,7 @@ div.description {
     clear: both;
     font-style: italic;
     margin-top: 5px;
+    margin-bottom: 15px;
     width: 50%;
 }
 
@@ -46,4 +47,32 @@ div.description {
     float: right;
     clear: left;
     font-weight: bold;
+    margin-top: 5px;
+}
+
+.upload-div {
+    margin-top: 20px;
+    clear: both;
+}
+
+.numOfDocs {
+    height: 50px;
+    clear: both;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    width: 50%;
+    margin-top: 20px;
+    margin-bottom: 10px;  
+}
+
+.numOfDocs span {
+    font-size: large;
+    font-weight: bold;
+}
+
+.numOfDocs button {
+    float: right;
+    clear: left;
+    font-weight: bold;
+    margin-top: 5px;
 }
