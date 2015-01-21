@@ -398,12 +398,12 @@ namespace NREPPAdminSite
             try
             {
                 CheckConn();
-                returnValue = cmdUpdate.ExecuteNonQuery();
+                cmdUpdate.ExecuteNonQuery();
 
-                if (returnValue >= 0)
-                    return (int)cmdUpdate.Parameters["@Output"].Value;
-                else
-                    return -1;
+                returnValue = (int)cmdUpdate.Parameters["@Output"].Value;
+                
+
+
 
             } catch (Exception ex) // Just in here for error handling reasons
             {

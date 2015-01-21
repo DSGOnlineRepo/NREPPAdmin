@@ -13,16 +13,13 @@ AS SET NOCOUNT ON
 
 	BEGIN TRANSACTION
 
-	SET @Output = @IntervId
-
 	-- Do the insert portion first
 	IF @IntervId = -1 BEGIN
 
 		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, Submitter, Status, ProgramType, Acronym) VALUES
 			(@title, @fulldescription, @publishDate, @updateDate, @submitter, @status, @programType, @Acronym)
 
-		if @@error <> 0
-		BEGIN
+		if @@ERROR <> 0 BEGIN
 			ROLLBACK TRANSACTION
 			RETURN -1
 		END
@@ -41,6 +38,8 @@ AS SET NOCOUNT ON
 			ProgramType = @programType,
 			Acronym = @Acronym
 		WHERE Id = @IntervId
+
+		SET @Output = @IntervId
 
 		IF @@ERROR <> 0 BEGIN
 			ROLLBACK TRANSACTION
