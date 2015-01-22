@@ -8,6 +8,8 @@
     [UploadedBy] INT NOT NULL, 
     [TypeOfDocument] INT NULL DEFAULT 1, 
     [ReviewerId] INT NULL, 
+    [IsLitSearch] BIT NOT NULL DEFAULT 0, 
+    [ReviewerName] VARCHAR(100) NULL, 
     CONSTRAINT [FK_InvervDoc_Intervention] FOREIGN KEY ([InterventionId]) REFERENCES [Interventions]([Id]), 
     CONSTRAINT [FK_InvervDoc_Users] FOREIGN KEY ([UploadedBy]) REFERENCES [Users]([Id])
 )

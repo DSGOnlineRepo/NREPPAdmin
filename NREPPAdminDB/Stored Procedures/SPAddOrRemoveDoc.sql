@@ -8,7 +8,9 @@
 	@IsDelete BIT = 0,
 	@ItemId INT = -1,
 	@DocumentTypeID INT = 4,
-	@Output INT = -1 OUTPUT
+	@Output INT = -1 OUTPUT,
+	@ReviewerName VARCHAR(50) = NULL,
+	@IsLitSearch BIT = 0
 AS
 	BEGIN TRANSACTION
 
@@ -23,7 +25,8 @@ AS
 			END
 		END
 		ELSE BEGIN
-			INSERT INTO Document VALUES (@Description, @FileName, @MIMEType, @IntervId, @UploaderId, @DocumentTypeID, @ReviewerID)
+			INSERT INTO Document VALUES (@Description, @FileName, @MIMEType, @IntervId, @UploaderId, @DocumentTypeID,
+				@ReviewerID, @IsLitSearch, @ReviewerName)
 
 			SELECT @Output = @@IDENTITY
 
