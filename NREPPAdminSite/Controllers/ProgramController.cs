@@ -42,11 +42,10 @@ namespace NREPPAdminSite.Controllers
                 theIntervention = interventionList[0];
 
                 documentz = localService.GetDocuments(InvId, null, null).ToList<InterventionDoc>();
-
             }
             else
             {
-                theIntervention = new Intervention(-1, "", "", "", null, DateTime.Now, -1, "", -1, 0, "");
+                theIntervention = new Intervention(-1, "", "", "", null, DateTime.Now, -1, "", -1, 0, "", false);
                 pageModel = new IntervPageModel();
                 documentz = new List<InterventionDoc>();
             }
@@ -124,6 +123,12 @@ namespace NREPPAdminSite.Controllers
             return "Something came out!";
         }
 
+        [HttpPost]
+        public ActionResult Submit(IntervPageModel model)
+        {
+            return RedirectToAction("Programs", "Home");
+        }
+
         protected NreppUser ReadCookie(HttpRequestBase req)
         {
             NreppUser outUser = new NreppUser();
@@ -146,5 +151,6 @@ namespace NREPPAdminSite.Controllers
 
             return outUser;
         }
+
     }
 }

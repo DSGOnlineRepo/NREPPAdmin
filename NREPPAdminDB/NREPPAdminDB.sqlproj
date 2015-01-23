@@ -93,6 +93,8 @@
     <Build Include="Tables\MaskList.sql" />
     <Build Include="Stored Procedures\SPGetMasksByCategory.sql" />
     <Build Include="Stored Procedures\SPGetDocuments.sql" />
+    <Build Include="Stored Procedures\SPChangeInterventionStatus.sql" />
+    <Build Include="Tables\Document_Outcome.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

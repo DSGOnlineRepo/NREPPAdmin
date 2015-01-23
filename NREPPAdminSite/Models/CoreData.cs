@@ -32,6 +32,9 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Acronym")]
         public string Acronym { get; set; }
 
+        [Display(Name = "From Literature Search?")]
+        public bool FromLitSearch { get; set; }
+
         public int Id {get; set;}
         /*{
             get { return id; }
@@ -50,10 +53,11 @@ namespace NREPPAdminSite.Models
             StatusId = 1;
             ProgramType = 0;
             Acronym = "";
+            FromLitSearch = false;
         }
 
         public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate,
-            int submitterId, string status, int statusId, int programType, string acronym)
+            int submitterId, string status, int statusId, int programType, string acronym, bool fromLitSearch)
         {
             Id = inId;
             Title = title;
@@ -66,6 +70,7 @@ namespace NREPPAdminSite.Models
             StatusId = statusId;
             ProgramType = programType;
             Acronym = acronym;
+            FromLitSearch = fromLitSearch;
         }
 
         // private int submitterId; Is this a thing?

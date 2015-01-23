@@ -21,4 +21,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IsLitSearch" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="37e534a8-5cab-43cd-ad34-055c355ef83a" ChangeDateTime="01/22/2015 18:35:12">
+    <Property Name="ElementName" Value="[dbo].[Document_Outcome].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Document_Outcome]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DocumentId" />
+  </Operation>
 </Operations>

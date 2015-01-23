@@ -62,6 +62,13 @@ namespace NREPPAdminSite.Controllers
             //return View();
         }
 
+        public ActionResult Logout()
+        {
+            Request.Cookies.Remove(Constants.USR_COOKIE);
+
+            return RedirectToAction("Login");
+        }
+
         public ActionResult Lookups()
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);

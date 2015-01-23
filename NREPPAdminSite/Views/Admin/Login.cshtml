@@ -2,8 +2,12 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
-    <div>
+    ViewBag.Title = "Log in to NREPP";
+}
+
+    <h2>@ViewBag.Title</h2>
+
+    <div style="padding-top: 10px;">
         @using (Html.BeginForm("Login", "Admin"))
         {
             @Html.LabelFor(m => m.UserName)
@@ -17,6 +21,5 @@
             <input type="submit" value="Login" />
         }
     </div>
-}
 
 

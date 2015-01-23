@@ -118,5 +118,17 @@
             You may upload files after initially saving 
         </div>
     }
+
+    <div class="submitDiv">
+        @using (Html.BeginForm("Submit", "Program", FormMethod.Post))
+        {
+            @Html.HiddenFor(m => m.TheIntervention.Id);
+            @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
+            @Html.HiddenFor(m => m.TheIntervention.StatusId);
+            @Html.HiddenFor(m => m.TheIntervention.ProgramType);
+            
+            <input type="submit" value="Submit" />
+        }
+    </div>
 </div>
 

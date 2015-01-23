@@ -313,13 +313,13 @@ namespace NREPPAdminSite
                 {
                     interventions.Add(new Intervention((int)dr["InterventionId"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), NullDate(dr["PublishDate"]),
                         Convert.ToDateTime(dr["UpdateDate"]), (int)dr["SubmitterId"], dr["StatusName"].ToString(), (int)dr["StatusId"],
-                        dr["ProgramType"] == DBNull.Value ? 0 : (int)dr["ProgramType"], dr["Acronym"].ToString()));
+                        dr["ProgramType"] == DBNull.Value ? 0 : (int)dr["ProgramType"], dr["Acronym"].ToString(), false));
                 }
 
             }
             catch (Exception ex)
             {
-                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1, "Submitted", 1, 0, ""));
+                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1, "Submitted", 1, 0, "", false));
             }
 
             return interventions;
@@ -390,6 +390,7 @@ namespace NREPPAdminSite
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@status", SqlDbType = SqlDbType.Int, Value = inData.StatusId > 0 ? inData.StatusId : 1 });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@programType", SqlDbType = SqlDbType.Int, Value = inData.ProgramType });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@Acronym", SqlDbType = SqlDbType.VarChar, Value = inData.Acronym });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@IsLitSearch", SqlDbType = SqlDbType.Bit, Value = inData.FromLitSearch });
 
             SqlParameter OutPut = new SqlParameter("@Output", -1);
             OutPut.Direction = ParameterDirection.Output;
@@ -579,6 +580,38 @@ namespace NREPPAdminSite
             }
 
             return retValue;
+        }
+
+        #endregion
+
+        #region Workflow Functionality
+
+        public bool ChangeStatus(int InterventionId, int ToStatus, int UserId, int? DestUser)
+        {
+            SqlCommand cmd = new SqlCommand("SPChangeInterventionStatus", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@IntervId", SqlDbType = SqlDbType.Int, Value = InterventionId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@User", SqlDbType = SqlDbType.Int, Value = UserId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DestStatus", SqlDbType = SqlDbType.Int, Value = ToStatus });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DestUser", SqlDbType = SqlDbType.Int, Value = DestUser });
+
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+
+            } catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return true;
         }
 
         #endregion
