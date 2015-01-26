@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[Studies]
 (
 	[Id] INT NOT NULL PRIMARY KEY,
+	[StudyId] INT NOT NULL,
     [Reference] VARCHAR(100) NULL, 
     [InLitSearch] BIT NOT NULL DEFAULT 0, 
     [Exclusion1] INT NULL, 
@@ -16,5 +17,7 @@
     [ListOfOutcomes] NCHAR(10) NULL, 
     [AuthorQueryNeeded] BIT NOT NULL DEFAULT 0, 
     [RecommendReview] BIT NOT NULL DEFAULT 0, 
-    [Notes] VARCHAR(MAX) NULL
+    [Notes] VARCHAR(MAX) NULL, 
+    [DocumentId] INT NOT NULL, 
+    CONSTRAINT [FK_Studies_Document] FOREIGN KEY ([DocumentId]) REFERENCES [Document]([Id])
 )

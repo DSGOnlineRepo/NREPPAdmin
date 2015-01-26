@@ -89,12 +89,13 @@
     <Build Include="Tables\Answer_Category.sql" />
     <Build Include="Stored Procedures\SPGetAnswersByCategory.sql" />
     <Build Include="Stored Procedures\SPAddAnswerToCategory.sql" />
-    <Build Include="Tables\Document_Study.sql" />
     <Build Include="Tables\MaskList.sql" />
     <Build Include="Stored Procedures\SPGetMasksByCategory.sql" />
     <Build Include="Stored Procedures\SPGetDocuments.sql" />
     <Build Include="Stored Procedures\SPChangeInterventionStatus.sql" />
     <Build Include="Tables\Document_Outcome.sql" />
+    <Build Include="Stored Procedures\SPGetStudiesByIntervention.sql" />
+    <Build Include="Stored Procedures\SPAddOrUpdateStudyRecord.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

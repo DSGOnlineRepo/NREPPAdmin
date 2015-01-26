@@ -125,6 +125,58 @@ namespace NREPPAdminSite.Models
 
     }
 
+    public class Outcome
+    {
+        public int Id { get; set; }
+        public string OutcomeMeasure { get; set; }
+        public string Citation { get; set; }
+        public bool OverallAttrition { get; set; }
+        public bool DiffAttrition { get; set; }
+        public bool EffectSize { get; set; }
+        public int BaselineEquiv { get; set; }
+        public int SignificantImpact { get; set; }
+        public bool GroupFavored { get; set; }
+        public string PopDescription { get; set; }
+        public int SAMHSAPop { get; set; }
+        public bool PrimaryOutcome { get; set; }
+        public int Priority { get; set; }
+    }
+
+    public class Study
+    {
+        public int Id { get; set;}
+        public int StudyId { get; set; }
+        public string Reference { get; set; }
+        public bool inLitSearch { get; set; }
+        public int Exclusion1 { get; set; }
+        public int Exclusion2 { get; set; }
+        public int Exclusion3 { get; set; }
+        public int StudyDesign { get; set; }
+        // public string GroupSize { get; set; } // I am not sure that this is right?
+        public string BaselineEquiv { get; set; }
+        public bool UseMultivariate { get; set; }
+        // public int LongestFollowup {get; set;}
+        public int SAMSHARelated { get; set; }
+        // public int TargetPop { get; set; }
+        // public int ListOfOutcomes { get; set; }
+        public bool AuthorQueryNeeded { get; set; }
+        public bool RecommendReview { get; set; }
+        public string Notes { get; set; }
+        public int DocumentId { get; set; }
+    }
+
+    public class Study_Outcome
+    {
+        public int StudyId { get; set; }
+        public  int OutcomeId { get; set; }
+        public int DocumentId { get; set; }
+    }
+
+    public class something
+    {
+        Study_Outcome so = new Study_Outcome() { StudyId = 1, OutcomeId = 2 };
+    }
+
     public class Answer
     {
         public int AnswerId { get; set; }
@@ -156,24 +208,6 @@ namespace NREPPAdminSite.Models
             List<MaskValue> outList = new List<MaskValue>();
 
             int principal = inMask;
-            int powerCounter = 0;
-
-            /*while (principal > 0)
-            {
-                /*if (principal % 2 > 0)
-                {
-                    outList.Add((int)Math.Pow(2, powerCounter));
-                }
-
-                outList.Add(new MaskValue() { Name = inList[powerCounter].Name, Value = inList[powerCounter].Value, Selected = (principal % 2 > 0) });
-
-                if (principal == 1)
-                    break;
-
-                principal = principal >> 1;
-                powerCounter++;
-                //powerCounter += 1;
-            }*/
 
             for (int i = 0; i < inList.Count; i++ )
             {

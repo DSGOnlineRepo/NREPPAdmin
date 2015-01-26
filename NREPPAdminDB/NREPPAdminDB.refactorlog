@@ -28,4 +28,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="DocumentId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="fcb0d0a3-8003-404e-95f6-002c923611d0" ChangeDateTime="01/26/2015 16:26:51">
+    <Property Name="ElementName" Value="[dbo].[Document_Outcome].[DocumentId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Document_Outcome]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Study" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4db373a4-7b3f-421b-bdf8-302c2d4d78d6" ChangeDateTime="01/26/2015 16:27:01">
+    <Property Name="ElementName" Value="[dbo].[Document_Outcome].[Study]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Document_Outcome]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StudyId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ca8aec67-1cc0-4fbc-a730-16a8e626b916" ChangeDateTime="01/26/2015 16:27:15">
+    <Property Name="ElementName" Value="[dbo].[Document_Outcome].[DocumentID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Document_Outcome]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DocumentId" />
+  </Operation>
 </Operations>
