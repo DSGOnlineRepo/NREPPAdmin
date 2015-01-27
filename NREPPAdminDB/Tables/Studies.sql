@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Studies]
 (
-	[Id] INT NOT NULL PRIMARY KEY,
+	[Id] INT IDENTITY NOT NULL PRIMARY KEY,
 	[StudyId] INT NOT NULL,
     [Reference] VARCHAR(100) NULL, 
     [InLitSearch] BIT NOT NULL DEFAULT 0, 

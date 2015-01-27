@@ -84,10 +84,20 @@ namespace NREPPAdminSite.Controllers
         {
             List<Study> theStudies = new List<Study>();
             NrepServ localService = new NrepServ(NrepServ.ConnString);
+            Intervention theIntervention;
 
             theStudies = localService.GetStudiesByIntervention(InterventionId).ToList<Study>();
+            //Intervention theIntervention = localService.GetInterventions()
 
-            return View();
+            SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InterventionId };
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(idParam);
+            List<Intervention> interventionList = localService.GetInterventions(parameters);
+            theIntervention = interventionList[0];
+
+            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention);
+
+            return View(sm);
         }
 
         #region Post Methods

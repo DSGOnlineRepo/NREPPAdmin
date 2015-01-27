@@ -660,7 +660,8 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    OutList.Add(new Study() { Id = (int)dr["Id"], Notes = dr["Notes"].ToString()});
+                    OutList.Add(new Study() { Id = (int)dr["Id"], Notes = dr["Notes"].ToString(), StudyId = (int)dr["StudyId"],
+                        Reference = dr["Reference"].ToString()});
                 }
 
             } catch (Exception ex)

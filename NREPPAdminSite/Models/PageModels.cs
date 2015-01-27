@@ -5,6 +5,9 @@ using System.Web;
 
 namespace NREPPAdminSite.Models
 {
+
+    #region Lookup Page Model
+
     public class LookupPageModel
     {
         private List<Answer> firstLookup = new List<Answer>();
@@ -107,4 +110,62 @@ namespace NREPPAdminSite.Models
             documents.RemoveAt(index);
         }
     }
+
+    #endregion
+
+    #region Screening Model
+
+    public class ScreeningModel
+    {
+        private List<Study> studyDocuments = new List<Study>();
+        private Intervention intervention = new Intervention();
+
+        #region Constructors
+
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        public ScreeningModel() { }
+
+        public ScreeningModel(List<Study> inDocs, Intervention interV)
+        {
+            studyDocuments = inDocs;
+            intervention = interV;
+        }
+
+        #endregion
+
+        public IEnumerable<Study> StudyDocuments
+        {
+            get
+            {
+                return studyDocuments;
+            }
+        }
+
+        public Intervention TheIntervention
+        {
+            get { return intervention; }
+        }
+
+        /// <summary>
+        /// Add a Study Document
+        /// </summary>
+        /// <param name="inStudy">The Study Info to Add To the List</param>
+        public void AddStudyDocument(Study inStudy)
+        {
+            studyDocuments.Add(inStudy);
+        }
+
+        /// <summary>
+        /// Remove a document from the study list
+        /// </summary>
+        /// <param name="index">The index of the study document record to delete</param>
+        public void DeleteStudyDocument(int index)
+        {
+            studyDocuments.RemoveAt(index);
+        }
+    }
+
+    #endregion
 }
