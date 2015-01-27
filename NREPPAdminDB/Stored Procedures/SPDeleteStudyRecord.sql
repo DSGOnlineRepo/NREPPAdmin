@@ -1,0 +1,13 @@
+﻿CREATE PROCEDURE [dbo].[SPDeleteStudyRecord]
+	@StudyRecordID INT
+AS
+	BEGIN TRANSACTION
+		DELETE from Studies
+		WHERE Id = @StudyRecordID
+
+		IF @@ERROR <> 0 BEGIN
+			ROLLBACK TRANSACTION
+			RETURN -1
+		END
+	COMMIT TRANSACTION
+RETURN 0

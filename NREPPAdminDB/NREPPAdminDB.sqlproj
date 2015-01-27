@@ -96,6 +96,7 @@
     <Build Include="Tables\Document_Outcome.sql" />
     <Build Include="Stored Procedures\SPGetStudiesByIntervention.sql" />
     <Build Include="Stored Procedures\SPAddOrUpdateStudyRecord.sql" />
+    <Build Include="Stored Procedures\SPDeleteStudyRecord.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

@@ -582,6 +582,99 @@ namespace NREPPAdminSite
             return retValue;
         }
 
+        /// <summary>
+        /// Deletes a study record with the supplied ID
+        /// </summary>
+        /// <param name="RecordId"></param>
+        public void DeleteStudyRecord(int RecordId)
+        {
+            SqlCommand cmd = new SqlCommand("SPDeleteStudyRecord", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@StudyRecordID", RecordId));
+
+            try
+            {
+                CheckConn();
+            } catch (Exception)
+            {
+
+            }
+            finally { conn.Close(); }
+
+            return;
+        }
+
+        public int AddStudyRecord(Study inStudy)
+        {
+            int returnValue = 0;
+            SqlCommand cmd = new SqlCommand("SPAddOrUpdateStudyRecord", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "RETURN_VALUE", SqlDbType = SqlDbType.Int, Direction = ParameterDirection.ReturnValue });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = inStudy.Id });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StudyId", SqlDbType = SqlDbType.Int, Value = inStudy.StudyId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Reference", SqlDbType = SqlDbType.VarChar, Value = inStudy.Reference });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@InLitSearch", SqlDbType = SqlDbType.Bit, Value = inStudy.inLitSearch });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion1", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion1 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion2", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion2 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion3", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion3 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StudyDesign", SqlDbType = SqlDbType.Int, Value = inStudy.StudyDesign });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@BaselineEquiv", SqlDbType = SqlDbType.VarChar, Value = inStudy.BaselineEquiv });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@UseMultivariate", SqlDbType = SqlDbType.Bit, Value = inStudy.UseMultivariate });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SAMSHARelated", SqlDbType = SqlDbType.Int, Value = inStudy.SAMSHARelated });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@AuthorQueryNeeded", SqlDbType = SqlDbType.Bit, Value = inStudy.AuthorQueryNeeded });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Notes", SqlDbType = SqlDbType.VarChar, Value = inStudy.Notes });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocumentId", SqlDbType = SqlDbType.Int, Value = inStudy.DocumentId });
+
+            try
+            {
+                CheckConn();
+
+                int someVal = cmd.ExecuteNonQuery();
+                returnValue = (int)cmd.Parameters["RETURN_VALUE"].Value;
+
+            } catch (Exception)
+            {
+                returnValue = -1;
+            }
+            finally { conn.Close(); }
+
+            return returnValue;
+        }
+
+        public IEnumerable<Study> GetStudiesByIntervention(int IntervId)
+        {
+            List<Study> OutList = new List<Study>();
+            SqlCommand cmd = new SqlCommand("SPGetStudiesByIntervention", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@IntervId", IntervId));
+
+            try
+            {
+                CheckConn();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    OutList.Add(new Study() { Id = (int)dr["Id"], Notes = dr["Notes"].ToString()});
+                }
+
+            } catch (Exception ex)
+            {
+                OutList.Add(new Study() { Notes = ex.Message, Id = -1 });
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return OutList;
+        }
+
         #endregion
 
         #region Workflow Functionality

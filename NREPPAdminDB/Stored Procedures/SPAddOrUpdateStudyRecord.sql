@@ -19,7 +19,8 @@
     @AuthorQueryNeeded BIT = 0, 
     @RecommendReview BIT = 0, 
     @Notes VARCHAR(MAX), 
-    @DocumentId INT
+    @DocumentId INT,
+	@IDOut INT OUTPUT
 AS SET NOCOUNT ON	
 	
 	BEGIN TRANSACTION
@@ -65,6 +66,8 @@ AS SET NOCOUNT ON
 			ROLLBACK TRANSACTION
 			RETURN -1
 		END
+
+		SET @IDOut = @@IDENTITY
 	END
 	ELSE BEGIN
 
@@ -85,7 +88,7 @@ AS SET NOCOUNT ON
 			[ListOfOutcomes] = null, 
 			[AuthorQueryNeeded] = @AuthorQueryNeeded, 
 			[RecommendReview] = @RecommendReview, 
-			[Notes] = @Notes, 
+			[Notes] = @Notes,
 			[DocumentId] = @DocumentId
 		WHERE Id = @Id
 
@@ -93,6 +96,8 @@ AS SET NOCOUNT ON
 			ROLLBACK TRANSACTION
 			RETURN -2
 		END
+
+		SET @IDOut = @Id
 	END
 	COMMIT TRANSACTION
 

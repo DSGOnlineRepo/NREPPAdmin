@@ -22,5 +22,5 @@ AS
 		[Notes], 
 		[DocumentId]
 	FROM Studies 
-	WHERE DocumentId in (select DocumentID from Document where InterventionId = @IntervId)
+	WHERE DocumentId in (select DocumentId from Document where InterventionId = @IntervId)
 RETURN 0

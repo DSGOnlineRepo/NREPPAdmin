@@ -57,6 +57,52 @@ namespace NREPPAdminSite.Controllers
             return View(pageModel);
         }
 
+
+        // TODO: Make sure you have a cookie and rights to delete this document (pretty easy, but you DO need to implement it)
+
+        public ActionResult DeleteDocument(int DocId, int InvId)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            localService.DeleteDocument(DocId, 1); // TODO: Get User from Cookie
+
+            return RedirectToAction("View", new { InvId = InvId });
+        }
+
+        public ActionResult UploadFile()
+        {
+            return View();
+        }
+
+        public string Document()
+        {
+
+            return "Something came out!";
+        }
+
+        public ActionResult Screen(int InterventionId)
+        {
+            List<Study> theStudies = new List<Study>();
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            theStudies = localService.GetStudiesByIntervention(InterventionId).ToList<Study>();
+
+            return View();
+        }
+
+        #region Post Methods
+
+        /// <summary>
+        /// Performs the submission of a new program
+        /// </summary>
+        /// <param name="model">The intervention to submit for review</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Submit(IntervPageModel model)
+        {
+            return RedirectToAction("Programs", "Home");
+        }
+
         [HttpPost]
         public ActionResult Edit(IntervPageModel inInterv)
         {
@@ -90,44 +136,12 @@ namespace NREPPAdminSite.Controllers
                 }
             }
 
-            return RedirectToAction("View", new {InvId = int.Parse(Request.Form["TheIntervention.Id"])});
+            return RedirectToAction("View", new { InvId = int.Parse(Request.Form["TheIntervention.Id"]) });
         }
 
-        // TODO: Make sure you have a cookie and rights to delete this document (pretty easy, but you DO need to implement it)
+        #endregion
 
-        public ActionResult DeleteDocument(int DocId, int InvId)
-        {
-            NrepServ localService = new NrepServ(NrepServ.ConnString);
-
-            localService.DeleteDocument(DocId, 1); // TODO: Get User from Cookie
-
-            return RedirectToAction("View", new { InvId = InvId });
-        }
-
-        /*[HttpPost]
-        public ActionResult DeleteDoc()*/
-
-        // Delete document with an object
-
-        public ActionResult UploadFile()
-        {
-            return View();
-        }
-
-        public string Document()
-        {
-            /*NrepServ localService = new NrepServ(NrepServ.ConnString);
-
-            localService.getFilePath(1);*/
-
-            return "Something came out!";
-        }
-
-        [HttpPost]
-        public ActionResult Submit(IntervPageModel model)
-        {
-            return RedirectToAction("Programs", "Home");
-        }
+        #region Helper Methods
 
         protected NreppUser ReadCookie(HttpRequestBase req)
         {
@@ -151,6 +165,8 @@ namespace NREPPAdminSite.Controllers
 
             return outUser;
         }
+
+        #endregion
 
     }
 }
