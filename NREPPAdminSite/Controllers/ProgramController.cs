@@ -149,6 +149,24 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("View", new { InvId = int.Parse(Request.Form["TheIntervention.Id"]) });
         }
 
+        [HttpPost]
+        public ActionResult AddStudy(FormCollection formCollection)
+        {
+            //int InvId = 0;
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            Study nStudy = new Study();
+            nStudy.StudyId = int.Parse(Request.Form["StudyId"]);
+            nStudy.DocumentId = int.Parse(Request.Form["Document"]);
+            nStudy.StudyDesign = int.Parse(Request.Form["StudyDesign"]);
+            nStudy.BaselineEquiv = Request.Form["BaselineEquiv"];
+            nStudy.Reference = "Some Reference";
+            nStudy.Id = -1;
+
+            int ActualId = localService.AddStudyRecord(nStudy);
+
+            return RedirectToAction("Screen", new { InterventionId = int.Parse(Request.Form["InterventionId"]) });
+        }
+
         #endregion
 
         #region Helper Methods

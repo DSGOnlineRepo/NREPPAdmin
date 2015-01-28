@@ -9,5 +9,44 @@
 
 <div>
     This Space For Rent
+
+    <table>
+        <tr>
+            <th>Reference</th>
+            <th>Notes</th>
+        </tr>
+        @foreach (NREPPAdminSite.Models.Study study in Model.StudyDocuments)
+        {
+            <tr>
+                <td>@study.Reference</td>
+                <td>@study.Notes</td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div>
+    @using (Html.BeginForm("AddStudy", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
+        <label for="studyIdBox">Study ID:</label><input type="text" name="StudyId" /><br />
+        <label for="docDropdown">Document:</label>
+        <select id="docDropdown" name="Document">
+            <option value="1">Document 1</option>
+            <option value="2">Document 2</option>
+        </select><br />
+        <input type="checkbox" name="IsLitSearch" /><label>Was this part of a Literature Search?</label> <br />
+        
+        <label>What was the Study Design?</label>
+        <select name="StudyDesign">
+            <option value="1">Study Design 1</option>
+            <option value="2">Study Design 2</option>
+        </select><br /><br />
+        
+        <label>Describe The Baseline Equivalence Measure:</label><br />
+        <textarea name="BaselineEquiv"></textarea>
+        
+        <input type="submit" value="Submit" />
+    }
 </div>
 

@@ -626,6 +626,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@AuthorQueryNeeded", SqlDbType = SqlDbType.Bit, Value = inStudy.AuthorQueryNeeded });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Notes", SqlDbType = SqlDbType.VarChar, Value = inStudy.Notes });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocumentId", SqlDbType = SqlDbType.Int, Value = inStudy.DocumentId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@IDOut", SqlDbType = SqlDbType.Int, Direction = ParameterDirection.Output });
 
             try
             {
