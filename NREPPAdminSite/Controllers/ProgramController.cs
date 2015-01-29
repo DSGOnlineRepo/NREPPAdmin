@@ -171,6 +171,9 @@ namespace NREPPAdminSite.Controllers
             nStudy.Notes = Request.Form["Notes"];
             nStudy.UseMultivariate = Request.Form["useMultivariate"] == "on";
             nStudy.SAMSHARelated = int.Parse(Request.Form["SAMSHARelated"]);
+            nStudy.Exclusion1 = int.Parse(Request.Form["Exclusion1"]);
+            nStudy.Exclusion2 = int.Parse(Request.Form["Exclusion2"]);
+            nStudy.Exclusion3 = int.Parse(Request.Form["Exclusion3"]);
 
             int ActualId = localService.AddStudyRecord(nStudy);
 

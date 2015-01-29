@@ -46,6 +46,7 @@ INSERT INTO InterventionStatus (StatusName) VALUES ('Under Review')
 
 SET IDENTITY_INSERT Answers ON
 
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (-1, ' ', 'None')
 Insert INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (1, 'Y', 'Yes')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (2, 'N', 'No')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (3, 'NR', 'Not Reported')
@@ -111,6 +112,7 @@ INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (13, 5)
 
 -- Exclusions
 INSERT INTO Answer_Category (AnswerId, CategoryId) SELECT ID, 6 from Answers where Id BETWEEN 14 AND 21
+INSERT INTO Answer_Category (AnswerId, CategoryID) VALUES (-1, 6)
 
 -- Masks
 

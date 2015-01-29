@@ -28,6 +28,7 @@
 @{
     List<SelectListItem> StudyDesigns = new List<SelectListItem>();
     List<SelectListItem> YPYN = new List<SelectListItem>();
+    List<SelectListItem> Exclusions = new List<SelectListItem>();
 
     foreach (NREPPAdminSite.Models.Answer ans in Model.StudyDesigns)
     {
@@ -37,6 +38,11 @@
     foreach (NREPPAdminSite.Models.Answer ans in Model.YPYN)
     {
         YPYN.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+    }
+    
+    foreach (NREPPAdminSite.Models.Answer ans in Model.Exclusions)
+    {
+        Exclusions.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
     }
 }
 
@@ -61,9 +67,9 @@
         
         <div>
             <span style="width: 100%; clear: both; float: left;">Exclusions:</span>
-            <span style="float: left; clear: left;">Exclusion 1</span><br />
-            <span style="float: left; clear: left;">Exclusion 2</span><br />
-            <span style="float: left; clear: left;">Exclusion 3</span><br />
+            <span style="float: left; clear: left;">Exclusion 1</span>@Html.DropDownList("Exclusion1", Exclusions)<br />
+            <span style="float: left; clear: left;">Exclusion 2</span>@Html.DropDownList("Exclusion2", Exclusions)<br />
+            <span style="float: left; clear: left;">Exclusion 3</span>@Html.DropDownList("Exclusion3", Exclusions)<br />
             <br />
         </div>
         

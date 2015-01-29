@@ -8,6 +8,6 @@ AS SET NOCOUNT ON
 	INNER JOIN Category c ON c.Id = ac.CategoryID
 	WHERE (@InCategory IS NULL OR ac.CategoryID = @InCategory) AND
 	(@InCategoryName IS NULL OR c.CategoryName = @InCategoryName)
-	--ac.CategoryID = @InCategory
+	ORDER BY AnswerId ASC
 
 RETURN 0
