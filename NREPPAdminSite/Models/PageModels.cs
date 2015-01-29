@@ -121,6 +121,7 @@ namespace NREPPAdminSite.Models
         private Intervention intervention = new Intervention();
         private List<Answer> studyDesigns;
         private List<Answer> ypyn;
+        private List<Answer> exclusions;
 
         #region Constructors
 
@@ -129,12 +130,13 @@ namespace NREPPAdminSite.Models
         /// </summary>
         public ScreeningModel() { }
 
-        public ScreeningModel(List<Study> inDocs, Intervention interV, List<Answer> inStudyDesigns, List<Answer> inYPYN)
+        public ScreeningModel(List<Study> inDocs, Intervention interV, List<Answer> inStudyDesigns, List<Answer> inYPYN, List<Answer> inExclusions)
         {
             studyDocuments = inDocs;
             intervention = interV;
             studyDesigns = inStudyDesigns;
             ypyn = inYPYN;
+            exclusions = inExclusions;
         }
 
         #endregion
@@ -160,6 +162,11 @@ namespace NREPPAdminSite.Models
         public IEnumerable<Answer> YPYN
         {
             get { return ypyn; }
+        }
+
+        public IEnumerable<Answer> Exclusions
+        {
+            get { return exclusions; }
         }
 
         /// <summary>

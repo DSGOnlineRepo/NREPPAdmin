@@ -59,6 +59,14 @@ INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (10, 'QED/Other', 'QED/
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (11, 'Time Series Multi', 'Time Series (Multiple-Group)')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (12, 'Time Series Single', 'Time Series (Single-Group)')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (13, 'Y&Priority', 'Yes & Priority')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (14, 'Not Impact', 'Not an impact evaluation')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (15, 'Not Quant', 'Not Quantitative')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (16, 'Pre-experimental', 'Pre-experimental study design')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (17, 'pretest/posttest', '< 3 pretests/posttests, single time series design')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (18, 'Comp Effective', 'Comparative Effectiveness Study')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (19, 'Not Article', 'Not a journal article or comp eval report')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (20, 'Not English', 'Study Not in English')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (21, 'Not SAMSHA', 'No SAMSHA Population or Outcome')
 
 SET IDENTITY_INSERT Answers OFF
 
@@ -71,6 +79,7 @@ INSERT INTO Category (Id, CategoryName) VALUES (2, 'Y/N/NR')
 INSERT INTO Category (Id, CategoryName) VALUES (3, 'DocumentType')
 INSERT INTO Category (Id, CategoryName) VALUES (4, 'StudyDesign')
 INSERT INTO Category (Id, CategoryName) VALUES (5, 'YPYN')
+INSERT INTO Category (Id, CategoryName) VALUES (6, 'Exclusions')
 
 SET IDENTITY_INSERT Category OFF
 
@@ -99,6 +108,9 @@ INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (12, 4)
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (1, 5)
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (2, 5)
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (13, 5)
+
+-- Exclusions
+INSERT INTO Answer_Category (AnswerId, CategoryId) SELECT ID, 6 from Answers where Id BETWEEN 14 AND 21
 
 -- Masks
 

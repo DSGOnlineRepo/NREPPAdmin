@@ -4,6 +4,7 @@ using NREPPAdminSite;
 using NREPPAdminSite.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace NREPPTests
 {
@@ -67,6 +68,15 @@ namespace NREPPTests
             //int secondNum = aService.SaveFileToDB(fileBytes, nFileName, 1, "NOT IMPLEMENTED!", 1, true, fileNum, "Healer Calcs");
 
             //Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public void CategoryTest()
+        {
+            NrepServ aService = new NrepServ(ServiceTests.ConnString);
+            List<Answer> SomeAnswers = aService.GetAnswersByCategory("Y/N/NR").ToList<Answer>();
+
+            Assert.AreEqual(SomeAnswers.Count, 3);
         }
 
     }

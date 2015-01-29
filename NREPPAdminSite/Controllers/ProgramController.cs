@@ -87,10 +87,13 @@ namespace NREPPAdminSite.Controllers
             Intervention theIntervention;
             List<Answer> StudyDesigns;
             List<Answer> YPYN;
+            List<Answer> Exclusions;
 
             theStudies = localService.GetStudiesByIntervention(InterventionId).ToList<Study>();
             StudyDesigns = localService.GetAnswersByCategory("StudyDesign").ToList<Answer>();
             YPYN = localService.GetAnswersByCategory("YPYN").ToList<Answer>();
+            Exclusions = localService.GetAnswersByCategory("Exclusions").ToList<Answer>();
+            
             //Intervention theIntervention = localService.GetInterventions()
 
             SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InterventionId };
@@ -99,7 +102,7 @@ namespace NREPPAdminSite.Controllers
             List<Intervention> interventionList = localService.GetInterventions(parameters);
             theIntervention = interventionList[0];
 
-            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN);
+            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions);
 
             return View(sm);
         }
