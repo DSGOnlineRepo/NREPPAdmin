@@ -52,6 +52,13 @@ INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (3, 'NR', 'Not Reported
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (4, 'ProgEval', 'Program Evaluation')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (5, 'Dissem', 'Dissemination Materials')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (6, 'Support', 'Other Supporting Materials')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (7, 'RCT', 'RCT')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (8, 'QED/Propen', 'QED/Propensity-score Matched')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (9, 'QED/Matched', 'QED/Matches')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (10, 'QED/Other', 'QED/Other')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (11, 'Time Series Multi', 'Time Series (Multiple-Group)')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (12, 'Time Series Single', 'Time Series (Single-Group)')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (13, 'Y&Priority', 'Yes & Priority')
 
 SET IDENTITY_INSERT Answers OFF
 
@@ -62,6 +69,8 @@ SET IDENTITY_INSERT Category ON
 INSERT INTO Category (Id, CategoryName) VALUES (1, 'Yes/No')
 INSERT INTO Category (Id, CategoryName) VALUES (2, 'Y/N/NR')
 INSERT INTO Category (Id, CategoryName) VALUES (3, 'DocumentType')
+INSERT INTO Category (Id, CategoryName) VALUES (4, 'StudyDesign')
+INSERT INTO Category (Id, CategoryName) VALUES (5, 'YPYN')
 
 SET IDENTITY_INSERT Category OFF
 
@@ -77,6 +86,19 @@ INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (3, 2)
 INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (4, 3)
 INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (5, 3)
 INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (6, 3)
+
+-- Study Designs
+INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (7, 4)
+INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (8, 4)
+INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (9, 4)
+INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (10, 4)
+INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (11, 4)
+INSERT INTO Answer_Category(AnswerID, CategoryID) VALUES (12, 4)
+
+-- Yes, Yes & Priority, No
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (1, 5)
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (2, 5)
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (13, 5)
 
 -- Masks
 

@@ -25,6 +25,21 @@
     </table>
 </div>
 
+@{
+    List<SelectListItem> StudyDesigns = new List<SelectListItem>();
+    List<SelectListItem> YPYN = new List<SelectListItem>();
+
+    foreach (NREPPAdminSite.Models.Answer ans in Model.StudyDesigns)
+    {
+        StudyDesigns.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+    }
+
+    foreach (NREPPAdminSite.Models.Answer ans in Model.YPYN)
+    {
+        YPYN.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+    }
+}
+
 <div>
     @using (Html.BeginForm("AddStudy", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
@@ -35,17 +50,30 @@
             <option value="1">Document 1</option>
             <option value="2">Document 2</option>
         </select><br />
-        <input type="checkbox" name="IsLitSearch" /><label>Was this part of a Literature Search?</label> <br />
-        
+        <input type="checkbox" name="IsLitSearch" /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <br />
+        <input type="checkbox" name="useMulitvariate" /><label style="margin-left: 2px;">Evaluation Employs a Multivariate Analysis</label> <br />
+
         <label>What was the Study Design?</label>
-        <select name="StudyDesign">
-            <option value="1">Study Design 1</option>
-            <option value="2">Study Design 2</option>
-        </select><br /><br />
+        @Html.DropDownList("StudyDesign", StudyDesigns)<br /><br />
+        
+        <label>SAMSHA-related Population?</label>
+        @Html.DropDownList("SAMSHARelated", YPYN)<br />
+        
+        <div>
+            <span style="width: 100%; clear: both; float: left;">Exclusions:</span>
+            <span style="float: left; clear: left;">Exclusion 1</span><br />
+            <span style="float: left; clear: left;">Exclusion 2</span><br />
+            <span style="float: left; clear: left;">Exclusion 3</span><br />
+            <br />
+        </div>
         
         <label>Describe The Baseline Equivalence Measure:</label><br />
-        <textarea name="BaselineEquiv"></textarea>
-        
+        <textarea name="BaselineEquiv"></textarea><br />
+
+        <label>Notes:</label><br />
+        <textarea name="Notes"></textarea><br />
+
+        <br /><br />
         <input type="submit" value="Submit" />
     }
 </div>

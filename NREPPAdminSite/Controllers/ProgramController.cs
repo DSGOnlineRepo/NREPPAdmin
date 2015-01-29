@@ -85,8 +85,12 @@ namespace NREPPAdminSite.Controllers
             List<Study> theStudies = new List<Study>();
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             Intervention theIntervention;
+            List<Answer> StudyDesigns;
+            List<Answer> YPYN;
 
             theStudies = localService.GetStudiesByIntervention(InterventionId).ToList<Study>();
+            StudyDesigns = localService.GetAnswersByCategory("StudyDesign").ToList<Answer>();
+            YPYN = localService.GetAnswersByCategory("YPYN").ToList<Answer>();
             //Intervention theIntervention = localService.GetInterventions()
 
             SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InterventionId };
@@ -95,7 +99,7 @@ namespace NREPPAdminSite.Controllers
             List<Intervention> interventionList = localService.GetInterventions(parameters);
             theIntervention = interventionList[0];
 
-            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention);
+            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN);
 
             return View(sm);
         }
@@ -161,6 +165,9 @@ namespace NREPPAdminSite.Controllers
             nStudy.BaselineEquiv = Request.Form["BaselineEquiv"];
             nStudy.Reference = "Some Reference";
             nStudy.Id = -1;
+            nStudy.Notes = Request.Form["Notes"];
+            nStudy.UseMultivariate = Request.Form["useMultivariate"] == "on";
+            nStudy.SAMSHARelated = int.Parse(Request.Form["SAMSHARelated"]);
 
             int ActualId = localService.AddStudyRecord(nStudy);
 
