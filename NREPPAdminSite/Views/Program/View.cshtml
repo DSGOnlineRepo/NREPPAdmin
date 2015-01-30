@@ -82,7 +82,7 @@
                     <tr>
                         <td class="withborder">@doc.FileDescription</td>
                         <td class="withborder">@doc.DocumentTypeName</td>
-                        <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = "1", DocId = doc.DocId })</td>
+                        <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.TheIntervention.Id, DocId = doc.DocId })</td>
                         <!-- Need to Add Type -->
                     </tr>
                 }

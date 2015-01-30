@@ -69,6 +69,21 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("View", new { InvId = InvId });
         }
 
+        /// <summary>
+        /// Deletes a Study Record
+        /// </summary>
+        /// <param name="RecId">The Record Id to Delete</param>
+        /// <param name="InvId">The Program ID so it can redirect</param>
+        /// <returns></returns>
+        public ActionResult DeleteStudyRecord(int RecId, int InvId)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            
+            localService.DeleteStudyRecord(RecId);
+
+            return RedirectToAction("Screen", new { InterventionId = InvId });
+        }
+
         public ActionResult UploadFile()
         {
             return View();
@@ -165,7 +180,7 @@ namespace NREPPAdminSite.Controllers
             nStudy.StudyId = int.Parse(Request.Form["StudyId"]);
             nStudy.DocumentId = int.Parse(Request.Form["Document"]);
             nStudy.StudyDesign = int.Parse(Request.Form["StudyDesign"]);
-            nStudy.BaselineEquiv = Request.Form["BaselineEquiv"];
+            nStudy.BaselineEquiv = Request.Form["BaselineEquiv"] == null ? "" : Request.Form["BaselineEquiv"];
             nStudy.Reference = "Some Reference";
             nStudy.Id = -1;
             nStudy.Notes = Request.Form["Notes"];

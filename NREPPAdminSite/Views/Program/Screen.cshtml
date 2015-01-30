@@ -5,21 +5,27 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("/Scripts/screenTool.js")"></script>
+}
+
 <h2>Screening tool for @Model.TheIntervention.Title</h2>
 
 <div>
     This Space For Rent
 
-    <table>
+    <table style="border: 1px solid;">
         <tr>
-            <th>Reference</th>
-            <th>Notes</th>
+            <th class="withborder" style="text-align: center;">Reference</th>
+            <th class="withborder" style="text-align: center;">Notes</th>
+            <th> </th>
         </tr>
         @foreach (NREPPAdminSite.Models.Study study in Model.StudyDocuments)
         {
             <tr>
-                <td>@study.Reference</td>
-                <td>@study.Notes</td>
+                <td class="withborder">@study.Reference</td>
+                <td class="withborder">@study.Notes</td>
+                <td class="withborder">@Html.ActionLink("Delete", "DeleteStudyRecord", new { RecId = study.Id, InvId = Model.TheIntervention.Id })</td>
             </tr>
         }
     </table>
@@ -46,7 +52,7 @@
     }
 }
 
-<div>
+<div style="padding-top: 10px; padding-bottom: 10px;">
     @using (Html.BeginForm("AddStudy", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
@@ -61,10 +67,10 @@
 
         <label>What was the Study Design?</label>
         @Html.DropDownList("StudyDesign", StudyDesigns)<br /><br />
-        
+
         <label>SAMSHA-related Population?</label>
         @Html.DropDownList("SAMSHARelated", YPYN)<br />
-        
+
         <div>
             <span style="width: 100%; clear: both; float: left;">Exclusions:</span>
             <span style="float: left; clear: left;">Exclusion 1</span>@Html.DropDownList("Exclusion1", Exclusions)<br />
@@ -72,7 +78,7 @@
             <span style="float: left; clear: left;">Exclusion 3</span>@Html.DropDownList("Exclusion3", Exclusions)<br />
             <br />
         </div>
-        
+
         <label>Describe The Baseline Equivalence Measure:</label><br />
         <textarea name="BaselineEquiv"></textarea><br />
 
@@ -83,4 +89,39 @@
         <input type="submit" value="Submit" />
     }
 </div>
+
+<button id="testButton">Test Me!</button>
+
+<script type="text/javascript">
+    var thisIsAThing = 5;
+    var currentStudy = new Array();
+    
+    function makeRecord(Id, StudyId, Reference, inLitSearch, Exclusion1, Exclusion2, Exclusion3, StudyDesign, BaselineEquiv,
+        UseMultivariate, SAMSHARelated, AuthorQueryNeeded, RecommendReview, Notes, DocumentId) {
+        var anObject = {};
+
+        anObject.Id = Id;
+        anObject.StudyId = StudyId;
+        anObject.Reference = Reference;
+        anObject.inLitSearch = inLitSearch != "False";
+        anObject.Exclusion1 = Exclusion1;
+        anObject.Exclusion2 = Exclusion2;
+        anObject.Exclusion3 = Exclusion3;
+        anObject.StudyDesign = StudyDesign;
+        anObject.BaselineEquiv = BaselineEquiv;
+        anObject.UseMultivariate = UseMultivariate != "False";
+        anObject.SAMSHARelated = SAMSHARelated;
+        anObject.AuthorQueryNeeded = AuthorQueryNeeded != "False";
+        anObject.RecommendReview = RecommendReview != "False";
+        anObject.Notes = Notes;
+        anObject.DocumentId = DocumentId;
+
+        return anObject;
+    }
+
+    @foreach(NREPPAdminSite.Models.Study item in Model.StudyDocuments)
+    {
+        @:currentStudy.push(makeRecord(@item.Id, @item.StudyId, '@item.Reference', "@item.inLitSearch", @item.Exclusion1, @item.Exclusion2, @item.Exclusion3, @item.StudyDesign, '@item.BaselineEquiv', "@item.UseMultivariate", @item.SAMSHARelated, "@item.AuthorQueryNeeded", "@item.RecommendReview", "@item.Notes", @item.DocumentId));
+    }
+</script>
 
