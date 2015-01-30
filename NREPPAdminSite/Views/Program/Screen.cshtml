@@ -12,7 +12,7 @@
 <h2>Screening tool for @Model.TheIntervention.Title</h2>
 
 <div>
-    This Space For Rent
+    @{int i = 0; }
 
     <table style="border: 1px solid;">
         <tr>
@@ -23,7 +23,7 @@
         @foreach (NREPPAdminSite.Models.Study study in Model.StudyDocuments)
         {
             <tr>
-                <td class="withborder">@study.Reference</td>
+                <td class="withborder"><a href="#" onclick="populateStudyForm(@i)">@study.Reference</a></td>
                 <td class="withborder">@study.Notes</td>
                 <td class="withborder">@Html.ActionLink("Delete", "DeleteStudyRecord", new { RecId = study.Id, InvId = Model.TheIntervention.Id })</td>
             </tr>
@@ -56,6 +56,7 @@
     @using (Html.BeginForm("AddStudy", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
+        @Html.Hidden("ActualId");
         <label for="studyIdBox">Study ID:</label><input type="text" name="StudyId" /><br />
         <label for="docDropdown">Document:</label>
         <select id="docDropdown" name="Document">
@@ -90,7 +91,9 @@
     }
 </div>
 
-<button id="testButton">Test Me!</button>
+<div>
+    Outcomes go here
+</div>
 
 <script type="text/javascript">
     var thisIsAThing = 5;

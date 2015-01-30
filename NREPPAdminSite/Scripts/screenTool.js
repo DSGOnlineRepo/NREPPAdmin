@@ -1,8 +1,5 @@
-﻿$('#testButton').click(function () {
-    populateForm(0);
-});
-
-function populateForm(FormId)
+﻿
+function populateStudyForm(FormId)
 {
     var ject = currentStudy[FormId];
 
@@ -16,4 +13,5 @@ function populateForm(FormId)
     $("select[name*='StudyDesign']").val(ject.StudyDesign);
     $("textarea[name*='Notes']").text(ject.Notes);
     $("textarea[name*='BaselineEquiv']").text(ject.BaselineEquiv);
+    $("#ActualId").val(ject.Id);
 }
