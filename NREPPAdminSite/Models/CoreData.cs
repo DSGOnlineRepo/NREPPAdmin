@@ -128,6 +128,8 @@ namespace NREPPAdminSite.Models
     public class Outcome
     {
         public int Id { get; set; }
+
+        [Display(Name = "Measure Reported in Study")]
         public string OutcomeMeasure { get; set; }
         public string Citation { get; set; }
         public bool OverallAttrition { get; set; }
@@ -136,7 +138,11 @@ namespace NREPPAdminSite.Models
         public int BaselineEquiv { get; set; }
         public int SignificantImpact { get; set; }
         public bool GroupFavored { get; set; }
+
+        [Display(Name = "Describe Evaluated Population")]
         public string PopDescription { get; set; }
+
+        [Display(Name = "SAMSHA-related population")]
         public int SAMHSAPop { get; set; }
         public bool PrimaryOutcome { get; set; }
         public int Priority { get; set; }

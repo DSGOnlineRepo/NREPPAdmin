@@ -15,3 +15,7 @@ function populateStudyForm(FormId)
     $("textarea[name*='BaselineEquiv']").text(ject.BaselineEquiv);
     $("#ActualId").val(ject.Id);
 }
+
+$(document).ready(function () {
+    $(".chosen-select").chosen();
+});

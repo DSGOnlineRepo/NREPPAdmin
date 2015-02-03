@@ -108,8 +108,8 @@ namespace NREPPAdminSite.Controllers
             StudyDesigns = localService.GetAnswersByCategory("StudyDesign").ToList<Answer>();
             YPYN = localService.GetAnswersByCategory("YPYN").ToList<Answer>();
             Exclusions = localService.GetAnswersByCategory("Exclusions").ToList<Answer>();
-            
-            //Intervention theIntervention = localService.GetInterventions()
+
+            //theIntervention = localService.GetInterventions(InterventionId);
 
             SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InterventionId };
             List<SqlParameter> parameters = new List<SqlParameter>();

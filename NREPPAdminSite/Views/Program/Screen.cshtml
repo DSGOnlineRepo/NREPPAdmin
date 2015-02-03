@@ -7,6 +7,7 @@
 
 @section scripts {
     <script type="text/javascript" src="@Url.Content("/Scripts/screenTool.js")"></script>
+    <script type="text/javascript" src="@Url.Content("/Scripts/chosen.jquery.min.js")"></script>
 }
 
 <h2>Screening tool for @Model.TheIntervention.Title</h2>
@@ -93,6 +94,22 @@
 
 <div>
     Outcomes go here
+
+    @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <label for="measure">Measure Reported in the Study</label>
+        <input type="text" id="measure" name="measure" /><br /><br />
+        
+        <label for="popDescription">Describe Evaluated Population:</label><br />
+        <textarea name="popDescription" id="popDescription"></textarea><br /><br />
+        
+        <label for="studySelector">Select Applicable Studies</label><br />
+        <select id="studySelector" name="studySelector" multiple class="chosen-select">
+            <option>One</option>
+            <option>Two</option>
+            <option>Three</option>
+        </select>
+    }
 </div>
 
 <script type="text/javascript">
