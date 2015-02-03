@@ -117,7 +117,9 @@ namespace NREPPAdminSite.Controllers
             List<Intervention> interventionList = localService.GetInterventions(parameters);
             theIntervention = interventionList[0];
 
-            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions);
+            OutcomesWrapper ow = localService.GetOutcomesByIntervention(InterventionId);
+
+            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow);
 
             return View(sm);
         }

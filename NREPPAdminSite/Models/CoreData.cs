@@ -140,6 +140,39 @@ namespace NREPPAdminSite.Models
         public int SAMHSAPop { get; set; }
         public bool PrimaryOutcome { get; set; }
         public int Priority { get; set; }
+        public int DocumentId { get; set; }
+    }
+
+    public class OutcomesWrapper
+    {
+        private List<Outcome> outcomes;
+        private List<Study_Outcome> studyOutcomes;
+
+        #region Constructors
+
+        public OutcomesWrapper()
+        {
+            outcomes = new List<Outcome>();
+            studyOutcomes = new List<Study_Outcome>();
+        }
+
+        public OutcomesWrapper(List<Outcome> inOutcomes, List<Study_Outcome> inStudyOutcomes)
+        {
+            outcomes = inOutcomes;
+            studyOutcomes = inStudyOutcomes;
+        }
+
+        #endregion
+
+        public List<Outcome> Outcomes
+        {
+            get { return outcomes; }
+        }
+
+        public List<Study_Outcome> StudyOutcomes
+        {
+            get { return studyOutcomes; }
+        }
     }
 
     public class Study

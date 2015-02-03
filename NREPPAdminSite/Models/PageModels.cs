@@ -123,6 +123,8 @@ namespace NREPPAdminSite.Models
         private List<Answer> ypyn;
         private List<Answer> exclusions;
 
+        public OutcomesWrapper Outcomes { get; set; }
+
         #region Constructors
 
         /// <summary>
@@ -130,13 +132,15 @@ namespace NREPPAdminSite.Models
         /// </summary>
         public ScreeningModel() { }
 
-        public ScreeningModel(List<Study> inDocs, Intervention interV, List<Answer> inStudyDesigns, List<Answer> inYPYN, List<Answer> inExclusions)
+        public ScreeningModel(List<Study> inDocs, Intervention interV, List<Answer> inStudyDesigns, List<Answer> inYPYN, List<Answer> inExclusions,
+            OutcomesWrapper OW)
         {
             studyDocuments = inDocs;
             intervention = interV;
             studyDesigns = inStudyDesigns;
             ypyn = inYPYN;
             exclusions = inExclusions;
+            Outcomes = OW;
         }
 
         #endregion
