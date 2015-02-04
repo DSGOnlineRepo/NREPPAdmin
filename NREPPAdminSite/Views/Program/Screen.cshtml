@@ -19,6 +19,7 @@
         <tr>
             <th class="withborder" style="text-align: center;">Reference</th>
             <th class="withborder" style="text-align: center;">Notes</th>
+            <th>Study Id</th>
             <th> </th>
         </tr>
         @foreach (NREPPAdminSite.Models.Study study in Model.StudyDocuments)
@@ -26,8 +27,11 @@
             <tr>
                 <td class="withborder"><a href="#" onclick="populateStudyForm(@i)">@study.Reference</a></td>
                 <td class="withborder">@study.Notes</td>
+                <td class="withborder">Study @study.StudyId</td>
                 <td class="withborder">@Html.ActionLink("Delete", "DeleteStudyRecord", new { RecId = study.Id, InvId = Model.TheIntervention.Id })</td>
             </tr>
+            
+            i++;
         }
     </table>
 </div>
@@ -59,11 +63,13 @@
         @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
         @Html.Hidden("ActualId");
         <label for="studyIdBox">Study ID:</label><input type="text" name="StudyId" /><br />
-        <label for="docDropdown">Document:</label>
+        <label for="docDropdown">Article:</label>
         <select id="docDropdown" name="Document">
             <option value="1">Document 1</option>
             <option value="2">Document 2</option>
         </select><br />
+        <label>Reference: </label>
+        <input type="text" name="Reference" />
         <input type="checkbox" name="IsLitSearch" /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <br />
         <input type="checkbox" name="useMulitvariate" /><label style="margin-left: 2px;">Evaluation Employs a Multivariate Analysis</label> <br />
 
@@ -88,12 +94,12 @@
         <textarea name="Notes"></textarea><br />
 
         <br /><br />
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" /> <button onclick="return false;">Clear</button>
     }
 </div>
 
 <div>
-    Outcomes go here
+    <h2>Add an Outcome</h2>
 
     @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
@@ -104,10 +110,11 @@
         <textarea name="popDescription" id="popDescription"></textarea><br /><br />
         
         <label for="studySelector">Select Applicable Studies</label><br />
-        <select id="studySelector" name="studySelector" multiple class="chosen-select">
-            <option>One</option>
-            <option>Two</option>
-            <option>Three</option>
+        <select id="studySelector" name="studySelector" multiple class="chosen-select" style="width: 350px;">
+            @foreach(NREPPAdminSite.Models.Study study in Model.StudyDocuments)
+            {
+                <option value="@study.Id">Study @study.StudyId</option>
+            }
         </select>
     }
 </div>

@@ -662,7 +662,8 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in dt.Rows)
                 {
                     OutList.Add(new Study() { Id = (int)dr["Id"], Notes = dr["Notes"].ToString(), StudyId = (int)dr["StudyId"],
-                        Reference = dr["Reference"].ToString()});
+                        Reference = dr["Reference"].ToString(), DocumentId = (int)dr["DocumentId"], Exclusion1 = (int)dr["Exclusion1"],
+                    Exclusion2 = (int)dr["Exclusion2"], Exclusion3 = (int)dr["Exclusion3"], StudyDesign = (int)dr["StudyDesign"]});
                 }
 
             } catch (Exception ex)

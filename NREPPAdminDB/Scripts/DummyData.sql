@@ -15,6 +15,9 @@ INSERT INTO Interventions (Title, FullDescription, Submitter, UpdateDate, Publis
 INSERT INTO Document (Description, FileName, MIME, InterventionId, UploadedBy, TypeOfDocument, ReviewerId, IsLitSearch, ReviewerName)
 	VALUES ('Some Document', '[NOT RELEVANT]', 'NOT IMPLEMENTED', 1, 1, 4, 1, 0, 'A File')
 
+INSERT INTO Document (Description, FileName, MIME, InterventionId, UploadedBy, TypeOfDocument, ReviewerId, IsLitSearch, ReviewerName)
+	VALUES ('Some Document 2', '[NOT RELEVANT]', 'NOT IMPLEMENTED', 1, 1, 4, 1, 0, 'A File')
+
 -- Dummy Study Data
 
 INSERT INTO Studies (StudyId, Reference, InLitSearch, Exclusion1, Exclusion2, Exclusion3, StudyDesign, GroupSize, BaselineEquiv, UseMultivariate,

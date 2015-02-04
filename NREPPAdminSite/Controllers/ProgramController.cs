@@ -104,6 +104,8 @@ namespace NREPPAdminSite.Controllers
             List<Answer> YPYN;
             List<Answer> Exclusions;
 
+            
+            
             theStudies = localService.GetStudiesByIntervention(InterventionId).ToList<Study>();
             StudyDesigns = localService.GetAnswersByCategory("StudyDesign").ToList<Answer>();
             YPYN = localService.GetAnswersByCategory("YPYN").ToList<Answer>();
@@ -183,7 +185,7 @@ namespace NREPPAdminSite.Controllers
             nStudy.DocumentId = int.Parse(Request.Form["Document"]);
             nStudy.StudyDesign = int.Parse(Request.Form["StudyDesign"]);
             nStudy.BaselineEquiv = Request.Form["BaselineEquiv"] == null ? "" : Request.Form["BaselineEquiv"];
-            nStudy.Reference = "Some Reference";
+            nStudy.Reference = Request.Form["Reference"];
             nStudy.Id = -1;
             nStudy.Notes = Request.Form["Notes"];
             nStudy.UseMultivariate = Request.Form["useMultivariate"] == "on";
