@@ -2,10 +2,10 @@
 	@IntervId INT
 AS
 	SELECT 
-		[Id] ,
+		[Id],
 		[StudyId],
 		[Reference], 
-		[InLitSearch], 
+		[FromLitSearch] as InLitSearch, 
 		[Exclusion1], 
 		[Exclusion2], 
 		[Exclusion3], 
@@ -15,8 +15,7 @@ AS
 		[UseMultivariate], 
 		[LongestFollowup], 
 		[SAMSHARelated], 
-		[TargetPop], 
-		[ListOfOutcomes], 
+		[TargetPop],
 		[AuthorQueryNeeded], 
 		[RecommendReview], 
 		[Notes], 

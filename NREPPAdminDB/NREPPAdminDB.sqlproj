@@ -98,6 +98,8 @@
     <Build Include="Stored Procedures\SPAddOrUpdateStudyRecord.sql" />
     <Build Include="Stored Procedures\SPDeleteStudyRecord.sql" />
     <Build Include="Stored Procedures\SPGetOutcomesByInterventionId.sql" />
+    <Build Include="Tables\RC_DocData.sql" />
+    <Build Include="Stored Procedures\SPAddOrUpdateDocTags.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

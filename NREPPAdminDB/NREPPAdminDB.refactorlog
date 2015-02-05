@@ -56,4 +56,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="StudyId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="bf3e63bd-ca99-48fd-b5a0-9c3e4bbffe73" ChangeDateTime="02/04/2015 20:52:47">
+    <Property Name="ElementName" Value="[dbo].[Studies].[InLitSearch]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Studies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FromLitSearch" />
+  </Operation>
 </Operations>
