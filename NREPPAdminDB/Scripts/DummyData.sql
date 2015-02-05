@@ -20,6 +20,6 @@ INSERT INTO Document (Description, FileName, MIME, InterventionId, UploadedBy, T
 
 -- Dummy Study Data
 
-INSERT INTO Studies (StudyId, Reference, InLitSearch, Exclusion1, Exclusion2, Exclusion3, StudyDesign, GroupSize, BaselineEquiv, UseMultivariate,
-	LongestFollowup, SAMSHARelated, TargetPop, ListOfOutcomes, AuthorQueryNeeded, RecommendReview, Notes, DocumentId) VALUES
-	(1, 'Empty', 1, 1, 1, 1, 1, '0123456789', 'Some Baseline Text', 1, '0123456789', 1, '0123456789', '012345679', 0, 1, 'Notes go here', 1);
+INSERT INTO Studies (StudyId, Reference, FromLitSearch, Exclusion1, Exclusion2, Exclusion3, StudyDesign, GroupSize, BaselineEquiv, UseMultivariate,
+	LongestFollowup, SAMSHARelated, TargetPop, AuthorQueryNeeded, RecommendReview, Notes, DocumentId) VALUES
+	(1, 'Empty', 1, 1, 1, 1, 1, '0123456789', 'Some Baseline Text', 1, '0123456789', 1, '0123456789', 0, 1, 'Notes go here', 1);

@@ -706,6 +706,14 @@ namespace NREPPAdminSite
             return OutList;
         }
 
+        /// <summary>
+        /// Update the doc
+        /// </summary>
+        /// <param name="RCDocId">The ID of the Review Coordinator Record</param>
+        /// <param name="DocId">The DocumentId</param>
+        /// <param name="Reference">Reference Text</param>
+        /// <param name="RCDocName">Review Coordinator Name for the Document</param>
+        /// <returns></returns>
         public int UpdateRCDocInfo(int RCDocId, int DocId, string Reference, string RCDocName)
         {
             int retValue = 0;
@@ -732,6 +740,42 @@ namespace NREPPAdminSite
             }
 
             return retValue;
+        }
+
+        List<RCDocument> GetRCDocuments(int inRCDocID, int IntervId)
+        {
+            List<RCDocument> outList = new List<RCDocument>();
+            SqlCommand cmd = new SqlCommand("SPGetDocsWithTagsById", conn);
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocId", Value = inRCDocID });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@InterventionId", Value = IntervId });
+
+            try
+            {
+                CheckConn();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                RCDocument doc;
+
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    doc = new RCDocument((int)dr["DocumentId"], (int)dr["RCId"]);
+                    outList.Add(doc);
+                }
+
+            } catch (Exception ex)
+            {
+                RCDocument ADocument  = new RCDocument(-1, -1);
+                ADocument.FileDescription = ex.Message;
+                outList.Add(ADocument);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return outList;
         }
 
         #endregion

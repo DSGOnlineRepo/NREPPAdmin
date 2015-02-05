@@ -85,9 +85,9 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Uploaded By")]
         public string Uploader { get; set; }
 
-        private string documentTypeName;
-        private int documentType;
-        private int docId;
+        protected string documentTypeName;
+        protected int documentType;
+        protected int docId;
 
         [Display(Name = "Document Type")]
         public string DocumentTypeName
@@ -121,6 +121,26 @@ namespace NREPPAdminSite.Models
         public InterventionDoc(int inId)
         {
             docId = inId;
+        }
+
+    }
+
+    public class RCDocument : InterventionDoc
+    {
+        private int rcdocId;
+
+        public int RCDocId
+        {
+            get { return rcdocId; }
+        }
+
+        public string Reference { get; set; }
+        public string RCName { get; set; }
+
+        public RCDocument(int inDocId, int rcDocId) // Can you do this with : base(id)?
+        {
+            rcdocId = rcDocId;
+            docId = inDocId;
         }
 
     }
