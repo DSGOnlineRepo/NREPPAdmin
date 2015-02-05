@@ -72,7 +72,7 @@ AS SET NOCOUNT ON
 		UPDATE Studies
 		SET [StudyId] = @StudyId,
 			[Reference] = @Reference, 
-			[InLitSearch] = @InLitSearch, 
+			[FromLitSearch] = @InLitSearch, 
 			[Exclusion1] = @Exclusion1, 
 			[Exclusion2] = @Exclusion2, 
 			[Exclusion3] = @Exclusion3, 
@@ -83,7 +83,6 @@ AS SET NOCOUNT ON
 			[LongestFollowup] = null, 
 			[SAMSHARelated] = @SAMSHARelated, 
 			[TargetPop] = null, 
-			[ListOfOutcomes] = null, 
 			[AuthorQueryNeeded] = @AuthorQueryNeeded, 
 			[RecommendReview] = @RecommendReview, 
 			[Notes] = @Notes,

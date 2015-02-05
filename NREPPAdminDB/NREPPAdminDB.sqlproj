@@ -100,6 +100,7 @@
     <Build Include="Stored Procedures\SPGetOutcomesByInterventionId.sql" />
     <Build Include="Tables\RC_DocData.sql" />
     <Build Include="Stored Procedures\SPAddOrUpdateDocTags.sql" />
+    <Build Include="Stored Procedures\SPGetDocsWithTagsById.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

@@ -556,20 +556,6 @@ namespace NREPPAdminSite
 
                 cmdSaveFile.ExecuteNonQuery();
 
-
-                /*string nFileName = ConfigurationManager.AppSettings["fileLocation"] + fileName;
-                FileStream someStream = new FileStream(nFileName, FileMode.OpenOrCreate);
-                someStream.Write(inData, 0, inData.Length);
-                someStream.Close();
-
-                // If we successfully save the file...
-                CheckConn();
-
-                cmdSaveFile.Parameters.Add(new SqlParameter("@FileName", nFileName));
-                retValue = cmdSaveFile.ExecuteNonQuery();*/
-
-                // TODO: delete the file if the transaction failed.
-
             }
             catch (Exception) {
                 retValue = -2; // Indicates some other exception
@@ -718,6 +704,34 @@ namespace NREPPAdminSite
             }
 
             return OutList;
+        }
+
+        public int UpdateRCDocInfo(int RCDocId, int DocId, string Reference, string RCDocName)
+        {
+            int retValue = 0;
+            SqlCommand cmd = new SqlCommand("SPAddOrUpdateDocTags", conn);
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "RETURN_VALUE", Direction = ParameterDirection.ReturnValue, DbType = DbType.Int32 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Id", DbType = DbType.Int32, Value = RCDocId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocId", DbType = DbType.Int32, Value = DocId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Reference", DbType = DbType.String, Value = Reference });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@RCDocName", DbType = DbType.String, Value = RCDocName });
+
+            try
+            {
+                CheckConn();
+
+                retValue = cmd.ExecuteNonQuery();
+
+            } catch (Exception)
+            {
+                retValue = -1;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return retValue;
         }
 
         #endregion
