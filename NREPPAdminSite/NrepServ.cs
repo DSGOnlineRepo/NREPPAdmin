@@ -719,8 +719,8 @@ namespace NREPPAdminSite
             int retValue = 0;
             SqlCommand cmd = new SqlCommand("SPAddOrUpdateDocTags", conn);
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "RETURN_VALUE", Direction = ParameterDirection.ReturnValue, DbType = DbType.Int32 });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Id", DbType = DbType.Int32, Value = RCDocId });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocId", DbType = DbType.Int32, Value = DocId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Id", Value = RCDocId > 0 ? RCDocId : (int?)null  });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocId", DbType = DbType.Int32, Value = DocId > 0 ? DocId : (int?)DocId });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Reference", DbType = DbType.String, Value = Reference });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@RCDocName", DbType = DbType.String, Value = RCDocName });
 
@@ -742,7 +742,7 @@ namespace NREPPAdminSite
             return retValue;
         }
 
-        List<RCDocument> GetRCDocuments(int inRCDocID, int IntervId)
+        public List<RCDocument> GetRCDocuments(int? inRCDocID, int IntervId)
         {
             List<RCDocument> outList = new List<RCDocument>();
             SqlCommand cmd = new SqlCommand("SPGetDocsWithTagsById", conn);

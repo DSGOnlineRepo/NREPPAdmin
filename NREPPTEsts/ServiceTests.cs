@@ -79,5 +79,22 @@ namespace NREPPTests
             Assert.AreEqual(SomeAnswers.Count, 3);
         }
 
+        [TestMethod]
+        public void RCDocEditTest()
+        {
+            NrepServ aService = new NrepServ(ServiceTests.ConnString);
+            List<InterventionDoc> Docs = aService.GetDocuments(1, null, null).ToList<InterventionDoc>();
+
+            Assert.IsTrue(Docs.Count > 0);
+            
+            int DocId = Docs[0].DocId;
+
+            aService.UpdateRCDocInfo(-1, DocId, "Some Reference", "SomeDoc.jpg");
+
+            List<RCDocument> RCDocs = aService.GetRCDocuments(null, 1);
+
+            Assert.IsTrue(RCDocs.Count > 0);
+        }
+
     }
 }
