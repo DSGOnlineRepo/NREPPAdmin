@@ -2,6 +2,7 @@
 	@DocId int = NULL,
 	@InterventionId int = NULL
 AS
+
 	SELECT d.Id as DocumentId, Description, TypeOfDocument, Reference, RCName, rc.Id as [RCId] from Document d
 	INNER JOIN RC_DocData rc
 	ON rc.DocumentId = d.Id

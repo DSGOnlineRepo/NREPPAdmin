@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[SPAddOrUpdateDocTags]
 	@Id INT = 0,
 	@DocId int = 0,
-	@DocType int,
+	@DocType int = null,
 	@Reference VARCHAR(250),
 	@RCName VARCHAR(50)
 AS SET NOCOUNT ON
@@ -21,6 +21,11 @@ AS SET NOCOUNT ON
 		IF @DocID < 1 BEGIN
 			SELECT @DocId = DocumentId from RC_DocData
 			WHERE Id = @Id
+		END
+
+		IF @DocType IS NULL BEGIN
+			SELECT @DocType = TypeOfDocument from Document
+			WHERE Id = @DocId
 		END
 
 		UPDATE Document

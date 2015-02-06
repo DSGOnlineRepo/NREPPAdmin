@@ -12,8 +12,23 @@
 
 <h2>Screening tool for @Model.TheIntervention.Title</h2>
 
-<div>
+<div style="margin-bottom: 10px; border: 1px solid;">
     <h3>Available Documents</h3>
+
+    <table>
+        <tr>
+            <th class="withborder">Description</th>
+            <th class="withborder">RC File Name</th>
+            <th class="withborder">Reference</th>
+        </tr>
+        @foreach (NREPPAdminSite.Models.RCDocument doc in Model.TheDocuments)
+        {
+            <tr>
+                <td class="withborder">@doc.FileDescription</td>
+                <td class="withborder">@doc.RCName</td>
+            </tr>
+        }
+    </table>
 </div>
 
 <div>

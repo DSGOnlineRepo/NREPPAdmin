@@ -122,6 +122,8 @@ namespace NREPPAdminSite.Models
         private List<Answer> studyDesigns;
         private List<Answer> ypyn;
         private List<Answer> exclusions;
+        private List<RCDocument> theDocuments;
+
 
         public OutcomesWrapper Outcomes { get; set; }
 
@@ -141,6 +143,13 @@ namespace NREPPAdminSite.Models
             ypyn = inYPYN;
             exclusions = inExclusions;
             Outcomes = OW;
+        }
+
+        public ScreeningModel(List<Study> inDocs, Intervention interV, List<Answer> inStudyDesigns, List<Answer> inYPYN, List<Answer> inExclusions,
+            OutcomesWrapper OW, List<RCDocument> someDocs)
+            : this(inDocs, interV, inStudyDesigns, inYPYN, inExclusions, OW)
+        {
+            theDocuments = someDocs;
         }
 
         #endregion
@@ -171,6 +180,11 @@ namespace NREPPAdminSite.Models
         public IEnumerable<Answer> Exclusions
         {
             get { return exclusions; }
+        }
+
+        public IEnumerable<RCDocument> TheDocuments
+        {
+            get { return theDocuments; }
         }
 
         /// <summary>

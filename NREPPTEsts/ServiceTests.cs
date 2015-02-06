@@ -85,7 +85,7 @@ namespace NREPPTests
             NrepServ aService = new NrepServ(ServiceTests.ConnString);
             List<InterventionDoc> Docs = aService.GetDocuments(1, null, null).ToList<InterventionDoc>();
 
-            Assert.IsTrue(Docs.Count > 0);
+            Assert.IsTrue(Docs.Count > 0, "No Documents");
             
             int DocId = Docs[0].DocId;
 
@@ -93,7 +93,7 @@ namespace NREPPTests
 
             List<RCDocument> RCDocs = aService.GetRCDocuments(null, 1);
 
-            Assert.IsTrue(RCDocs.Count > 0);
+            Assert.IsTrue(RCDocs.Count > 0, "No RC Data");
         }
 
     }

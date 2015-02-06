@@ -103,6 +103,7 @@ namespace NREPPAdminSite.Controllers
             List<Answer> StudyDesigns;
             List<Answer> YPYN;
             List<Answer> Exclusions;
+            List<RCDocument> reviewerDocs;
 
             
             
@@ -120,8 +121,9 @@ namespace NREPPAdminSite.Controllers
             theIntervention = interventionList[0];
 
             OutcomesWrapper ow = localService.GetOutcomesByIntervention(InterventionId);
+            reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
-            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow);
+            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs);
 
             return View(sm);
         }
