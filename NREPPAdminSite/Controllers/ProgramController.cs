@@ -204,6 +204,28 @@ namespace NREPPAdminSite.Controllers
 
         #endregion
 
+        [HttpPost]
+        public ActionResult TempAction(FormCollection col)
+        {
+            string RCNameText = "txtRCName_", ReferenceText = "txtRef_", hiddenText = "hid_", dirtyText = "isdirty_";
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            int i = 0;
+
+            while(i < col.Count) // break if i gets too big
+            {
+                if (col[dirtyText + i.ToString()] == "true")
+                {
+                    localService.UpdateRCDocInfo(-1, int.Parse(col[hiddenText + i.ToString()]), col[ReferenceText + i.ToString()], col[RCNameText + i.ToString()]);
+                    break;
+                }
+                else i++;
+                
+            }
+
+            return RedirectToAction("Programs", "Home");
+        }
+
         #region Helper Methods
 
         protected NreppUser ReadCookie(HttpRequestBase req)

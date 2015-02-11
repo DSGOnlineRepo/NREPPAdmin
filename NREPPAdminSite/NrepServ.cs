@@ -762,7 +762,10 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    doc = new RCDocument((int)dr["DocumentId"], (int)dr["RCId"]);
+                    doc = new RCDocument((int)dr["DocumentId"], dr.IsNull("RCId") ? -1 : (int)dr["RCId"]);
+                    doc.Reference = dr["Reference"].ToString();
+                    doc.RCName = dr["RCName"].ToString();
+                    doc.FileDescription = dr["Description"].ToString();
                     outList.Add(doc);
                 }
 
