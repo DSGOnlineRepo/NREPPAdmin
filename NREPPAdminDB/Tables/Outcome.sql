@@ -1,16 +1,7 @@
 ﻿CREATE TABLE [dbo].[Outcome]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
-    [OutcomeMeasure] VARCHAR(50) NULL, 
-    [Citation] VARCHAR(60) NULL, 
-    [OverallAttrition] BIT NOT NULL DEFAULT 0, 
-    [DiffAttrition] BIT NULL DEFAULT 0, 
-    [EffectSize] BIT NULL DEFAULT 0, 
-    [BaselineEquiv] INT NULL, 
-    [SignificantImpact] INT NULL, 
-    [GroupFavored] BIT NULL DEFAULT 0, 
-    [PopDescription] VARCHAR(50) NULL, 
-    [SAMHSAPop] INT NULL, 
-    [PrimaryOutcome] BIT NULL DEFAULT 0, 
-    [Priority] INT NULL, 
+	[Id] INT NOT NULL IDENTITY PRIMARY KEY, 
+    [OutcomeName] VARCHAR(30),
+	[InterventionId] INT NOT NULL, 
+    CONSTRAINT [FK_Outcome_ToTable] FOREIGN KEY ([InterventionId]) REFERENCES [Interventions]([Id])
 )
