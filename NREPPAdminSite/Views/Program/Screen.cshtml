@@ -144,8 +144,23 @@
 <div>
     <h2>Add an Outcome</h2>
 
+    @{
+        List<SelectListItem> OutcomeList = new List<SelectListItem>();
+        
+        foreach (NREPPAdminSite.Models.Outcome outcome in Model.Outcomes.MacroOutcomes)
+        {
+            OutcomeList.Add(new SelectListItem() { Text = outcome.OutcomeName, Value = outcome.Id.ToString() });
+        }
+
+        OutcomeList.Add(new SelectListItem() { Text = "New Outcome", Value = "-1" });
+    }
+
     @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
+        @Html.Hidden("IntervId", Model.TheIntervention.Id)
+        <label>Choose An Outcome: </label>
+        @Html.DropDownList("MacroOutome", OutcomeList)
+        <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
         <label for="measure">Measure Reported in the Study</label>
         <input type="text" id="measure" name="measure" /><br /><br />
         
@@ -159,6 +174,8 @@
                 <option value="@study.Id">Study @study.StudyId</option>
             }
         </select>
+        
+        <input type="submit" value="Submit" />
     }
 </div>
 

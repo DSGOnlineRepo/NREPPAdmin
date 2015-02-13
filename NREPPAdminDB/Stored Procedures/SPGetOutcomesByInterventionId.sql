@@ -11,6 +11,9 @@ AS
 	INNER JOIN Outcome o ON o.Id = om.OutcomeId
 	WHERE InterventionId = @InterventionId
 
+	SELECT Id, OutcomeName from Outcome 
+	WHERE InterventionId = @InterventionId
+
 	SELECT DocumentId, StudyId, OutcomeId FROM Document_Outcome
 	where DocumentId in (SELECT DocumentId from @Docs)
 

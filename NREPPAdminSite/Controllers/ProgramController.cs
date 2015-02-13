@@ -121,6 +121,8 @@ namespace NREPPAdminSite.Controllers
             theIntervention = interventionList[0];
 
             OutcomesWrapper ow = localService.GetOutcomesByIntervention(InterventionId);
+
+            List<OutcomeMeasure> oms = ow.OutcomesMeasures.Where(om => om.OutcomeId == 1).ToList<OutcomeMeasure>();
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
             ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs);
@@ -224,6 +226,13 @@ namespace NREPPAdminSite.Controllers
             }
 
             return RedirectToAction("Programs", "Home");
+        }
+
+        [HttpPost]
+        public ActionResult AddOutcome(FormCollection col)
+        {
+            int IntervId = int.Parse(col["IntervId"]);
+            return RedirectToAction("Screen", new { InterventionId = IntervId });
         }
 
         #region Helper Methods

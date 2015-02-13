@@ -667,12 +667,12 @@ namespace NREPPAdminSite
         public OutcomesWrapper GetOutcomesByIntervention(int IntervId)
         {
             OutcomesWrapper OutList;
-            List<Outcome> outcomeList = new List<Outcome>();
-            List<Study_Outcome> studyOutcomeList = new List<Study_Outcome>();
-            SqlCommand cmd = new SqlCommand("SPGetStudiesByIntervention", conn);
+            List<OutcomeMeasure> outcomeList = new List<OutcomeMeasure>();
+            List<Outcome> studyOutcomeList = new List<Outcome>();
+            SqlCommand cmd = new SqlCommand("SPGetOutcomesByInterventionId", conn);
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.Add(new SqlParameter("@IntervId", IntervId));
+            cmd.Parameters.Add(new SqlParameter("@InterventionId", IntervId));
 
             try
             {
@@ -683,19 +683,19 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    outcomeList.Add(new Outcome() { Id = (int)dr["OutcomeId"], OutcomeMeasure = dr["OutcomeMeasure"].ToString(),
+                    outcomeList.Add(new OutcomeMeasure() { Id = (int)dr["OutcomeId"], OutcomeMeasureName = dr["OutcomeMeasure"].ToString(),
                     OverallAttrition = (bool)dr["OverallAttrition"], DiffAttrition = (bool)dr["DiffAttrition"], EffectSize = (bool)dr["EffectSize"],
                     SignificantImpact = (int)dr["SignificantImpact"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
                     SAMHSAPop = (int)dr["SAMSHAPop"], PrimaryOutcome = (bool)dr["PrimaryOutcome"], Priority = (int)dr["Priority"], DocumentId = (int)dr["DocumentId"]});
                 }
 
                 foreach (DataRow dr in ds.Tables[1].Rows)
-                    studyOutcomeList.Add(new Study_Outcome() { StudyId = (int)dr["StudyId"], OutcomeId = (int)dr["OutcomeId"] });
+                    studyOutcomeList.Add(new Outcome() { IntervId = IntervId, OutcomeName = dr["OutcomeName"].ToString(), Id = (int)dr["Id"] });
 
             }
             catch (Exception ex)
             {
-                outcomeList.Add(new Outcome() { OutcomeMeasure = ex.Message, Id = -1 });
+                outcomeList.Add(new OutcomeMeasure() { OutcomeMeasureName = ex.Message, Id = -1 });
             }
             finally
             {
