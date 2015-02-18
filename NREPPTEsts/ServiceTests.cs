@@ -11,7 +11,7 @@ namespace NREPPTests
     [TestClass]
     public class ServiceTests
     {
-        public static string ConnString = "server=localhost;database=NREPPAdmin;uid=nrAgent;password=nr!Agent123456";
+        public static string ConnString = "server=192.168.0.234\\MSSQL2014;database=NREPPAdminDB;uid=nrAgent;password=nr!Agent123456";
         [TestMethod]
         public void DummyMethod()
         {

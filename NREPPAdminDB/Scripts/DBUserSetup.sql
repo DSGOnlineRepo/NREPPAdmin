@@ -5,9 +5,6 @@
 CREATE LOGIN nrAdmin WITH PASSWORD = 'nr!Admin123456';
 GO
 
-CREATE LOGIN nrAgent WITH PASSWORD = 'nr!Agent123456';
-GO
-
 use NREPPAdmin;
 CREATE USER [nrAdmin] FOR LOGIN nrAdmin
 EXEC sp_addrolemember N'db_owner', N'nrAdmin'
