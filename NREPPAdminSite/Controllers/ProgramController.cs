@@ -211,7 +211,11 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("Screen", new { InterventionId = IntervId });
         }
 
-
+        /// <summary>
+        /// Update the Documents to include the RC Information
+        /// </summary>
+        /// <param name="col">Form Collection</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult UpdateRCDocs(FormCollection col)
         {
@@ -224,6 +228,7 @@ namespace NREPPAdminSite.Controllers
             {
                 if (col[dirtyText + i.ToString()] == "true")
                 {
+                    // TODO: Check to see if an RCDocinfo Exists
                     localService.UpdateRCDocInfo(-1, int.Parse(col[hiddenText + i.ToString()]), col[ReferenceText + i.ToString()], col[RCNameText + i.ToString()]);
                     break;
                 }
@@ -231,8 +236,10 @@ namespace NREPPAdminSite.Controllers
                 
             }
 
-            return RedirectToAction("Programs", "Home");
+            return RedirectToAction("Screen", new { InterventionId = int.Parse(col["InterventionId"]) });
         }
+
+        #endregion
 
         #region Helper Methods
 
@@ -258,8 +265,6 @@ namespace NREPPAdminSite.Controllers
 
             return outUser;
         }
-
-        #endregion
 
         #endregion
 

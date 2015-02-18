@@ -27,6 +27,8 @@
         </tr>
         @using (Html.BeginForm("UpdateRCDocs", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
+            @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
+            
             foreach (NREPPAdminSite.Models.RCDocument doc in Model.TheDocuments)
             {
                 <tr>
