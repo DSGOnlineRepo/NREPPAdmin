@@ -208,7 +208,38 @@ namespace NREPPAdminSite.Controllers
         public ActionResult AddOutcome(FormCollection col)
         {
             int IntervId = int.Parse(col["IntervId"]);
-            return RedirectToAction("Screen", new { InterventionId = IntervId });
+            
+            OutcomeMeasure om = new OutcomeMeasure();
+            om.DocumentId = int.Parse(col["docDropDown"]);
+            //om.DiffAttrition = bool.Parse(col["DiffAttrition"]);
+            //om.EffectSize = bool.Parse(col["EffectSize"]);
+            om.PopDescription = col["popDescription"];
+            om.StudyId = int.Parse(col["studySelector"]);
+            om.OutcomeMeasureName = col["measure"];
+            om.OutcomeId = int.Parse(col["MacroOutcome"]);
+
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            localService.AddOrUpdateOutcomeMeasure(om, IntervId);
+
+
+            return RedirectToAction("Screen", new { InterventionId = IntervId }); // TODO: Pass errors on failure
+
+            /*
+             *  <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
+        <label for="measure">Measure Reported in the Study</label>
+        <input type="text" id="measure" name="measure" /><br /><br />
+        
+        <label for="popDescription">Describe Evaluated Population:</label><br />
+        <textarea name="popDescription" id="popDescription"></textarea><br /><br />
+        
+        <label for="studySelector">Select Applicable Studies</label><br />
+        <select id="studySelector" name="studySelector" multiple class="chosen-select" style="width: 350px;">
+            @foreach(NREPPAdminSite.Models.Study study in Model.StudyDocuments)
+            {
+                <option value="@study.Id">Study @study.StudyId</option>
+            }
+        </select>
+             */
         }
 
         /// <summary>

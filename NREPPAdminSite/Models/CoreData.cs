@@ -175,6 +175,7 @@ namespace NREPPAdminSite.Models
         public bool PrimaryOutcome { get; set; }
         public int Priority { get; set; }
         public int DocumentId { get; set; }
+        public int StudyId { get; set; }
     }
 
     public class OutcomesWrapper

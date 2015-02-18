@@ -684,7 +684,6 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     outcomeList.Add(new OutcomeMeasure() { Id = (int)dr["OutcomeId"], OutcomeMeasureName = dr["OutcomeMeasure"].ToString(),
-                    OverallAttrition = (bool)dr["OverallAttrition"], DiffAttrition = (bool)dr["DiffAttrition"], EffectSize = (bool)dr["EffectSize"],
                     SignificantImpact = (int)dr["SignificantImpact"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
                     SAMHSAPop = (int)dr["SAMSHAPop"], PrimaryOutcome = (bool)dr["PrimaryOutcome"], Priority = (int)dr["Priority"], DocumentId = (int)dr["DocumentId"]});
                 }
@@ -781,6 +780,49 @@ namespace NREPPAdminSite
             }
 
             return outList;
+        }
+
+        public int AddOrUpdateOutcomeMeasure(OutcomeMeasure om, int InterventionId)
+        {
+            int retValue = 0;
+            SqlCommand cmd = new SqlCommand("SPAddOrUpdateOutcomeMeasure", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "RETURN_VALUE", Direction = ParameterDirection.ReturnValue, DbType = DbType.Int32 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OutcomeId", Value = om.OutcomeId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OutcomeMeasureId", DbType = DbType.Int32, Value = om.Id });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OutcomeMeasure", DbType = DbType.String, Value = om.OutcomeMeasureName });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@InterventionId", DbType = DbType.Int32, Value = InterventionId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StudyId", DbType = DbType.Int32, Value = om.StudyId });
+            /*cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DiffAttrition", Value = om.DiffAttrition });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@EffectSize", Value = om.EffectSize });*/
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@BaselineEquiv", Value = om.BaselineEquiv });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SignificantImpact", Value = om.SignificantImpact });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@GroupFavored", Value = om.GroupFavored });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PopDescription", Value = om.PopDescription });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SAMHSAPop", Value = om.SAMHSAPop });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryOutcome", Value = om.PrimaryOutcome });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Priority", Value = om.Priority });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocId", Value = om.DocumentId });
+
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+
+                retValue = (int)cmd.Parameters["RETURN_VALUE"].Value;
+
+            }
+            catch (Exception)
+            {
+                retValue = -1;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return retValue;
         }
 
         #endregion

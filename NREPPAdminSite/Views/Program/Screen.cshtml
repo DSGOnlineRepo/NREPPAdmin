@@ -165,11 +165,14 @@
     {
         @Html.Hidden("IntervId", Model.TheIntervention.Id)
         <label>Choose An Outcome: </label>
-        @Html.DropDownList("MacroOutome", OutcomeList)
+        @Html.DropDownList("MacroOutcome", OutcomeList)
+        
         <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
         <label for="measure">Measure Reported in the Study</label>
         <input type="text" id="measure" name="measure" /><br /><br />
         
+        <label>Document: </label>@Html.DropDownList("docDropdown", Docs)<br /><br />
+
         <label for="popDescription">Describe Evaluated Population:</label><br />
         <textarea name="popDescription" id="popDescription"></textarea><br /><br />
         
