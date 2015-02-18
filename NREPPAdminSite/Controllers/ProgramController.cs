@@ -204,10 +204,16 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("Screen", new { InterventionId = int.Parse(Request.Form["InterventionId"]) });
         }
 
-        #endregion
+        [HttpPost]
+        public ActionResult AddOutcome(FormCollection col)
+        {
+            int IntervId = int.Parse(col["IntervId"]);
+            return RedirectToAction("Screen", new { InterventionId = IntervId });
+        }
+
 
         [HttpPost]
-        public ActionResult TempAction(FormCollection col)
+        public ActionResult UpdateRCDocs(FormCollection col)
         {
             string RCNameText = "txtRCName_", ReferenceText = "txtRef_", hiddenText = "hid_", dirtyText = "isdirty_";
             NrepServ localService = new NrepServ(NrepServ.ConnString);
@@ -226,13 +232,6 @@ namespace NREPPAdminSite.Controllers
             }
 
             return RedirectToAction("Programs", "Home");
-        }
-
-        [HttpPost]
-        public ActionResult AddOutcome(FormCollection col)
-        {
-            int IntervId = int.Parse(col["IntervId"]);
-            return RedirectToAction("Screen", new { InterventionId = IntervId });
         }
 
         #region Helper Methods
@@ -259,6 +258,8 @@ namespace NREPPAdminSite.Controllers
 
             return outUser;
         }
+
+        #endregion
 
         #endregion
 

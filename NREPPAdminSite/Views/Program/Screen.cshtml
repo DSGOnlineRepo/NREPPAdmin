@@ -25,7 +25,7 @@
             <th class="withborder">Reference</th>
             <th class="withborder"> </th>
         </tr>
-        @using (Html.BeginForm("TempAction", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("UpdateRCDocs", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             foreach (NREPPAdminSite.Models.RCDocument doc in Model.TheDocuments)
             {
@@ -44,7 +44,7 @@
                         @Html.TextArea("txtRef_" + i.ToString(), @doc.Reference, new { @class = "hidden" })
                     </td>
                     <td class="withborder">
-                        <button id="btnEdit" onclick="setEdit(@i); return false;">Edit</button>
+                        <button name="btnEdit" onclick="setEdit(@i); return false;">Edit</button>
                         <button name="cancel_@i" class="hidden" onclick="clearEdit(@i); return false;">Cancel</button>
                         <input type="submit" value="Save" class="hidden" />
                     </td>
@@ -113,10 +113,7 @@
         @Html.Hidden("ActualId");
         <label for="studyIdBox">Study ID:</label><input type="text" name="StudyId" /><br />
         <label for="docDropdown">Article:</label>
-        <!-- <select id="docDropdown" name="Document">
-            <option value="1">Document 1</option>
-            <option value="2">Document 2</option>
-        </select> -->
+      
         @Html.DropDownList("docDropdown", Docs);
             <br />
         
