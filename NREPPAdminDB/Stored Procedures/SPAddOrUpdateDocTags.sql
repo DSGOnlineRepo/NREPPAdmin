@@ -7,6 +7,11 @@
 AS SET NOCOUNT ON
 	BEGIN TRANSACTION
 
+	IF @Id <= 0 BEGIN
+		SELECT @Id = Id FROM RC_DocData
+		WHERE DocumentId = @DocId
+	END
+
 	IF @Id > 0 BEGIN
 
 		UPDATE RC_DocData
