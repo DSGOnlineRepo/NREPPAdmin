@@ -63,4 +63,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="FromLitSearch" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="8f482d5a-05f1-4061-a5a6-98acc9a774c9" ChangeDateTime="02/18/2015 22:47:34">
+    <Property Name="ElementName" Value="[dbo].[Studies].[SAMSHARelated]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Studies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SAMSHSARelated" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="275553fb-2334-4350-bec8-1b8370718eef" ChangeDateTime="02/19/2015 14:51:42">
+    <Property Name="ElementName" Value="[dbo].[Studies].[SAMSHSARelated]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Studies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SAMHSARelated" />
+  </Operation>
 </Operations>

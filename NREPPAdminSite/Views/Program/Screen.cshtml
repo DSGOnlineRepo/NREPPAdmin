@@ -25,8 +25,10 @@
             <th class="withborder">Reference</th>
             <th class="withborder"> </th>
         </tr>
-        @using (Html.BeginForm("TempAction", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("UpdateRCDocs", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
+            @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
+            
             foreach (NREPPAdminSite.Models.RCDocument doc in Model.TheDocuments)
             {
                 <tr>
@@ -44,7 +46,7 @@
                         @Html.TextArea("txtRef_" + i.ToString(), @doc.Reference, new { @class = "hidden" })
                     </td>
                     <td class="withborder">
-                        <button id="btnEdit" onclick="setEdit(@i); return false;">Edit</button>
+                        <button name="btnEdit" onclick="setEdit(@i); return false;">Edit</button>
                         <button name="cancel_@i" class="hidden" onclick="clearEdit(@i); return false;">Cancel</button>
                         <input type="submit" value="Save" class="hidden" />
                     </td>
@@ -83,6 +85,7 @@
     List<SelectListItem> StudyDesigns = new List<SelectListItem>();
     List<SelectListItem> YPYN = new List<SelectListItem>();
     List<SelectListItem> Exclusions = new List<SelectListItem>();
+    List<SelectListItem> Docs = new List<SelectListItem>();
 
     foreach (NREPPAdminSite.Models.Answer ans in Model.StudyDesigns)
     {
@@ -98,6 +101,11 @@
     {
         Exclusions.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
     }
+
+    foreach (NREPPAdminSite.Models.RCDocument doc in Model.TheDocuments)
+    {
+        Docs.Add(new SelectListItem() { Text = doc.FileDescription, Value = doc.DocId.ToString() });
+    }
 }
 
 <div style="padding-top: 10px; padding-bottom: 10px;">
@@ -107,12 +115,10 @@
         @Html.Hidden("ActualId");
         <label for="studyIdBox">Study ID:</label><input type="text" name="StudyId" /><br />
         <label for="docDropdown">Article:</label>
-        <select id="docDropdown" name="Document">
-            <option value="1">Document 1</option>
-            <option value="2">Document 2</option>
-        </select><br />
-        <label>Reference: </label>
-        <input type="text" name="Reference" />
+      
+        @Html.DropDownList("docDropdown", Docs);
+            <br />
+        
         <input type="checkbox" name="IsLitSearch" /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <br />
         <input type="checkbox" name="useMulitvariate" /><label style="margin-left: 2px;">Evaluation Employs a Multivariate Analysis</label> <br />
 
@@ -144,21 +150,61 @@
 <div>
     <h2>Add an Outcome</h2>
 
+    @{
+        List<SelectListItem> OutcomeList = new List<SelectListItem>();
+        
+        foreach (NREPPAdminSite.Models.Outcome outcome in Model.Outcomes.MacroOutcomes)
+        {
+            OutcomeList.Add(new SelectListItem() { Text = outcome.OutcomeName, Value = outcome.Id.ToString() });
+        }
+
+        OutcomeList.Add(new SelectListItem() { Text = "New Outcome", Value = "-1" });
+    }
+
+    <table>
+        <tr>
+            <th class="withborder" style="text-align: center;">Outcome</th>
+            <th class="withborder" style="text-align: center;">Measure</th>
+            <th>Study Id</th>
+            <th> </th>
+        </tr>
+        @foreach (NREPPAdminSite.Models.OutcomeMeasure measure in Model.Outcomes.OutcomesMeasures)
+        {
+            <tr>
+                <td class="withborder"><a href="#">@measure.OutcomeId</a></td>
+                <td class="withborder">@measure.OutcomeMeasureName</td>
+                <td class="withborder">Study @measure.StudyId</td>
+                <td class="withborder">@Html.ActionLink("Delete", "DeleteStudyRecord", new { RecId = measure.Id, InvId = Model.TheIntervention.Id })</td>
+            </tr>
+
+            i++;
+        }
+    </table>
+
     @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
+        @Html.Hidden("IntervId", Model.TheIntervention.Id)
+        <label>Choose An Outcome: </label>
+        @Html.DropDownList("MacroOutcome", OutcomeList)
+        
+        <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
         <label for="measure">Measure Reported in the Study</label>
         <input type="text" id="measure" name="measure" /><br /><br />
         
+        <label>Document: </label>@Html.DropDownList("docDropdown", Docs)<br /><br />
+
         <label for="popDescription">Describe Evaluated Population:</label><br />
         <textarea name="popDescription" id="popDescription"></textarea><br /><br />
         
         <label for="studySelector">Select Applicable Studies</label><br />
-        <select id="studySelector" name="studySelector" multiple class="chosen-select" style="width: 350px;">
+        <select id="studySelector" name="studySelector" style="width: 350px;">
             @foreach(NREPPAdminSite.Models.Study study in Model.StudyDocuments)
             {
                 <option value="@study.Id">Study @study.StudyId</option>
             }
         </select>
+        
+        <input type="submit" value="Submit" />
     }
 </div>
 

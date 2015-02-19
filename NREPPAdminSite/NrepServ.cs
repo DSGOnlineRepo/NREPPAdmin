@@ -600,7 +600,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "RETURN_VALUE", SqlDbType = SqlDbType.Int, Direction = ParameterDirection.ReturnValue });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = inStudy.Id });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StudyId", SqlDbType = SqlDbType.Int, Value = inStudy.StudyId });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Reference", SqlDbType = SqlDbType.VarChar, Value = inStudy.Reference });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Reference", SqlDbType = SqlDbType.VarChar, Value = "Not used at the moment" });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@InLitSearch", SqlDbType = SqlDbType.Bit, Value = inStudy.inLitSearch });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion1", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion1 });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion2", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion2 });
@@ -667,12 +667,12 @@ namespace NREPPAdminSite
         public OutcomesWrapper GetOutcomesByIntervention(int IntervId)
         {
             OutcomesWrapper OutList;
-            List<Outcome> outcomeList = new List<Outcome>();
-            List<Study_Outcome> studyOutcomeList = new List<Study_Outcome>();
-            SqlCommand cmd = new SqlCommand("SPGetStudiesByIntervention", conn);
+            List<OutcomeMeasure> outcomeList = new List<OutcomeMeasure>();
+            List<Outcome> studyOutcomeList = new List<Outcome>();
+            SqlCommand cmd = new SqlCommand("SPGetOutcomesByInterventionId", conn);
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.Add(new SqlParameter("@IntervId", IntervId));
+            cmd.Parameters.Add(new SqlParameter("@InterventionId", IntervId));
 
             try
             {
@@ -683,19 +683,21 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    outcomeList.Add(new Outcome() { Id = (int)dr["OutcomeId"], OutcomeMeasure = dr["OutcomeMeasure"].ToString(),
-                    OverallAttrition = (bool)dr["OverallAttrition"], DiffAttrition = (bool)dr["DiffAttrition"], EffectSize = (bool)dr["EffectSize"],
+                    outcomeList.Add(new OutcomeMeasure() { Id = (int)dr["OutcomeId"], OutcomeMeasureName = dr["OutcomeMeasure"].ToString(),
                     SignificantImpact = (int)dr["SignificantImpact"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
-                    SAMHSAPop = (int)dr["SAMSHAPop"], PrimaryOutcome = (bool)dr["PrimaryOutcome"], Priority = (int)dr["Priority"], DocumentId = (int)dr["DocumentId"]});
+                    SAMHSAPop = (int)dr["SAMHSAPop"], PrimaryOutcome = (bool)dr["PrimaryOutcome"], Priority = (int)dr["Priority"],
+                    StudyId = (int)dr["StudyId"], DocumentId = (int)dr["DocumentId"]});
                 }
 
+                // TODO: Document Association
+
                 foreach (DataRow dr in ds.Tables[1].Rows)
-                    studyOutcomeList.Add(new Study_Outcome() { StudyId = (int)dr["StudyId"], OutcomeId = (int)dr["OutcomeId"] });
+                    studyOutcomeList.Add(new Outcome() { IntervId = IntervId, OutcomeName = dr["OutcomeName"].ToString(), Id = (int)dr["Id"] });
 
             }
             catch (Exception ex)
             {
-                outcomeList.Add(new Outcome() { OutcomeMeasure = ex.Message, Id = -1 });
+                outcomeList.Add(new OutcomeMeasure() { OutcomeMeasureName = ex.Message, Id = -1 });
             }
             finally
             {
@@ -781,6 +783,55 @@ namespace NREPPAdminSite
             }
 
             return outList;
+        }
+
+        public int AddOrUpdateOutcomeMeasure(OutcomeMeasure om, int InterventionId)
+        {
+            int retValue = 0;
+            SqlCommand cmd = new SqlCommand("SPAddOrUpdateOutcomeMeasure", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "RETURN_VALUE", Direction = ParameterDirection.ReturnValue, DbType = DbType.Int32 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OutcomeId", Value = om.OutcomeId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OutcomeMeasureId", DbType = DbType.Int32, Value = om.Id });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OutcomeMeasure", DbType = DbType.String, Value = om.OutcomeMeasureName });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@InterventionId", DbType = DbType.Int32, Value = InterventionId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StudyId", DbType = DbType.Int32, Value = om.StudyId });
+            /*cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DiffAttrition", Value = om.DiffAttrition });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@EffectSize", Value = om.EffectSize });*/
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@BaselineEquiv", Value = om.BaselineEquiv });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SignificantImpact", Value = om.SignificantImpact });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@GroupFavored", Value = om.GroupFavored });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PopDescription", Value = om.PopDescription });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SAMHSAPop", Value = om.SAMHSAPop });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryOutcome", Value = om.PrimaryOutcome });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Priority", Value = om.Priority });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocId", Value = om.DocumentId });
+
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+
+                retValue = (int)cmd.Parameters["RETURN_VALUE"].Value;
+
+            }
+            catch (Exception)
+            {
+                retValue = -1;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return retValue;
+        }
+
+        public void AddOrUpdateStudy(Study inStudy)
+        {
+
+            return;
         }
 
         #endregion

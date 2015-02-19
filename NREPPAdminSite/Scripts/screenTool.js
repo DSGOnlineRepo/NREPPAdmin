@@ -32,6 +32,10 @@ function setEdit(index)
     $("button[name*=" + cancelName + "]").removeClass("hidden");
     $("button[name*=" + cancelName + "]").siblings("input[type=submit]").removeClass("hidden");
 
+    $("button[name*=btnEdit]").each(function () {
+        $(this).prop("disabled", true);
+    });
+
     $(dirtyId).val("true");
 }
 
@@ -45,6 +49,11 @@ function clearEdit(index)
     $("#" + rcnameId).addClass("hidden");
     $("#" + referenceId).addClass("hidden");
     $("button[name*=" + cancelName + "]").addClass("hidden");
+    $("button[name*=" + cancelName + "]").siblings("input[type=submit]").addClass("hidden");
+
+    $("button[name*=btnEdit]").each(function () {
+        $(this).prop("disabled", false);
+    });
 
     $(dirtyId).val("false");
 

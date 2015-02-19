@@ -121,6 +121,8 @@ namespace NREPPAdminSite.Controllers
             theIntervention = interventionList[0];
 
             OutcomesWrapper ow = localService.GetOutcomesByIntervention(InterventionId);
+
+            List<OutcomeMeasure> oms = ow.OutcomesMeasures.Where(om => om.OutcomeId == 1).ToList<OutcomeMeasure>();
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
             ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs);
@@ -184,7 +186,7 @@ namespace NREPPAdminSite.Controllers
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             Study nStudy = new Study();
             nStudy.StudyId = int.Parse(Request.Form["StudyId"]);
-            nStudy.DocumentId = int.Parse(Request.Form["Document"]);
+            nStudy.DocumentId = int.Parse(Request.Form["docDropDown"]);
             nStudy.StudyDesign = int.Parse(Request.Form["StudyDesign"]);
             nStudy.BaselineEquiv = Request.Form["BaselineEquiv"] == null ? "" : Request.Form["BaselineEquiv"];
             nStudy.Reference = Request.Form["Reference"];
@@ -202,10 +204,51 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("Screen", new { InterventionId = int.Parse(Request.Form["InterventionId"]) });
         }
 
-        #endregion
-
         [HttpPost]
-        public ActionResult TempAction(FormCollection col)
+        public ActionResult AddOutcome(FormCollection col)
+        {
+            int IntervId = int.Parse(col["IntervId"]);
+            
+            OutcomeMeasure om = new OutcomeMeasure();
+            om.DocumentId = int.Parse(col["docDropDown"]);
+            //om.DiffAttrition = bool.Parse(col["DiffAttrition"]);
+            //om.EffectSize = bool.Parse(col["EffectSize"]);
+            om.PopDescription = col["popDescription"];
+            om.StudyId = int.Parse(col["studySelector"]);
+            om.OutcomeMeasureName = col["measure"];
+            om.OutcomeId = int.Parse(col["MacroOutcome"]);
+
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            localService.AddOrUpdateOutcomeMeasure(om, IntervId);
+
+
+            return RedirectToAction("Screen", new { InterventionId = IntervId }); // TODO: Pass errors on failure
+
+            /*
+             *  <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
+        <label for="measure">Measure Reported in the Study</label>
+        <input type="text" id="measure" name="measure" /><br /><br />
+        
+        <label for="popDescription">Describe Evaluated Population:</label><br />
+        <textarea name="popDescription" id="popDescription"></textarea><br /><br />
+        
+        <label for="studySelector">Select Applicable Studies</label><br />
+        <select id="studySelector" name="studySelector" multiple class="chosen-select" style="width: 350px;">
+            @foreach(NREPPAdminSite.Models.Study study in Model.StudyDocuments)
+            {
+                <option value="@study.Id">Study @study.StudyId</option>
+            }
+        </select>
+             */
+        }
+
+        /// <summary>
+        /// Update the Documents to include the RC Information
+        /// </summary>
+        /// <param name="col">Form Collection</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult UpdateRCDocs(FormCollection col)
         {
             string RCNameText = "txtRCName_", ReferenceText = "txtRef_", hiddenText = "hid_", dirtyText = "isdirty_";
             NrepServ localService = new NrepServ(NrepServ.ConnString);
@@ -216,6 +259,7 @@ namespace NREPPAdminSite.Controllers
             {
                 if (col[dirtyText + i.ToString()] == "true")
                 {
+                    // TODO: Check to see if an RCDocinfo Exists
                     localService.UpdateRCDocInfo(-1, int.Parse(col[hiddenText + i.ToString()]), col[ReferenceText + i.ToString()], col[RCNameText + i.ToString()]);
                     break;
                 }
@@ -223,8 +267,10 @@ namespace NREPPAdminSite.Controllers
                 
             }
 
-            return RedirectToAction("Programs", "Home");
+            return RedirectToAction("Screen", new { InterventionId = int.Parse(col["InterventionId"]) });
         }
+
+        #endregion
 
         #region Helper Methods
 

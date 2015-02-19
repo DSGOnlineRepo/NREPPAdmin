@@ -148,10 +148,18 @@ namespace NREPPAdminSite.Models
     public class Outcome
     {
         public int Id { get; set; }
+        public int IntervId { get; set; }
+        public string OutcomeName { get; set; }
+    }
+
+    public class OutcomeMeasure
+    {
+        public int Id { get; set; }
+        public int OutcomeId { get; set; }
 
         [Display(Name = "Measure Reported in Study")]
-        public string OutcomeMeasure { get; set; }
-        public string Citation { get; set; }
+        public string OutcomeMeasureName { get; set; }
+        public string Citation { get; set; } // Hmm... Store this for display
         public bool OverallAttrition { get; set; }
         public bool DiffAttrition { get; set; }
         public bool EffectSize { get; set; }
@@ -167,22 +175,23 @@ namespace NREPPAdminSite.Models
         public bool PrimaryOutcome { get; set; }
         public int Priority { get; set; }
         public int DocumentId { get; set; }
+        public int StudyId { get; set; }
     }
 
     public class OutcomesWrapper
     {
-        private List<Outcome> outcomes;
-        private List<Study_Outcome> studyOutcomes;
+        private List<OutcomeMeasure> outcomes;
+        private List<Outcome> studyOutcomes;
 
         #region Constructors
 
         public OutcomesWrapper()
         {
-            outcomes = new List<Outcome>();
-            studyOutcomes = new List<Study_Outcome>();
+            outcomes = new List<OutcomeMeasure>();
+            studyOutcomes = new List<Outcome>();
         }
 
-        public OutcomesWrapper(List<Outcome> inOutcomes, List<Study_Outcome> inStudyOutcomes)
+        public OutcomesWrapper(List<OutcomeMeasure> inOutcomes, List<Outcome> inStudyOutcomes)
         {
             outcomes = inOutcomes;
             studyOutcomes = inStudyOutcomes;
@@ -190,12 +199,12 @@ namespace NREPPAdminSite.Models
 
         #endregion
 
-        public List<Outcome> Outcomes
+        public List<OutcomeMeasure> OutcomesMeasures
         {
             get { return outcomes; }
         }
 
-        public List<Study_Outcome> StudyOutcomes
+        public List<Outcome> MacroOutcomes
         {
             get { return studyOutcomes; }
         }
