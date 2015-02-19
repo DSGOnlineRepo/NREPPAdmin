@@ -785,7 +785,7 @@ namespace NREPPAdminSite
             return outList;
         }
 
-        public int AddOrUpdateOutcomeMeasure(OutcomeMeasure om, int InterventionId)
+        public int AddOrUpdateOutcomeMeasure(OutcomeMeasure om, int InterventionId, string NewOutcome)
         {
             int retValue = 0;
             SqlCommand cmd = new SqlCommand("SPAddOrUpdateOutcomeMeasure", conn);
@@ -796,6 +796,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OutcomeMeasure", DbType = DbType.String, Value = om.OutcomeMeasureName });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@InterventionId", DbType = DbType.Int32, Value = InterventionId });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StudyId", DbType = DbType.Int32, Value = om.StudyId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OutcomeName", DbType = DbType.String, Value = NewOutcome });
             /*cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DiffAttrition", Value = om.DiffAttrition });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@EffectSize", Value = om.EffectSize });*/
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@BaselineEquiv", Value = om.BaselineEquiv });

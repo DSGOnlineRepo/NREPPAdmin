@@ -219,7 +219,7 @@ namespace NREPPAdminSite.Controllers
             om.OutcomeId = int.Parse(col["MacroOutcome"]);
 
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            localService.AddOrUpdateOutcomeMeasure(om, IntervId);
+            localService.AddOrUpdateOutcomeMeasure(om, IntervId, col["newOutcome"].Trim());
 
 
             return RedirectToAction("Screen", new { InterventionId = IntervId }); // TODO: Pass errors on failure
