@@ -161,6 +161,26 @@
         OutcomeList.Add(new SelectListItem() { Text = "New Outcome", Value = "-1" });
     }
 
+    <table>
+        <tr>
+            <th class="withborder" style="text-align: center;">Outcome</th>
+            <th class="withborder" style="text-align: center;">Measure</th>
+            <th>Study Id</th>
+            <th> </th>
+        </tr>
+        @foreach (NREPPAdminSite.Models.OutcomeMeasure measure in Model.Outcomes.OutcomesMeasures)
+        {
+            <tr>
+                <td class="withborder"><a href="#">@measure.OutcomeId</a></td>
+                <td class="withborder">@measure.OutcomeMeasureName</td>
+                <td class="withborder">Study @measure.StudyId</td>
+                <td class="withborder">@Html.ActionLink("Delete", "DeleteStudyRecord", new { RecId = measure.Id, InvId = Model.TheIntervention.Id })</td>
+            </tr>
+
+            i++;
+        }
+    </table>
+
     @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.Hidden("IntervId", Model.TheIntervention.Id)
@@ -177,7 +197,7 @@
         <textarea name="popDescription" id="popDescription"></textarea><br /><br />
         
         <label for="studySelector">Select Applicable Studies</label><br />
-        <select id="studySelector" name="studySelector" multiple class="chosen-select" style="width: 350px;">
+        <select id="studySelector" name="studySelector" style="width: 350px;">
             @foreach(NREPPAdminSite.Models.Study study in Model.StudyDocuments)
             {
                 <option value="@study.Id">Study @study.StudyId</option>

@@ -12,7 +12,7 @@
     [BaselineEquiv] VARCHAR(MAX) NULL, 
     [UseMultivariate] BIT NOT NULL DEFAULT 0, 
     [LongestFollowup] NCHAR(10) NULL, 
-    [SAMSHARelated] INT NULL, 
+    [SAMHSARelated] INT NULL, 
     [TargetPop] NCHAR(10) NULL,
     [AuthorQueryNeeded] BIT NOT NULL DEFAULT 0, 
     [RecommendReview] BIT NOT NULL DEFAULT 0, 

@@ -186,7 +186,7 @@ namespace NREPPAdminSite.Controllers
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             Study nStudy = new Study();
             nStudy.StudyId = int.Parse(Request.Form["StudyId"]);
-            nStudy.DocumentId = int.Parse(Request.Form["Document"]);
+            nStudy.DocumentId = int.Parse(Request.Form["docDropDown"]);
             nStudy.StudyDesign = int.Parse(Request.Form["StudyDesign"]);
             nStudy.BaselineEquiv = Request.Form["BaselineEquiv"] == null ? "" : Request.Form["BaselineEquiv"];
             nStudy.Reference = Request.Form["Reference"];

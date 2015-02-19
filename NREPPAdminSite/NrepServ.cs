@@ -600,7 +600,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "RETURN_VALUE", SqlDbType = SqlDbType.Int, Direction = ParameterDirection.ReturnValue });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = inStudy.Id });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StudyId", SqlDbType = SqlDbType.Int, Value = inStudy.StudyId });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Reference", SqlDbType = SqlDbType.VarChar, Value = inStudy.Reference });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Reference", SqlDbType = SqlDbType.VarChar, Value = "Not used at the moment" });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@InLitSearch", SqlDbType = SqlDbType.Bit, Value = inStudy.inLitSearch });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion1", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion1 });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion2", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion2 });
@@ -685,8 +685,11 @@ namespace NREPPAdminSite
                 {
                     outcomeList.Add(new OutcomeMeasure() { Id = (int)dr["OutcomeId"], OutcomeMeasureName = dr["OutcomeMeasure"].ToString(),
                     SignificantImpact = (int)dr["SignificantImpact"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
-                    SAMHSAPop = (int)dr["SAMSHAPop"], PrimaryOutcome = (bool)dr["PrimaryOutcome"], Priority = (int)dr["Priority"], DocumentId = (int)dr["DocumentId"]});
+                    SAMHSAPop = (int)dr["SAMHSAPop"], PrimaryOutcome = (bool)dr["PrimaryOutcome"], Priority = (int)dr["Priority"],
+                    StudyId = (int)dr["StudyId"], DocumentId = (int)dr["DocumentId"]});
                 }
+
+                // TODO: Document Association
 
                 foreach (DataRow dr in ds.Tables[1].Rows)
                     studyOutcomeList.Add(new Outcome() { IntervId = IntervId, OutcomeName = dr["OutcomeName"].ToString(), Id = (int)dr["Id"] });
@@ -823,6 +826,12 @@ namespace NREPPAdminSite
             }
 
             return retValue;
+        }
+
+        public void AddOrUpdateStudy(Study inStudy)
+        {
+
+            return;
         }
 
         #endregion

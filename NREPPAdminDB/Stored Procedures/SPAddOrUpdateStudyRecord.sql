@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[SPAddOrUpdateStudyRecord]
-	/*@param1 int = 0,
-	@param2 int*/
+	-- TODO: Study ID collision.
 	@Id INT,
 	@StudyId INT,
     @Reference VARCHAR(100), 
@@ -36,7 +35,7 @@ AS SET NOCOUNT ON
 		[BaselineEquiv], 
 		[UseMultivariate], 
 		[LongestFollowup], 
-		[SAMSHARelated], 
+		[SAMHSARelated], 
 		[TargetPop], 
 		[AuthorQueryNeeded], 
 		[RecommendReview], 
@@ -81,7 +80,7 @@ AS SET NOCOUNT ON
 			[BaselineEquiv] = @BaselineEquiv, 
 			[UseMultivariate] = @UseMultivariate, 
 			[LongestFollowup] = null, 
-			[SAMSHARelated] = @SAMSHARelated, 
+			[SAMHSARelated] = @SAMSHARelated, 
 			[TargetPop] = null, 
 			[AuthorQueryNeeded] = @AuthorQueryNeeded, 
 			[RecommendReview] = @RecommendReview, 

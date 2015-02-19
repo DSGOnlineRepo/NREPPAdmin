@@ -14,7 +14,7 @@ AS
 		[BaselineEquiv], 
 		[UseMultivariate], 
 		[LongestFollowup], 
-		[SAMSHARelated], 
+		[SAMHSARelated], 
 		[TargetPop],
 		[AuthorQueryNeeded], 
 		[RecommendReview], 
