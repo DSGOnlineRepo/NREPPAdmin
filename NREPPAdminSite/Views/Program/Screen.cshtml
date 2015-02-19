@@ -159,6 +159,8 @@
         }
 
         OutcomeList.Add(new SelectListItem() { Text = "New Outcome", Value = "-1" });
+
+        List<int> studyz = Model.StudyDocuments.Select(m => m.StudyId).Distinct().ToList();
     }
 
     <table>
@@ -198,9 +200,9 @@
         
         <label for="studySelector">Select Applicable Studies</label><br />
         <select id="studySelector" name="studySelector" style="width: 350px;">
-            @foreach(NREPPAdminSite.Models.Study study in Model.StudyDocuments)
+            @foreach(int studyId in studyz)
             {
-                <option value="@study.Id">Study @study.StudyId</option>
+                <option value="@studyId">Study @studyId</option>
             }
         </select>
         
@@ -211,6 +213,7 @@
 <script type="text/javascript">
     var thisIsAThing = 5;
     var currentStudy = new Array();
+    var currentOutcomes = new Array();
     
     function makeRecord(Id, StudyId, Reference, inLitSearch, Exclusion1, Exclusion2, Exclusion3, StudyDesign, BaselineEquiv,
         UseMultivariate, SAMSHARelated, AuthorQueryNeeded, RecommendReview, Notes, DocumentId) {
@@ -235,9 +238,25 @@
         return anObject;
     }
 
+    function makeOutcomeRecord(OutcomeId, StudyId, Measure, PopDescrip) {
+        var anObject = {};
+
+        anObject.Id = OutcomeId;
+        anObject.StudyId = StudyId;
+        anObject.Measure = Measure;
+        anObject.PopDescrip = PopDescrip;
+    }
+
     @foreach(NREPPAdminSite.Models.Study item in Model.StudyDocuments)
     {
         @:currentStudy.push(makeRecord(@item.Id, @item.StudyId, '@item.Reference', "@item.inLitSearch", @item.Exclusion1, @item.Exclusion2, @item.Exclusion3, @item.StudyDesign, '@item.BaselineEquiv', "@item.UseMultivariate", @item.SAMSHARelated, "@item.AuthorQueryNeeded", "@item.RecommendReview", "@item.Notes", @item.DocumentId));
     }
+
+    @foreach(NREPPAdminSite.Models.OutcomeMeasure om in Model.Outcomes.OutcomesMeasures)
+    {
+        @:currentOutcomes(@om.Id, @om.StudyId, @om.OutcomeMeasureName, @om.PopDescription);
+    }
+
+
 </script>
 
