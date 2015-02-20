@@ -829,10 +829,35 @@ namespace NREPPAdminSite
             return retValue;
         }
 
-        public void AddOrUpdateStudy(Study inStudy)
+        public bool DeleteOutcomeMeasure(int MeasureId)
         {
+            bool retValue = true;
 
-            return;
+            SqlCommand cmd = new SqlCommand("SPDeleteOutcomeMeasure", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "RETURN_VALUE", Direction = ParameterDirection.ReturnValue, DbType = DbType.Int32 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OutcomeMeasureId", Value = MeasureId });
+            
+
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+
+                retValue = (int)cmd.Parameters["RETURN_VALUE"].Value == 0;
+
+            }
+            catch (Exception)
+            {
+                retValue = false;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return retValue;
         }
 
         #endregion

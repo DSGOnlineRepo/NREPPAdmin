@@ -70,6 +70,21 @@ namespace NREPPAdminSite.Controllers
         }
 
         /// <summary>
+        /// Deletes an Outcome Measure Record
+        /// </summary>
+        /// <param name="RecId">The Record Id to Delete</param>
+        /// <param name="InvId">The Program ID so it can redirect</param>
+        /// <returns></returns>
+        public ActionResult DeleteOutcomeMeasure(int MeasureId, int InvId)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            
+            localService.DeleteOutcomeMeasure(MeasureId);
+
+            return RedirectToAction("Screen", new { InterventionId = InvId });
+        }
+
+        /// <summary>
         /// Deletes a Study Record
         /// </summary>
         /// <param name="RecId">The Record Id to Delete</param>
@@ -78,7 +93,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult DeleteStudyRecord(int RecId, int InvId)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            
+
             localService.DeleteStudyRecord(RecId);
 
             return RedirectToAction("Screen", new { InterventionId = InvId });

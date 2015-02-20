@@ -178,7 +178,7 @@
                 <td class="withborder"><a href="#" onclick="populateOutcomeForm(@i); return false;">@measure.OutcomeId</a></td>
                 <td class="withborder">@measure.OutcomeMeasureName</td>
                 <td class="withborder">Study @measure.StudyId</td>
-                <td class="withborder">@Html.ActionLink("Delete", "DeleteStudyRecord", new { RecId = measure.Id, InvId = Model.TheIntervention.Id })</td>
+                <td class="withborder">@Html.ActionLink("Delete", "DeleteOutcomeMeasure", new { MeasureId = measure.Id, InvId = Model.TheIntervention.Id })</td>
             </tr>
 
             i++;

@@ -103,6 +103,7 @@
     <Build Include="Stored Procedures\SPGetDocsWithTagsById.sql" />
     <Build Include="Tables\OutcomeMeasure.sql" />
     <Build Include="Stored Procedures\SPAddOrUpdateOutcomeMeasure.sql" />
+    <Build Include="Stored Procedures\SPDeleteOutcomeMeasure.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

@@ -1,0 +1,16 @@
+﻿CREATE PROCEDURE [dbo].[SPDeleteOutcomeMeasure]
+	@OutcomeMeasureId INT
+AS
+	
+	BEGIN TRANSACTION
+
+	DELETE FROM OutcomeMeasure
+		WHERE Id = @OutcomeMeasureId
+
+	IF @@ERROR <> 0 BEGIN
+		ROLLBACK TRANSACTION
+		RETURN -1
+	END
+
+	COMMIT TRANSACTION
+RETURN 0
