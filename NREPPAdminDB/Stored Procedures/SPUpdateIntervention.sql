@@ -8,6 +8,7 @@
 	@programType INT = 0,
 	@Acronym VARCHAR(20) = NULL,
 	@status int,
+	@IsLitSearch bit = 0,
 	@Output INT OUTPUT
 AS SET NOCOUNT ON
 
