@@ -161,6 +161,8 @@
         OutcomeList.Add(new SelectListItem() { Text = "New Outcome", Value = "-1" });
 
         List<int> studyz = Model.StudyDocuments.Select(m => m.StudyId).Distinct().ToList();
+
+        i = 0;
     }
 
     <table>
@@ -173,7 +175,7 @@
         @foreach (NREPPAdminSite.Models.OutcomeMeasure measure in Model.Outcomes.OutcomesMeasures)
         {
             <tr>
-                <td class="withborder"><a href="#">@measure.OutcomeId</a></td>
+                <td class="withborder"><a href="#" onclick="populateOutcomeForm(@i); return false;">@measure.OutcomeId</a></td>
                 <td class="withborder">@measure.OutcomeMeasureName</td>
                 <td class="withborder">Study @measure.StudyId</td>
                 <td class="withborder">@Html.ActionLink("Delete", "DeleteStudyRecord", new { RecId = measure.Id, InvId = Model.TheIntervention.Id })</td>
@@ -186,6 +188,7 @@
     @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.Hidden("IntervId", Model.TheIntervention.Id)
+        @Html.Hidden("OutcomeMeasureId")
         <label>Choose An Outcome: </label>
         @Html.DropDownList("MacroOutcome", OutcomeList)
         
@@ -245,6 +248,8 @@
         anObject.StudyId = StudyId;
         anObject.Measure = Measure;
         anObject.PopDescrip = PopDescrip;
+
+        return anObject;
     }
 
     @foreach(NREPPAdminSite.Models.Study item in Model.StudyDocuments)
@@ -254,7 +259,7 @@
 
     @foreach(NREPPAdminSite.Models.OutcomeMeasure om in Model.Outcomes.OutcomesMeasures)
     {
-        @:currentOutcomes(@om.Id, @om.StudyId, @om.OutcomeMeasureName, @om.PopDescription);
+        @:currentOutcomes.push(makeOutcomeRecord(@om.Id, @om.StudyId, "@om.OutcomeMeasureName", "@om.PopDescription"));
     }
 
 

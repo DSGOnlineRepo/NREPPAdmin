@@ -212,6 +212,7 @@ namespace NREPPAdminSite.Controllers
             int IntervId = int.Parse(col["IntervId"]);
             
             OutcomeMeasure om = new OutcomeMeasure();
+            om.Id = col["OutcomeMeasureId"] == string.Empty || int.Parse(col["OutcomeMeasureId"]) < 1 ? -1 : int.Parse(col["OutcomeMeasureId"]);
             om.DocumentId = int.Parse(col["docDropDown"]);
             //om.DiffAttrition = bool.Parse(col["DiffAttrition"]);
             //om.EffectSize = bool.Parse(col["EffectSize"]);

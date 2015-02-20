@@ -16,6 +16,17 @@ function populateStudyForm(FormId)
     $("#ActualId").val(ject.Id);
 }
 
+function populateOutcomeForm(FormId)
+{
+    var ject = currentOutcomes[FormId];
+
+    //$("select[name*='']").val(ject.)
+    $("input[name*='OutcomeMeasureId']").val(ject.Id);
+    $("input[name*='measure']").val(ject.Measure);
+    $("select[name*='studySelector']").val(ject.StudyId);
+    $("textarea[name*='popDescription']").text(ject.PopDescrip);
+}
+
 $(document).ready(function () {
     $(".chosen-select").chosen();
 });
