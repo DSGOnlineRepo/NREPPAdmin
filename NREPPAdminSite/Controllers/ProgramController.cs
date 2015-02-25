@@ -157,6 +157,10 @@ namespace NREPPAdminSite.Controllers
         [HttpPost]
         public ActionResult Submit(IntervPageModel model)
         {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            localService.ChangeStatus(model.TheIntervention.Id, -1, 2);
+
             return RedirectToAction("Programs", "Home");
         }
 

@@ -182,6 +182,7 @@ namespace NREPPAdminSite
 
         }
 
+
         public static NreppUser GetFromCookie(HttpCookie inCookie)
         {
             return (new JavaScriptSerializer()).Deserialize<NreppUser>(inCookie.Value);
@@ -190,6 +191,28 @@ namespace NREPPAdminSite
         #endregion
 
         #region Misc Functionality
+
+        public void ChangeStatus(int inId, int inUser, int ToStatus)
+        {
+            SqlCommand cmd = new SqlCommand("SPChangeInterventionStatus", conn);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IntervId", inId));
+            cmd.Parameters.Add(new SqlParameter("@User", inUser));
+            cmd.Parameters.Add(new SqlParameter("@DestUser", inId));
+            cmd.Parameters.Add(new SqlParameter("@DestStatus", ToStatus));
+
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
         
 
         public IEnumerable<Answer> GetAnswersByCategory(string inCategory)

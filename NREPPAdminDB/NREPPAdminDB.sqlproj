@@ -104,6 +104,7 @@
     <Build Include="Tables\OutcomeMeasure.sql" />
     <Build Include="Stored Procedures\SPAddOrUpdateOutcomeMeasure.sql" />
     <Build Include="Stored Procedures\SPDeleteOutcomeMeasure.sql" />
+    <Build Include="Tables\Inter_User_Roles.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

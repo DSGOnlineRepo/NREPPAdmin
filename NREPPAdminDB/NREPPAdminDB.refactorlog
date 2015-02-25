@@ -77,4 +77,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="SAMHSARelated" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="d8d20267-44bf-4648-acea-832799d43f6e" ChangeDateTime="02/23/2015 20:38:52">
+    <Property Name="ElementName" Value="[dbo].[Inter_User_Roles].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Inter_User_Roles]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="InterventionId" />
+  </Operation>
 </Operations>

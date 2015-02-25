@@ -11,15 +11,28 @@ AS SET NOCOUNT ON
 
 	BEGIN TRANSACTION
 
-		UPDATE Interventions
-			SET Owner = @DestUser,
-			Status = @DestStatus
+		DECLARE @CurrStatus INT
+
+		SELECT @CurrStatus = Status from Interventions
 		WHERE Id = @IntervId
 
-		IF @@ERROR <> 0 BEGIN
-			ROLLBACK TRANSACTION
-			RETURN -1
-		END
+
+			UPDATE Interventions
+				SET Status = @DestStatus
+			WHERE Id = @IntervId
+
+			IF @@ERROR <> 0 BEGIN
+				ROLLBACK TRANSACTION
+				RETURN -1
+			END
+
+			IF @DestStatus = 3 BEGIN
+				IF @@ERROR <> 0 BEGIN
+					ROLLBACK TRANSACTION
+					RETURN -3
+				END
+			END
+
 			
 	COMMIT TRANSACTION
 RETURN 0
