@@ -10,7 +10,7 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
--- Roles
+-- Roles TODO: Identity insert off version
 
 INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
@@ -35,6 +35,12 @@ INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
 					('Quality Control', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+
+INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
+					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
+					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
+					('Review Coordinator', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- Statuses
 

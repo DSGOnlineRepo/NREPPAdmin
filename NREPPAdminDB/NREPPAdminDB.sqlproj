@@ -63,6 +63,7 @@
     <Folder Include="Tables" />
     <Folder Include="Stored Procedures" />
     <Folder Include="Scripts" />
+    <Folder Include="Functions" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NREPPAdminDB.publish.xml" />
@@ -105,6 +106,7 @@
     <Build Include="Stored Procedures\SPAddOrUpdateOutcomeMeasure.sql" />
     <Build Include="Stored Procedures\SPDeleteOutcomeMeasure.sql" />
     <Build Include="Tables\Inter_User_Roles.sql" />
+    <Build Include="Functions\FNGetStatusesByRole.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

@@ -1,7 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[SPGetInterventionList]
-@Id INT = NULL
+@Id INT = NULL,
+@UserRoleId INT
 AS
 SET NOCOUNT ON
+
+	DECLARE @AvailStatus table (statusId INT)
+
+	INSERT INTO @AvailStatus SELECT statusId from FNGetStatusesByRole(@UserRoleId)
 
 	IF @Id IS NULL BEGIN
 		SELECT TOP 100 i.Id as InterventionId, Title, FullDescription, u.Firstname + ' ' + u.Lastname as [Submitter], i.Submitter as [SubmitterId], StatusName,
@@ -9,6 +14,7 @@ SET NOCOUNT ON
 		from Interventions i 
 		inner join Users u ON i.Submitter = u.Id
 		inner join InterventionStatus s on i.Status = s.Id
+		WHERE s.Id in (SELECT statusId from @AvailStatus)
 
 	END
 	ELSE BEGIN
