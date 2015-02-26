@@ -5,6 +5,7 @@ AS
 	DECLARE @RoleID INT
 
 	SELECT @RoleID = RoleID from Users
+		WHERE Username = @userName
 
 	SELECT Id, Username, Firstname, Lastname, RoleID  FROM Users
 	WHERE Username = @userName
