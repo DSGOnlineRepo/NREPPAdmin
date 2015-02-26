@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using NREPPAdminSite.Models;
 using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -38,7 +39,7 @@ namespace NREPPAdminSite.Controllers
 
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
-            List<Intervention> interventionList = localService.GetInterventions();
+            List<Intervention> interventionList = localService.GetInterventions(usr.UserRole.RoleId);
 
 
             return View(interventionList);
@@ -58,6 +59,9 @@ namespace NREPPAdminSite.Controllers
                 try
                 {
                     outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
+                    dynamic dyn = JsonConvert.DeserializeObject(usrStuff.Value);
+
+                    outUser.setRole(Convert.ToInt32(dyn["UserRole"]["RoleId"]), Convert.ToString(dyn["UserRole"]["RoleName"]));
                 }
                 catch (Exception)
                 {

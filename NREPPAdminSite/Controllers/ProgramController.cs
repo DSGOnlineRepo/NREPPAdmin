@@ -35,9 +35,14 @@ namespace NREPPAdminSite.Controllers
 
             if (InvId > 0)
             {
+                HttpCookie usrStuff = Request.Cookies.Get(Constants.USR_COOKIE);
+                NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
+
                 SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
+                SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserRoleId", Value = 1 };
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(idParam);
+                parameters.Add(roleParam);
                 List<Intervention> interventionList = localService.GetInterventions(parameters);
                 theIntervention = interventionList[0];
 
@@ -155,7 +160,7 @@ namespace NREPPAdminSite.Controllers
         /// <param name="model">The intervention to submit for review</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Submit(IntervPageModel model)
+        public ActionResult Submit(IntervPageModel model, FormCollection col)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 

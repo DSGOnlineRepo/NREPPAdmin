@@ -10,23 +10,24 @@ namespace NREPPAdminSite.Models
 {
     public class Role
     {
-        private int roleId;
-        private string roleName;
-        private Dictionary<string, bool> permissions = new Dictionary<string, bool>();
+        public int RoleId {get; set;}
+        public string RoleName { get; set; }
+        //private Dictionary<string, bool> permissions = new Dictionary<string, bool>();
 
-        public string RoleName
+        /*public string RoleName
         {
             get { return roleName; }
-        }
+        }*/
 
-        public Role(int id, string name, Dictionary<string, bool>permList)
+        public Role(int id, string name)
         {
-            roleId = id;
-            roleName = name;
-            permissions = permList;
+            RoleId = id;
+            RoleName = name;
+            //permissions = permList;
         }
 
-        public bool hasPermission(string inAction)
+
+        /*public bool hasPermission(string inAction)
         {
             return permissions[inAction];
         }
@@ -37,7 +38,7 @@ namespace NREPPAdminSite.Models
             {
                 return permissions;
             }
-        }
+        }*/
     }
 
     public class NreppUser
@@ -92,15 +93,20 @@ namespace NREPPAdminSite.Models
             Lastname = lname;
         }
 
-        public bool hasPermission(string permission)
+        /*public bool hasPermission(string permission)
         {
             return userRole.hasPermission(permission);
-        }
+        }*/
 
 
         public void Authenticate(bool setStatus) // function callback? or have I been writing too much JS?
         {
             isAuth = setStatus;
+        }
+
+        public void setRole(int RoleId, string RoleName)
+        {
+            userRole = new Role(RoleId, RoleName);
         }
 
         public string MakeJSON()

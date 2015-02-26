@@ -120,12 +120,22 @@
     }
 
     <div class="submitDiv">
+        Please submit your completed program.
+
         @using (Html.BeginForm("Submit", "Program", FormMethod.Post))
         {
             @Html.HiddenFor(m => m.TheIntervention.Id);
             @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
             @Html.HiddenFor(m => m.TheIntervention.StatusId);
             @Html.HiddenFor(m => m.TheIntervention.ProgramType);
+            
+            if (Model.TheIntervention.StatusId > 1)
+            { 
+            <input type="checkbox" name="haveEvalStudy" /> <label for="haveEvalStudy">Is there a study that assesses mental health or substance use outcome?</label><br />
+            <input type="checkbox" name="haveBehaveStudy" /> <label for="haveBehaveStudy">Is there an evaluation study that assesses other behavioral health-related outcomes on populations with mental health issues or substance abuse problems?</label><br />
+            <input type="checkbox" name="haveExperStudy" /> <label for="haveExperStudy">Has the effectiveness of the intervention been assessed with at least one experiment or quasi-experimental design, with a comparison group?</label><br />
+            <input type="checkbox" name="havePeerStudy" /> <label for="havePeerStudy">Have the results of tehse studies been published in a peer reviewed journal, other professional publication, or documentmented in a comprehensive evaluation report?</label><br />
+            }
             
             <input type="submit" value="Submit" />
         }

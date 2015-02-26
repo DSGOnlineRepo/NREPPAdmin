@@ -171,7 +171,8 @@ namespace NREPPAdminSite
                         roleStatus.Add(col.ColumnName, (bool)RoleRow[col]); // This is totally clear. :D
                 }
 
-                Role userRole = new Role((int)RoleRow["RoleId"], RoleRow["RoleName"].ToString(), roleStatus);
+                //Role userRole = new Role((int)RoleRow["RoleId"], RoleRow["RoleName"].ToString(), roleStatus);
+                Role userRole = new Role((int)RoleRow["RoleId"], RoleRow["RoleName"].ToString());
 
                 currentUser = new NreppUser((int)UserRow["Id"], userRole, UserRow["Username"].ToString(), UserRow["Firstname"].ToString(), UserRow["Lastname"].ToString());
 
@@ -308,6 +309,19 @@ namespace NREPPAdminSite
             List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
             return this.GetInterventions(nullParams);
         }
+
+        /// <summary>
+        /// Gets the interventions list based on role
+        /// </summary>
+        /// <param name="RoleId">User's Role Id</param>
+        /// <returns></returns>
+        public List<Intervention> GetInterventions(int RoleId) // This needs to take some parameters, so there should be a bunch of functions for it
+        {
+            List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
+            nullParams.Add(new SqlParameter() { ParameterName = "@UserRoleId", SqlDbType = SqlDbType.Int, Value = RoleId });
+            return this.GetInterventions(nullParams);
+        }
+
 
         // TODO: Generalize the parameter passing better? I need something that will be easier to maintain
 
