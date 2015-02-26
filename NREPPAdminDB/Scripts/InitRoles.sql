@@ -46,6 +46,8 @@ INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
 
 INSERT INTO InterventionStatus (StatusName) VALUES ('Submitted')
 INSERT INTO InterventionStatus (StatusName) VALUES ('Under Review')
+INSERT INTO InterventionStatus (StatusName) VALUES ('Awaiting Assignment')
+INSERT INTO InterventionStatus (StatusName) VALUES ('Being Screened')
 
 -- Answers, Categories, Mapping
 -- TODO: Index off Version

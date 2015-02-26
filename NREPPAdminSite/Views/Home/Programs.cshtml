@@ -13,6 +13,7 @@
         <tr>
             <th>Title</th>
             <th>Full Description</th>
+            <th>Status</th>
             <th>Updated Date</th>
             <th>Submitter</th>
         </tr>
@@ -22,14 +23,15 @@
             {
                 <tr>
                     <!-- <td>@inv.Title</td> -->
-                    <td>@Html.ActionLink(inv.Title, "View", "Program", new {InvId = inv.Id }, new {id = "link" + inv.Id.ToString() }) </td>
-                    <td>@inv.FullDescription</td>
-                    <td>@inv.UpdatedDate.ToShortDateString()</td>
-                    <td>@inv.Submitter</td>
+                    <td class="withborder">@Html.ActionLink(inv.Title, "View", "Program", new {InvId = inv.Id }, new {id = "link" + inv.Id.ToString() }) </td>
+                    <td class="withborder">@inv.FullDescription</td>
+                    <td class="withborder">@inv.Status</td>
+                    <td class="withborder">@inv.UpdatedDate.ToShortDateString()</td>
+                    <td class="withborder">@inv.Submitter</td>
                 </tr>
             }
         }
     </table>
-    @Html.ActionLink("Create a New Submission", "View", "Program", new { InvId = "-1" }, null)
+    @Html.ActionLink("Create a New Submission", "View", "Program", new { InvId = "-1" }, null)<br />
     @Html.ActionLink("Log Out", "Logout", "Admin", null, null)
 </div>

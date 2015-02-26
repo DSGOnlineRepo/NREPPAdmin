@@ -164,7 +164,7 @@ namespace NREPPAdminSite.Controllers
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
-            localService.ChangeStatus(model.TheIntervention.Id, -1, 2);
+            localService.ChangeStatus(model.TheIntervention.Id, -1, int.Parse(col["destStatus"]));
 
             return RedirectToAction("Programs", "Home");
         }

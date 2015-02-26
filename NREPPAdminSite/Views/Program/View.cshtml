@@ -11,6 +11,7 @@
 
 <h2>Viewing @Model.TheIntervention.Title</h2>
 <h3>Submitted by @Model.TheIntervention.Submitter</h3>
+<label>@Model.TheIntervention.Status</label>
 @Html.ActionLink("Screen this Intervention", "Screen", new { InterventionId = Model.TheIntervention.Id})
 <div>
 
@@ -129,14 +130,20 @@
             @Html.HiddenFor(m => m.TheIntervention.StatusId);
             @Html.HiddenFor(m => m.TheIntervention.ProgramType);
             
+            
             if (Model.TheIntervention.StatusId > 1)
-            { 
+            {
+                @Html.Hidden("destStatus", 4) 
             <input type="checkbox" name="haveEvalStudy" /> <label for="haveEvalStudy">Is there a study that assesses mental health or substance use outcome?</label><br />
             <input type="checkbox" name="haveBehaveStudy" /> <label for="haveBehaveStudy">Is there an evaluation study that assesses other behavioral health-related outcomes on populations with mental health issues or substance abuse problems?</label><br />
             <input type="checkbox" name="haveExperStudy" /> <label for="haveExperStudy">Has the effectiveness of the intervention been assessed with at least one experiment or quasi-experimental design, with a comparison group?</label><br />
             <input type="checkbox" name="havePeerStudy" /> <label for="havePeerStudy">Have the results of tehse studies been published in a peer reviewed journal, other professional publication, or documentmented in a comprehensive evaluation report?</label><br />
             }
-            
+            else
+            {
+                @Html.Hidden("destStatus", 2)
+            }
+
             <input type="submit" value="Submit" />
         }
     </div>
