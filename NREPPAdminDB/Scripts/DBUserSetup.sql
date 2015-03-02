@@ -3,6 +3,7 @@
 */
 
 CREATE LOGIN nrAdmin WITH PASSWORD = 'nr!Admin123456';
+CREATE LOGIN nrAgent WITH PASSWORD = 'nr!Agent123456';
 GO
 
 use NREPPAdmin;

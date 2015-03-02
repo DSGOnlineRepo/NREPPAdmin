@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[SPGetInterventionList]
 @Id INT = NULL,
-@UserRoleId INT
+@UserRoleId INT = NULL
 AS
 SET NOCOUNT ON
 

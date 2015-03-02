@@ -11,8 +11,11 @@
 
 <h2>Viewing @Model.TheIntervention.Title</h2>
 <h3>Submitted by @Model.TheIntervention.Submitter</h3>
-<label>@Model.TheIntervention.Status</label>
-@Html.ActionLink("Screen this Intervention", "Screen", new { InterventionId = Model.TheIntervention.Id})
+<label>@Model.TheIntervention.Status</label><br />
+
+@if (Model.TheIntervention.StatusId == 4) {
+    @Html.ActionLink("Screen this Intervention", "Screen", new { InterventionId = Model.TheIntervention.Id });
+    }
 <div>
 
     <div style="height: 100px;">

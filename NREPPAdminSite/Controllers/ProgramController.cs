@@ -216,14 +216,13 @@ namespace NREPPAdminSite.Controllers
             nStudy.StudyDesign = int.Parse(Request.Form["StudyDesign"]);
             nStudy.BaselineEquiv = Request.Form["BaselineEquiv"] == null ? "" : Request.Form["BaselineEquiv"];
             nStudy.Reference = Request.Form["Reference"];
-            nStudy.Id = -1;
+            nStudy.Id = Request.Form["ActualID"] == string.Empty ? -1 : int.Parse(Request.Form["ActualID"]);
             nStudy.Notes = Request.Form["Notes"];
             nStudy.UseMultivariate = Request.Form["useMultivariate"] == "on";
             nStudy.SAMSHARelated = int.Parse(Request.Form["SAMSHARelated"]);
             nStudy.Exclusion1 = int.Parse(Request.Form["Exclusion1"]);
             nStudy.Exclusion2 = int.Parse(Request.Form["Exclusion2"]);
             nStudy.Exclusion3 = int.Parse(Request.Form["Exclusion3"]);
-            nStudy.Id = Request.Form["Id"] == null || Request.Form["Id"] == string.Empty ? -1 : int.Parse(Request.Form["Id"]);
 
             int ActualId = localService.AddStudyRecord(nStudy);
 
