@@ -156,6 +156,7 @@ namespace NREPPAdminSite.Models
     {
         public int Id { get; set; }
         public int OutcomeId { get; set; }
+        public int OutcomeMeasureId { get; set; }
 
         [Display(Name = "Measure Reported in Study")]
         public string OutcomeMeasureName { get; set; }

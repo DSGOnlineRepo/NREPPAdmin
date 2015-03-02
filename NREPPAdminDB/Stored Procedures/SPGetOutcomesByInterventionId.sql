@@ -6,8 +6,8 @@ AS
 
 	INSERT INTO @Docs (DocumentId) select Id from Document where InterventionId = @InterventionId
 
-	SELECT o.Id as [OutcomeId], OutcomeMeasure, BaselineEquiv,
-		SignificantImpact, GroupFavored, PopDescription, SAMHSAPop, PrimaryOutcome, Priority, StudyId, DocId as DocumentId from OutcomeMeasure om
+	SELECT o.Id as [OutcomeMeasureId], OutcomeMeasure, BaselineEquiv,
+		SignificantImpact, GroupFavored, PopDescription, SAMHSAPop, PrimaryOutcome, Priority, StudyId, DocId as DocumentId, o.Id as OutcomeId from OutcomeMeasure om
 	INNER JOIN Outcome o ON o.Id = om.OutcomeId
 	WHERE InterventionId = @InterventionId
 

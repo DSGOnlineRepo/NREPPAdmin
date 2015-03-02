@@ -165,6 +165,19 @@
         i = 0;
     }
 
+    @functions {
+        string getOutcomeByNumber(int inNumber, List<SelectListItem> inList)
+        {
+            foreach (SelectListItem i in inList)
+                if (i.Value == inNumber.ToString())
+                    return i.Text;
+
+            return "Error";
+        }
+        
+       
+    }
+
     <table>
         <tr>
             <th class="withborder" style="text-align: center;">Outcome</th>
@@ -175,7 +188,7 @@
         @foreach (NREPPAdminSite.Models.OutcomeMeasure measure in Model.Outcomes.OutcomesMeasures)
         {
             <tr>
-                <td class="withborder"><a href="#" onclick="populateOutcomeForm(@i); return false;">@measure.OutcomeId</a></td>
+                <td class="withborder"><a href="#" onclick="populateOutcomeForm(@i); return false;">@getOutcomeByNumber(@measure.OutcomeId, OutcomeList)</a></td>
                 <td class="withborder">@measure.OutcomeMeasureName</td>
                 <td class="withborder">Study @measure.StudyId</td>
                 <td class="withborder">@Html.ActionLink("Delete", "DeleteOutcomeMeasure", new { MeasureId = measure.Id, InvId = Model.TheIntervention.Id })</td>

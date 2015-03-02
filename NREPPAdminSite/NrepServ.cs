@@ -720,10 +720,10 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    outcomeList.Add(new OutcomeMeasure() { Id = (int)dr["OutcomeId"], OutcomeMeasureName = dr["OutcomeMeasure"].ToString(),
+                    outcomeList.Add(new OutcomeMeasure() { Id = (int)dr["OutcomeMeasureId"], OutcomeMeasureName = dr["OutcomeMeasure"].ToString(),
                     SignificantImpact = (int)dr["SignificantImpact"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
                     SAMHSAPop = (int)dr["SAMHSAPop"], PrimaryOutcome = (bool)dr["PrimaryOutcome"], Priority = (int)dr["Priority"],
-                    StudyId = (int)dr["StudyId"], DocumentId = (int)dr["DocumentId"]});
+                    StudyId = (int)dr["StudyId"], DocumentId = (int)dr["DocumentId"], OutcomeId = (int)dr["OutcomeId"]});
                 }
 
                 // TODO: Document Association
