@@ -42,6 +42,12 @@ INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
 					('Review Coordinator', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 
+INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
+					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
+					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
+					('DSG PRM', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+
 -- Statuses
 
 INSERT INTO InterventionStatus (StatusName) VALUES ('Submitted')
