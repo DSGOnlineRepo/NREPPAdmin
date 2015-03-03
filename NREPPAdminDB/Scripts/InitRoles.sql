@@ -10,50 +10,57 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
--- Roles TODO: Identity insert off version
+SET IDENTITY_INSERT Roles ON
 
-INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					('Data Entry', 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+					(1, 'Data Entry', 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					('Editor', 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0);
+					(2, 'Editor', 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0);
 							   
-INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					('Principal Investigator', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0);
+					(3, 'Principal Investigator', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0);
 
-INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					('Quality Control', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+					(4, 'Quality Control', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 
-INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					('Review Coordinator', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+					(5, 'Review Coordinator', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 
-INSERT INTO Roles (RoleName, ViewInterventions, ViewAllUsers,
+INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					('DSG PRM', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+					(6, 'DSG PRM', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+
+SET IDENTITY_INSERT InterventionStatus OFF
 
 -- Statuses
 
-INSERT INTO InterventionStatus (StatusName) VALUES ('Submitted')
-INSERT INTO InterventionStatus (StatusName) VALUES ('Under Review')
-INSERT INTO InterventionStatus (StatusName) VALUES ('Awaiting Assignment')
-INSERT INTO InterventionStatus (StatusName) VALUES ('Being Screened')
+SET IDENTITY_INSERT InterventionStatus ON
+
+INSERT INTO InterventionStatus (Id, StatusName) VALUES (1, 'Submitted')
+INSERT INTO InterventionStatus (Id, StatusName) VALUES (2, 'Under Review')
+INSERT INTO InterventionStatus (Id, StatusName) VALUES (3, 'Awaiting Assignment')
+INSERT INTO InterventionStatus (Id, StatusName) VALUES (4, 'Being Screened')
+INSERT INTO InterventionStatus (Id, StatusName) VALUES (5, 'PRM Screening')
+
+SET IDENTITY_INSERT InterventionStatus OFF
 
 -- Answers, Categories, Mapping
 -- TODO: Index off Version

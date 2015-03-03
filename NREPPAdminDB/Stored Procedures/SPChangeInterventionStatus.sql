@@ -33,6 +33,10 @@ AS SET NOCOUNT ON
 				END
 			END
 
+			IF @DestStatus = 4 BEGIN
+				INSERT INTO Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @DestUser, 5)
+			END
+
 			
 	COMMIT TRANSACTION
 RETURN 0
