@@ -60,6 +60,19 @@
 <div>
     @{i = 0; }
 
+    @functions{
+        string getReference(List<NREPPAdminSite.Models.RCDocument> docs, int inDocId)
+        {
+            //string outRef = "";
+
+            foreach (NREPPAdminSite.Models.RCDocument d in docs)
+                if (d.DocId == inDocId)
+                    return d.Reference;
+
+            return "Error";
+        }
+    }
+
     <table style="border: 1px solid;">
         <tr>
             <th class="withborder" style="text-align: center;">Reference</th>
@@ -70,7 +83,7 @@
         @foreach (NREPPAdminSite.Models.Study study in Model.StudyDocuments)
         {
             <tr>
-                <td class="withborder"><a href="#" onclick="populateStudyForm(@i)">@study.Reference</a></td>
+                <td class="withborder"><a href="#" onclick="populateStudyForm(@i)">@getReference(Model.TheDocuments.ToList(), @study.DocumentId)</a></td>
                 <td class="withborder">@study.Notes</td>
                 <td class="withborder">Study @study.StudyId</td>
                 <td class="withborder">@Html.ActionLink("Delete", "DeleteStudyRecord", new { RecId = study.Id, InvId = Model.TheIntervention.Id })</td>
