@@ -296,6 +296,23 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("Screen", new { InterventionId = int.Parse(col["InterventionId"]) });
         }
 
+        [HttpPost]
+        public ActionResult ChangeStatus(FormCollection col)
+        {
+            int IntervId = int.Parse(col["IntervId"]);
+            string Destination = col["selDest"];
+
+            string[] DestStuff = Destination.Split(',');
+            HttpCookie usrStuff = Request.Cookies.Get(Constants.USR_COOKIE);
+            NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
+
+            NrepServ localservice = new NrepServ(NrepServ.ConnString);
+
+            localservice.ChangeStatus(IntervId, int.Parse(DestStuff[0]), int.Parse(DestStuff[1]));
+
+            return RedirectToAction("Screen", new { InterventionId = int.Parse(col["InterventionId"]) });
+        }
+
         #endregion
 
         #region Helper Methods

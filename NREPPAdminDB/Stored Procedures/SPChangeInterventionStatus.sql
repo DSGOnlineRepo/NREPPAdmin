@@ -35,6 +35,20 @@ AS SET NOCOUNT ON
 
 			IF @DestStatus = 4 BEGIN
 				INSERT INTO Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @DestUser, 5)
+
+				IF @@ERROR <> 0 BEGIN
+					ROLLBACK TRANSACTION
+					RETURN -4
+				END
+			END
+
+			IF @DestStatus = 5 BEGIN
+				INSERT INTO Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @DestUser, 6)
+
+				IF @@ERROR <> 0 BEGIN
+					ROLLBACK TRANSACTION
+					RETURN -5
+				END
 			END
 
 			

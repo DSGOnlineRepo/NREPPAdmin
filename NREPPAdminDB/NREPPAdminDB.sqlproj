@@ -107,6 +107,7 @@
     <Build Include="Stored Procedures\SPDeleteOutcomeMeasure.sql" />
     <Build Include="Tables\Inter_User_Roles.sql" />
     <Build Include="Functions\FNGetStatusesByRole.sql" />
+    <Build Include="Stored Procedures\SPGetDestinations.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />
