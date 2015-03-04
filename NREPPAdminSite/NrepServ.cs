@@ -901,6 +901,14 @@ namespace NREPPAdminSite
 
         #region Workflow Functionality
 
+        /// <summary>
+        /// Chages the status of an Intervention
+        /// </summary>
+        /// <param name="InterventionId">Id of the intervention to change</param>
+        /// <param name="ToStatus">Destination status</param>
+        /// <param name="UserId">User performing the transition</param>
+        /// <param name="DestUser">Destination user</param>
+        /// <returns></returns>
         public bool ChangeStatus(int InterventionId, int ToStatus, int UserId, int? DestUser)
         {
             SqlCommand cmd = new SqlCommand("SPChangeInterventionStatus", conn);
@@ -927,6 +935,44 @@ namespace NREPPAdminSite
             }
 
             return true;
+        }
+
+        public IEnumerable<Destination> GetDestinations(int IntervId)
+        {
+            List<Destination> outList = new List<Destination>();
+            SqlCommand cmd = new SqlCommand("SPGetDestinations", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@IntervId", Value = IntervId });
+
+            try
+            {
+                CheckConn();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                //Answer ans;
+
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+
+                    outList.Add(new Destination() { UserId = (int)dr["UserId"], StatusId = (int)dr["StatusId"], StatusName = dr["StatusName"].ToString(),
+                        UserName = dr["UserName"].ToString(), RoleName = dr["RoleName"].ToString()
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //ADocument.FileDescription = ex.Message;
+                outList.Add(new Destination() { StatusId = -1, UserName = ex.Message, StatusName = "Error" });
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return outList;
         }
 
         #endregion

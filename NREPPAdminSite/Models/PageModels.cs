@@ -123,6 +123,7 @@ namespace NREPPAdminSite.Models
         private List<Answer> ypyn;
         private List<Answer> exclusions;
         private List<RCDocument> theDocuments;
+        private List<Destination> theDestinations;
 
 
         public OutcomesWrapper Outcomes { get; set; }
@@ -187,6 +188,11 @@ namespace NREPPAdminSite.Models
             get { return theDocuments; }
         }
 
+        public IEnumerable<Destination> TheDestinations
+        {
+            get {return theDestinations;}
+        }
+
         /// <summary>
         /// Add a Study Document
         /// </summary>
@@ -203,6 +209,11 @@ namespace NREPPAdminSite.Models
         public void DeleteStudyDocument(int index)
         {
             studyDocuments.RemoveAt(index);
+        }
+
+        public void AddDests(IEnumerable<Destination> inDests) // stopgap
+        {
+            theDestinations = inDests.ToList();
         }
     }
 

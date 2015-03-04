@@ -265,6 +265,15 @@ namespace NREPPAdminSite.Models
         }
     }
 
+    public class Destination
+    {
+        public int StatusId { get; set; }
+        public string StatusName { get; set; }
+        public string RoleName { get; set; }
+        public int UserId { get; set; }
+        public string UserName { get; set; }
+    }
+
     public class MaskValue
     {
         [Display(Name = "Name")]
