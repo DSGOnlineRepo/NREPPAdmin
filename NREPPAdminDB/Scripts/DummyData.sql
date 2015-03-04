@@ -1,7 +1,13 @@
-﻿-- This file enters non-production data into the database. FOR DEVELOPMENT USE ONLY
+﻿DECLARE @pass VARCHAR(100)
+DECLARE @salt VARCHAR(100)
 
-INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('nrepptest1', 'Nrepp', 'Test', '12p3821p312', '23p[18210', 1)
-INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('nrepptest2', 'Nrepp2', 'Test2', '12p3821p312', '23p[18210', 1)
+SET @pass = 'Gj51geLeI8EJfCd/7qdldQ6F8Oat0mq0YEXiZJpHqHo='
+SET @salt = 'TOjQdGWJCsEyeefw78zSzo+ouCp7/WmQ'
+
+-- This file enters non-production data into the database. FOR DEVELOPMENT USE ONLY
+
+INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('nrepptest1', 'Nrepp', 'Test', @pass, @salt, 1)
+INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('nrepptest2', 'Nrepp2', 'Test2', @pass, @salt, 5)
 
 INSERT INTO Interventions (Title, FullDescription, Submitter, UpdateDate, PublishDate, Status) VALUES
 	('Dummy Intervention 1', 'Some Description', 1, GetDate(), null, 1);
@@ -28,3 +34,4 @@ INSERT INTO Studies (StudyId, Reference, FromLitSearch, Exclusion1, Exclusion2, 
 
 INSERT INTO Outcome (OutcomeName, InterventionId) VALUES ('Mental Health', 1)
 INSERT INTO Outcome (OutcomeName, InterventionId) VALUES ('Alcohol Use', 1)
+

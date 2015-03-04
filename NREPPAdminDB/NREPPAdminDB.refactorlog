@@ -84,4 +84,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="InterventionId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="965e0b79-aecb-4dd5-9adc-70510c410578" ChangeDateTime="03/04/2015 16:34:43">
+    <Property Name="ElementName" Value="[dbo].[RoutingTable].[DestUser]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[RoutingTable]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DestUserRole" />
+  </Operation>
 </Operations>

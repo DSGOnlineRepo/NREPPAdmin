@@ -108,6 +108,7 @@
     <Build Include="Tables\Inter_User_Roles.sql" />
     <Build Include="Functions\FNGetStatusesByRole.sql" />
     <Build Include="Stored Procedures\SPGetDestinations.sql" />
+    <Build Include="Tables\RoutingTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

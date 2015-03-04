@@ -22,7 +22,7 @@ INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					(2, 'Editor', 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0);
+					(2, 'Assigner', 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0);
 							   
 INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
@@ -34,7 +34,7 @@ INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
 					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					(4, 'Quality Control', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+					(4, 'Lit Review', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 
 INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
@@ -48,7 +48,13 @@ INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
 					(6, 'DSG PRM', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 
-SET IDENTITY_INSERT InterventionStatus OFF
+INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
+					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
+					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
+					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
+					(12, 'Mathematica Assigner', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+
+SET IDENTITY_INSERT Roles OFF
 
 -- Statuses
 
@@ -57,6 +63,7 @@ SET IDENTITY_INSERT InterventionStatus ON
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (1, 'Submitted')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (2, 'Under Review')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (3, 'Awaiting Assignment')
+INSERT INTO InterventionStatus (Id, StatusName) VALUES (13, 'Awaiting Mathematica Screened')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (4, 'Being Screened')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (5, 'PRM Screening')
 
@@ -141,3 +148,12 @@ INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (1, 'Mental
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (2, 'Mental Health Treatment', 'ProgramType')
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (3, 'Substance Use Prevention', 'ProgramType')
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (4, 'Mental Health Treatment', 'ProgramType')
+
+-- Routing Stuff
+
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 5, 4)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 4, 4)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 5, 2)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 2, 3)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 5, 4)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 12, 13)
