@@ -55,8 +55,10 @@ namespace NREPPAdminSite.Controllers
                 documentz = new List<InterventionDoc>();
             }
 
+            List<Destination> nDests = localService.GetDestinations(theIntervention.Id).ToList();
+
             pageModel = new IntervPageModel(documentz, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
-                documentTypes);
+                documentTypes, nDests);
             pageModel.TheIntervention = theIntervention;
 
             return View(pageModel);
@@ -164,8 +166,33 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Submit(IntervPageModel model, FormCollection col)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
+            /*int destValue = 0;
 
-            localService.ChangeStatus(model.TheIntervention.Id, -1, int.Parse(col["destStatus"]));
+            if (col["selDest"] != null)
+                destValue = int.Parse(col["selDest"]);
+            else
+                destValue = int.Parse(col["destStatus"]);
+            
+            localService.ChangeStatus(model.TheIntervention.Id, -1, destValue);*/
+            int destLoc = 0, destUser = -1;
+
+            if (col["selDest"] != null)
+            {
+
+                string Destination = col["selDest"];
+
+                string[] DestStuff = Destination.Split(',');
+                HttpCookie usrStuff = Request.Cookies.Get(Constants.USR_COOKIE);
+                NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
+                destUser = int.Parse(DestStuff[0]);
+                destLoc = int.Parse(DestStuff[1]);
+            }
+            else
+                destLoc = int.Parse(col["destStatus"]);
+
+            //NrepServ localservice = new NrepServ(NrepServ.ConnString);
+
+            localService.ChangeStatus(model.TheIntervention.Id, destUser, destLoc);
 
             return RedirectToAction("Programs", "Home");
         }
@@ -282,7 +309,7 @@ namespace NREPPAdminSite.Controllers
         }
 
         [HttpPost]
-        public ActionResult ChangeStatus(FormCollection col)
+        public ActionResult ChangeStatus(FormCollection col) // Use this for all status changes (requires a refactoring)
         {
             int IntervId = int.Parse(col["IntervId"]);
             string Destination = col["selDest"];

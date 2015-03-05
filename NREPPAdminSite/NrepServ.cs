@@ -956,7 +956,7 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in dt.Rows)
                 {
 
-                    outList.Add(new Destination() { UserId = (int)dr["UserId"], StatusId = (int)dr["StatusId"], StatusName = dr["StatusName"].ToString(),
+                    outList.Add(new Destination() { UserId = dr.IsNull("UserId") ? -1 : (int)dr["UserId"], StatusId = (int)dr["StatusId"], StatusName = dr["StatusName"].ToString(),
                         UserName = dr["UserName"].ToString(), RoleName = dr["RoleName"].ToString()
                     });
                 }

@@ -123,6 +123,15 @@
         </div>
     }
 
+    @{
+        List<SelectListItem> DestinationOpts = new List<SelectListItem>();
+
+        foreach (NREPPAdminSite.Models.Destination dest in Model.TheDestinations)
+        {
+            DestinationOpts.Add(new SelectListItem() { Text = dest.UserName, Value = dest.UserId.ToString() + "," + dest.StatusId.ToString() });
+        }
+    }
+
     @if (Model.TheIntervention.StatusId < 4)
     { 
         <div class="submitDiv">
@@ -138,11 +147,15 @@
             
                 if (Model.TheIntervention.StatusId > 1)
                 {
-                    @Html.Hidden("destStatus", 4) 
+                    
                 <input type="checkbox" name="haveEvalStudy" /> <label for="haveEvalStudy">Is there a study that assesses mental health or substance use outcome?</label><br />
                 <input type="checkbox" name="haveBehaveStudy" /> <label for="haveBehaveStudy">Is there an evaluation study that assesses other behavioral health-related outcomes on populations with mental health issues or substance abuse problems?</label><br />
                 <input type="checkbox" name="haveExperStudy" /> <label for="haveExperStudy">Has the effectiveness of the intervention been assessed with at least one experiment or quasi-experimental design, with a comparison group?</label><br />
                 <input type="checkbox" name="havePeerStudy" /> <label for="havePeerStudy">Have the results of tehse studies been published in a peer reviewed journal, other professional publication, or documentmented in a comprehensive evaluation report?</label><br />
+                <br />
+                
+                @Html.DropDownList("selDest", DestinationOpts)
+                
                 }
                 else
                 {

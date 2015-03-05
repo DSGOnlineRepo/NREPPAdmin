@@ -40,6 +40,10 @@ namespace NREPPAdminSite.Models
         }
     }
 
+    #endregion
+
+    #region Intervention View Page Model
+
     public class IntervPageModel
     {
         private Intervention theIntervention;
@@ -47,6 +51,7 @@ namespace NREPPAdminSite.Models
 
         private List<MaskValue> programType = new List<MaskValue>();
         private List<Answer> documentType = new List<Answer>();
+        private List<Destination> dests = new List<Destination>();
 
         #region Constructors
 
@@ -63,6 +68,15 @@ namespace NREPPAdminSite.Models
             documents = inDocuments;
             programType = inProgTypes;
             documentType = inDocTypes;
+        }
+
+        public IntervPageModel(List<InterventionDoc> inDocuments, List<MaskValue> inProgTypes, List<Answer> inDocTypes,
+            List<Destination> inDests)
+        {
+            documents = inDocuments;
+            programType = inProgTypes;
+            documentType = inDocTypes;
+            dests = inDests;
         }
 
         #endregion
@@ -88,6 +102,11 @@ namespace NREPPAdminSite.Models
         public List<Answer> DocumentType
         {
             get { return documentType; }
+        }
+
+        public List<Destination> TheDestinations
+        {
+            get { return dests; }
         }
 
         #endregion
