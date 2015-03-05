@@ -148,6 +148,7 @@ namespace NREPPAdminSite.Controllers
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
             ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs);
+            sm.AddDests(localService.GetDestinations(theIntervention.Id).ToList());
 
             return View(sm);
         }
@@ -250,22 +251,6 @@ namespace NREPPAdminSite.Controllers
 
             return RedirectToAction("Screen", new { InterventionId = IntervId }); // TODO: Pass errors on failure
 
-            /*
-             *  <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
-        <label for="measure">Measure Reported in the Study</label>
-        <input type="text" id="measure" name="measure" /><br /><br />
-        
-        <label for="popDescription">Describe Evaluated Population:</label><br />
-        <textarea name="popDescription" id="popDescription"></textarea><br /><br />
-        
-        <label for="studySelector">Select Applicable Studies</label><br />
-        <select id="studySelector" name="studySelector" multiple class="chosen-select" style="width: 350px;">
-            @foreach(NREPPAdminSite.Models.Study study in Model.StudyDocuments)
-            {
-                <option value="@study.Id">Study @study.StudyId</option>
-            }
-        </select>
-             */
         }
 
         /// <summary>

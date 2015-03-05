@@ -156,4 +156,6 @@ INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 4,
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 5, 2)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 2, 3)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 5, 4)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (4, 2, 3)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (4, 6, 5)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 12, 13)

@@ -8,6 +8,7 @@ SET @salt = 'TOjQdGWJCsEyeefw78zSzo+ouCp7/WmQ'
 
 INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('nrepptest1', 'Nrepp', 'Test', @pass, @salt, 1)
 INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('nrepptest2', 'Nrepp2', 'Test2', @pass, @salt, 5)
+INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('prm1', 'PRM1', 'Person', @pass, @salt, 6)
 
 INSERT INTO Interventions (Title, FullDescription, Submitter, UpdateDate, PublishDate, Status) VALUES
 	('Dummy Intervention 1', 'Some Description', 1, GetDate(), null, 1);
