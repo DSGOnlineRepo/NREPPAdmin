@@ -61,11 +61,13 @@ SET IDENTITY_INSERT Roles OFF
 SET IDENTITY_INSERT InterventionStatus ON
 
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (1, 'Submitted')
-INSERT INTO InterventionStatus (Id, StatusName) VALUES (2, 'Under Review')
+INSERT INTO InterventionStatus (Id, StatusName) VALUES (2, 'Pre-Screening')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (3, 'Awaiting Assignment')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (13, 'Awaiting Mathematica Screened')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (4, 'Being Screened')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (5, 'PRM Screening')
+INSERT INTO InterventionStatus (Id, StatusName) VALUES (92, 'Rejected From Pre-screening')
+
 
 SET IDENTITY_INSERT InterventionStatus OFF
 
@@ -156,6 +158,7 @@ INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 4,
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 5, 2)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 2, 3)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 5, 4)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, null, 92)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (4, 2, 3)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (4, 6, 5)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 12, 13)
