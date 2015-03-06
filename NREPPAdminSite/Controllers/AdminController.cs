@@ -17,14 +17,14 @@ namespace NREPPAdminSite.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(RegisterViewModel model)
+        public ActionResult Register(RegisterViewModel model, FormCollection col)
         {
             /*RegisterViewModel nModel = new RegisterViewModel();
             ViewBag.message = "Registered Ok!";*/
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             //ViewBag.SomeValue = localService.DoHash(model.Password1).Item1; // Tuple together the hash and salt because we will need both
 
-            int retValue = localService.registerUser(model.UserName, model.Firstname, model.Lastname, model.Password1, 3);
+            int retValue = localService.registerUser(model.UserName, model.Firstname, model.Lastname, model.Password1, int.Parse(col["roleId"]));
 
 
             return RedirectToAction("Login");
