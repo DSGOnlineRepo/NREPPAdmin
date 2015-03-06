@@ -239,15 +239,21 @@
         }
     </div>
 
+    @{
+        List<SelectListItem> DestinationOpts = new List<SelectListItem>();
+
+        foreach (NREPPAdminSite.Models.Destination dest in Model.TheDestinations)
+        {
+            DestinationOpts.Add(new SelectListItem() { Text = dest.UserName, Value = dest.UserId.ToString() + "," + dest.StatusId.ToString() });
+        }
+    }
+
     <div style="padding: 10px 10px 10px 10px; border: 1px solid;">
         @using (Html.BeginForm("ChangeStatus", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.Hidden("IntervId", Model.TheIntervention.Id)
             <label for="selDest">Destination:</label>
-            <select name="selDest">
-                <option value="5, 5">Reviewer</option>
-                <option value="-1, 3">Assignment</option>
-            </select><br />
+            @Html.DropDownList("selDest", DestinationOpts)<br />
             
             <input type="submit" value="Send" />
         }
