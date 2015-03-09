@@ -1,0 +1,27 @@
+﻿CREATE TABLE [dbo].[Reviewers]
+(
+	[Id] INT NOT NULL PRIMARY KEY, 
+    [UserId] INT NULL, 
+    [Degree] INT NULL, 
+    [ReviewerType] INT NULL, 
+    [IsActive] BIT NULL, 
+    [FirstName] VARCHAR(30) NULL, 
+    [LastName] VARCHAR(35) NULL, 
+    [StreetAddress] VARCHAR(100) NULL, 
+    [Phone] VARCHAR(15) NULL, 
+	[City] VARCHAR(30) NULL,
+    [State] CHAR(2) NULL, 
+    [ZIP] VARCHAR(11) NULL, 
+    [FaxNumber] VARCHAR(15) NULL, 
+    [HomeEmail] VARCHAR(35) NULL, 
+    [Employer] VARCHAR(40) NULL, 
+    [Department] VARCHAR(30) NULL, 
+    [WorkStreetAddress] VARCHAR(100) NULL, 
+    [WorkCity] VARCHAR(30) NULL, 
+    [WorkZip] VARCHAR(11) NULL, 
+    [WorkPhone] VARCHAR(15) NULL, 
+    [WorkFax] VARCHAR(15) NULL, 
+    [WorkEmail] NCHAR(10) NULL, 
+    [ExperienceSummary] VARCHAR(MAX) NULL, 
+    CONSTRAINT [FK_Reviewers_User] FOREIGN KEY ([UserId]) REFERENCES [Users]([Id])
+)
