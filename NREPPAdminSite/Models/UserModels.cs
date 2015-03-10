@@ -121,6 +121,37 @@ namespace NREPPAdminSite.Models
 
     }
 
+    /// <summary>
+    /// Reviewer Class
+    /// </summary>
+    public class Reviewer
+    {
+        public int ReviewerId { get; set; }
+        public int UserId { get; set; }
+        public int Degree { get; set; }
+        public int ReviewerType { get; set; }
+        public bool isActive { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string StreetAddress { get; set; }
+        public string PhoneNumber { get; set; }
+        public string State { get; set; }
+        public string ZIP { get; set; }
+        public string FaxNumber { get; set; }
+        public string Employer { get; set; }
+        public string Email { get; set; }
+        public string Department { get; set; }
+
+        public string WorkStreetAddress { get; set; }
+        public string WorkPhone { get; set; }
+        public string WorkState { get; set; }
+        public string WorkZIP { get; set; }
+        public string WorkFaxNumber { get; set; }
+        public string WorkEmployer { get; set; }
+        public string WorkEmail { get; set; }
+        public string ExpSummary { get; set; }
+    }
+
     public class RegisterViewModel
     {
         [Required]

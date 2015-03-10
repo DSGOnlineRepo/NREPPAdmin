@@ -54,6 +54,12 @@ INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
 					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
 					(12, 'Mathematica Assigner', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 
+INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
+					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
+					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
+					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
+					(7, 'Reviewer', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+
 SET IDENTITY_INSERT Roles OFF
 
 -- Statuses

@@ -977,6 +977,12 @@ namespace NREPPAdminSite
 
         #endregion
 
+        #region Other User Functionality
+
+        
+
+        #endregion
+
         #endregion
 
         #region Helper Functions
