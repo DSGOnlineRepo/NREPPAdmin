@@ -1,4 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[SPAddReviewer]
+﻿/*
+	Creation Date: 3/10/2015
+	Author: Patrick Taylor
+*/
+CREATE PROCEDURE [dbo].[SPAddReviewer]
 	@ReviewerId INT = -1, 
 	@UserId INT = NULL,
 	@Degree int = NULL,
