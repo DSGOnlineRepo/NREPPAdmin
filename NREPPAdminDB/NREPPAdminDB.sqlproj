@@ -111,6 +111,7 @@
     <Build Include="Tables\RoutingTable.sql" />
     <Build Include="Tables\Reviewers.sql" />
     <Build Include="Stored Procedures\SPGetReviewers.sql" />
+    <Build Include="Stored Procedures\SPAddReviewer.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />
