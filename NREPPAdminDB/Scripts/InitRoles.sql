@@ -105,6 +105,27 @@ INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (19, 'Not Article', 'No
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (20, 'Not English', 'Study Not in English')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (21, 'Not SAMSHA', 'No SAMSHA Population or Outcome')
 
+/*
+•	Co-occurring Disorders
+•	Homelessness
+•	Mental Health Promotion
+•	Mental Health Treatment – Adults
+•	Mental Health Treatment – Children
+•	Older Adults
+•	Suicide Prevention	•	Adult/Workplace
+•	Childhood/School
+•	Community Prevention
+•	Environmental/Systems/Policy
+•	Family
+•	Older Adult
+•	Violence Prevention
+•	Youth/Adolescent/School	•	Adolescents
+•	Adult, General Population
+•	Co-occurring Disorders
+•	Smoking Cessation
+
+*/
+
 SET IDENTITY_INSERT Answers OFF
 
 -- Categories
@@ -117,6 +138,7 @@ INSERT INTO Category (Id, CategoryName) VALUES (3, 'DocumentType')
 INSERT INTO Category (Id, CategoryName) VALUES (4, 'StudyDesign')
 INSERT INTO Category (Id, CategoryName) VALUES (5, 'YPYN')
 INSERT INTO Category (Id, CategoryName) VALUES (6, 'Exclusions')
+INSERT INTO Category (Id, CategoryName) VALUES (7, 'AreasOfExpertise')
 
 SET IDENTITY_INSERT Category OFF
 

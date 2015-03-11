@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Reviewers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int someValue = 0;
+}
+
+<h2>Reviewers</h2>
+
+<div>
+    List of Available Reviewers and Filtering happens here
+</div>
+
+<div class="reviewerInfo">
+    <table>
+        <tr>
+            <th>Reviewer Name</th>
+            <th>Degree</th>
+            <th>Active?</th>
+        </tr>
+    </table>
+</div>
+
+<div>
+    Interaction portions go here.
+    @if(someValue > 0){
+       using(Html.BeginForm("Invite", "Admin"))
+       {
+           
+           <input type="submit" value="Assign This Reviewer" />
+       }
+    }
+    <div>
+
+    </div>
+</div>
+

@@ -176,6 +176,7 @@
     <Content Include="Views\Program\UploadFile.cshtml" />
     <Content Include="Views\Admin\Lookups.cshtml" />
     <Content Include="Views\Program\Screen.cshtml" />
+    <Content Include="Views\Admin\Reviewers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

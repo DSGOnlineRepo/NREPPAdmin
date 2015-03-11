@@ -13,4 +13,10 @@ AS
 	SELECT InterventionId from Inter_User_Roles
 		WHERE UserId = @UserId AND WkRoleId = 7 -- Reviewer Role
 
+	SELECT ReviewerId, AreaOfExpertise from Reviewer_Expertise
+		WHERE ReviewerId IN (SELECT Id from Reviewers
+	WHERE (@UserId IS NULL OR UserId = @UserId) AND
+	(@ReviewerTypeId IS NULL OR ReviewerType = @ReviewerTypeId)
+	AND (@NameField IS NULL OR FirstName like '%' + @NameField + '%' or LastName like '%' + @NameField + '%'))
+
 RETURN 0
