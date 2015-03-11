@@ -50,6 +50,7 @@ namespace NREPPAdminSite.Models
         private List<InterventionDoc> documents = new List<InterventionDoc>();
 
         private List<MaskValue> programType = new List<MaskValue>();
+        private List<MaskValue> prescreen = new List<MaskValue>();
         private List<Answer> documentType = new List<Answer>();
         private List<Destination> dests = new List<Destination>();
 
@@ -71,12 +72,13 @@ namespace NREPPAdminSite.Models
         }
 
         public IntervPageModel(List<InterventionDoc> inDocuments, List<MaskValue> inProgTypes, List<Answer> inDocTypes,
-            List<Destination> inDests)
+            List<Destination> inDests, List<MaskValue> preScreen)
         {
             documents = inDocuments;
             programType = inProgTypes;
             documentType = inDocTypes;
             dests = inDests;
+            prescreen = preScreen;
         }
 
         #endregion
@@ -97,6 +99,11 @@ namespace NREPPAdminSite.Models
         public List<MaskValue> ProgramType
         {
             get { return programType; }
+        }
+
+        public List<MaskValue> PreScreen
+        {
+            get { return prescreen; }
         }
 
         public List<Answer> DocumentType

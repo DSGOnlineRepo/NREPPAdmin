@@ -179,6 +179,19 @@ INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (2, 'Mental
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (3, 'Substance Use Prevention', 'ProgramType')
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (4, 'Mental Health Treatment', 'ProgramType')
 
+-- Pre-Screening
+INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (1, 'Is there a study that assesses mental health or substance use outcome?', 'PreScreen')
+INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (2, 'Is there an evaluation study that assesses other behavioral health-related outcomes on populations with mental health issues or substance abuse problems?', 'PreScreen')
+INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (3, 'Has the effectiveness of the intervention been assessed with at least one experiment or quasi-experimental design, with a comparison group?', 'PreScreen')
+INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (4, 'Have the results of tehse studies been published in a peer reviewed journal, other professional publication, or documentmented in a comprehensive evaluation report?', 'PreScreen')
+
+/*
+Is there a study that assesses mental health or substance use outcome?
+Is there an evaluation study that assesses other behavioral health-related outcomes on populations with mental health issues or substance abuse problems?
+Has the effectiveness of the intervention been assessed with at least one experiment or quasi-experimental design, with a comparison group?
+Have the results of tehse studies been published in a peer reviewed journal, other professional publication, or documentmented in a comprehensive evaluation report?
+*/
+
 -- Routing Stuff
 
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 5, 4)

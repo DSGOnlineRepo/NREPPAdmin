@@ -147,13 +147,21 @@
             
                 if (Model.TheIntervention.StatusId > 1)
                 {
-                    
-                <input type="checkbox" name="haveEvalStudy" /> <label for="haveEvalStudy">Is there a study that assesses mental health or substance use outcome?</label><br />
-                <input type="checkbox" name="haveBehaveStudy" /> <label for="haveBehaveStudy">Is there an evaluation study that assesses other behavioral health-related outcomes on populations with mental health issues or substance abuse problems?</label><br />
-                <input type="checkbox" name="haveExperStudy" /> <label for="haveExperStudy">Has the effectiveness of the intervention been assessed with at least one experiment or quasi-experimental design, with a comparison group?</label><br />
-                <input type="checkbox" name="havePeerStudy" /> <label for="havePeerStudy">Have the results of tehse studies been published in a peer reviewed journal, other professional publication, or documentmented in a comprehensive evaluation report?</label><br />
+                    @Html.HiddenFor(m => m.TheIntervention.PreScreenMask, new { Id = "preScreenAns" });
+                <!--
+                <input type="checkbox" name="prescreen_1" /> <label for="haveEvalStudy">Is there a study that assesses mental health or substance use outcome?</label><br />
+                <input type="checkbox" name="prescreen_2" /> <label for="haveBehaveStudy">Is there an evaluation study that assesses other behavioral health-related outcomes on populations with mental health issues or substance abuse problems?</label><br />
+                <input type="checkbox" name="prescreen_3" /> <label for="haveExperStudy">Has the effectiveness of the intervention been assessed with at least one experiment or quasi-experimental design, with a comparison group?</label><br />
+                <input type="checkbox" name="prescreen_4" /> <label for="havePeerStudy">Have the results of tehse studies been published in a peer reviewed journal, other professional publication, or documentmented in a comprehensive evaluation report?</label><br />
                 <br />
-                
+
+                -->
+                    foreach (NREPPAdminSite.Models.MaskValue mask in Model.PreScreen)
+                    {
+                        bool isChecked = mask.Selected;
+                        @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "preScreenMask" }) @mask.Name <br />
+                    }
+
                 @Html.DropDownList("selDest", DestinationOpts)
                 
                 }

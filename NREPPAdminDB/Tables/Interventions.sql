@@ -11,8 +11,9 @@
     [RC2] INT NULL, 
     [Reviewer] INT NULL, 
     [Acronym] VARCHAR(20) NULL, 
-    [ProgramType] INT NULL, 
+    [ProgramType] INT NULL DEFAULT 0, 
     [Owner] INT NULL, 
     [FromListSearch] BIT NOT NULL DEFAULT 0, 
+    [PreScreenAnswers] INT NULL DEFAULT 0, 
     CONSTRAINT [FK_Interventions_InterventionStatus] FOREIGN KEY ([Status]) REFERENCES [InterventionStatus]([Id]) 
 )

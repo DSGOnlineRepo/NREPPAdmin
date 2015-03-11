@@ -40,6 +40,8 @@ namespace NREPPAdminSite.Models
             get { return id; }
         }*/
 
+        public int PreScreenMask { get; set; }
+
         public Intervention()
         {
             Id = -1;
