@@ -59,7 +59,7 @@ namespace NREPPAdminSite.Controllers
             List<Destination> nDests = localService.GetDestinations(theIntervention.Id).ToList();
 
             pageModel = new IntervPageModel(documentz, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
-                documentTypes, nDests, preScreen);
+                documentTypes, nDests, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>());
             pageModel.TheIntervention = theIntervention;
 
             return View(pageModel);
