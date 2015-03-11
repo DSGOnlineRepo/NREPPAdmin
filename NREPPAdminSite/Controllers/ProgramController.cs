@@ -193,6 +193,8 @@ namespace NREPPAdminSite.Controllers
 
             //NrepServ localservice = new NrepServ(NrepServ.ConnString);
 
+            int returnValue = localService.SaveIntervention(model.TheIntervention);
+
             localService.ChangeStatus(model.TheIntervention.Id, destUser, destLoc);
 
             return RedirectToAction("Programs", "Home");

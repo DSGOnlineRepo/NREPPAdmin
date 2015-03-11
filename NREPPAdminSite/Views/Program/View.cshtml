@@ -143,6 +143,12 @@
                 @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
                 @Html.HiddenFor(m => m.TheIntervention.StatusId);
                 @Html.HiddenFor(m => m.TheIntervention.ProgramType);
+                @Html.HiddenFor(m => m.TheIntervention.Title)
+                @Html.HiddenFor(m => m.TheIntervention.FromLitSearch)
+                @Html.HiddenFor(m => m.TheIntervention.FullDescription)
+                @Html.HiddenFor(m => m.TheIntervention.SubmitterId)
+                @Html.HiddenFor(m => m.TheIntervention.UpdatedDate)
+                @Html.HiddenFor(m => m.TheIntervention.Acronym)
             
             
                 if (Model.TheIntervention.StatusId > 1)

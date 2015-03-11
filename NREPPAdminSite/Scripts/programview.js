@@ -20,10 +20,10 @@ $("#DocButton").click(function () {
 
 $(".preScreenMask").click(function () {
     var sum = 0;
-    $(".programMask").each(function () {
+    $(".preScreenMask").each(function () {
         if ($(this).prop("checked"))
             sum += parseInt($(this).val());
     });
 
-    $("#programType").val(sum);
+    $("#preScreenAns").val(sum);
 });

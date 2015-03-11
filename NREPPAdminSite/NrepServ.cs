@@ -435,7 +435,7 @@ namespace NREPPAdminSite
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@programType", SqlDbType = SqlDbType.Int, Value = inData.ProgramType });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@Acronym", SqlDbType = SqlDbType.VarChar, Value = inData.Acronym });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@IsLitSearch", SqlDbType = SqlDbType.Bit, Value = inData.FromLitSearch });
-            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PreScreenAnswers", SqlDbType = SqlDbType.Bit, Value = inData.PreScreenMask });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PreScreenAnswers", SqlDbType = SqlDbType.Int, Value = inData.PreScreenMask });
 
             SqlParameter OutPut = new SqlParameter("@Output", -1);
             OutPut.Direction = ParameterDirection.Output;
