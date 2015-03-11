@@ -200,7 +200,7 @@ namespace NREPPAdminSite
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Add(new SqlParameter("@IntervId", inId));
             cmd.Parameters.Add(new SqlParameter("@User", inUser));
-            cmd.Parameters.Add(new SqlParameter("@DestUser", inId));
+            cmd.Parameters.Add(new SqlParameter("@DestUser", inUser));
             cmd.Parameters.Add(new SqlParameter("@DestStatus", ToStatus));
 
             try
