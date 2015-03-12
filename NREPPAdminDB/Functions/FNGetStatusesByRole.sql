@@ -14,6 +14,6 @@ BEGIN
 		SELECT Id from InterventionStatus where Id > 1
 	END ELSE IF @RoleID = 3
 		INSERT INTO @returntable 
-			SELECT Id from InterventionStatus WHERE Id in (1, 15)
+			SELECT Id from InterventionStatus WHERE Id < 90
 	RETURN
 END
