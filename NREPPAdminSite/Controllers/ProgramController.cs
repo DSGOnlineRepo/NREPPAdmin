@@ -325,7 +325,7 @@ namespace NREPPAdminSite.Controllers
 
             localservice.ChangeStatus(IntervId, int.Parse(DestStuff[0]), int.Parse(DestStuff[1]));
 
-            return RedirectToAction("Screen", new { InterventionId = int.Parse(col["InterventionId"]) });
+            return RedirectToAction("Screen", new { InterventionId = int.Parse(col["IntervId"]) });
         }
 
         #endregion
