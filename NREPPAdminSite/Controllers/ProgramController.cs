@@ -292,6 +292,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult UpdateRCDocs(FormCollection col)
         {
             string RCNameText = "txtRCName_", ReferenceText = "txtRef_", hiddenText = "hid_", dirtyText = "isdirty_";
+            string PubYearText = "txtPubYear_";
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
             int i = 0;
@@ -301,7 +302,8 @@ namespace NREPPAdminSite.Controllers
                 if (col[dirtyText + i.ToString()] == "true")
                 {
                     // TODO: Check to see if an RCDocinfo Exists
-                    localService.UpdateRCDocInfo(-1, int.Parse(col[hiddenText + i.ToString()]), col[ReferenceText + i.ToString()], col[RCNameText + i.ToString()]);
+                    localService.UpdateRCDocInfo(-1, int.Parse(col[hiddenText + i.ToString()]), col[ReferenceText + i.ToString()],
+                        col[RCNameText + i.ToString()], col[PubYearText + i.ToString()] == string.Empty ? null : (int?)int.Parse(col[PubYearText + i.ToString()]));
                     break;
                 }
                 else i++;

@@ -138,6 +138,7 @@ namespace NREPPAdminSite.Models
 
         public string Reference { get; set; }
         public string RCName { get; set; }
+        public int? PubYear { get; set; }
 
         public RCDocument(int inDocId, int rcDocId) // Can you do this with : base(id)?
         {

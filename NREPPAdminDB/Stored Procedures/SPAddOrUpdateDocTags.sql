@@ -3,7 +3,8 @@
 	@DocId int = 0,
 	@DocType int = null,
 	@Reference VARCHAR(250),
-	@RCName VARCHAR(50)
+	@RCName VARCHAR(50),
+	@PubYear INT = NULL
 AS SET NOCOUNT ON
 	BEGIN TRANSACTION
 
@@ -16,7 +17,9 @@ AS SET NOCOUNT ON
 
 		UPDATE RC_DocData
 		SET Reference = @Reference,
-		RCName = @RCName
+		RCName = @RCName,
+		PubYear = @PubYear
+		WHERE Id = @Id
 
 		IF @@ERROR <> 0 BEGIN
 			ROLLBACK TRANSACTION
@@ -45,7 +48,7 @@ AS SET NOCOUNT ON
 	END
 	ELSE BEGIN
 
-		INSERT INTO RC_DocData (DocumentId, Reference, RCName) VALUES (@DocId, @Reference, @RCName)
+		INSERT INTO RC_DocData (DocumentId, Reference, RCName, PubYear) VALUES (@DocId, @Reference, @RCName, @PubYear)
 
 		IF @@ERROR <> 0 BEGIN
 			ROLLBACK TRANSACTION

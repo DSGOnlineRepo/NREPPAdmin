@@ -23,6 +23,7 @@
             <th class="withborder">Description</th>
             <th class="withborder">RC File Name</th>
             <th class="withborder">Reference</th>
+            <th class="withborder">Publication Year</th>
             <th class="withborder"> </th>
         </tr>
         @using (Html.BeginForm("UpdateRCDocs", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -44,6 +45,10 @@
                     <td class="withborder">
                         @doc.Reference
                         @Html.TextArea("txtRef_" + i.ToString(), @doc.Reference, new { @class = "hidden" })
+                    </td>
+                    <td class="withborder">
+                        @doc.PubYear
+                        @Html.TextBox("txtPubYear_" + i.ToString(), @doc.PubYear, new { @class = "hidden" })
                     </td>
                     <td class="withborder">
                         <button name="btnEdit" onclick="setEdit(@i); return false;">Edit</button>
