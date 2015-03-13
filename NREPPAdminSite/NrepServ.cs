@@ -626,6 +626,8 @@ namespace NREPPAdminSite
             try
             {
                 CheckConn();
+                cmd.ExecuteNonQuery();
+
             } catch (Exception)
             {
 
