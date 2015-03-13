@@ -6,6 +6,7 @@ function populateStudyForm(FormId)
     $("input[name*='StudyId']").val(ject.StudyId)
     $("input[name*='IsLitSearch'").prop('checked', ject.inLitSearch);
     $("input[name*='useMultivariate']").prop('checked', ject.UseMultivariate);
+    $("input[name*='recommendReview']").prop('checked', ject.RecommendReview);
     $('#docDropdown').val(ject.DocumentId);
     $("select[name*='Exclusion1']").val(ject.Exclusion1);
     $("select[name*='Exclusion2']").val(ject.Exclusion2);

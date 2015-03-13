@@ -254,6 +254,7 @@ namespace NREPPAdminSite.Controllers
             nStudy.Exclusion1 = int.Parse(Request.Form["Exclusion1"]);
             nStudy.Exclusion2 = int.Parse(Request.Form["Exclusion2"]);
             nStudy.Exclusion3 = int.Parse(Request.Form["Exclusion3"]);
+            nStudy.RecommendReview = Request.Form["recommendReview"] == "on";
 
             int ActualId = localService.AddStudyRecord(nStudy);
 
