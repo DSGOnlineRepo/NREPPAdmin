@@ -55,6 +55,11 @@ AS SET NOCOUNT ON
 			RETURN -3
 		END
 
+		IF @DocType IS NULL BEGIN
+			SELECT @DocType = TypeOfDocument from Document
+			WHERE Id = @DocId
+		END
+
 		UPDATE Document
 		SET TypeOfDocument = @DocType
 		WHERE Id = @DocId
