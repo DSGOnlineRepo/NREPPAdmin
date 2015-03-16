@@ -10,14 +10,18 @@
     @using(Html.BeginForm("Register", "Admin", FormMethod.Post))
     {
         @Html.AntiForgeryToken();
+        @Html.ValidationSummary(true, "")
         <div>
             <span style="padding-right: 10px;">@Html.LabelFor(m => m.UserName)</span>
-            <span>@Html.TextBoxFor(m => m.UserName)</span>
+            <span>@Html.TextBoxFor(m => m.UserName)</span> @Html.ValidationMessageFor(m => m.UserName)
         </div>
     
         <div>
             <span style="padding-right: 10px;">@Html.LabelFor(m => m.Password1)</span>
-            <span>@Html.TextBoxFor(m => m.Password1)</span>
+            <span>@Html.PasswordFor(m => m.Password1)</span><br />
+            <span style="padding-right: 10px;">@Html.LabelFor(m => m.Password2)</span>
+            <span>@Html.PasswordFor(m => m.Password2)</span>
+            @Html.ValidationMessageFor(m => m.Password2, "")
         </div>
         
         <div>

@@ -154,7 +154,7 @@ namespace NREPPAdminSite.Models
 
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessage="You most provide a user name.")]
         [Display(Name = "User Name")]
         public string UserName { get; set; }
         public string Firstname { get; set; }
@@ -163,6 +163,9 @@ namespace NREPPAdminSite.Models
         [Required]
         [Display(Name = "Choose a Password")]
         public string Password1 { get; set; }
+
+        [Compare("Password1")]
+        [Display(Name = "Confirm Password")]
         public string Password2 { get; set; }
     }
 
