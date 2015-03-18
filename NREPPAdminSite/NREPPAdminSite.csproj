@@ -119,6 +119,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProgramController.cs" />
+    <Compile Include="Controllers\ReviewerProgs.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -169,7 +170,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Admin\New.cshtml" />
-    <Content Include="Views\Admin\Register.cshtml" />
     <Content Include="Views\Admin\Login.cshtml" />
     <Content Include="Views\Home\Programs.cshtml" />
     <Content Include="Views\Program\View.cshtml" />
@@ -177,6 +177,7 @@
     <Content Include="Views\Admin\Lookups.cshtml" />
     <Content Include="Views\Program\Screen.cshtml" />
     <Content Include="Views\Admin\Reviewers.cshtml" />
+    <Content Include="Views\Program\ScreenResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

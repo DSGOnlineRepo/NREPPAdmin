@@ -26,6 +26,7 @@ function populateOutcomeForm(FormId)
     $("input[name*='measure']").val(ject.Measure);
     $("select[name*='studySelector']").val(ject.StudyId);
     $("textarea[name*='popDescription']").text(ject.PopDescrip);
+    $("select[name*='MacroOutcome']").val(ject.OutcomeId);
 }
 
 $(document).ready(function () {

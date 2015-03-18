@@ -12,7 +12,7 @@ using System.Web.Script.Serialization;
 
 namespace NREPPAdminSite.Controllers
 {
-    public class ProgramController : Controller
+    public partial class ProgramController : Controller
     {
         // GET: Program
         public ActionResult View(int InvId)
@@ -147,7 +147,8 @@ namespace NREPPAdminSite.Controllers
 
             OutcomesWrapper ow = localService.GetOutcomesByIntervention(InterventionId);
 
-            List<OutcomeMeasure> oms = ow.OutcomesMeasures.Where(om => om.OutcomeId == 1).ToList<OutcomeMeasure>();
+            //List<OutcomeMeasure> oms = ow.OutcomesMeasures.Where(om => om.OutcomeId == 1).ToList<OutcomeMeasure>();
+            List<OutcomeMeasure> oms = ow.OutcomesMeasures.ToList<OutcomeMeasure>();
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
             ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs);

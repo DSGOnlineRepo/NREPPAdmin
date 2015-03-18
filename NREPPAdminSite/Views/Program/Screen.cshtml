@@ -171,6 +171,7 @@
 
     @{
         List<SelectListItem> OutcomeList = new List<SelectListItem>();
+        //List<SelectListItem> StudiesForOutcomes = new List<SelectListItem>();
         
         foreach (NREPPAdminSite.Models.Outcome outcome in Model.Outcomes.MacroOutcomes)
         {
@@ -294,13 +295,14 @@
         return anObject;
     }
 
-    function makeOutcomeRecord(OutcomeId, StudyId, Measure, PopDescrip) {
+    function makeOutcomeRecord(OutcomeMeasureId, StudyId, Measure, PopDescrip, OutcomeId) {
         var anObject = {};
 
-        anObject.Id = OutcomeId;
+        anObject.Id = OutcomeMeasureId;
         anObject.StudyId = StudyId;
         anObject.Measure = Measure;
         anObject.PopDescrip = PopDescrip;
+        anObject.OutcomeId = OutcomeId;
 
         return anObject;
     }
@@ -312,7 +314,7 @@
 
     @foreach(NREPPAdminSite.Models.OutcomeMeasure om in Model.Outcomes.OutcomesMeasures)
     {
-        @:currentOutcomes.push(makeOutcomeRecord(@om.Id, @om.StudyId, "@om.OutcomeMeasureName", "@om.PopDescription"));
+        @:currentOutcomes.push(makeOutcomeRecord(@om.Id, @om.StudyId, "@om.OutcomeMeasureName", "@om.PopDescription", @om.OutcomeId));
     }
 
 
