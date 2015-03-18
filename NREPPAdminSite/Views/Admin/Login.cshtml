@@ -6,6 +6,10 @@
 }
 
     <h2>@ViewBag.Title</h2>
+    @if (ViewBag.Status != "")
+    {
+        <h3>@ViewBag.Status</h3>
+    }
 
     <div style="padding-top: 10px;">
         @using (Html.BeginForm("Login", "Admin"))

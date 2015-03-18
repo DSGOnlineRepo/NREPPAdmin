@@ -36,8 +36,13 @@ namespace NREPPAdminSite.Controllers
         }
 
         // GET: Login Page
-        public ActionResult Login()
+        public ActionResult Login(string Status)
         {
+            if (Status != null)
+                ViewBag.Status = "Failed Login";
+            else
+                ViewBag.Status = "";
+
             return View();
         }
 
@@ -51,6 +56,11 @@ namespace NREPPAdminSite.Controllers
             //HttpContext.User = localService.LoginComplete(model.UserName, model.Password);
 
             NreppUser oUser = localService.LoginComplete(model.UserName, model.Password);
+            if (oUser.Id == -1)
+            {
+                return RedirectToAction("Login", new { Status = "Failed" });
+            }
+
             string someJSON = oUser.MakeJSON();
             HttpCookie loginCookie = new HttpCookie(Constants.USR_COOKIE, someJSON);
 
