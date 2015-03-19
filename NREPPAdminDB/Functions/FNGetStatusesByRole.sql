@@ -15,5 +15,8 @@ BEGIN
 	END ELSE IF @RoleID = 3
 		INSERT INTO @returntable 
 			SELECT Id from InterventionStatus WHERE Id < 90
+	ELSE IF @RoleID = 6
+		INSERT INTO @returntable
+			SELECT Id from InterventionStatus WHERE Id = 5
 	RETURN
 END
