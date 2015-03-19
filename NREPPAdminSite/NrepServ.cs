@@ -488,7 +488,16 @@ namespace NREPPAdminSite
             {
                 // TODO: file name collision
 
-                string nFileName = ConfigurationManager.AppSettings["fileLocation"] + fileName;
+                //string nFileName = ConfigurationManager.AppSettings["fileLocation"] + "\\" + IntervId.ToString() + "\\" + fileName;
+                string nDirectory = ConfigurationManager.AppSettings["fileLocation"] + "\\" + IntervId.ToString() + "\\";
+                string nFileName = nDirectory + fileName;
+
+                if (!Directory.Exists(nDirectory))
+                {
+                    Directory.CreateDirectory(nDirectory);
+                }
+
+
                 FileStream someStream = new FileStream(nFileName, FileMode.OpenOrCreate);
                 someStream.Write(inData, 0, inData.Length);
                 someStream.Close();
