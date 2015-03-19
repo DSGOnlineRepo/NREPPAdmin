@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using NREPPAdminSite.Models;
 using System.Data;
+using System.IO;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -15,6 +16,8 @@ namespace NREPPAdminSite.Controllers
         {
             return View();
         }
+
+        #region Post Methods
 
         [HttpPost]
         public ActionResult Register(RegisterViewModel model, FormCollection col)
@@ -28,11 +31,6 @@ namespace NREPPAdminSite.Controllers
 
 
             return RedirectToAction("Login");
-        }
-
-        public ActionResult New()
-        {
-            return View();
         }
 
         // GET: Login Page
@@ -70,6 +68,13 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("Programs", "Home");
         }
 
+        #endregion
+
+        public ActionResult New()
+        {
+            return View();
+        }
+
         public ActionResult Logout()
         {
             Request.Cookies.Remove(Constants.USR_COOKIE);
@@ -77,6 +82,21 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("Login");
         }
 
+        public FilePathResult GetFile(int FileId)
+        {
+
+            string MIMEType = "application/unknown";
+
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            InterventionDoc doc = localService.GetDocuments(null, null, FileId).First();
+
+            return File(doc.Link, MIMEType, Path.GetFileName(doc.Link));
+        }
+
+        /// <summary>
+        /// Used for the Lookups editing page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Lookups()
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
