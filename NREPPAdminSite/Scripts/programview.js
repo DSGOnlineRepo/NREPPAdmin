@@ -18,6 +18,16 @@ $("#DocButton").click(function () {
     $(".upload-div").removeClass("hidden");
 });
 
+$("#AddStudy").click(function () {
+    $(".AddStudy").addClass("hidden");
+    $(".Add-div").removeClass("hidden");
+});
+
+$("#AddOutcome").click(function () {
+    $(".AddOutcome").addClass("hidden");
+    $(".AddO-div").removeClass("hidden");
+});
+
 $(".preScreenMask").click(function () {
     var sum = 0;
     $(".preScreenMask").each(function () {

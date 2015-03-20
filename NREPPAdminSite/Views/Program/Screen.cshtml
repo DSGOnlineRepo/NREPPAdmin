@@ -8,6 +8,7 @@
 @section scripts {
     <script type="text/javascript" src="@Url.Content("/Scripts/screenTool.js")"></script>
     <script type="text/javascript" src="@Url.Content("/Scripts/chosen.jquery.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("/Scripts/programview.js")"></script>
 }
 
 <h2>Screening tool for @Model.TheIntervention.Title</h2>
@@ -126,7 +127,11 @@
     }
 }
 
-<div style="padding-top: 10px; padding-bottom: 10px;">
+<div class="AddStudy">
+    <button id="AddStudy">Add Study</button>
+</div>
+
+<div class="Add-div hidden" style="padding-top: 10px; padding-bottom: 10px;">
     @using (Html.BeginForm("AddStudy", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
@@ -167,7 +172,7 @@
 </div>
 
 <div>
-    <h2>Add an Outcome</h2>
+   
 
     @{
         List<SelectListItem> OutcomeList = new List<SelectListItem>();
@@ -217,7 +222,15 @@
             i++;
         }
     </table>
-    <div style="padding: 10px 10px 10px 10px; border: 1px solid;">
+    <br />
+    <div class="AddOutcome">
+        <button id="AddOutcome">Add Outcome</button>
+    </div>
+    <br />
+    <br />
+
+
+    <div class="AddO-div hidden" style="padding: 10px 10px 10px 10px; border: 1px solid;">
         @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.Hidden("IntervId", Model.TheIntervention.Id)

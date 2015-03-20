@@ -33,6 +33,16 @@ $(document).ready(function () {
     $(".chosen-select").chosen();
 });
 
+$("#AddStudy").click(function () {
+    $(".AddStudy").addClass("hidden");
+    $(".Add-div").removeClass("hidden");
+});
+
+$("#AddOutcome").click(function () {
+    $(".AddOutcome").addClass("hidden");
+    $(".AddO-div").removeClass("hidden");
+});
+
 function setEdit(index)
 {
     var rcnameId = "txtRCName_" + index.toString();
