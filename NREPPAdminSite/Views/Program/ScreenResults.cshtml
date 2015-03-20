@@ -176,7 +176,10 @@
         {
             <tr>
                 <td class="withborder">@study.StudyId</td>
-                <td class="withborder">@getReference(Model.TheDocuments.ToList(), study.DocumentId)</td>
+                <td class="withborder">
+                    @Html.ActionLink(getReference(Model.TheDocuments.ToList(), study.DocumentId)
+                    , "GetFile", "Admin", new { FileId = study.DocumentId }, null)
+                </td>
                 <td class="withborder">@getPubYear(Model.TheDocuments.ToList(), study.DocumentId)</td>
                 <td class="withborder"><input type="checkbox" checked="@isChecked(study.inLitSearch)" disabled /> </td>
                 <td class="withborder">@getAnswerText(Model.Exclusions.ToList(), study.Exclusion1)</td>

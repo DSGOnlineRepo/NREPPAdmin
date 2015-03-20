@@ -88,10 +88,9 @@ else if (Model.TheIntervention.StatusId == 5)
                 @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
                 {
                     <tr>
-                        <td class="withborder">@doc.FileDescription</td>
+                        <td class="withborder">@Html.ActionLink(@doc.FileDescription, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
                         <td class="withborder">@doc.DocumentTypeName</td>
                         <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.TheIntervention.Id, DocId = doc.DocId })</td>
-                        <!-- Need to Add Type -->
                     </tr>
                 }
             </table>
