@@ -44,7 +44,7 @@
                         @Html.TextBox("txtRCName_" + i.ToString(), @doc.RCName, new { @class = "hidden" })
                     </td>
                     <td class="withborder">
-                        @doc.Reference
+                        @Html.ActionLink(@doc.Reference, "GetFile", "Admin", new { FileId = doc.DocId }, null)
                         @Html.TextArea("txtRef_" + i.ToString(), @doc.Reference, new { @class = "hidden" })
                     </td>
                     <td class="withborder">
