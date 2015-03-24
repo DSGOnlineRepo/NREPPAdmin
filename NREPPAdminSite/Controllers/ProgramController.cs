@@ -127,6 +127,7 @@ namespace NREPPAdminSite.Controllers
             List<Answer> YPYN;
             List<Answer> Exclusions;
             List<RCDocument> reviewerDocs;
+            List<Answer> AttritionAnswers;
 
             
             
@@ -134,6 +135,7 @@ namespace NREPPAdminSite.Controllers
             StudyDesigns = localService.GetAnswersByCategory("StudyDesign").ToList<Answer>();
             YPYN = localService.GetAnswersByCategory("YPYN").ToList<Answer>();
             Exclusions = localService.GetAnswersByCategory("Exclusions").ToList<Answer>();
+            AttritionAnswers = Exclusions = localService.GetAnswersByCategory("Exclusions").ToList<Answer>();
 
             //List<Object> something = theStudies.GroupBy(s => s.StudyId).Select(group => new { StudyId = group.Key });
 
@@ -151,7 +153,7 @@ namespace NREPPAdminSite.Controllers
             List<OutcomeMeasure> oms = ow.OutcomesMeasures.ToList<OutcomeMeasure>();
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
-            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs);
+            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs, AttritionAnswers);
             sm.AddDests(localService.GetDestinations(theIntervention.Id).ToList());
 
             return View(sm);
@@ -253,8 +255,8 @@ namespace NREPPAdminSite.Controllers
             nStudy.UseMultivariate = Request.Form["useMultivariate"] == "on";
             nStudy.SAMSHARelated = int.Parse(Request.Form["SAMSHARelated"]);
             nStudy.Exclusion1 = int.Parse(Request.Form["Exclusion1"]);
-            nStudy.Exclusion2 = int.Parse(Request.Form["Exclusion2"]);
-            nStudy.Exclusion3 = int.Parse(Request.Form["Exclusion3"]);
+            //nStudy.Exclusion2 = int.Parse(Request.Form["Exclusion2"]);
+            //nStudy.Exclusion3 = int.Parse(Request.Form["Exclusion3"]);
             nStudy.RecommendReview = Request.Form["recommendReview"] == "on";
 
             int ActualId = localService.AddStudyRecord(nStudy);

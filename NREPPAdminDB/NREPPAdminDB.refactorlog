@@ -105,4 +105,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ReviewerId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="fea8a1a7-d50b-4671-9fcf-9d29de02f2fd" ChangeDateTime="03/23/2015 16:16:03">
+    <Property Name="ElementName" Value="[dbo].[Studies].[AttritionAvail]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Studies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OverallAttritionAvail" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c0f836e0-2d0f-412b-bb2a-e2716070d185" ChangeDateTime="03/23/2015 16:16:10">
+    <Property Name="ElementName" Value="[dbo].[Studies].[D]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Studies]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffAttritionAvail" />
+  </Operation>
 </Operations>

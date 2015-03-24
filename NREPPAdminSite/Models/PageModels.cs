@@ -148,6 +148,7 @@ namespace NREPPAdminSite.Models
         private List<Answer> studyDesigns;
         private List<Answer> ypyn;
         private List<Answer> exclusions;
+        private List<Answer> attritionAnswers;
         private List<RCDocument> theDocuments;
         private List<Destination> theDestinations;
 
@@ -173,10 +174,11 @@ namespace NREPPAdminSite.Models
         }
 
         public ScreeningModel(List<Study> inDocs, Intervention interV, List<Answer> inStudyDesigns, List<Answer> inYPYN, List<Answer> inExclusions,
-            OutcomesWrapper OW, List<RCDocument> someDocs)
+            OutcomesWrapper OW, List<RCDocument> someDocs, List<Answer> inAttrAnswers)
             : this(inDocs, interV, inStudyDesigns, inYPYN, inExclusions, OW)
         {
             theDocuments = someDocs;
+            attritionAnswers = inAttrAnswers;
         }
 
         #endregion
@@ -217,6 +219,11 @@ namespace NREPPAdminSite.Models
         public IEnumerable<Destination> TheDestinations
         {
             get {return theDestinations;}
+        }
+
+        public IEnumerable<Answer> AttritionAnswers
+        {
+            get { return attritionAnswers; }
         }
 
         /// <summary>

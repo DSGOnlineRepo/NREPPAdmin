@@ -659,8 +659,6 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Reference", SqlDbType = SqlDbType.VarChar, Value = "Not used at the moment" });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@InLitSearch", SqlDbType = SqlDbType.Bit, Value = inStudy.inLitSearch });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion1", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion1 });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion2", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion2 });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion3", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion3 });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StudyDesign", SqlDbType = SqlDbType.Int, Value = inStudy.StudyDesign });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@BaselineEquiv", SqlDbType = SqlDbType.VarChar, Value = inStudy.BaselineEquiv });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@UseMultivariate", SqlDbType = SqlDbType.Bit, Value = inStudy.UseMultivariate });
@@ -707,7 +705,10 @@ namespace NREPPAdminSite
                     OutList.Add(new Study() { Id = (int)dr["Id"], Notes = dr["Notes"].ToString(), StudyId = (int)dr["StudyId"],
                         Reference = dr["Reference"].ToString(), DocumentId = (int)dr["DocumentId"], Exclusion1 = (int)dr["Exclusion1"],
                     Exclusion2 = (int)dr["Exclusion2"], Exclusion3 = (int)dr["Exclusion3"], StudyDesign = (int)dr["StudyDesign"],
-                    RecommendReview = (bool)dr["RecommendReview"]});
+                    RecommendReview = (bool)dr["RecommendReview"], DocOrdinal = (int)dr["DocOrdinal"],
+                    OverallAttrition = dr.IsNull("OverallAttritionAvail") ? 0 : (int)dr["OverallAttritionAvail"],
+                    DiffAttrition = dr.IsNull("DiffAttritionAvail") ? 0 : (int)dr["DiffAttritionAvail"]
+                    });
                 }
 
             } catch (Exception ex)

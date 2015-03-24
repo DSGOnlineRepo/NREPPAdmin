@@ -19,7 +19,10 @@ AS
 		[AuthorQueryNeeded], 
 		[RecommendReview], 
 		[Notes], 
-		[DocumentId]
+		[DocumentId],
+		[DocOrdinal],
+		[OverallAttritionAvail], 
+		[DiffAttritionAvail]
 	FROM Studies 
 	WHERE DocumentId in (select Id from Document where InterventionId = @IntervId)
 RETURN 0

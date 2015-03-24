@@ -227,7 +227,7 @@ namespace NREPPAdminSite.Models
         // public string GroupSize { get; set; } // I am not sure that this is right?
         public string BaselineEquiv { get; set; }
         public bool UseMultivariate { get; set; }
-        // public int LongestFollowup {get; set;}
+        public string LongestFollowup {get; set;}
         public int SAMSHARelated { get; set; }
         // public int TargetPop { get; set; }
         // public int ListOfOutcomes { get; set; }
@@ -235,6 +235,9 @@ namespace NREPPAdminSite.Models
         public bool RecommendReview { get; set; }
         public string Notes { get; set; }
         public int DocumentId { get; set; }
+        public int DocOrdinal { get; set; }
+        public int OverallAttrition { get; set; }
+        public int DiffAttrition { get; set; }
     }
 
     public class Study_Outcome

@@ -46,7 +46,11 @@
                     <td class="withborder">
                         @if (doc.Reference != null && doc.Reference != string.Empty)
                         {
-                            Html.ActionLink(@doc.Reference, "GetFile", "Admin", new { FileId = doc.DocId }, null);
+                            @Html.ActionLink(@doc.Reference, "GetFile", "Admin", new { FileId = doc.DocId }, null);
+                        }
+                        else
+                        {
+                            <label>@doc.Reference</label>
                         }
                         @Html.TextArea("txtRef_" + i.ToString(), @doc.Reference, new { @class = "hidden" })
                     </td>
@@ -67,7 +71,33 @@
 </div>
 
 <div>
-    @{i = 0; }
+    @{
+        i = 0;
+        List<SelectListItem> StudyDesigns = new List<SelectListItem>();
+        List<SelectListItem> YPYN = new List<SelectListItem>();
+        List<SelectListItem> Exclusions = new List<SelectListItem>();
+        List<SelectListItem> Docs = new List<SelectListItem>();
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.StudyDesigns)
+        {
+            StudyDesigns.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.YPYN)
+        {
+            YPYN.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.Exclusions)
+        {
+            Exclusions.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.RCDocument doc in Model.TheDocuments)
+        {
+            Docs.Add(new SelectListItem() { Text = doc.FileDescription, Value = doc.DocId.ToString() });
+        }
+      }
 
     @functions{
         string getReference(List<NREPPAdminSite.Models.RCDocument> docs, int inDocId)
@@ -80,55 +110,124 @@
 
             return "Error";
         }
+
+        string getPubYear(List<NREPPAdminSite.Models.RCDocument> docs, int inDocId)
+        {
+
+            foreach (NREPPAdminSite.Models.RCDocument d in docs)
+                if (d.DocId == inDocId)
+                    return d.PubYear.ToString();
+
+            return "Error";
+        }
+
+        string isChecked(bool trueValue)
+        {
+            if (trueValue)
+                return "checked";
+            else return "";
+        }
+
+        string getAnswerText(List<NREPPAdminSite.Models.Answer> AnswerList, int inId)
+        {
+            foreach (NREPPAdminSite.Models.Answer anAnswer in AnswerList)
+            {
+                if (anAnswer.AnswerId == inId)
+                    return anAnswer.LongAnswer;
+            }
+
+            return "";
+        }
     }
 
     <table style="border: 1px solid;">
         <tr>
             <th class="withborder" style="text-align: center;">Reference</th>
-            <th class="withborder" style="text-align: center;">Notes</th>
-            <th>Study Id</th>
+            <th class="withborder" style="text-align: center;">Year of Publication</th>
+            <th class="withborder">Found In Literature Search</th>
+            <th class="withborder">Reason for Exclusion</th>
+            <th class="withborder">Overall Attrition Data Available</th>
+            <th class="withborder">Differential Attrition Data Available</th>
+            <th class="withborder">Initial Study Design</th>
+            <th class="withborder">Total Sample Size</th>
+            <th class="withborder">Longest Follow-Up</th>
+            <th class="withborder">Recommend For Review</th>
+            <th class="withborder">Study #</th>
+            <th class="withborder">Article #</th>
             <th> </th>
         </tr>
+        
         @foreach (NREPPAdminSite.Models.Study study in Model.StudyDocuments)
         {
             <tr>
-                <td class="withborder"><a href="#" onclick="populateStudyForm(@i)">@getReference(Model.TheDocuments.ToList(), @study.DocumentId)</a></td>
-                <td class="withborder">@study.Notes</td>
-                <td class="withborder">Study @study.StudyId</td>
+                <td class="withborder">@getReference(Model.TheDocuments.ToList(), @study.DocumentId)</td>
+                <td class="withborder">@getPubYear(Model.TheDocuments.ToList(), @study.DocumentId)</td>
+                <td class="withborder"><input type="checkbox" checked="@isChecked(study.inLitSearch)" disabled /></td>
+                <td class="withborder">@getAnswerText(Model.Exclusions.ToList(), @study.Exclusion1)</td>
+                <td class="withborder">[SOMETHING HERE]</td>
+                <td class="withborder">[SOMETHING HERE]</td>
+                <td class="withborder">@getAnswerText(Model.StudyDesigns.ToList(), @study.StudyDesign)</td>
+                <td class="withborder">@study.BaselineEquiv</td>
+                <td class="withborder">@study.LongestFollowup</td>
+                <td class="withborder"><input type="checkbox" checked="@isChecked(study.RecommendReview)" disabled /></td>
+                <td class="withborder">@study.StudyId</td>
+                <td class="withborder">@study.DocOrdinal</td>
                 <td class="withborder">@Html.ActionLink("Delete", "DeleteStudyRecord", new { RecId = study.Id, InvId = Model.TheIntervention.Id })</td>
+            </tr>
+            <tr id="formrow_@i">
+                <td colspan="12">
+                    <div class="studyForm hidden">
+                        @using (Html.BeginForm("AddStudy", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
+                            @Html.Hidden("ActualId");
+
+                            <textarea name="newReference"></textarea><br />
+                            <label>Year of Publication: </label><input type="text" name="PubYear" /><br /><br />
+
+                            <label for="docDropdown">Article:</label>
+
+                            @Html.DropDownList("docDropdown", Docs);
+                            <br />
+
+                            <input type="checkbox" name="IsLitSearch" /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <br />
+
+
+                            <label>What was the Study Design?</label>
+                            @Html.DropDownList("StudyDesign", StudyDesigns)<br /><br />
+
+                            <label>SAMSHA-related Population?</label>
+                            @Html.DropDownList("SAMSHARelated", YPYN)<br />
+
+                            <div>
+                                <span style="width: 100%; clear: both; float: left;">Exclusions:</span>
+                                <span style="float: left; clear: left;">Reason for Exclusion: </span>@Html.DropDownList("Exclusion1", Exclusions)<br />
+                                <br />
+                            </div>
+
+                            <label>Describe The Baseline Equivalence Measure:</label><br />
+                            <textarea name="BaselineEquiv"></textarea><br />
+
+                            <input type="checkbox" name="recommendReview" /><label style="margin-left: 2px;">Recommend for Review</label> <br />
+
+                            <label for="studyIdBox">Study #</label><input type="text" name="StudyId" /><br />
+                            <label for="articleIdBox">Article #</label><input type="text" name="articleIdBox" /><br /><br />
+
+                            <label>Notes:</label><br />
+                            <textarea name="Notes"></textarea><br />
+
+                            <br /><br />
+                            <input type="submit" value="Submit" /> <button onclick="return false;">Clear</button>
+                        }
+                    </div>
+                    <button id="show_@i" onclick="toggleEdit('show_@i'); return false;">Edit</button>
+                </td>
             </tr>
             
             i++;
         }
     </table>
 </div>
-
-@{
-    List<SelectListItem> StudyDesigns = new List<SelectListItem>();
-    List<SelectListItem> YPYN = new List<SelectListItem>();
-    List<SelectListItem> Exclusions = new List<SelectListItem>();
-    List<SelectListItem> Docs = new List<SelectListItem>();
-
-    foreach (NREPPAdminSite.Models.Answer ans in Model.StudyDesigns)
-    {
-        StudyDesigns.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
-    }
-
-    foreach (NREPPAdminSite.Models.Answer ans in Model.YPYN)
-    {
-        YPYN.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
-    }
-    
-    foreach (NREPPAdminSite.Models.Answer ans in Model.Exclusions)
-    {
-        Exclusions.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
-    }
-
-    foreach (NREPPAdminSite.Models.RCDocument doc in Model.TheDocuments)
-    {
-        Docs.Add(new SelectListItem() { Text = doc.FileDescription, Value = doc.DocId.ToString() });
-    }
-}
 
 <div class="AddStudy">
     <button id="AddStudy">Add Study</button>
@@ -157,9 +256,7 @@
 
         <div>
             <span style="width: 100%; clear: both; float: left;">Exclusions:</span>
-            <span style="float: left; clear: left;">Exclusion 1</span>@Html.DropDownList("Exclusion1", Exclusions)<br />
-            <span style="float: left; clear: left;">Exclusion 2</span>@Html.DropDownList("Exclusion2", Exclusions)<br />
-            <span style="float: left; clear: left;">Exclusion 3</span>@Html.DropDownList("Exclusion3", Exclusions)<br />
+            <span style="float: left; clear: left;">Reason for Exclusion: </span>@Html.DropDownList("Exclusion1", Exclusions)<br />
             <br />
         </div>
 
@@ -333,6 +430,14 @@
         @:currentOutcomes.push(makeOutcomeRecord(@om.Id, @om.StudyId, "@om.OutcomeMeasureName", "@om.PopDescription", @om.OutcomeId));
     }
 
+    function toggleEdit(this_id) {
+        //alert(this_id);
+        var crtl = $("#" + this_id).siblings("div");
 
+        if (crtl.hasClass("hidden"))
+            crtl.removeClass("hidden");
+        else
+            crtl.addClass("hidden");
+    }
 </script>
 

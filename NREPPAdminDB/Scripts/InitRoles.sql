@@ -105,6 +105,12 @@ INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (19, 'Not Article', 'No
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (20, 'Not English', 'Study Not in English')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (21, 'Not SAMSHA', 'No SAMSHA Population or Outcome')
 
+-- Answers for Attrition Questions
+
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (22, 'Not Available', 'No, data not available')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (23, 'Assignment Calculation', 'Attrition group from assignment can be calculated')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (24, 'Pretest Calculation', 'Attrition from pretest can be calculated')
+
 /*
 •	Co-occurring Disorders
 •	Homelessness
@@ -139,6 +145,7 @@ INSERT INTO Category (Id, CategoryName) VALUES (4, 'StudyDesign')
 INSERT INTO Category (Id, CategoryName) VALUES (5, 'YPYN')
 INSERT INTO Category (Id, CategoryName) VALUES (6, 'Exclusions')
 INSERT INTO Category (Id, CategoryName) VALUES (7, 'AreasOfExpertise')
+INSERT INTO Category (Id, CategoryName) VALUES (8, 'AttritionAnswers')
 
 SET IDENTITY_INSERT Category OFF
 
@@ -171,6 +178,11 @@ INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (13, 5)
 -- Exclusions
 INSERT INTO Answer_Category (AnswerId, CategoryId) SELECT ID, 6 from Answers where Id BETWEEN 14 AND 21
 INSERT INTO Answer_Category (AnswerId, CategoryID) VALUES (-1, 6)
+
+-- Attrition Answers
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (22, 8)
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (23, 8)
+INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (24, 8)
 
 -- Masks
 
