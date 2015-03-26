@@ -265,12 +265,12 @@ namespace NREPPAdminSite.Controllers
 
             int ActualId = localService.AddStudyRecord(nStudy);
 
-            /*RCDocument rcDoc = new RCDocument(nStudy.DocumentId, -1);
-            rcDoc.RCName = Request.Form["RCDocName"];
-            rcDoc.Reference = Request.Form["Reference"];
-            rcDoc.PubYear = int.Parse(Request.Form["PubYear"]);*/
+            RCDocument rcDoc = new RCDocument(nStudy.DocumentId, int.Parse(Request.Form["RCDocumentID"]));
+            rcDoc.RCName = Request.Form["RCDocumentName"];
+            rcDoc.Reference = Request.Form["newReference"];
+            rcDoc.PubYear = int.Parse(Request.Form["PubYear"]);
 
-
+            localService.UpdateRCDocInfo(rcDoc.RCDocId, rcDoc.DocId, rcDoc.Reference, rcDoc.RCName, rcDoc.PubYear);
 
             return RedirectToAction("Screen", new { InterventionId = int.Parse(Request.Form["InterventionId"]) });
         }

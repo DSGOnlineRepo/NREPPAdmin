@@ -238,6 +238,7 @@
                             @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
                             @Html.Hidden("ActualId", @study.Id);
                             @Html.Hidden("RCDocumentId")
+                            @Html.Hidden("RCDocumentName");
 
                                 <label for="docDropdown">Article:</label>
 
@@ -297,6 +298,7 @@
     @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
     @Html.Hidden("ActualId");
     @Html.Hidden("RCDocumentId")
+    @Html.Hidden("RCDocumentName");
 
     <textarea name="newReference"></textarea><br />
     <label>Year of Publication: </label><input type="text" name="PubYear"
@@ -488,13 +490,14 @@
         return anObject;
     }
 
-    function makeDocRecord(inId, inReference, inYear, inrcDocId)
+    function makeDocRecord(inId, inReference, inYear, inrcDocId, inName)
     {
         var anObject = {};
         anObject.Id = inId;
         anObject.Reference = inReference;
         anObject.inYear = inYear;
         anObject.rcDocId = inrcDocId;
+        anObject.rcName = inName;
 
         return anObject;
     }
@@ -511,7 +514,7 @@
 
     @foreach (NREPPAdminSite.Models.RCDocument rcdoc in Model.TheDocuments)
     {
-        @:docsList.push(makeDocRecord(@rcdoc.DocId, "@rcdoc.Reference", "@rcdoc.PubYear", "@rcdoc.RCDocId"));
+        @:docsList.push(makeDocRecord(@rcdoc.DocId, "@rcdoc.Reference", "@rcdoc.PubYear", "@rcdoc.RCDocId", "@rcdoc.RCName"));
     }
 
 

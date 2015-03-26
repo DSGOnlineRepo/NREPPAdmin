@@ -90,6 +90,8 @@ function GetDocumentInfo(inDocId, incrtl)
 {
     var reference = $(incrtl).siblings("textarea[name*='Reference']");
     var pubYear = $(incrtl).siblings("input[name*='PubYear']");
+    var docIdThing = $(incrtl).siblings("input[name*='RCDocumentId']");
+    var rcName = $(incrtl).siblings("input[name*='RCDocumentName']");
 
     for(var i = 0; i < docsList.length; i++)
     {
@@ -97,6 +99,8 @@ function GetDocumentInfo(inDocId, incrtl)
         {
             $(reference).text(docsList[i].Reference);
             $(pubYear).val(docsList[i].inYear);
+            $(docIdThing).val(docsList[i].rcDocId);
+            $(rcName).val(docsList[i].rcName);
             break;
         }
             
