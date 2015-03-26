@@ -265,7 +265,7 @@ namespace NREPPAdminSite.Controllers
 
             int ActualId = localService.AddStudyRecord(nStudy);
 
-            RCDocument rcDoc = new RCDocument(nStudy.DocumentId, int.Parse(Request.Form["RCDocumentID"]));
+            RCDocument rcDoc = new RCDocument(nStudy.DocumentId, int.Parse(Request.Form["RCDocumentId"]));
             rcDoc.RCName = Request.Form["RCDocumentName"];
             rcDoc.Reference = Request.Form["newReference"];
             rcDoc.PubYear = int.Parse(Request.Form["PubYear"]);

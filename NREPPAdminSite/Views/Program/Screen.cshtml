@@ -155,6 +155,17 @@
 
             return retVal.ToString();
         }
+
+        string getDocName(List<NREPPAdminSite.Models.RCDocument> docs, int inDocId)
+        {
+            string retVal = "";
+
+            foreach (NREPPAdminSite.Models.RCDocument d in docs)
+                if (d.DocId == inDocId)
+                    retVal = d.RCName;
+
+            return retVal.ToString();
+        }
     }
 
     <table style="border: 1px solid;">
@@ -237,8 +248,8 @@
                         {
                             @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
                             @Html.Hidden("ActualId", @study.Id);
-                            @Html.Hidden("RCDocumentId")
-                            @Html.Hidden("RCDocumentName");
+                            @Html.Hidden("RCDocumentId", getRCDocId(Model.TheDocuments.ToList(), study.DocumentId))
+                            @Html.Hidden("RCDocumentName", getDocName(Model.TheDocuments.ToList(), study.DocumentId))
 
                                 <label for="docDropdown">Article:</label>
 
