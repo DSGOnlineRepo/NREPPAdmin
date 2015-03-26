@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[SPGetAnswersByCategory]
 	@InCategory INT = NULL,
-	@InCategoryName VARCHAR(15) = NULL
+	@InCategoryName VARCHAR(20) = NULL
 AS SET NOCOUNT ON
 	
 	SELECT a.Id as [AnswerId], ShortAnswer, LongAnswer from Answers a INNER JOIN

@@ -144,8 +144,8 @@ INSERT INTO Category (Id, CategoryName) VALUES (3, 'DocumentType')
 INSERT INTO Category (Id, CategoryName) VALUES (4, 'StudyDesign')
 INSERT INTO Category (Id, CategoryName) VALUES (5, 'YPYN')
 INSERT INTO Category (Id, CategoryName) VALUES (6, 'Exclusions')
-INSERT INTO Category (Id, CategoryName) VALUES (7, 'AreasOfExpertise')
-INSERT INTO Category (Id, CategoryName) VALUES (8, 'AttritionAnswers')
+INSERT INTO Category (Id, CategoryName) VALUES (7, 'AreasExpertise')
+INSERT INTO Category (Id, CategoryName) VALUES (8, 'AttritionAnswer')
 
 SET IDENTITY_INSERT Category OFF
 
@@ -189,7 +189,7 @@ INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (24, 8)
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (1, 'Mental Health Promotion', 'ProgramType')
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (2, 'Mental Health Treatment', 'ProgramType')
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (3, 'Substance Use Prevention', 'ProgramType')
-INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (4, 'Mental Health Treatment', 'ProgramType')
+INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (4, 'Substance Abuse Treatment', 'ProgramType')
 
 -- Pre-Screening
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (1, 'Is there a study that assesses mental health or substance use outcome?', 'PreScreen')

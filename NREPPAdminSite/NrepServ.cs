@@ -667,7 +667,10 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@RecommendReview", SqlDbType = SqlDbType.Bit, Value = inStudy.RecommendReview });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Notes", SqlDbType = SqlDbType.VarChar, Value = inStudy.Notes });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocumentId", SqlDbType = SqlDbType.Int, Value = inStudy.DocumentId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocOrdinal", SqlDbType = SqlDbType.Int, Value = inStudy.DocOrdinal });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@IDOut", SqlDbType = SqlDbType.Int, Direction = ParameterDirection.Output });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DiffAttr", SqlDbType = SqlDbType.Int, Value = inStudy.DiffAttrition });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OverallAttr", SqlDbType = SqlDbType.Int, Value = inStudy.OverallAttrition });
 
             try
             {
@@ -703,8 +706,7 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in dt.Rows)
                 {
                     OutList.Add(new Study() { Id = (int)dr["Id"], Notes = dr["Notes"].ToString(), StudyId = (int)dr["StudyId"],
-                        Reference = dr["Reference"].ToString(), DocumentId = (int)dr["DocumentId"], Exclusion1 = (int)dr["Exclusion1"],
-                    Exclusion2 = (int)dr["Exclusion2"], Exclusion3 = (int)dr["Exclusion3"], StudyDesign = (int)dr["StudyDesign"],
+                        Reference = dr["Reference"].ToString(), DocumentId = (int)dr["DocumentId"], Exclusion1 = (int)dr["Exclusion1"], StudyDesign = (int)dr["StudyDesign"],
                     RecommendReview = (bool)dr["RecommendReview"], DocOrdinal = (int)dr["DocOrdinal"],
                     OverallAttrition = dr.IsNull("OverallAttritionAvail") ? 0 : (int)dr["OverallAttritionAvail"],
                     DiffAttrition = dr.IsNull("DiffAttritionAvail") ? 0 : (int)dr["DiffAttritionAvail"]

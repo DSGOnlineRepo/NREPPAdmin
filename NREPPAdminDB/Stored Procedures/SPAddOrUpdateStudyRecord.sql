@@ -8,17 +8,16 @@
     @Exclusion2 INT = NULL, 
     @Exclusion3 INT = NULL, 
     @StudyDesign INT = 0, 
-    --@GroupSize] NCHAR(10) NULL, 
     @BaselineEquiv VARCHAR(MAX), 
     @UseMultivariate BIT = 0, 
-    --[LongestFollowup] NCHAR(10) NULL, 
     @SAMSHARelated INT, 
-    --@TargetPop NCHAR(10), 
-    --@ListOfOutcomes NCHAR(10), 
     @AuthorQueryNeeded BIT = 0, 
     @RecommendReview BIT = 0, 
     @Notes VARCHAR(MAX) = NULL, 
     @DocumentId INT,
+	@DocOrdinal INT,
+	@OverallAttr INT = 0,
+	@DiffAttr INT = 0,
 	@IDOut INT OUTPUT
 AS SET NOCOUNT ON	
 	
@@ -40,7 +39,10 @@ AS SET NOCOUNT ON
 		[AuthorQueryNeeded], 
 		[RecommendReview], 
 		[Notes], 
-		[DocumentId]) VALUES (@StudyId,
+		[DocumentId],
+		[DocOrdinal],
+		DiffAttritionAvail,
+		OverallAttritionAvail) VALUES (@StudyId,
     @Reference, 
     @InLitSearch, 
     @Exclusion1, 
@@ -56,7 +58,10 @@ AS SET NOCOUNT ON
     @AuthorQueryNeeded, 
     @RecommendReview, 
     @Notes, 
-    @DocumentId)
+    @DocumentId,
+	@DocOrdinal,
+	@DiffAttr, 
+	@OverallAttr)
 
 
 		IF @@ERROR <> 0 BEGIN
@@ -85,7 +90,10 @@ AS SET NOCOUNT ON
 			[AuthorQueryNeeded] = @AuthorQueryNeeded, 
 			[RecommendReview] = @RecommendReview, 
 			[Notes] = @Notes,
-			[DocumentId] = @DocumentId
+			[DocumentId] = @DocumentId,
+			[DocOrdinal] = @DocOrdinal,
+			[DiffAttritionAvail] = @DiffAttr,
+			[OverallAttritionAvail] = @OverallAttr
 		WHERE Id = @Id
 
 		IF @@ERROR <> 0 BEGIN

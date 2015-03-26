@@ -135,7 +135,7 @@ namespace NREPPAdminSite.Controllers
             StudyDesigns = localService.GetAnswersByCategory("StudyDesign").ToList<Answer>();
             YPYN = localService.GetAnswersByCategory("YPYN").ToList<Answer>();
             Exclusions = localService.GetAnswersByCategory("Exclusions").ToList<Answer>();
-            AttritionAnswers = Exclusions = localService.GetAnswersByCategory("Exclusions").ToList<Answer>();
+            AttritionAnswers = localService.GetAnswersByCategory("AttritionAnswer").ToList<Answer>();
 
             //List<Object> something = theStudies.GroupBy(s => s.StudyId).Select(group => new { StudyId = group.Key });
 
@@ -253,13 +253,24 @@ namespace NREPPAdminSite.Controllers
             nStudy.Id = Request.Form["ActualID"] == string.Empty ? -1 : int.Parse(Request.Form["ActualID"]);
             nStudy.Notes = Request.Form["Notes"];
             nStudy.UseMultivariate = Request.Form["useMultivariate"] == "on";
-            nStudy.SAMSHARelated = int.Parse(Request.Form["SAMSHARelated"]);
+            //nStudy.SAMSHARelated = int.Parse(Request.Form["SAMSHARelated"]);
             nStudy.Exclusion1 = int.Parse(Request.Form["Exclusion1"]);
             //nStudy.Exclusion2 = int.Parse(Request.Form["Exclusion2"]);
             //nStudy.Exclusion3 = int.Parse(Request.Form["Exclusion3"]);
             nStudy.RecommendReview = Request.Form["recommendReview"] == "on";
+            nStudy.OverallAttrition = int.Parse(Request.Form["OverallAttrition"]);
+            nStudy.DiffAttrition = int.Parse(Request.Form["DiffAttrition"]);
+            nStudy.DocOrdinal = Request.Form["articleIdBox"] == null || Request.Form["articleIdBox"].Trim() == string.Empty ? -1 :
+                int.Parse(Request.Form["articleIdBox"]);
 
             int ActualId = localService.AddStudyRecord(nStudy);
+
+            /*RCDocument rcDoc = new RCDocument(nStudy.DocumentId, -1);
+            rcDoc.RCName = Request.Form["RCDocName"];
+            rcDoc.Reference = Request.Form["Reference"];
+            rcDoc.PubYear = int.Parse(Request.Form["PubYear"]);*/
+
+
 
             return RedirectToAction("Screen", new { InterventionId = int.Parse(Request.Form["InterventionId"]) });
         }
@@ -359,6 +370,11 @@ namespace NREPPAdminSite.Controllers
             }
 
             return outUser;
+        }
+
+        protected void UpdateRCDocument(RCDocument doc, NrepServ localService)
+        {
+            localService.UpdateRCDocInfo(doc.RCDocId, doc.DocId, doc.Reference, doc.RCName, doc.PubYear);
         }
 
         #endregion
