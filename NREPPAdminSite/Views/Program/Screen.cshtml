@@ -241,7 +241,7 @@
 
                                 <label for="docDropdown">Article:</label>
 
-                                @Html.DropDownList("docDropdown", thisDocList);
+                                @Html.DropDownList("docDropdown", thisDocList, new { onchange = "GetDocumentInfo($(this).val(), this);" });
                                 <br />
 
 
@@ -511,7 +511,7 @@
 
     @foreach (NREPPAdminSite.Models.RCDocument rcdoc in Model.TheDocuments)
     {
-        @:docsList.push(makeDocRecord(@rcdoc.DocId, @rcdoc.Reference, @rcdoc.PubYear, @rcdoc.RCDocId));
+        @:docsList.push(makeDocRecord(@rcdoc.DocId, "@rcdoc.Reference", "@rcdoc.PubYear", "@rcdoc.RCDocId"));
     }
 
 

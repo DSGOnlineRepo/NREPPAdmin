@@ -85,3 +85,20 @@ function clearEdit(index)
     $(dirtyId).val("false");
 
 }
+
+function GetDocumentInfo(inDocId, incrtl)
+{
+    var reference = $(incrtl).siblings("textarea[name*='Reference']");
+    var pubYear = $(incrtl).siblings("input[name*='PubYear']");
+
+    for(var i = 0; i < docsList.length; i++)
+    {
+        if (docsList[i].Id == inDocId)
+        {
+            $(reference).text(docsList[i].Reference);
+            $(pubYear).val(docsList[i].inYear);
+            break;
+        }
+            
+    }
+}
