@@ -249,6 +249,8 @@ namespace NREPPAdminSite.Controllers
             nStudy.DocumentId = int.Parse(Request.Form["docDropDown"]);
             nStudy.StudyDesign = int.Parse(Request.Form["StudyDesign"]);
             nStudy.BaselineEquiv = Request.Form["BaselineEquiv"] == null ? "" : Request.Form["BaselineEquiv"];
+            nStudy.TotalSampleSize = Request.Form["TotalSampleSize"] == null ? "" : Request.Form["TotalSampleSize"];
+            nStudy.LongestFollowup = Request.Form["LongestFollowup"] == null ? "" : Request.Form["LongestFollowup"];
             nStudy.Reference = Request.Form["Reference"];
             nStudy.Id = Request.Form["ActualID"] == string.Empty ? -1 : int.Parse(Request.Form["ActualID"]);
             nStudy.Notes = Request.Form["Notes"];

@@ -672,6 +672,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DiffAttr", SqlDbType = SqlDbType.Int, Value = inStudy.DiffAttrition });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OverallAttr", SqlDbType = SqlDbType.Int, Value = inStudy.OverallAttrition });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@TotalSampleSize", SqlDbType = SqlDbType.VarChar, Value = inStudy.TotalSampleSize });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@LongestFollowup", SqlDbType = SqlDbType.VarChar, Value = inStudy.LongestFollowup });
 
             try
             {
@@ -710,7 +711,7 @@ namespace NREPPAdminSite
                         Reference = dr["Reference"].ToString(), DocumentId = (int)dr["DocumentId"], Exclusion1 = (int)dr["Exclusion1"], StudyDesign = (int)dr["StudyDesign"],
                     RecommendReview = (bool)dr["RecommendReview"], DocOrdinal = (int)dr["DocOrdinal"],
                     OverallAttrition = dr.IsNull("OverallAttritionAvail") ? 0 : (int)dr["OverallAttritionAvail"], TotalSampleSize = dr["TotalSampleSize"].ToString(),
-                    DiffAttrition = dr.IsNull("DiffAttritionAvail") ? 0 : (int)dr["DiffAttritionAvail"]
+                    DiffAttrition = dr.IsNull("DiffAttritionAvail") ? 0 : (int)dr["DiffAttritionAvail"], LongestFollowup = dr.IsNull("LongestFollowup") ? "" : dr["LongestFollowup"].ToString()
                     });
                 }
 

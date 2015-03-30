@@ -108,5 +108,5 @@ function GetDocumentInfo(inDocId, incrtl)
 }
 
 $(document).ready(function () {
-    GetDocumentInfo("1", $("#docDropdown"));
+    GetDocumentInfo("1", $(".mainDropDown"));
 });

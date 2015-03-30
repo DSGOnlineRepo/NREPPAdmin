@@ -234,7 +234,7 @@
                 <td class="withborder">@getAnswerText(Model.AttritionAnswers.ToList(), @study.OverallAttrition)</td>
                 <td class="withborder">@getAnswerText(Model.AttritionAnswers.ToList(), @study.DiffAttrition)</td>
                 <td class="withborder">@getAnswerText(Model.StudyDesigns.ToList(), @study.StudyDesign)</td>
-                <td class="withborder">@study.BaselineEquiv</td>
+                <td class="withborder">@study.TotalSampleSize</td>
                 <td class="withborder">@study.LongestFollowup</td>
                 <td class="withborder"><input type="checkbox" checked="@isChecked(study.RecommendReview)" disabled /></td>
                 <td class="withborder">@study.StudyId</td>
@@ -253,7 +253,7 @@
 
                                 <label for="docDropdown">Article:</label>
 
-                                @Html.DropDownList("docDropdown_@i", thisDocList, new { onchange = "GetDocumentInfo($(this).val(), this);" });
+                                @Html.DropDownList("docDropdown", thisDocList, new { onchange = "GetDocumentInfo($(this).val(), this);" });
                                 <br />
 
 
@@ -275,8 +275,11 @@
                             <label>What was the Study Design?</label>
                             @Html.DropDownList("StudyDesign", thisStudyDesign)<br /><br />
 
-                            <label>Describe The Measure:</label><br />
-                            <textarea name="BaselineEquiv"></textarea><br />
+                            <label>Longest Followup:</label>
+                            <input type="text" name="LongestFollowup" value="@study.LongestFollowup" /><br /><br />
+
+                            <label>Total Sample Size:</label>
+                            <input type="text" name="TotalSampleSize" value="@study.TotalSampleSize" /><br />
 
                             <input type="checkbox" name="recommendReview" /><label style="margin-left: 2px;">Recommend for Review</label> <br />
 
@@ -317,7 +320,7 @@
 
     <label for="docDropdown">Article:</label>
 
-    @Html.DropDownList("docDropdown", Docs, new { onchange = "GetDocumentInfo($(this).val(), this);" });
+    @Html.DropDownList("docDropdown", Docs, new { onchange = "GetDocumentInfo($(this).val(), this);", @class="mainDropDown" });
     <br />
 
     <input type="checkbox" name="IsLitSearch" /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <br />
@@ -335,8 +338,8 @@
     <label>What was the Study Design?</label>
     @Html.DropDownList("StudyDesign", StudyDesigns)<br /><br />
 
-    <label>Describe The Measure:</label><br />
-    <textarea name="BaselineEquiv"></textarea><br />
+    <label>Longest Followup:</label><br />
+    <input type="text" name="LongestFollowup" /><br />
 
     <input type="checkbox" name="recommendReview" /><label style="margin-left: 2px;">Recommend for Review</label> <br />
 

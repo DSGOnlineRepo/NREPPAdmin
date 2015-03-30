@@ -18,6 +18,7 @@
 	@OverallAttr INT = 0,
 	@DiffAttr INT = 0,
 	@TotalSampleSize VARCHAR(200) = NULL,
+	@LongestFollowup VARCHAR(200) = NULL,
 	@IDOut INT OUTPUT
 AS SET NOCOUNT ON	
 	
@@ -32,7 +33,6 @@ AS SET NOCOUNT ON
 		[StudyDesign], 
 		[GroupSize], 
 		[UseMultivariate], 
-		[LongestFollowup], 
 		[SAMHSARelated],
 		[AuthorQueryNeeded], 
 		[RecommendReview], 
@@ -41,14 +41,14 @@ AS SET NOCOUNT ON
 		[DocOrdinal],
 		[DiffAttritionAvail],
 		[OverallAttritionAvail],
-		[TotalSampleSize]) VALUES (@StudyId,
+		[TotalSampleSize],
+		[LongestFollowup]) VALUES (@StudyId,
     @Reference, 
     @InLitSearch, 
     @Exclusion1, 
     @Exclusion2, 
     @Exclusion3, 
     @StudyDesign, 
-		null, 
     @UseMultivariate, 
     null,
     @SAMSHARelated, 
@@ -59,7 +59,8 @@ AS SET NOCOUNT ON
 	@DocOrdinal,
 	@DiffAttr, 
 	@OverallAttr,
-	@TotalSampleSize)
+	@TotalSampleSize,
+	@LongestFollowup)
 
 
 		IF @@ERROR <> 0 BEGIN
@@ -81,7 +82,6 @@ AS SET NOCOUNT ON
 			[StudyDesign] = @StudyDesign, 
 			[GroupSize] = null, 
 			[UseMultivariate] = @UseMultivariate, 
-			[LongestFollowup] = null, 
 			[SAMHSARelated] = @SAMSHARelated, 
 			[AuthorQueryNeeded] = @AuthorQueryNeeded, 
 			[RecommendReview] = @RecommendReview, 
@@ -90,7 +90,8 @@ AS SET NOCOUNT ON
 			[DocOrdinal] = @DocOrdinal,
 			[DiffAttritionAvail] = @DiffAttr,
 			[OverallAttritionAvail] = @OverallAttr,
-			[TotalSampleSize] = @TotalSampleSize
+			[TotalSampleSize] = @TotalSampleSize,
+			[LongestFollowup] = @LongestFollowup
 		WHERE Id = @Id
 
 		IF @@ERROR <> 0 BEGIN
