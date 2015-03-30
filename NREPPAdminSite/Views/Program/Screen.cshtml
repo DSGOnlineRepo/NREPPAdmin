@@ -253,7 +253,7 @@
 
                                 <label for="docDropdown">Article:</label>
 
-                                @Html.DropDownList("docDropdown", thisDocList, new { onchange = "GetDocumentInfo($(this).val(), this);" });
+                                @Html.DropDownList("docDropdown_@i", thisDocList, new { onchange = "GetDocumentInfo($(this).val(), this);" });
                                 <br />
 
 
@@ -317,7 +317,7 @@
 
     <label for="docDropdown">Article:</label>
 
-    @Html.DropDownList("docDropdown", Docs);
+    @Html.DropDownList("docDropdown", Docs, new { onchange = "GetDocumentInfo($(this).val(), this);" });
     <br />
 
     <input type="checkbox" name="IsLitSearch" /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <br />
@@ -410,7 +410,7 @@
     <br />
 
 
-    <div class="AddO-div hidden" style="padding: 10px 10px 10px 10px; border: 1px solid;">
+    <div class="Add-div hidden" style="padding: 10px 10px 10px 10px; border: 1px solid;">
         @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.Hidden("IntervId", Model.TheIntervention.Id)
@@ -538,5 +538,6 @@
         else
             crtl.addClass("hidden");
     }
+    
 </script>
 

@@ -253,10 +253,7 @@ namespace NREPPAdminSite.Controllers
             nStudy.Id = Request.Form["ActualID"] == string.Empty ? -1 : int.Parse(Request.Form["ActualID"]);
             nStudy.Notes = Request.Form["Notes"];
             nStudy.UseMultivariate = Request.Form["useMultivariate"] == "on";
-            //nStudy.SAMSHARelated = int.Parse(Request.Form["SAMSHARelated"]);
             nStudy.Exclusion1 = int.Parse(Request.Form["Exclusion1"]);
-            //nStudy.Exclusion2 = int.Parse(Request.Form["Exclusion2"]);
-            //nStudy.Exclusion3 = int.Parse(Request.Form["Exclusion3"]);
             nStudy.RecommendReview = Request.Form["recommendReview"] == "on";
             nStudy.OverallAttrition = int.Parse(Request.Form["OverallAttrition"]);
             nStudy.DiffAttrition = int.Parse(Request.Form["DiffAttrition"]);

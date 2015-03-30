@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[SPUpdateIntervention]
 	@IntervId int = -1,
-	@title varchar(50),
+	@title varchar(50) = '',
 	@fulldescription ntext,
 	@submitter int,
 	@updateDate DateTime,

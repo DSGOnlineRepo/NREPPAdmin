@@ -231,6 +231,7 @@ namespace NREPPAdminSite.Models
         public int SAMSHARelated { get; set; }
         // public int TargetPop { get; set; }
         // public int ListOfOutcomes { get; set; }
+        public string TotalSampleSize { get; set; }
         public bool AuthorQueryNeeded { get; set; }
         public bool RecommendReview { get; set; }
         public string Notes { get; set; }
