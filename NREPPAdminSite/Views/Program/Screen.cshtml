@@ -275,11 +275,11 @@
                             <label>What was the Study Design?</label>
                             @Html.DropDownList("StudyDesign", thisStudyDesign)<br /><br />
 
-                            <label>Longest Followup:</label>
-                            <input type="text" name="LongestFollowup" value="@study.LongestFollowup" /><br /><br />
-
                             <label>Total Sample Size:</label>
                             <input type="text" name="TotalSampleSize" value="@study.TotalSampleSize" /><br />
+
+                            <label>Longest Followup:</label>
+                            <input type="text" name="LongestFollowup" value="@study.LongestFollowup" /><br /><br />
 
                             <input type="checkbox" name="recommendReview" /><label style="margin-left: 2px;">Recommend for Review</label> <br />
 
@@ -337,6 +337,9 @@
 
     <label>What was the Study Design?</label>
     @Html.DropDownList("StudyDesign", StudyDesigns)<br /><br />
+
+    <label>Total Sample Size:</label>
+    <input type="text" name="TotalSampleSize" /><br />
 
     <label>Longest Followup:</label><br />
     <input type="text" name="LongestFollowup" /><br />
