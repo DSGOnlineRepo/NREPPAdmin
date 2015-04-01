@@ -89,7 +89,7 @@ namespace NREPPTests
             
             int DocId = Docs[0].DocId;
 
-            aService.UpdateRCDocInfo(-1, DocId, "Some Reference", "SomeDoc.jpg");
+            aService.UpdateRCDocInfo(-1, DocId, "Some Reference", "SomeDoc.jpg", null);
 
             List<RCDocument> RCDocs = aService.GetRCDocuments(null, 1);
 

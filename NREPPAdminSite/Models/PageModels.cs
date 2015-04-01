@@ -151,6 +151,7 @@ namespace NREPPAdminSite.Models
         private List<Answer> attritionAnswers;
         private List<RCDocument> theDocuments;
         private List<Destination> theDestinations;
+        private List<Answer> TaxonomyOutcomes;
 
 
         public OutcomesWrapper Outcomes { get; set; }

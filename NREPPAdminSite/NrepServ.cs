@@ -214,8 +214,52 @@ namespace NREPPAdminSite
                 Console.WriteLine(ex.Message);
             }
         }
-        
 
+        public IEnumerable<Answer> GetTaxonomicOutcomes(int? inId)
+        {
+            List<Answer> TheOutcomes = new List<Answer>();
+
+            // SQL Stuff
+            SqlCommand GetTaxonomy = new SqlCommand("SPGetTaxOutcomes", conn);
+
+            GetTaxonomy.CommandType = CommandType.StoredProcedure;
+            GetTaxonomy.Parameters.Add(new SqlParameter("@TaxId", inId));
+
+            SqlDataAdapter da = new SqlDataAdapter(GetTaxonomy);
+
+
+            try
+            {
+                CheckConn();
+
+                DataTable dt = new DataTable();
+
+
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    TheOutcomes.Add(new Answer((int)dr["Id"], dr["OutcomeName"].ToString(), dr["Guidelines"].ToString()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Answer nAnswer = new Answer();
+                nAnswer.ShortAnswer = "Error!";
+                nAnswer.LongAnswer = ex.Message;
+                nAnswer.AnswerId = -1;
+                TheOutcomes.Add(nAnswer);
+            }
+
+            return TheOutcomes;
+        }
+        
+        /// <summary>
+        /// Gets a an IEnumberable of Answers from the provided Category
+        /// </summary>
+        /// <param name="inCategory">The Category's Name</param>
+        /// <returns>The Answers as an IEnumerable</returns>
         public IEnumerable<Answer> GetAnswersByCategory(string inCategory)
         {
             List<Answer> OutAnswers = new List<Answer>();
@@ -661,7 +705,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Exclusion1", SqlDbType = SqlDbType.Int, Value = inStudy.Exclusion1 });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StudyDesign", SqlDbType = SqlDbType.Int, Value = inStudy.StudyDesign });
             //cmd.Parameters.Add(new SqlParameter() { ParameterName = "@BaselineEquiv", SqlDbType = SqlDbType.VarChar, Value = inStudy.BaselineEquiv });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@UseMultivariate", SqlDbType = SqlDbType.Bit, Value = inStudy.UseMultivariate });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@UseMultivariate", SqlDbType = SqlDbType.Bit, Value = inStudy.UseMultivariate == null ? false : inStudy.UseMultivariate });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SAMSHARelated", SqlDbType = SqlDbType.Int, Value = inStudy.SAMSHARelated });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@AuthorQueryNeeded", SqlDbType = SqlDbType.Bit, Value = inStudy.AuthorQueryNeeded });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@RecommendReview", SqlDbType = SqlDbType.Bit, Value = inStudy.RecommendReview });
@@ -748,7 +792,7 @@ namespace NREPPAdminSite
                 {
                     outcomeList.Add(new OutcomeMeasure() { Id = (int)dr["OutcomeMeasureId"], OutcomeMeasureName = dr["OutcomeMeasure"].ToString(),
                     SignificantImpact = (int)dr["SignificantImpact"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
-                    SAMHSAPop = (int)dr["SAMHSAPop"], PrimaryOutcome = (bool)dr["PrimaryOutcome"], Priority = (int)dr["Priority"],
+                    SAMHSAPop = (int)dr["SAMHSAPop"], PrimaryOutcome = (bool)dr["PrimaryOutcome"], Priority = (int)dr["Priority"], TaxOutcome = (int)dr["TaxonomyOutcome"],
                     StudyId = (int)dr["StudyId"], DocumentId = (int)dr["DocumentId"], OutcomeId = (int)dr["OutcomeId"]});
                 }
 

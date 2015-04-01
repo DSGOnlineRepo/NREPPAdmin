@@ -180,6 +180,7 @@ namespace NREPPAdminSite.Models
         public int Priority { get; set; }
         public int DocumentId { get; set; }
         public int StudyId { get; set; }
+        public int TaxOutcome { get; set; }
     }
 
     public class OutcomesWrapper

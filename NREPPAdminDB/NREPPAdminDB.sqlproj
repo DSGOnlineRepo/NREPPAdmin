@@ -113,6 +113,11 @@
     <Build Include="Stored Procedures\SPGetReviewers.sql" />
     <Build Include="Stored Procedures\SPAddReviewer.sql" />
     <Build Include="Tables\Reviewer_Expertise.sql" />
+    <Build Include="Tables\OutcomeTaxonomy.sql" />
+    <Build Include="Stored Procedures\SPGetTaxOutcomes.sql" />
+    <Build Include="Tables\Role_Permissions.sql" />
+    <Build Include="Tables\Permissions.sql" />
+    <Build Include="Functions\FNHavePermission.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

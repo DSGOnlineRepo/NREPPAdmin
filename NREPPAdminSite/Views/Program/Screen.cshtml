@@ -421,10 +421,11 @@
         {
             @Html.Hidden("IntervId", Model.TheIntervention.Id)
             @Html.Hidden("OutcomeMeasureId")
-            <label>Choose An Outcome: </label>
+            <label>Choose An Outcome from the Article: </label>
             @Html.DropDownList("MacroOutcome", OutcomeList)
         
             <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
+            <label>Outcome from Taxonomy:</label>@Html.DropDownList("TaxOutcome", OutcomeList)<br />
             <label for="measure">Measure Reported in the Study</label>
             <input type="text" id="measure" name="measure" /><br /><br />
         
