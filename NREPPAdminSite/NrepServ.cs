@@ -1047,6 +1047,29 @@ namespace NREPPAdminSite
             return outList;
         }
 
+        bool CanDo(string Permission, int UserId, int? InterventionId)
+        {
+            bool result = false;
+
+            SqlCommand cmd = new SqlCommand("FNHavePermission");
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@inPermission", Permission));
+            cmd.Parameters.Add(new SqlParameter("@InterventionId", InterventionId));
+            cmd.Parameters.Add(new SqlParameter("@UserId", UserId));
+
+            try
+            {
+                CheckConn();
+                result = (bool)cmd.ExecuteScalar();
+            } catch (Exception) // Somehow we need to recover the error
+            {
+                result = false;
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region Other User Functionality
