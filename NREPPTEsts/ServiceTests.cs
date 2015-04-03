@@ -11,7 +11,7 @@ namespace NREPPTests
     [TestClass]
     public class ServiceTests
     {
-        public static string ConnString = "server=192.168.0.234\\MSSQL2014;database=NREPPAdminDB;uid=nrAgent;password=nr!Agent123456";
+        public static string ConnString = "server=localhost;database=NREPPAdmin;uid=nrAgent;password=nr!Agent123456";
         [TestMethod]
         public void DummyMethod()
         {
@@ -94,6 +94,25 @@ namespace NREPPTests
             List<RCDocument> RCDocs = aService.GetRCDocuments(null, 1);
 
             Assert.IsTrue(RCDocs.Count > 0, "No RC Data");
+        }
+
+        /// <summary>
+        /// This test is pretty useless, since it passes even if the connection fails. :|
+        /// </summary>
+        [TestMethod]
+        public void NoPermTest()
+        {
+            NrepServ aService = new NrepServ(ServiceTests.ConnString);
+
+            Assert.IsFalse(aService.CanDo("TestPermission", 1, null));
+        }
+
+        [TestMethod]
+        public void HasPermTest()
+        {
+            NrepServ aService = new NrepServ(ServiceTests.ConnString);
+
+            Assert.IsFalse(aService.CanDo("TestPermission", 4, null));
         }
 
     }

@@ -1047,7 +1047,7 @@ namespace NREPPAdminSite
             return outList;
         }
 
-        bool CanDo(string Permission, int UserId, int? InterventionId)
+        public bool CanDo(string Permission, int UserId, int? InterventionId)
         {
             bool result = false;
 

@@ -220,3 +220,12 @@ INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, nu
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (4, 2, 3)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (4, 6, 5)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 12, 13)
+
+
+-- Permissions Stuff
+
+INSERT INTO Permissions (Id, PermissionName) VALUES (1, 'TestPermission')
+
+INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, 7, NULL, cast(1 as Bit))
+INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, 7, 3, CAST(0 AS BIT))
+INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, 7, 1, CAST(1 as BIT))
