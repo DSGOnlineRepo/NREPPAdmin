@@ -104,15 +104,23 @@ namespace NREPPTests
         {
             NrepServ aService = new NrepServ(ServiceTests.ConnString);
 
-            Assert.IsFalse(aService.CanDo("TestPermission", 1, null));
+            Assert.IsFalse(aService.CanDo("TestPermission", 4, 2));
         }
 
         [TestMethod]
-        public void HasPermTest()
+        public void HasGeneralPermTest()
         {
             NrepServ aService = new NrepServ(ServiceTests.ConnString);
 
             Assert.IsFalse(aService.CanDo("TestPermission", 4, null));
+        }
+
+        [TestMethod]
+        public void HasSpecificPermTest()
+        {
+            NrepServ aService = new NrepServ(ServiceTests.ConnString);
+
+            Assert.IsFalse(aService.CanDo("TestPermission", 4, 1));
         }
 
     }
