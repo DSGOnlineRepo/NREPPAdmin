@@ -111,6 +111,29 @@ INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (22, 'Not Available', '
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (23, 'Assignment Calculation', 'Attrition group from assignment can be calculated')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (24, 'Pretest Calculation', 'Attrition from pretest can be calculated')
 
+-- SAMHSA Population Answers
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (25, 'Ind', 'Indicated')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (26, 'Sel', 'Selective')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (27, 'Univ', 'Universal')
+
+-- SAMHSA Outcomes
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (28, 'BH', 'Behavioral Health')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (29, 'R/P', 'Risk/Protective')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (30, 'Oth', 'Other')
+
+-- Treatment Size
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (31, 'No effect', 'No effect size reported or other effect size reported')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (32, 'Odds', 'Odds Ratio')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (33, 'Cohen', 'Cohen''s d')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (34, 'Hedges', 'Hedges''s g')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (35, 'Eta', 'Eta Squared')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (36, 'f2', 'f squared')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (37, 'Rphi', 'Rphi')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (38, 'Rel Risk', 'Relative Risk')
+
+
+
+
 /*
 •	Co-occurring Disorders
 •	Homelessness
@@ -146,6 +169,9 @@ INSERT INTO Category (Id, CategoryName) VALUES (5, 'YPYN')
 INSERT INTO Category (Id, CategoryName) VALUES (6, 'Exclusions')
 INSERT INTO Category (Id, CategoryName) VALUES (7, 'AreasExpertise')
 INSERT INTO Category (Id, CategoryName) VALUES (8, 'AttritionAnswer')
+INSERT INTO Category (Id, CategoryName) VALUES (9, 'SAMHSAPop')
+INSERT INTO Category (Id, CategoryName) VALUES (10, 'SAMHSAOutcome')
+INSERT INTO Category (Id, CategoryName) VALUES (11, 'TreatCompare')
 
 SET IDENTITY_INSERT Category OFF
 
@@ -183,6 +209,10 @@ INSERT INTO Answer_Category (AnswerId, CategoryID) VALUES (-1, 6)
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (22, 8)
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (23, 8)
 INSERT INTO Answer_Category (AnswerID, CategoryID) VALUES (24, 8)
+
+INSERT INTO Answer_Category (AnswerId, CategoryId) SELECT ID, 9 from Answers where Id BETWEEN 25 AND 27
+INSERT INTO Answer_Category (AnswerId, CategoryId) SELECT ID, 10 from Answers where Id BETWEEN 28 AND 30
+INSERT INTO Answer_Category (AnswerId, CategoryId) SELECT ID, 11 from Answers where Id BETWEEN 31 AND 38
 
 -- Masks
 

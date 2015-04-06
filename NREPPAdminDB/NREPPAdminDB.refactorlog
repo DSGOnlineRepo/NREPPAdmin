@@ -119,4 +119,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="DiffAttritionAvail" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="21404787-f17b-4b94-96ae-aea04450b43a" ChangeDateTime="04/06/2015 15:54:10">
+    <Property Name="ElementName" Value="[dbo].[OutcomeMeasure].[SAMSHAOutcome]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OutcomeMeasure]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SAMHSAOutcome" />
+  </Operation>
 </Operations>
