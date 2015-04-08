@@ -108,8 +108,8 @@ INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (21, 'Not SAMSHA', 'No 
 -- Answers for Attrition Questions
 
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (22, 'Not Available', 'No, data not available')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (23, 'Assignment Calculation', 'Attrition group from assignment can be calculated')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (24, 'Pretest Calculation', 'Attrition from pretest can be calculated')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (23, 'Assignment Calculation', 'Assignment group can be calculated')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (24, 'Pretest Calculation', 'Pretest can be calculated')
 
 -- SAMHSA Population Answers
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (25, 'Ind', 'Indicated')
@@ -122,7 +122,7 @@ INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (29, 'R/P', 'Risk/Prote
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (30, 'Oth', 'Other')
 
 -- Treatment Size
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (31, 'No effect', 'No effect size reported or other effect size reported')
+INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (31, 'No effect', 'No effect size or other effect size reported')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (32, 'Odds', 'Odds Ratio')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (33, 'Cohen', 'Cohen''s d')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (34, 'Hedges', 'Hedges''s g')

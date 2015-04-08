@@ -151,7 +151,10 @@ namespace NREPPAdminSite.Models
         private List<Answer> attritionAnswers;
         private List<RCDocument> theDocuments;
         private List<Destination> theDestinations;
-        private List<Answer> TaxonomyOutcomes;
+        private List<Answer> taxonomyOutcomes;
+        private List<Answer> samhsaOutcomes;
+        private List<Answer> effectReports;
+        private List<Answer> samhsaPops;
 
 
         public OutcomesWrapper Outcomes { get; set; }
@@ -175,11 +178,15 @@ namespace NREPPAdminSite.Models
         }
 
         public ScreeningModel(List<Study> inDocs, Intervention interV, List<Answer> inStudyDesigns, List<Answer> inYPYN, List<Answer> inExclusions,
-            OutcomesWrapper OW, List<RCDocument> someDocs, List<Answer> inAttrAnswers)
+            OutcomesWrapper OW, List<RCDocument> someDocs, List<Answer> inAttrAnswers, List<Answer> insamhsaPop, List<Answer> insamhsaOut,
+            List<Answer> ineffectReports)
             : this(inDocs, interV, inStudyDesigns, inYPYN, inExclusions, OW)
         {
             theDocuments = someDocs;
             attritionAnswers = inAttrAnswers;
+            samhsaPops = insamhsaPop;
+            samhsaOutcomes = insamhsaOut;
+            effectReports = ineffectReports;
         }
 
         #endregion
@@ -225,6 +232,26 @@ namespace NREPPAdminSite.Models
         public IEnumerable<Answer> AttritionAnswers
         {
             get { return attritionAnswers; }
+        }
+
+        public IEnumerable<Answer> EffectReports
+        {
+            get { return effectReports; }
+        }
+
+        public IEnumerable<Answer> TaxonomyOutcomes
+        {
+            get { return taxonomyOutcomes; }
+        }
+
+        public IEnumerable<Answer> SAMHSAOutcomes
+        {
+            get { return samhsaOutcomes; }
+        }
+
+        public IEnumerable<Answer> SAMHSAPops
+        {
+            get { return samhsaPops;  }
         }
 
         /// <summary>

@@ -5,13 +5,13 @@
 	@InterventionId INT = 0,
 	@StudyId INT,
 	@OutcomeMeasure VARCHAR(50) = '',
-	@BaselineEquiv INT = 0,
-	@SignificantImpact INT = 0,
+	@SAMHSAOutcome INT = 0,
 	@GroupFavored BIT = 0,
 	@PopDescription VARCHAR(50) = '',
 	@SAMHSAPop INT = 0,
-	@PrimaryOutcome BIT = 0,
+	@EffectReport BIT = 0,
 	@Priority INT = 0,
+	@TaxonomyOutcome INT = 0,
 	@DocId INT
 AS
 
@@ -41,13 +41,13 @@ AS
 		SET OutcomeId = @OutcomeId,
 			StudyId = @StudyId,
 			OutcomeMeasure = @OutcomeMeasure,
-			BaselineEquiv = @BaselineEquiv,
-			SignificantImpact = @SignificantImpact,
+			--BaselineEquiv = @BaselineEquiv,
+			--SignificantImpact = @SignificantImpact,
 			GroupFavored = @GroupFavored,
 			PopDescription = @PopDescription,
 			SAMHSAPop = @SAMHSAPop,
-			PrimaryOutcome = @PrimaryOutcome,
-			Priority = @Priority,
+			--PrimaryOutcome = @PrimaryOutcome,
+			--Priority = @Priority,
 			DocId = @DocId
 		WHERE Id = @OutcomeMeasureId
 
@@ -62,24 +62,24 @@ AS
 			OutcomeId,
 			StudyId,
 			OutcomeMeasure,
-			BaselineEquiv,
-			SignificantImpact,
+			--BaselineEquiv,
+			--SignificantImpact,
 			GroupFavored,
 			PopDescription,
 			SAMHSAPop,
-			PrimaryOutcome,
-			Priority,
+			--PrimaryOutcome,
+			--Priority,
 			DocId)
 			VALUES (@OutcomeId,
 			@StudyId,
 			@OutcomeMeasure,
-			@BaselineEquiv,
-			@SignificantImpact,
+			--@BaselineEquiv,
+			--@SignificantImpact,
 			@GroupFavored,
 			@PopDescription,
 			@SAMHSAPop,
-			@PrimaryOutcome,
-			@Priority,
+			--@PrimaryOutcome,
+			--@Priority,
 			@DocId)
 
 		IF @@ERROR <> 0 BEGIN

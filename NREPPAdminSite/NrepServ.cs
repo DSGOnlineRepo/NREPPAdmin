@@ -781,6 +781,21 @@ namespace NREPPAdminSite
 
             cmd.Parameters.Add(new SqlParameter("@InterventionId", IntervId));
 
+            /*
+             * [Id] INT IDENTITY NOT NULL PRIMARY KEY,
+	[OutcomeId] INT NOT NULL,
+	[StudyId] INT NOT NULL,
+	[OutcomeMeasure] VARCHAR(50) NULL, 
+    [GroupFavored] BIT NULL DEFAULT 0, 
+    [PopDescription] VARCHAR(50) NULL, 
+    [SAMHSAPop] INT NULL,
+	[SAMHSAOutcome] INT NULL,
+	[EffectReport] INT NULL,
+    [DocId] INT NULL, 
+    [RecommendReview] BIT NULL DEFAULT 0, 
+    [TaxonomyOutcome] INT NULL, 
+             */
+
             try
             {
                 CheckConn();
@@ -791,8 +806,8 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     outcomeList.Add(new OutcomeMeasure() { Id = (int)dr["OutcomeMeasureId"], OutcomeMeasureName = dr["OutcomeMeasure"].ToString(),
-                    SignificantImpact = (int)dr["SignificantImpact"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
-                    SAMHSAPop = (int)dr["SAMHSAPop"], PrimaryOutcome = (bool)dr["PrimaryOutcome"], Priority = (int)dr["Priority"], TaxOutcome = (int)dr["TaxonomyOutcome"],
+                    SAMHSAOutcome = (int)dr["SignificantImpact"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
+                    SAMHSAPop = (int)dr["SAMHSAPop"], TaxOutcome = (int)dr["TaxonomyOutcome"], EffectReport = (int)dr["EffectReport"],
                     StudyId = (int)dr["StudyId"], DocumentId = (int)dr["DocumentId"], OutcomeId = (int)dr["OutcomeId"]});
                 }
 
@@ -906,16 +921,13 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@InterventionId", DbType = DbType.Int32, Value = InterventionId });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@StudyId", DbType = DbType.Int32, Value = om.StudyId });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@OutcomeName", DbType = DbType.String, Value = NewOutcome });
-            /*cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DiffAttrition", Value = om.DiffAttrition });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@EffectSize", Value = om.EffectSize });*/
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@BaselineEquiv", Value = om.BaselineEquiv });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SignificantImpact", Value = om.SignificantImpact });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@GroupFavored", Value = om.GroupFavored });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PopDescription", Value = om.PopDescription });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SAMHSAPop", Value = om.SAMHSAPop });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryOutcome", Value = om.PrimaryOutcome });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Priority", Value = om.Priority });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SAMHSAOutcome", Value = om.SAMHSAOutcome });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@EffectReport", Value = om.EffectReport });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocId", Value = om.DocumentId });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@TaxonomyOutcome", Value = om.TaxOutcome });
 
             try
             {

@@ -128,7 +128,9 @@ namespace NREPPAdminSite.Controllers
             List<Answer> Exclusions;
             List<RCDocument> reviewerDocs;
             List<Answer> AttritionAnswers;
-
+            List<Answer> SAMHSAOut;
+            List<Answer> SAMHSAPop;
+            List<Answer> EffectReports;
             
             
             theStudies = localService.GetStudiesByIntervention(InterventionId).ToList<Study>();
@@ -136,6 +138,9 @@ namespace NREPPAdminSite.Controllers
             YPYN = localService.GetAnswersByCategory("YPYN").ToList<Answer>();
             Exclusions = localService.GetAnswersByCategory("Exclusions").ToList<Answer>();
             AttritionAnswers = localService.GetAnswersByCategory("AttritionAnswer").ToList<Answer>();
+            SAMHSAOut = localService.GetAnswersByCategory("SAMHSAOutcome").ToList<Answer>();
+            SAMHSAPop = localService.GetAnswersByCategory("SAMHSAPop").ToList<Answer>();
+            EffectReports = localService.GetAnswersByCategory("TreatCompare").ToList<Answer>();
 
             //List<Object> something = theStudies.GroupBy(s => s.StudyId).Select(group => new { StudyId = group.Key });
 
@@ -153,7 +158,8 @@ namespace NREPPAdminSite.Controllers
             List<OutcomeMeasure> oms = ow.OutcomesMeasures.ToList<OutcomeMeasure>();
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
-            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs, AttritionAnswers);
+            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs, AttritionAnswers,
+                SAMHSAPop, SAMHSAOut, EffectReports);
             sm.AddDests(localService.GetDestinations(theIntervention.Id).ToList());
 
             return View(sm);

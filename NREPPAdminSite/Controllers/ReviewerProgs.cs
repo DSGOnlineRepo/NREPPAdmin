@@ -46,7 +46,7 @@ namespace NREPPAdminSite.Controllers
             List<OutcomeMeasure> oms = ow.OutcomesMeasures.Where(om => om.OutcomeId == 1).ToList<OutcomeMeasure>();
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
-            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs, null);
+            ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow); // TODO: fix this call
             sm.AddDests(localService.GetDestinations(theIntervention.Id).ToList());
 
             return View(sm);

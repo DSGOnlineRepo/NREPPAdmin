@@ -167,17 +167,18 @@ namespace NREPPAdminSite.Models
         public bool OverallAttrition { get; set; }
         public bool DiffAttrition { get; set; }
         public bool EffectSize { get; set; }
-        public int BaselineEquiv { get; set; }
-        public int SignificantImpact { get; set; }
         public bool GroupFavored { get; set; }
 
         [Display(Name = "Describe Evaluated Population")]
         public string PopDescription { get; set; }
 
-        [Display(Name = "SAMSHA-related population")]
+        [Display(Name = "SAMHSA-related population")]
         public int SAMHSAPop { get; set; }
-        public bool PrimaryOutcome { get; set; }
-        public int Priority { get; set; }
+
+        [Display(Name = "SAMHSA-related Outcome")]
+        public int SAMHSAOutcome { get; set; }
+        public int EffectReport { get; set; }
+
         public int DocumentId { get; set; }
         public int StudyId { get; set; }
         public int TaxOutcome { get; set; }
