@@ -47,8 +47,10 @@ AS
 			GroupFavored = @GroupFavored,
 			PopDescription = @PopDescription,
 			SAMHSAPop = @SAMHSAPop,
+			SAMHSAOutcome = @SAMHSAOutcome,
 			RecommendReview = @RecommendReview,
 			TaxonomyOutcome = @TaxonomyOutcome,
+			EffectReport = @EffectReport,
 			DocId = @DocId
 		WHERE Id = @OutcomeMeasureId
 
@@ -70,6 +72,8 @@ AS
 			SAMHSAPop,
 			RecommendReview,
 			TaxonomyOutcome,
+			SAMHSAOutcome,
+			EffectReport,
 			DocId)
 			VALUES (@OutcomeId,
 			@StudyId,
@@ -81,6 +85,8 @@ AS
 			@SAMHSAPop,
 			@TaxonomyOutcome,
 			@RecommendReview,
+			@SAMHSAOutcome,
+			@EffectReport,
 			@DocId)
 
 		IF @@ERROR <> 0 BEGIN
