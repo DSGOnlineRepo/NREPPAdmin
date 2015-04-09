@@ -26,8 +26,14 @@ namespace NREPPAdminSite.Controllers
             ViewBag.message = "Registered Ok!";*/
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             //ViewBag.SomeValue = localService.DoHash(model.Password1).Item1; // Tuple together the hash and salt because we will need both
+            try
+            {
 
-            int retValue = localService.registerUser(model.UserName, model.Firstname, model.Lastname, model.Password1, int.Parse(col["roleId"]));
+                int retValue = localService.registerUser(model.UserName, model.Firstname, model.Lastname, model.Password1, int.Parse(col["roleId"]));
+            } catch (Exception Ex)
+            {
+                RedirectToAction("Login", new { Status = Ex.Message });
+            }
 
 
             return RedirectToAction("Login");
@@ -37,7 +43,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Login(string Status)
         {
             if (Status != null)
-                ViewBag.Status = "Failed Login";
+                ViewBag.Status = Status;
             else
                 ViewBag.Status = "";
 
