@@ -363,10 +363,34 @@
     @{
         List<SelectListItem> OutcomeList = new List<SelectListItem>();
         //List<SelectListItem> StudiesForOutcomes = new List<SelectListItem>();
+        List<SelectListItem> SAMHSAPops = new List<SelectListItem>();
+        List<SelectListItem> SAMHSAOutcomes = new List<SelectListItem>();
+        List<SelectListItem> EffectReports = new List<SelectListItem>();
+        List<SelectListItem> TaxOutcomes = new List<SelectListItem>();
         
         foreach (NREPPAdminSite.Models.Outcome outcome in Model.Outcomes.MacroOutcomes)
         {
             OutcomeList.Add(new SelectListItem() { Text = outcome.OutcomeName, Value = outcome.Id.ToString() });
+        }
+        
+        foreach (NREPPAdminSite.Models.Answer ans in Model.SAMHSAPops)
+        {
+            SAMHSAPops.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+        
+        foreach (NREPPAdminSite.Models.Answer ans in Model.SAMHSAOutcomes)
+        {
+            SAMHSAOutcomes.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.EffectReports)
+        {
+            EffectReports.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+        
+        foreach (NREPPAdminSite.Models.Answer ans in Model.TaxonomyOutcomes)
+        {
+            TaxOutcomes.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
         }
 
         OutcomeList.Add(new SelectListItem() { Text = "New Outcome", Value = "-1" });
@@ -416,7 +440,7 @@
     <br />
 
 
-    <div class="Add-div hidden" style="padding: 10px 10px 10px 10px; border: 1px solid;">
+    <div class="AddO-div hidden" style="padding: 10px 10px 10px 10px; border: 1px solid;">
         @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.Hidden("IntervId", Model.TheIntervention.Id)
@@ -425,19 +449,30 @@
             @Html.DropDownList("MacroOutcome", OutcomeList)
         
             <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
-            <label>Outcome from Taxonomy:</label>@Html.DropDownList("TaxOutcome", OutcomeList)<br />
+            <label>Outcome from Taxonomy:</label>@Html.DropDownList("TaxOutcome", TaxOutcomes)<br />
             <label for="measure">Measure Reported in the Study</label>
             <input type="text" id="measure" name="measure" /><br /><br />
         
             <label>Document: </label>@Html.DropDownList("docDropdown", Docs)<br /><br />
 
+            <label>SAMHSA-Related Population:</label>
+            @Html.DropDownList("popDropDown", SAMHSAPops)<br />
+            
             <label for="popDescription">Describe Evaluated Population:</label><br />
             <textarea name="popDescription" id="popDescription"></textarea><br /><br />
             
-        
+            <label>SAMHSA-Related Outcome:</label>
+            @Html.DropDownList("samOutDropDown", SAMHSAOutcomes)<br />
+
+            <label>SAMHSA-Related Outcome:</label>
+            @Html.DropDownList("treatmentDropDown", EffectReports)<br />
+            
+            <input type="checkbox" name="reviewOutcome" /><label>Recommend for Review</label>
+
+
             <label for="studySelector">Select Applicable Studies</label><br />
             <select id="studySelector" name="studySelector" style="width: 350px;">
-                @foreach(int studyId in studyz)
+                @foreach (int studyId in studyz)
                 {
                     <option value="@studyId">Study @studyId</option>
                 }

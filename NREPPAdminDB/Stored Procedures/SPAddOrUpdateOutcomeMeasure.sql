@@ -12,6 +12,7 @@
 	@EffectReport BIT = 0,
 	@Priority INT = 0,
 	@TaxonomyOutcome INT = 0,
+	@RecommendReview BIT = 0,
 	@DocId INT
 AS
 
@@ -46,8 +47,8 @@ AS
 			GroupFavored = @GroupFavored,
 			PopDescription = @PopDescription,
 			SAMHSAPop = @SAMHSAPop,
-			--PrimaryOutcome = @PrimaryOutcome,
-			--Priority = @Priority,
+			RecommendReview = @RecommendReview,
+			TaxonomyOutcome = @TaxonomyOutcome,
 			DocId = @DocId
 		WHERE Id = @OutcomeMeasureId
 
@@ -67,8 +68,8 @@ AS
 			GroupFavored,
 			PopDescription,
 			SAMHSAPop,
-			--PrimaryOutcome,
-			--Priority,
+			RecommendReview,
+			TaxonomyOutcome,
 			DocId)
 			VALUES (@OutcomeId,
 			@StudyId,
@@ -78,8 +79,8 @@ AS
 			@GroupFavored,
 			@PopDescription,
 			@SAMHSAPop,
-			--@PrimaryOutcome,
-			--@Priority,
+			@TaxonomyOutcome,
+			@RecommendReview,
 			@DocId)
 
 		IF @@ERROR <> 0 BEGIN

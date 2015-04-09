@@ -239,7 +239,7 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    TheOutcomes.Add(new Answer((int)dr["Id"], dr["OutcomeName"].ToString(), dr["Guidelines"].ToString()));
+                    TheOutcomes.Add(new Answer((int)dr["Id"], dr["Guidelines"].ToString(), dr["OutcomeName"].ToString()));
                 }
 
             }
@@ -806,9 +806,9 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     outcomeList.Add(new OutcomeMeasure() { Id = (int)dr["OutcomeMeasureId"], OutcomeMeasureName = dr["OutcomeMeasure"].ToString(),
-                    SAMHSAOutcome = (int)dr["SignificantImpact"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
-                    SAMHSAPop = (int)dr["SAMHSAPop"], TaxOutcome = (int)dr["TaxonomyOutcome"], EffectReport = (int)dr["EffectReport"],
-                    StudyId = (int)dr["StudyId"], DocumentId = (int)dr["DocumentId"], OutcomeId = (int)dr["OutcomeId"]});
+                    SAMHSAOutcome = dr.IsNull("SAMHSAOutcome") ? 0 : (int)dr["SAMHSAOutcome"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
+                    SAMHSAPop = (int)dr["SAMHSAPop"], TaxOutcome = (int)dr["TaxonomyOutcome"], EffectReport = dr.IsNull("EffectReport") ? 0 : (int)dr["EffectReport"],
+                    StudyId = (int)dr["StudyId"], DocumentId = (int)dr["DocumentId"], OutcomeId = (int)dr["OutcomeId"], RecommendReview = (bool)dr["RecommendReview"]});
                 }
 
                 // TODO: Document Association
@@ -926,6 +926,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SAMHSAPop", Value = om.SAMHSAPop });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@SAMHSAOutcome", Value = om.SAMHSAOutcome });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@EffectReport", Value = om.EffectReport });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@RecommendReview", Value = om.RecommendReview });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocId", Value = om.DocumentId });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@TaxonomyOutcome", Value = om.TaxOutcome });
 

@@ -182,6 +182,7 @@ namespace NREPPAdminSite.Models
         public int DocumentId { get; set; }
         public int StudyId { get; set; }
         public int TaxOutcome { get; set; }
+        public bool RecommendReview { get; set; }
     }
 
     public class OutcomesWrapper

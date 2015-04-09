@@ -179,7 +179,7 @@ namespace NREPPAdminSite.Models
 
         public ScreeningModel(List<Study> inDocs, Intervention interV, List<Answer> inStudyDesigns, List<Answer> inYPYN, List<Answer> inExclusions,
             OutcomesWrapper OW, List<RCDocument> someDocs, List<Answer> inAttrAnswers, List<Answer> insamhsaPop, List<Answer> insamhsaOut,
-            List<Answer> ineffectReports)
+            List<Answer> ineffectReports, List<Answer> TaxonomyOuts)
             : this(inDocs, interV, inStudyDesigns, inYPYN, inExclusions, OW)
         {
             theDocuments = someDocs;
@@ -187,6 +187,7 @@ namespace NREPPAdminSite.Models
             samhsaPops = insamhsaPop;
             samhsaOutcomes = insamhsaOut;
             effectReports = ineffectReports;
+            taxonomyOutcomes = TaxonomyOuts;
         }
 
         #endregion

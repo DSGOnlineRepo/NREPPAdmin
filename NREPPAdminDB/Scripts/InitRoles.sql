@@ -215,7 +215,6 @@ INSERT INTO Answer_Category (AnswerId, CategoryId) SELECT ID, 10 from Answers wh
 INSERT INTO Answer_Category (AnswerId, CategoryId) SELECT ID, 11 from Answers where Id BETWEEN 31 AND 38
 
 -- Masks
-
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (1, 'Mental Health Promotion', 'ProgramType')
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (2, 'Mental Health Treatment', 'ProgramType')
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (3, 'Substance Use Prevention', 'ProgramType')

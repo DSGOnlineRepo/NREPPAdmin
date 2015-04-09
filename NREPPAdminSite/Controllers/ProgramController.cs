@@ -131,6 +131,7 @@ namespace NREPPAdminSite.Controllers
             List<Answer> SAMHSAOut;
             List<Answer> SAMHSAPop;
             List<Answer> EffectReports;
+            List<Answer> TaxOutcomes;
             
             
             theStudies = localService.GetStudiesByIntervention(InterventionId).ToList<Study>();
@@ -141,6 +142,7 @@ namespace NREPPAdminSite.Controllers
             SAMHSAOut = localService.GetAnswersByCategory("SAMHSAOutcome").ToList<Answer>();
             SAMHSAPop = localService.GetAnswersByCategory("SAMHSAPop").ToList<Answer>();
             EffectReports = localService.GetAnswersByCategory("TreatCompare").ToList<Answer>();
+            TaxOutcomes = localService.GetTaxonomicOutcomes(null).ToList<Answer>();
 
             //List<Object> something = theStudies.GroupBy(s => s.StudyId).Select(group => new { StudyId = group.Key });
 
@@ -159,7 +161,7 @@ namespace NREPPAdminSite.Controllers
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
             ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs, AttritionAnswers,
-                SAMHSAPop, SAMHSAOut, EffectReports);
+                SAMHSAPop, SAMHSAOut, EffectReports, TaxOutcomes);
             sm.AddDests(localService.GetDestinations(theIntervention.Id).ToList());
 
             return View(sm);
@@ -288,12 +290,15 @@ namespace NREPPAdminSite.Controllers
             OutcomeMeasure om = new OutcomeMeasure();
             om.Id = col["OutcomeMeasureId"] == string.Empty || int.Parse(col["OutcomeMeasureId"]) < 1 ? -1 : int.Parse(col["OutcomeMeasureId"]);
             om.DocumentId = int.Parse(col["docDropDown"]);
-            //om.DiffAttrition = bool.Parse(col["DiffAttrition"]);
-            //om.EffectSize = bool.Parse(col["EffectSize"]);
+            om.SAMHSAOutcome = int.Parse(col["samOutDropDown"]);
+            om.SAMHSAPop = int.Parse(col["popDropDown"]);
+            om.EffectReport = int.Parse(col["treatmentDropDown"]);
             om.PopDescription = col["popDescription"];
             om.StudyId = int.Parse(col["studySelector"]);
             om.OutcomeMeasureName = col["measure"];
             om.OutcomeId = int.Parse(col["MacroOutcome"]);
+            om.RecommendReview = col["reviewOutcome"].ToString() == "on";
+            om.TaxOutcome = int.Parse(col["TaxOutcome"]);
 
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             localService.AddOrUpdateOutcomeMeasure(om, IntervId, col["newOutcome"].Trim());
