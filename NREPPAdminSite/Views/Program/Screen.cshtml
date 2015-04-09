@@ -415,17 +415,27 @@
 
     <table>
         <tr>
-            <th class="withborder" style="text-align: center;">Outcome</th>
-            <th class="withborder" style="text-align: center;">Measure</th>
-            <th>Study Id</th>
+            <th class="withborder" style="text-align: center;">Measure Resported in Study</th>
+            <th class="withborder" style="text-align: center;">Outcome Named in Article</th>
+            <th class="withborder">Study Id</th>
+            <th class="withborder">Reference</th>
+            <th class="withborder">SAMHSA-Related Population</th>
+            <th class="withborder">Describe Evaluated Population</th>
+            <th class="withborder">SAMHSA-Related Outcome</th>
+            <th class="withborder">Treatment Vs. Comparison Size</th>
             <th> </th>
         </tr>
         @foreach (NREPPAdminSite.Models.OutcomeMeasure measure in Model.Outcomes.OutcomesMeasures)
         {
             <tr>
-                <td class="withborder"><a href="#" onclick="populateOutcomeForm(@i); return false;">@getOutcomeByNumber(@measure.OutcomeId, OutcomeList)</a></td>
                 <td class="withborder">@measure.OutcomeMeasureName</td>
+                <td class="withborder">@getOutcomeByNumber(@measure.OutcomeId, OutcomeList)</td>
                 <td class="withborder">Study @measure.StudyId</td>
+                <td class="withborder">Reference Goes Here</td>
+                <td class="withborder">@getAnswerText(Model.SAMHSAPops.ToList(), @measure.SAMHSAPop)</td>
+                <td class="withborder">@measure.PopDescription</td>
+                <td class="withborder">@getAnswerText(Model.SAMHSAOutcomes.ToList(), @measure.SAMHSAOutcome)</td>
+                <td class="withborder">@getAnswerText(Model.EffectReports.ToList(), @measure.EffectReport)</td>
                 <td class="withborder">@Html.ActionLink("Delete", "DeleteOutcomeMeasure", new { MeasureId = measure.Id, InvId = Model.TheIntervention.Id })</td>
             </tr>
 
@@ -464,7 +474,7 @@
             <label>SAMHSA-Related Outcome:</label>
             @Html.DropDownList("samOutDropDown", SAMHSAOutcomes)<br />
 
-            <label>SAMHSA-Related Outcome:</label>
+            <label>What Treatment vs. Comparison Effect Size:</label>
             @Html.DropDownList("treatmentDropDown", EffectReports)<br />
             
             <input type="checkbox" name="reviewOutcome" /><label>Recommend for Review</label>
