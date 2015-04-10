@@ -362,7 +362,6 @@
 
     @{
         List<SelectListItem> OutcomeList = new List<SelectListItem>();
-        //List<SelectListItem> StudiesForOutcomes = new List<SelectListItem>();
         List<SelectListItem> SAMHSAPops = new List<SelectListItem>();
         List<SelectListItem> SAMHSAOutcomes = new List<SelectListItem>();
         List<SelectListItem> EffectReports = new List<SelectListItem>();
@@ -427,7 +426,89 @@
         </tr>
         @foreach (NREPPAdminSite.Models.OutcomeMeasure measure in Model.Outcomes.OutcomesMeasures)
         {
-            <tr>
+            string theClass = (i + 1) % 2 == 0 ? "screenEven" : "screenOdd";
+            string reviewIsChecked = measure.RecommendReview == true ? "checked" : "";
+            List<SelectListItem> thisDocList = new List<SelectListItem>();
+            List<SelectListItem> thisPopDrop = new List<SelectListItem>();
+            List<SelectListItem> thisOutcomeList = new List<SelectListItem>();
+            List<SelectListItem> thisTaxOutcomes = new List<SelectListItem>();
+            List<SelectListItem> thisSAMHSAOutcomes = new List<SelectListItem>();
+            List<SelectListItem> thisEffectReports = new List<SelectListItem>();
+
+            foreach (SelectListItem item in SAMHSAPops)
+            {
+                if (item.Value == measure.SAMHSAPop.ToString())
+                {
+                    thisPopDrop.Add(new SelectListItem() { Value = item.Value, Text = item.Text, Selected = true });
+                }
+                else
+                {
+                    thisPopDrop.Add(new SelectListItem() { Value = item.Value, Text = item.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item2 in Docs)
+            {
+                if (item2.Value == measure.DocumentId.ToString())
+                {
+                    thisDocList.Add(new SelectListItem() { Value = item2.Value, Text = item2.Text, Selected = true });
+                }
+                else
+                {
+                    thisDocList.Add(new SelectListItem() { Value = item2.Value, Text = item2.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item3 in OutcomeList)
+            {
+                if (item3.Value == measure.OutcomeId.ToString())
+                {
+                    thisOutcomeList.Add(new SelectListItem() { Value = item3.Value, Text = item3.Text, Selected = true });
+                }
+                else
+                {
+                    thisOutcomeList.Add(new SelectListItem() { Value = item3.Value, Text = item3.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item4 in TaxOutcomes)
+            {
+                if (item4.Value == measure.TaxOutcome.ToString())
+                {
+                    thisTaxOutcomes.Add(new SelectListItem() { Value = item4.Value, Text = item4.Text, Selected = true });
+                }
+                else
+                {
+                    thisTaxOutcomes.Add(new SelectListItem() { Value = item4.Value, Text = item4.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item5 in SAMHSAOutcomes)
+            {
+                if (item5.Value == measure.SAMHSAOutcome.ToString())
+                {
+                    thisSAMHSAOutcomes.Add(new SelectListItem() { Value = item5.Value, Text = item5.Text, Selected = true });
+                }
+                else
+                {
+                    thisSAMHSAOutcomes.Add(new SelectListItem() { Value = item5.Value, Text = item5.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item6 in TaxOutcomes)
+            {
+                if (item6.Value == measure.EffectReport.ToString())
+                {
+                    thisEffectReports.Add(new SelectListItem() { Value = item6.Value, Text = item6.Text, Selected = true });
+                }
+                else
+                {
+                    thisEffectReports.Add(new SelectListItem() { Value = item6.Value, Text = item6.Text, Selected = false });
+                }
+            }
+            
+            
+            <tr class="@theClass">
                 <td class="withborder">@measure.OutcomeMeasureName</td>
                 <td class="withborder">@getOutcomeByNumber(@measure.OutcomeId, OutcomeList)</td>
                 <td class="withborder">Study @measure.StudyId</td>
@@ -438,8 +519,51 @@
                 <td class="withborder">@getAnswerText(Model.EffectReports.ToList(), @measure.EffectReport)</td>
                 <td class="withborder">@Html.ActionLink("Delete", "DeleteOutcomeMeasure", new { MeasureId = measure.Id, InvId = Model.TheIntervention.Id })</td>
             </tr>
+        <tr id="outFormrow_@i" class="@theClass">
+            <td colspan="9" class="withborder">
+                <div class="outcomeForm">
+                     @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" })) { @Html.Hidden("IntervId", Model.TheIntervention.Id)   @Html.Hidden("OutcomeMeasureId", @measure.Id)
+                     
+                         <label>Choose An Outcome from the Article: </label>
+                            @Html.DropDownList("MacroOutcome", thisOutcomeList)
 
-            i++;
+                            <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
+                            <label>Outcome from Taxonomy:</label>@Html.DropDownList("TaxOutcome", thisTaxOutcomes)<br />
+                            <label for="measure">Measure Reported in the Study</label>
+                            <input type="text" id="measure" name="measure" value="@measure.OutcomeMeasureName" /><br /><br />
+
+                            <label>Document: </label>@Html.DropDownList("docDropdown", thisDocList)<br /><br />
+
+                            <label>SAMHSA-Related Population:</label>
+                            @Html.DropDownList("popDropDown", thisPopDrop)<br />
+
+                            <label for="popDescription">Describe Evaluated Population:</label><br />
+                            <textarea name="popDescription" id="popDescription">@measure.PopDescription</textarea><br /><br />
+
+                            <label>SAMHSA-Related Outcome:</label>
+                            @Html.DropDownList("samOutDropDown", thisSAMHSAOutcomes)<br />
+
+                            <label>What Treatment vs. Comparison Effect Size:</label>
+                            @Html.DropDownList("treatmentDropDown", thisEffectReports)<br />
+
+                            <input type="checkbox" name="reviewOutcome" checked="@reviewIsChecked" /><label>Recommend for Review</label><br />
+
+
+                            <label for="studySelector">Select Applicable Studies</label><br />
+                            <select id="studySelector" name="studySelector" style="width: 350px;">
+                                @foreach (int studyId in studyz)
+                                {
+                                    <option value="@studyId">Study @studyId</option>
+                                }
+                            </select>
+
+                            <input type="submit" value="Submit" />
+                     }
+                </div>
+        </td>
+    </tr>
+
+i++;
         }
     </table>
     <br />
@@ -477,7 +601,7 @@
             <label>What Treatment vs. Comparison Effect Size:</label>
             @Html.DropDownList("treatmentDropDown", EffectReports)<br />
             
-            <input type="checkbox" name="reviewOutcome" /><label>Recommend for Review</label>
+            <input type="checkbox" name="reviewOutcome" /><label>Recommend for Review</label><br />
 
 
             <label for="studySelector">Select Applicable Studies</label><br />
