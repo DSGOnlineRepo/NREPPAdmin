@@ -434,6 +434,7 @@
             List<SelectListItem> thisTaxOutcomes = new List<SelectListItem>();
             List<SelectListItem> thisSAMHSAOutcomes = new List<SelectListItem>();
             List<SelectListItem> thisEffectReports = new List<SelectListItem>();
+            List<SelectListItem> thisStudys = new List<SelectListItem>();
 
             foreach (SelectListItem item in SAMHSAPops)
             {
@@ -506,6 +507,18 @@
                     thisEffectReports.Add(new SelectListItem() { Value = item6.Value, Text = item6.Text, Selected = false });
                 }
             }
+
+            foreach (int j in studyz)
+            {
+                if (j == measure.StudyId)
+                {
+                    thisStudys.Add(new SelectListItem() { Value = j.ToString(), Text = "Study " + j.ToString(), Selected = true });
+                }
+                else
+                {
+                    thisStudys.Add(new SelectListItem() { Value = j.ToString(), Text = "Study " + j.ToString(), Selected = false });
+                }
+            }
             
             
             <tr class="@theClass">
@@ -521,7 +534,7 @@
             </tr>
         <tr id="outFormrow_@i" class="@theClass">
             <td colspan="9" class="withborder">
-                <div class="outcomeForm">
+                <div class="outcomeForm hidden">
                      @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" })) { @Html.Hidden("IntervId", Model.TheIntervention.Id)   @Html.Hidden("OutcomeMeasureId", @measure.Id)
                      
                          <label>Choose An Outcome from the Article: </label>
@@ -560,6 +573,7 @@
                             <input type="submit" value="Submit" />
                      }
                 </div>
+                <button id="showOutcome_@i" onclick="toggleEdit('showOutcome_@i'); return false;">Edit</button>
         </td>
     </tr>
 
