@@ -111,11 +111,15 @@ else if (Model.TheIntervention.StatusId == 5)
                 @Html.HiddenFor(m => m.TheIntervention.ProgramType);
                 //@Html.HiddenFor(m => )
                 
-                <span style="font-size: large; font-weight: bold;">Upload a File: </span><input type="file" name="UploadedFile" /> <br />
-                <span>Document Title: </span><input type="text" name="FileDescription" />
-                @Html.DropDownList("docTypeDD", DocTypez);
-                <br /><br />
-                <input type="submit" value="Attach" /> <input type="checkbox" /> <span>from Lit Search</span>
+                if (Model.CanDo("UploadDocs"))
+                { 
+                
+                    <span style="font-size: large; font-weight: bold;">Upload a File: </span><input type="file" name="UploadedFile" /> <br />
+                    <span>Document Title: </span><input type="text" name="FileDescription" />
+                    @Html.DropDownList("docTypeDD", DocTypez);
+                    <br /><br />
+                    <input type="submit" value="Attach" /> <input type="checkbox" /> <span>from Lit Search</span>
+                }
             }
         </div>
     }

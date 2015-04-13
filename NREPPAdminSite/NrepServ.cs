@@ -1064,17 +1064,22 @@ namespace NREPPAdminSite
         {
             bool result = false;
 
-            SqlCommand cmd = new SqlCommand("FNHavePermission");
+            //SqlCommand cmd = new SqlCommand("SELECT from dbo.FNHavePermission(@inPermission, @UserId,@InterventionId)", conn);
+            
+            //cmd.CommandType = CommandType.Text;
+            SqlCommand cmd = new SqlCommand("FNHavePermission", conn);
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.Add(new SqlParameter("@inPermission", Permission));
             cmd.Parameters.Add(new SqlParameter("@InterventionId", InterventionId));
             cmd.Parameters.Add(new SqlParameter("@UserId", UserId));
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Ret", Direction = ParameterDirection.ReturnValue, SqlDbType = SqlDbType.Bit });
 
             try
             {
                 CheckConn();
-                result = (bool)cmd.ExecuteScalar();
+                cmd.ExecuteNonQuery();
+                result = (bool)cmd.Parameters["@Ret"].Value;
             } catch (Exception) // Somehow we need to recover the error
             {
                 result = false;

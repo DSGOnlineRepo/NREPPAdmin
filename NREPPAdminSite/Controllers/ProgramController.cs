@@ -21,6 +21,7 @@ namespace NREPPAdminSite.Controllers
             ViewBag.Id = InvId;
             IntervPageModel pageModel;
             NrepServ localService = new NrepServ(NrepServ.ConnString);
+            NreppUser usr = ReadCookie(Request);
 
             // Probably don't need to seed these
 
@@ -60,6 +61,12 @@ namespace NREPPAdminSite.Controllers
 
             pageModel = new IntervPageModel(documentz, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
                 documentTypes, nDests, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>());
+
+            List<string> perms = new List<string>();
+
+            perms.Add("UploadDocs");
+
+            pageModel.SetPermissions(perms, usr.Id, InvId);
             pageModel.TheIntervention = theIntervention;
 
             return View(pageModel);

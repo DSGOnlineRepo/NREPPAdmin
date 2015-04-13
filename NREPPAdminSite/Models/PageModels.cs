@@ -44,7 +44,7 @@ namespace NREPPAdminSite.Models
 
     #region Intervention View Page Model
 
-    public class IntervPageModel
+    public class IntervPageModel : NREPPPermissions
     {
         private Intervention theIntervention;
         private List<InterventionDoc> documents = new List<InterventionDoc>();
@@ -53,6 +53,8 @@ namespace NREPPAdminSite.Models
         private List<MaskValue> prescreen = new List<MaskValue>();
         private List<Answer> documentType = new List<Answer>();
         private List<Destination> dests = new List<Destination>();
+
+        private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>();
 
         #region Constructors
 
@@ -116,6 +118,11 @@ namespace NREPPAdminSite.Models
             get { return dests; }
         }
 
+        public Dictionary<string, bool> PermissionsList
+        {
+            get { return permissionsList; }
+        }
+
         #endregion
 
         /// <summary>
@@ -141,7 +148,7 @@ namespace NREPPAdminSite.Models
 
     #region Screening Model
 
-    public class ScreeningModel
+    public class ScreeningModel : NREPPPermissions
     {
         private List<Study> studyDocuments = new List<Study>();
         private Intervention intervention = new Intervention();
@@ -155,6 +162,8 @@ namespace NREPPAdminSite.Models
         private List<Answer> samhsaOutcomes;
         private List<Answer> effectReports;
         private List<Answer> samhsaPops;
+
+        private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>();
 
 
         public OutcomesWrapper Outcomes { get; set; }
@@ -255,6 +264,14 @@ namespace NREPPAdminSite.Models
             get { return samhsaPops;  }
         }
 
+        public Dictionary<string, bool> PermissionsList
+        {
+            get
+            {
+                return permissionsList;
+            }
+        }
+
         /// <summary>
         /// Add a Study Document
         /// </summary>
@@ -276,6 +293,31 @@ namespace NREPPAdminSite.Models
         public void AddDests(IEnumerable<Destination> inDests) // stopgap
         {
             theDestinations = inDests.ToList();
+        }
+    }
+
+    #endregion
+
+    #region Extra Stuff
+
+    public class NREPPPermissions
+    {
+        //private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>();
+        private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>();
+
+        public void SetPermissions(IEnumerable<string> lookingFor, int UserId, int? interVentionId)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            foreach (string permission in lookingFor)
+            {
+                permissionsList.Add(permission, localService.CanDo(permission, UserId, interVentionId));
+            }
+        }
+
+        public bool CanDo(string permission)
+        {
+            return permissionsList[permission];
         }
     }
 
