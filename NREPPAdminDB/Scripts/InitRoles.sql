@@ -231,6 +231,12 @@ INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (4, 'Have t
 INSERT INTO OutcomeTaxonomy (OutcomeName, Guidelines) VALUES ('Outcome One', 'Some guidelines go here soon')
 INSERT INTO OutcomeTaxonomy (OutcomeName, Guidelines) VALUES ('Outcome Two', 'Some guidelines go here later')
 
+-- Application Settings
+INSERT INTO AppSettings (SettingID, Value) VALUES ('AppName', 'NREPPAdmin')
+INSERT INTO AppSettings (SettingID, Value) VALUES ('CurrentPreScreen', NULL)
+INSERT INTO AppSettings (SettingID, Value) VALUES ('NextPreScreen', NULL)
+
+
 /*
 Is there a study that assesses mental health or substance use outcome?
 Is there an evaluation study that assesses other behavioral health-related outcomes on populations with mental health issues or substance abuse problems?
@@ -240,6 +246,8 @@ Have the results of tehse studies been published in a peer reviewed journal, oth
 
 -- Routing Stuff
 
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (1, 5, 2)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 2, 3)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 5, 4)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 4, 4)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 5, 2)

@@ -118,6 +118,8 @@
     <Build Include="Tables\Role_Permissions.sql" />
     <Build Include="Tables\Permissions.sql" />
     <Build Include="Functions\FNHavePermission.sql" />
+    <Build Include="Tables\AppSettings.sql" />
+    <Build Include="Stored Procedures\SPGetSetting.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

@@ -14,6 +14,9 @@ namespace NREPPAdminSite.Controllers
 {
     public partial class ProgramController : Controller
     {
+
+        #region Get Methods
+
         // GET: Program
         public ActionResult View(int InvId)
         {
@@ -174,6 +177,8 @@ namespace NREPPAdminSite.Controllers
             return View(sm);
         }
 
+        #endregion
+
         #region Post Methods
 
         /// <summary>
@@ -185,14 +190,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Submit(IntervPageModel model, FormCollection col)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            /*int destValue = 0;
-
-            if (col["selDest"] != null)
-                destValue = int.Parse(col["selDest"]);
-            else
-                destValue = int.Parse(col["destStatus"]);
             
-            localService.ChangeStatus(model.TheIntervention.Id, -1, destValue);*/
             int destLoc = 0, destUser = -1;
 
             if (col["selDest"] != null)
@@ -208,8 +206,6 @@ namespace NREPPAdminSite.Controllers
             }
             else
                 destLoc = int.Parse(col["destStatus"]);
-
-            //NrepServ localservice = new NrepServ(NrepServ.ConnString);
 
             int returnValue = localService.SaveIntervention(model.TheIntervention);
 
