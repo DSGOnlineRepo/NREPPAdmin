@@ -1143,6 +1143,9 @@ namespace NREPPAdminSite
 
         public const int ITERATION_INDEX = 0;
         public const int SALT_INDEX = 1;
+
+        public const string AES_KEY = "o/W9j1SmE74zzvvxfswBxmyMhl/CsLHJJQt2i8U17Tk=";
+        public const string AES_IV = "XNuf36OTWCn5fjtvi20h0Q==";
         //public const int PBKDF2_INDEX = 2;
 
         /// <summary>
@@ -1187,6 +1190,64 @@ namespace NREPPAdminSite
             string result = Convert.ToBase64String(tPassBytes);
 
             return result.Equals(hash);
+        }
+
+        public static string AESCrypt(string plainText)
+        {
+            string retstring = string.Empty;
+            byte[] Key = Convert.FromBase64String(PasswordHash.AES_KEY);
+            byte[] IV = Convert.FromBase64String(PasswordHash.AES_IV);
+
+            using (AesCryptoServiceProvider aesAlg = new AesCryptoServiceProvider())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter sw = new StreamWriter(cs))
+                        {
+                            sw.Write(plainText);
+                        }
+
+                        retstring = Convert.ToBase64String(ms.ToArray());
+                    }
+                }
+            }
+
+            return retstring;
+        }
+
+       public static string AESDecrypt(string cipherText)
+        {
+           string retString = string.Empty;
+           byte[] bitText = Convert.FromBase64String(cipherText);
+           byte[] Key = Convert.FromBase64String(PasswordHash.AES_KEY);
+           byte[] IV = Convert.FromBase64String(PasswordHash.AES_IV);
+
+           using (AesCryptoServiceProvider aesAlg = new AesCryptoServiceProvider())
+           {
+               aesAlg.Key = Key;
+               aesAlg.IV = IV;
+
+               ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+               using (MemoryStream msDecrypt = new MemoryStream(bitText))
+               {
+                   using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                   {
+                       using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                       {
+                           retString = srDecrypt.ReadToEnd();
+                       }
+                   }
+               }
+           }
+
+           return retString;
         }
     }
 

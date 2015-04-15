@@ -123,5 +123,16 @@ namespace NREPPTests
             Assert.IsFalse(aService.CanDo("TestPermission", 4, 1));
         }
 
+        [TestMethod]
+        public void SymEncrypt()
+        {
+            //string SomeString = PasswordHash.GenKey();
+            string initString = "someText";
+            string SomeString = PasswordHash.AESCrypt(initString);
+            string outString = PasswordHash.AESDecrypt(SomeString);
+
+            Assert.IsTrue(initString.Equals(outString));
+        }
+
     }
 }
