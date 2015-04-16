@@ -178,6 +178,8 @@
     <Content Include="Views\Program\Screen.cshtml" />
     <Content Include="Views\Admin\Reviewers.cshtml" />
     <Content Include="Views\Program\ScreenResults.cshtml" />
+    <Content Include="Views\Admin\GenReviewLink.cshtml" />
+    <Content Include="Views\Admin\JoinProgram.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
