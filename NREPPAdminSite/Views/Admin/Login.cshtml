@@ -5,25 +5,42 @@
     ViewBag.Title = "Log in to NREPP";
 }
 
-    <h2>@ViewBag.Title</h2>
-    @if (ViewBag.Status != "")
+    
+   
+<div>
+    @using (Html.BeginForm("Login", "Admin", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))
     {
-        <h3>@ViewBag.Status</h3>
-    }
+        @Html.AntiForgeryToken();
+        <div class="col-sm-offset-3 col-sm-10">
+            <h2>@ViewBag.Title</h2>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.UserName, new {@class = "col-sm-3 control-label"})
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Password, new {@class = "col-sm-3 control-label"})
+            <div class="col-sm-9">
+                @Html.PasswordFor(m => m.Password, new {@class = "form-control"})
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <div class="checkbox">
+                    @Html.LabelFor(m => m.RememberMe)
+                    @Html.CheckBoxFor(m => m.RememberMe)
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-offset-3 col-sm-9">
+            <input type="submit" value="Login" class="btn btn-default"/>
+            @Html.ActionLink("Register", "Register", "Admin")
+        </div>
 
-    <div style="padding-top: 10px;">
-        @using (Html.BeginForm("Login", "Admin"))
-        {
-            @Html.LabelFor(m => m.UserName)
-            @Html.TextBoxFor(m => m.UserName);
-            <br />
-            
-            @Html.LabelFor(m => m.Password)
-            @Html.PasswordFor(m => m.Password);
-            <br />
-            
-            <input type="submit" value="Login" />
-        }
-    </div>
+    }
+    @Html.ValidationSummary()
+</div>
 
 

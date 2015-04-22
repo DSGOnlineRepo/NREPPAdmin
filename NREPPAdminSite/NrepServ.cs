@@ -12,6 +12,7 @@ using System.Security.Principal;
 using System.Web.Script.Serialization;
 using System.Data.SqlTypes;
 using System.IO;
+using NREPPAdminSite.Constants;
 
 namespace NREPPAdminSite
 {
@@ -123,12 +124,12 @@ namespace NREPPAdminSite
 
             } catch (Exception ex) {
                 outUser = new DataSet();
-                outUser.Tables.Add(Constants.ERR_TABLE);
-                DataColumn col = new DataColumn(Constants.ERR_MSG_COL, System.Type.GetType("System.String"));
-                outUser.Tables[Constants.ERR_TABLE].Columns.Add(col);
-                DataRow errRow = outUser.Tables[Constants.ERR_TABLE].NewRow();
-                errRow[Constants.ERR_MSG_COL] = ex.Message;
-                outUser.Tables[Constants.ERR_TABLE].Rows.Add(errRow);
+                outUser.Tables.Add(SystemConstants.ERR_TABLE);
+                DataColumn col = new DataColumn(SystemConstants.ERR_MSG_COL, Type.GetType("System.String"));
+                outUser.Tables[SystemConstants.ERR_TABLE].Columns.Add(col);
+                DataRow errRow = outUser.Tables[SystemConstants.ERR_TABLE].NewRow();
+                errRow[SystemConstants.ERR_MSG_COL] = ex.Message;
+                outUser.Tables[SystemConstants.ERR_TABLE].Rows.Add(errRow);
             }
             finally
             {
@@ -156,9 +157,9 @@ namespace NREPPAdminSite
             DataRow UserRow = rawUser.Tables[0].Rows[0];
             NreppUser currentUser;
 
-            if (rawUser.Tables[0].Columns.Contains(Constants.ERR_MSG_COL))
+            if (rawUser.Tables[0].Columns.Contains(SystemConstants.ERR_MSG_COL))
             {
-                currentUser = new NreppUser(-1, rawUser.Tables[0].Rows[0][Constants.ERR_MSG_COL].ToString(), "Failed", "Login");
+                currentUser = new NreppUser(-1, rawUser.Tables[0].Rows[0][SystemConstants.ERR_MSG_COL].ToString(), "Failed", "Login");
             }
             else
             {
@@ -1116,7 +1117,7 @@ namespace NREPPAdminSite
         {
             get
             {
-                string currentEnv = ConfigurationManager.AppSettings[Constants.ENV_SETTING];
+                string currentEnv = ConfigurationManager.AppSettings[SystemConstants.ENV_SETTING];
                 return ConfigurationManager.ConnectionStrings[currentEnv].ConnectionString;
 
             }
@@ -1193,16 +1194,6 @@ namespace NREPPAdminSite
     #endregion
 
     #region Constants
-
-    public class Constants
-    {
-        public const string ENV_SETTING = "Environment";
-        public const string LOCAL_ENV = "LocalDev";
-        public const string REMOTE_ENV = "RemoteDev";
-        public const string ERR_TABLE = "Errors";
-        public const string ERR_MSG_COL = "ErrMsg";
-        public const string USR_COOKIE = "currentUser";
-    }
 
     #endregion
 }

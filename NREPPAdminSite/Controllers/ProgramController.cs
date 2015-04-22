@@ -1,17 +1,17 @@
-﻿using NREPPAdminSite.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using NREPPAdminSite.Constants;
+using NREPPAdminSite.Models;
 
 namespace NREPPAdminSite.Controllers
 {
+    [Authorize]
     public partial class ProgramController : Controller
     {
 
@@ -40,7 +40,7 @@ namespace NREPPAdminSite.Controllers
 
             if (InvId > 0)
             {
-                HttpCookie usrStuff = Request.Cookies.Get(Constants.USR_COOKIE);
+                HttpCookie usrStuff = Request.Cookies.Get(SystemConstants.USR_COOKIE);
                 NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
 
                 SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
@@ -199,7 +199,7 @@ namespace NREPPAdminSite.Controllers
                 string Destination = col["selDest"];
 
                 string[] DestStuff = Destination.Split(',');
-                HttpCookie usrStuff = Request.Cookies.Get(Constants.USR_COOKIE);
+                HttpCookie usrStuff = Request.Cookies.Get(SystemConstants.USR_COOKIE);
                 NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
                 destUser = int.Parse(DestStuff[0]);
                 destLoc = int.Parse(DestStuff[1]);
@@ -229,7 +229,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Upload(FormCollection formCollection)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            HttpCookie usrStuff = Request.Cookies.Get(Constants.USR_COOKIE);
+            HttpCookie usrStuff = Request.Cookies.Get(SystemConstants.USR_COOKIE);
             NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
 
             if (Request != null)
@@ -348,7 +348,7 @@ namespace NREPPAdminSite.Controllers
             string Destination = col["selDest"];
 
             string[] DestStuff = Destination.Split(',');
-            HttpCookie usrStuff = Request.Cookies.Get(Constants.USR_COOKIE);
+            HttpCookie usrStuff = Request.Cookies.Get(SystemConstants.USR_COOKIE);
             NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
 
             NrepServ localservice = new NrepServ(NrepServ.ConnString);
@@ -366,7 +366,7 @@ namespace NREPPAdminSite.Controllers
         {
             NreppUser outUser = new NreppUser();
 
-            HttpCookie usrStuff = req.Cookies.Get(Constants.USR_COOKIE);
+            HttpCookie usrStuff = req.Cookies.Get(SystemConstants.USR_COOKIE);
             //NreppUser usr;
 
             if (usrStuff.Value != "")
@@ -377,7 +377,7 @@ namespace NREPPAdminSite.Controllers
                 }
                 catch (Exception)
                 {
-                    Request.Cookies.Remove(Constants.USR_COOKIE);
+                    Request.Cookies.Remove(SystemConstants.USR_COOKIE);
                     outUser = null;
                 }
             }

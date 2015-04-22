@@ -1,17 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
+using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
-using System.Data;
-using System.IO;
+using NREPPAdminSite.Security;
 
 namespace NREPPAdminSite.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly UserManager<ExtendedUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public AdminController()
+        {
+            MyIdentityDbContext db = new MyIdentityDbContext();
+
+            UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
+            _userManager = new UserManager<ExtendedUser>(userStore);
+
+            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
+            _roleManager = new RoleManager<IdentityRole>(roleStore);
+
+        }
+
         // GET: Admin
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View();
@@ -19,75 +40,177 @@ namespace NREPPAdminSite.Controllers
 
         #region Post Methods
 
-        [HttpPost]
-        public ActionResult Register(RegisterViewModel model, FormCollection col)
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Register()
         {
-            /*RegisterViewModel nModel = new RegisterViewModel();
-            ViewBag.message = "Registered Ok!";*/
-            NrepServ localService = new NrepServ(NrepServ.ConnString);
-            //ViewBag.SomeValue = localService.DoHash(model.Password1).Item1; // Tuple together the hash and salt because we will need both
-            try
-            {
-
-                int retValue = localService.registerUser(model.UserName, model.Firstname, model.Lastname, model.Password1, int.Parse(col["roleId"]));
-            } catch (Exception Ex)
-            {
-                RedirectToAction("Login", new { Status = Ex.Message });
-            }
-
-
-            return RedirectToAction("Login");
-        }
-
-        // GET: Login Page
-        public ActionResult Login(string Status)
-        {
-            if (Status != null)
-                ViewBag.Status = Status;
-            else
-                ViewBag.Status = "";
-
+            ViewBag.Roles = new SelectList(DDLHelper.GetRoles(), "Value", "Text");
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login(LoginViewModel model)
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(RegisterViewModel model)
         {
-            NrepServ localService = new NrepServ(NrepServ.ConnString);
-            /*DataSet uds = localService.LoginUser(model.UserName, model.Password); // This step needs to move into the service.
-
-            NreppUser oUser = new NreppUser(1, uds.Tables[0].Rows[0]["Username"].ToString(), "Patrick", "Taylor"); // This should actually go into the session.*/
-            //HttpContext.User = localService.LoginComplete(model.UserName, model.Password);
-
-            NreppUser oUser = localService.LoginComplete(model.UserName, model.Password);
-            if (oUser.Id == -1)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Login", new { Status = "Failed" });
+                var user = new ExtendedUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber
+                };
+
+                IdentityResult result = _userManager.Create(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    _userManager.AddToRole(user.Id, model.Role);
+                    return RedirectToAction("Login", "Admin");
+                }
+                else
+                {
+                    ModelState.AddModelError("UserName", "Error while creating the user!");
+                }
             }
+            return View(model);
+        }
 
-            string someJSON = oUser.MakeJSON();
-            HttpCookie loginCookie = new HttpCookie(Constants.USR_COOKIE, someJSON);
+        // GET: Login Page
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
 
-            //loginCookie.Expires = DateTime.Now.AddHours(1d);
-            Response.Cookies.Add(loginCookie);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(LoginViewModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
 
-            return RedirectToAction("Programs", "Home");
+                ExtendedUser user = _userManager.Find(model.UserName, model.Password);
+                if (user != null)
+                {
+                    IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
+                    authenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                    ClaimsIdentity identity = _userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+                    AuthenticationProperties props = new AuthenticationProperties();
+                    props.IsPersistent = model.RememberMe;
+                    authenticationManager.SignIn(props, identity);
+                    if (Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Programs", "Home");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid username or password.");
+                }
+            }
+            return View(model);
         }
 
         #endregion
 
-        public ActionResult New()
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult Logout()
+        {
+            IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
+            authenticationManager.SignOut();
+            return RedirectToAction("Login", "Admin");
+        }
+
+        // GET: Profile Page
+        [HttpGet]
+        [Authorize]
+        public ActionResult Profile()
+        {
+            ExtendedUser user = _userManager.FindByName(HttpContext.User.Identity.Name);
+
+            UserProfileModel model = new UserProfileModel();
+            model.UserName = HttpContext.User.Identity.Name;
+            model.FirstName = user.FirstName;
+            model.LastName = user.LastName;
+            model.Email = user.Email;
+            model.PhoneNumber = user.PhoneNumber;
+
+            return View(model);
+        }
+
+        // POST: Profile Page
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult Profile(UserProfileModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                ExtendedUser user = _userManager.FindByName(HttpContext.User.Identity.Name);
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Email = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
+
+                IdentityResult result = _userManager.Update(user);
+                if (result.Succeeded)
+                {
+                    ViewBag.Message = "Profile updated successfully.";
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error while updating profile.");
+                }
+            }
+            return View(model);
+        }
+        // GET: Change Password Page
+        [HttpGet]
+        [Authorize]
+        public ActionResult ChangePassword()
         {
             return View();
         }
 
-        public ActionResult Logout()
+        // POST: Change Password Page
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(ChangePasswordModel model)
         {
-            Request.Cookies.Remove(Constants.USR_COOKIE);
 
-            return RedirectToAction("Login");
+            if (ModelState.IsValid)
+            {
+                ExtendedUser user = _userManager.FindByName(HttpContext.User.Identity.Name);
+                IdentityResult result = _userManager.ChangePassword(user.Id, model.CurrentPassword, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
+                    authenticationManager.SignOut();
+                    return RedirectToAction("Login", "Admin");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error while changing the password.");
+                }
+            }
+            return View(model);
         }
 
+
+        [Authorize]
         public FilePathResult GetFile(int FileId)
         {
 
@@ -103,6 +226,7 @@ namespace NREPPAdminSite.Controllers
         /// Used for the Lookups editing page
         /// </summary>
         /// <returns></returns>
+        [Authorize]
         public ActionResult Lookups()
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
@@ -114,13 +238,41 @@ namespace NREPPAdminSite.Controllers
             SomeMasks.Add(new MaskValue() { Name = "Three", Value = 3 });
             SomeMasks.Add(new MaskValue() { Name = "Four", Value = 4 });
 
-            
+
             List<MaskValue> SomeList2 = MaskValue.SplitMask(SomeMasks, 19).ToList<MaskValue>();
 
             LookupPageModel model = new LookupPageModel(answerList, null, SomeList2);
 
             return View(model);
         }
+
+        //public async Task RegisterAdmin()
+        //{
+        //    IdentityUser admin = await UserManager<ExtendedUser>.FindByNameAsync(UserConstants.Admin);
+
+        //    if (admin == null)
+        //    {
+        //        if (!_roleManager.RoleExists(UserConstants.Admin))
+        //        {
+        //            _roleManager.Create(new IdentityRole(UserConstants.Admin));
+        //        }
+
+        //        if (!_roleManager.RoleExists(UserConstants.Guest))
+        //        {
+        //            _roleManager.Create(new IdentityRole(UserConstants.Guest));
+        //        }
+
+        //        var user = new ExtendedUser(UserConstants.Admin, string.Empty, UserConstants.Admin,
+        //            UserConstants.Admin, false);
+
+        //        var adminResult = _userManager.Create(user, UserConstants.Password);
+
+        //        if (adminResult.Succeeded)
+        //        {
+        //            _userManager.AddToRole(user.Id, UserConstants.Admin);
+        //        }
+        //    }
+        //}
 
     }
 }

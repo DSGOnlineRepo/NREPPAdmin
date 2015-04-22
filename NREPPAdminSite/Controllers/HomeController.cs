@@ -1,22 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using NREPPAdminSite.Models;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json;
+using NREPPAdminSite.Constants;
+using NREPPAdminSite.Models;
 
 namespace NREPPAdminSite.Controllers
 {
     public class HomeController : Controller
     {
+        [HttpGet]
+        [AllowAnonymous]
         public ActionResult Index()
         {
             //NreppUser usr = ReadCookie(Request);
+            if (Request.IsAuthenticated)
+            {
+                return RedirectToAction("Programs", "Home");
+            }
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -24,6 +31,7 @@ namespace NREPPAdminSite.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
@@ -31,6 +39,7 @@ namespace NREPPAdminSite.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Programs()
         {
             ViewBag.Message = "Some Message Here";
@@ -51,7 +60,7 @@ namespace NREPPAdminSite.Controllers
         {
             NreppUser outUser = new NreppUser();
 
-            HttpCookie usrStuff = req.Cookies.Get(Constants.USR_COOKIE);
+            HttpCookie usrStuff = req.Cookies.Get(SystemConstants.USR_COOKIE);
             //NreppUser usr;
 
             if (usrStuff.Value != "")
@@ -65,7 +74,7 @@ namespace NREPPAdminSite.Controllers
                 }
                 catch (Exception)
                 {
-                    Request.Cookies.Remove(Constants.USR_COOKIE);
+                    Request.Cookies.Remove(SystemConstants.USR_COOKIE);
                     outUser = null;
                 }
             }

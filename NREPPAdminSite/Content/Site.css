@@ -96,3 +96,8 @@ a.actionLink {
     font-style: italic;
     color: darkgrey;
 }
+
+div.validation-summary-valid {
+    padding: 0 10px 10px 10px;
+}
+
