@@ -398,6 +398,8 @@ namespace NREPPAdminSite
                         dr["ProgramType"] == DBNull.Value ? 0 : (int)dr["ProgramType"], dr["Acronym"].ToString(), false);
 
                     inv.PreScreenMask = (int)dr["PreScreenAnswers"];
+                    inv.UserPreScreenMask = (int)dr["UserPreScreenMask"];
+                    inv.ScreeningNotes = dr["ScreeningNotes"].ToString();
 
                     interventions.Add(inv);
 

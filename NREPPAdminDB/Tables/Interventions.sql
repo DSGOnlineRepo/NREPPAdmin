@@ -15,5 +15,7 @@
     [Owner] INT NULL, 
     [FromListSearch] BIT NOT NULL DEFAULT 0, 
     [PreScreenAnswers] INT NULL DEFAULT 0, 
+    [UserPreScreenAnswer] INT NULL, 
+    [ScreeningNotes] VARCHAR(MAX) NULL, 
     CONSTRAINT [FK_Interventions_InterventionStatus] FOREIGN KEY ([Status]) REFERENCES [InterventionStatus]([Id]) 
 )

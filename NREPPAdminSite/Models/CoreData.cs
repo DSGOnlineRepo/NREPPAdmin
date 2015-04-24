@@ -41,6 +41,10 @@ namespace NREPPAdminSite.Models
         }*/
 
         public int PreScreenMask { get; set; }
+        public int UserPreScreenMask { get; set; }
+
+        [Display(Name = "Notes from Screening")]
+        public string ScreeningNotes { get; set; }
 
         public Intervention()
         {
