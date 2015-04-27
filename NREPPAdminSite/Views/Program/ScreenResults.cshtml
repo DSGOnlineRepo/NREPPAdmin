@@ -192,6 +192,27 @@
     </table>
 </div>
 
+<div>
+    @using (Html.BeginForm("SaveNotes"))
+    {
+        @Html.HiddenFor(m => m.TheIntervention.Id);
+        @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
+        @Html.HiddenFor(m => m.TheIntervention.StatusId);
+        @Html.HiddenFor(m => m.TheIntervention.ProgramType);
+        @Html.HiddenFor(m => m.TheIntervention.Title)
+        @Html.HiddenFor(m => m.TheIntervention.FromLitSearch)
+        @Html.HiddenFor(m => m.TheIntervention.FullDescription)
+        @Html.HiddenFor(m => m.TheIntervention.SubmitterId)
+        @Html.HiddenFor(m => m.TheIntervention.UpdatedDate)
+        @Html.HiddenFor(m => m.TheIntervention.Acronym)
+        
+        <span>Notes: </span>
+        @Html.TextAreaFor(m => m.TheIntervention.ScreeningNotes)<br />
+        
+        <input type="submit" value="Save Notes" />
+    }
+</div>
+
 <script type="text/javascript">
     var thisIsAThing = 5;
     var currentStudy = new Array();

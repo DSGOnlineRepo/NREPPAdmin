@@ -51,5 +51,13 @@ namespace NREPPAdminSite.Controllers
 
             return View(sm);
         }
+
+        public ActionResult SaveNotes(ScreeningModel sm) // Alright, but it should work with something
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            localService.SaveIntervention(sm.TheIntervention);
+
+            return RedirectToAction("ScreenResults", new { InvervId = sm.TheIntervention.Id });
+        }
     }
 }
