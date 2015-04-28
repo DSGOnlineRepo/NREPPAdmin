@@ -10,14 +10,15 @@ namespace NREPPAdminSite.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ExtendedUser> _userManager;
 
         public HomeController()
         {
             MyIdentityDbContext db = new MyIdentityDbContext();
 
-            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
-            _roleManager = new RoleManager<IdentityRole>(roleStore);
+            UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
+            _userManager = new UserManager<ExtendedUser>(userStore);
+
         }
 
         [HttpGet]
@@ -52,7 +53,8 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Programs()
         {
             ViewBag.Message = "Some Message Here";
-            var userRoles = Roles.GetRolesForUser(User.Identity.Name);
+            var user = _userManager.FindByName(User.Identity.Name);
+            var userRoles = _userManager.GetRoles(user.Id);
             
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
