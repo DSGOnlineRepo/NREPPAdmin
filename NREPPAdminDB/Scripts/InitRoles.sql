@@ -214,16 +214,6 @@ DECLARE @ROLEID1 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Data 
 		@ROLEID7 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Mathematica Assigner'), 
 		@ROLEID8 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Reviewer')
 
-INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Data Entry');
-INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Assigner');							   
-INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Principal Investigator');
-INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Lit Review');
-INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Review Coordinator');
-INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'DSG PRM');
-INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Mathematica Assigner');
-INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Reviewer');
-
-
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (1, @ROLEID5, 2)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, @ROLEID2, 3)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, @ROLEID5, 4)
