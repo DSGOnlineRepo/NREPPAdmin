@@ -11,6 +11,7 @@
 	@IsLitSearch bit = 0,
 	@PreScreenAnswers INT = 0,
 	@UserPreScreenAnswer INT = 0,
+	@ScreeningNotes VARCHAR(MAX),
 	@Output INT OUTPUT
 AS SET NOCOUNT ON
 
@@ -19,8 +20,8 @@ AS SET NOCOUNT ON
 	-- Do the insert portion first
 	IF @IntervId = -1 BEGIN
 
-		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, SubmitterId, Status, ProgramType, Acronym, PreScreenAnswers) VALUES
-			(@title, @fulldescription, @publishDate, @updateDate, @submitterId, @status, @programType, @Acronym, @PreScreenAnswers)
+		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, SubmitterId, Status, ProgramType, Acronym, PreScreenAnswers, ScreeningNotes) VALUES
+			(@title, @fulldescription, @publishDate, @updateDate, @submitterId, @status, @programType, @Acronym, @PreScreenAnswers, @ScreeningNotes)
 
 		if @@ERROR <> 0 BEGIN
 			ROLLBACK TRANSACTION
@@ -40,7 +41,8 @@ AS SET NOCOUNT ON
 			Status = @status,
 			ProgramType = @programType,
 			Acronym = @Acronym,
-			PreScreenAnswers = @PreScreenAnswers
+			PreScreenAnswers = @PreScreenAnswers,
+			ScreeningNotes = @ScreeningNotes
 		WHERE Id = @IntervId
 
 		SET @Output = @IntervId
