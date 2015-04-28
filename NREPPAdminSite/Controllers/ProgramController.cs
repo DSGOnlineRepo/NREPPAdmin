@@ -229,7 +229,7 @@ namespace NREPPAdminSite.Controllers
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             
-            inInterv.TheIntervention.SubmitterId = User.Identity.Name;
+            inInterv.TheIntervention.SubmitterId = User.Identity.GetUserId();
             int returnValue = localService.SaveIntervention(inInterv.TheIntervention);
 
             return RedirectToAction("View", new { InvId = returnValue });
