@@ -2,7 +2,7 @@
 	@IntervId int = -1,
 	@title varchar(50) = '',
 	@fulldescription ntext,
-	@submitter int,
+	@submitterId nvarchar(128),
 	@updateDate DateTime,
 	@publishDate DateTime = NULL,
 	@programType INT = 0,
@@ -18,8 +18,8 @@ AS SET NOCOUNT ON
 	-- Do the insert portion first
 	IF @IntervId = -1 BEGIN
 
-		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, Submitter, Status, ProgramType, Acronym, PreScreenAnswers) VALUES
-			(@title, @fulldescription, @publishDate, @updateDate, @submitter, @status, @programType, @Acronym, @PreScreenAnswers)
+		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, SubmitterId, Status, ProgramType, Acronym, PreScreenAnswers) VALUES
+			(@title, @fulldescription, @publishDate, @updateDate, @submitterId, @status, @programType, @Acronym, @PreScreenAnswers)
 
 		if @@ERROR <> 0 BEGIN
 			ROLLBACK TRANSACTION
@@ -35,7 +35,7 @@ AS SET NOCOUNT ON
 			FullDescription = @fulldescription,
 			PublishDate = @publishDate,
 			UpdateDate = @updateDate,
-			Submitter = @submitter,
+			SubmitterId = @submitterId,
 			Status = @status,
 			ProgramType = @programType,
 			Acronym = @Acronym,

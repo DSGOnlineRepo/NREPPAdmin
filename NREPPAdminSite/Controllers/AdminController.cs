@@ -44,7 +44,11 @@ namespace NREPPAdminSite.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.Roles = new SelectList(DDLHelper.GetRoles(), "Value", "Text");
+            ViewBag.Roles = _roleManager.Roles.ToList().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Name
+            });
             return View();
         }
 

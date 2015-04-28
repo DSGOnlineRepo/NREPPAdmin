@@ -1,12 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[SPGetReviewers]
 	@ReviewerTypeId int = NULL,
-	@UserId INT = NULL,
+	@UserId nvarchar(128) = NULL,
 	@NameField VARCHAR(35) = NULL
 AS
-	SELECT Id, UserId, Degree, ReviewerType, IsActive, FirstName, LastName, StreetAddress, City, Phone,
-	State, ZIP, FaxNumber, HomeEmail, Department, WorkStreetAddress, WorkCity, WorkState, WorkZip, WorkPhone,
-	WorkFax, WorkEmail, ExperienceSummary from Reviewers
-	WHERE (@UserId IS NULL OR UserId = @UserId) AND
+	SELECT Id, Degree, ReviewerType, FirstName, LastName, HomeAddressLine1, HomeAddressLine2, HomeCity, HomeState, HomeZip, PhoneNumber, HomeFaxNumber
+	Employer, Email, Department, WorkAddressLine1, WorkAddressLine2, WorkCity, WorkState, WorkZip, WorkPhoneNumber, WorkFaxNumber, ExperienceSummary
+	WorkEmail from AspNetUsers
+	WHERE (@UserId IS NULL OR Id = @UserId) AND
 	(@ReviewerTypeId IS NULL OR ReviewerType = @ReviewerTypeId)
 	AND (@NameField IS NULL OR FirstName like '%' + @NameField + '%' or LastName like '%' + @NameField + '%')
 

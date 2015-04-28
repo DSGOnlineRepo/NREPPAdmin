@@ -1,30 +1,41 @@
-﻿DECLARE @pass VARCHAR(100)
-DECLARE @salt VARCHAR(100)
+﻿INSERT INTO AspNetUsers(Id, Fitstname, LastName, UserName) values (newid(), 'Nrepp', 'Test','nrepptest1')
+INSERT INTO AspNetUsers(Id, Fitstname, LastName, UserName) values (newid(), 'Nrepp2', 'Test2','nrepptest2')
+INSERT INTO AspNetUsers(Id, Fitstname, LastName, UserName) values (newid(), 'PRM1', 'Person','prm1')
+INSERT INTO AspNetUsers(Id, Fitstname, LastName, UserName) values (newid(), 'reviewer', 'One','rev1')
 
-SET @pass = 'Gj51geLeI8EJfCd/7qdldQ6F8Oat0mq0YEXiZJpHqHo='
-SET @salt = 'TOjQdGWJCsEyeefw78zSzo+ouCp7/WmQ'
+DECLARE @ROLEID1 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Data Entry'),
+		@ROLEID2 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Assigner'),
+		@ROLEID3 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Principal Investigator'), 
+		@ROLEID4 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Lit Review'), 
+		@ROLEID5 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Review Coordinator'), 
+		@ROLEID6 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'DSG PRM'), 
+		@ROLEID7 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Mathematica Assigner'), 
+		@ROLEID8 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Reviewer')
 
--- This file enters non-production data into the database. FOR DEVELOPMENT USE ONLY
+DECLARE @USERID1 NVARCHAR(128) = (SELECT ID FROM ASPNETUSERS WHERE USERNAME = 'nrepptest1'),
+		@USERID2 NVARCHAR(128) = (SELECT ID FROM ASPNETUSERS WHERE USERNAME = 'nrepptest2'),
+		@USERID3 NVARCHAR(128) = (SELECT ID FROM ASPNETUSERS WHERE USERNAME = 'prm1'),
+		@USERID4 NVARCHAR(128) = (SELECT ID FROM ASPNETUSERS WHERE USERNAME = 'rev1')
 
-INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('nrepptest1', 'Nrepp', 'Test', @pass, @salt, 1)
-INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('nrepptest2', 'Nrepp2', 'Test2', @pass, @salt, 5)
-INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('prm1', 'PRM1', 'Person', @pass, @salt, 6)
-INSERT INTO Users (Username, Firstname, Lastname, hash, salt, RoleID) VALUES ('rev1', 'reviewer', 'One', @pass, @salt, 7)
+INSERT INTO AspNetUserRoles (UserId, RoleId) VALUES (@USERID1, @ROLEID1)
+INSERT INTO AspNetUserRoles (UserId, RoleId) VALUES (@USERID2, @ROLEID5)
+INSERT INTO AspNetUserRoles (UserId, RoleId) VALUES (@USERID3, @ROLEID6)
+INSERT INTO AspNetUserRoles (UserId, RoleId) VALUES (@USERID4, @ROLEID8)
 
 INSERT INTO Interventions (Title, FullDescription, Submitter, UpdateDate, PublishDate, Status) VALUES
-	('Dummy Intervention 1', 'Some Description', 1, GetDate(), null, 1);
+	('Dummy Intervention 1', 'Some Description', @USERID1, GetDate(), null, 1);
 
 INSERT INTO Interventions (Title, FullDescription, Submitter, UpdateDate, PublishDate, Status) VALUES
-	('Dummy Intervention 2', 'Some Other Description', 2, GetDate(), null, 3);
+	('Dummy Intervention 2', 'Some Other Description', @USERID2, GetDate(), null, 3);
 
 
 -- Dummy Document Data --> Doesn't Map To Anything
 
 INSERT INTO Document (Description, FileName, MIME, InterventionId, UploadedBy, TypeOfDocument, ReviewerId, IsLitSearch, ReviewerName)
-	VALUES ('Some Document', '[NOT RELEVANT]', 'NOT IMPLEMENTED', 1, 1, 4, 1, 0, 'A File')
+	VALUES ('Some Document', '[NOT RELEVANT]', 'NOT IMPLEMENTED', 1, @USERID1, 4, @USERID1, 0, 'A File')
 
 INSERT INTO Document (Description, FileName, MIME, InterventionId, UploadedBy, TypeOfDocument, ReviewerId, IsLitSearch, ReviewerName)
-	VALUES ('Some Document 2', '[NOT RELEVANT]', 'NOT IMPLEMENTED', 1, 1, 4, 1, 0, 'A File')
+	VALUES ('Some Document 2', '[NOT RELEVANT]', 'NOT IMPLEMENTED', 1, @USERID1, 4, @USERID1, 0, 'A File')
 
 -- Dummy Study Data
 

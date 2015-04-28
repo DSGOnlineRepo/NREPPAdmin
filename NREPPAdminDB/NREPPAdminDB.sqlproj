@@ -71,11 +71,7 @@
     <None Include="Scripts\DummyData.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Tables\Users.sql" />
-    <Build Include="Tables\Roles.sql" />
-    <Build Include="Stored Procedures\SPAdminRegisterUser.sql" />
     <Build Include="Stored Procedures\SPGetLogonCreds.sql" />
-    <Build Include="Stored Procedures\SPGetUser.sql" />
     <Build Include="Tables\Interventions.sql" />
     <Build Include="Stored Procedures\SPGetInterventionList.sql" />
     <Build Include="Tables\InterventionStatus.sql" />
@@ -111,7 +107,6 @@
     <Build Include="Tables\RoutingTable.sql" />
     <Build Include="Tables\Reviewers.sql" />
     <Build Include="Stored Procedures\SPGetReviewers.sql" />
-    <Build Include="Stored Procedures\SPAddReviewer.sql" />
     <Build Include="Tables\Reviewer_Expertise.sql" />
     <Build Include="Tables\OutcomeTaxonomy.sql" />
     <Build Include="Stored Procedures\SPGetTaxOutcomes.sql" />
@@ -120,6 +115,11 @@
     <Build Include="Functions\FNHavePermission.sql" />
     <Build Include="Tables\AppSettings.sql" />
     <Build Include="Stored Procedures\SPGetSetting.sql" />
+    <Build Include="Tables\AspNetRoles.sql" />
+    <Build Include="Tables\AspNetUsers.sql" />
+    <Build Include="Tables\AspNetUserClaims.sql" />
+    <Build Include="Tables\AspNetUserLogins.sql" />
+    <Build Include="Tables\AspNetUserRoles.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

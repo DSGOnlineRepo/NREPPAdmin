@@ -32,10 +32,10 @@ namespace NREPPTests
         [TestMethod]
         public void LoginFailure()
         {
-            NrepServ aService = new NrepServ(ServiceTests.ConnString);
-            NreppUser someUser = aService.LoginComplete("failusre", "failpass");
+            //NrepServ aService = new NrepServ(ServiceTests.ConnString);
+            //NreppUser someUser = aService.LoginComplete("failusre", "failpass");
 
-            Assert.IsTrue(someUser.Firstname == "Failed");
+            //Assert.IsTrue(someUser.Firstname == "Failed");
 
         }
 
@@ -53,7 +53,9 @@ namespace NREPPTests
             fs.Read(fileBytes, 0, fileBytes.Length);
             fs.Close();
 
-            int fileNum = aService.SaveFileToDB(fileBytes, nFileName, 1, "NOT IMPLEMENTED!", 1, false, -1, "Healer Calcs", 4);
+
+
+            int fileNum = aService.SaveFileToDB(fileBytes, nFileName, "nrepptest1", "NOT IMPLEMENTED!", 1, false, -1, "Healer Calcs", 4);
 
             Assert.IsTrue(fileNum > 0, "No filenumber returned.");
 
@@ -62,12 +64,7 @@ namespace NREPPTests
             byte[] outFile = aService.GetFileFromDB(fileNum);
 
             Assert.IsTrue(outFile.Length > 0, "Returned SOMETHING");
-
-            // NOW, let's delete the file:
-
-            //int secondNum = aService.SaveFileToDB(fileBytes, nFileName, 1, "NOT IMPLEMENTED!", 1, true, fileNum, "Healer Calcs");
-
-            //Assert.IsTrue(true);
+            
         }
 
         [TestMethod]
@@ -104,7 +101,7 @@ namespace NREPPTests
         {
             NrepServ aService = new NrepServ(ServiceTests.ConnString);
 
-            Assert.IsFalse(aService.CanDo("TestPermission", 4, 2));
+            Assert.IsFalse(aService.CanDo("TestPermission", "rev1", 2));
         }
 
         [TestMethod]
@@ -112,7 +109,7 @@ namespace NREPPTests
         {
             NrepServ aService = new NrepServ(ServiceTests.ConnString);
 
-            Assert.IsFalse(aService.CanDo("TestPermission", 4, null));
+            Assert.IsFalse(aService.CanDo("TestPermission", "rev1", null));
         }
 
         [TestMethod]
@@ -120,7 +117,7 @@ namespace NREPPTests
         {
             NrepServ aService = new NrepServ(ServiceTests.ConnString);
 
-            Assert.IsFalse(aService.CanDo("TestPermission", 4, 1));
+            Assert.IsFalse(aService.CanDo("TestPermission", "rev1", 1));
         }
 
     }

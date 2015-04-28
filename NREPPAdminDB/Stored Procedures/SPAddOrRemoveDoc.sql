@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[SPAddOrRemoveDoc]
 	@IntervId INT= NULL,
 	@ReviewerID INT = NULL,
-	@UploaderId INT,
+	@UploaderName NVARCHAR(128),
 	@Description VARCHAR(50) = NULL,
 	@FileName VARCHAR(100) = NULL,
 	@MIMEType VARCHAR(20) = NULL,
@@ -13,6 +13,8 @@
 	@IsLitSearch BIT = 0
 AS
 	BEGIN TRANSACTION
+
+		DECLARE @UploaderId NVARCHAR(128) = (SELECT ID FROM ASPNETUSERS WHERE USERNAME = @UploaderName)
 
 		--IF @ReviewerID IS NULL AND @I
 		IF @IsDelete = 1 BEGIN

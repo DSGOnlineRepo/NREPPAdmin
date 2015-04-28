@@ -7,6 +7,5 @@
         public const string REMOTE_ENV = "RemoteDev";
         public const string ERR_TABLE = "Errors";
         public const string ERR_MSG_COL = "ErrMsg";
-        public const string USR_COOKIE = "currentUser";
     }
 }

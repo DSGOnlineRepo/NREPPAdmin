@@ -10,57 +10,15 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-SET IDENTITY_INSERT Roles ON
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Data Entry');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Assigner');							   
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Principal Investigator');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Lit Review');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Review Coordinator');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'DSG PRM');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Mathematica Assigner');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Reviewer');
 
-INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
-					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
-					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
-					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					(1, 'Data Entry', 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
-INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
-					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
-					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
-					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					(2, 'Assigner', 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0);
-							   
-INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
-					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
-					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
-					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					(3, 'Principal Investigator', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0);
-
-INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
-					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
-					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
-					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					(4, 'Lit Review', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
-
-INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
-					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
-					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
-					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					(5, 'Review Coordinator', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
-
-INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
-					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
-					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
-					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					(6, 'DSG PRM', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
-
-INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
-					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
-					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
-					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					(12, 'Mathematica Assigner', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
-
-INSERT INTO Roles (Id, RoleName, ViewInterventions, ViewAllUsers,
-					ViewPendingInterventions, CreateUser, CreateIntervention, CreateReview,
-					AccesPIComments, EmailEditor, EmailPI, EmailQC, EmailSAMHSA, CanBeContacted,
-					ChangeProgStatus, ChangeAccess, AssignStaff, DeleteProgram) VALUES
-					(7, 'Reviewer', 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
-
-SET IDENTITY_INSERT Roles OFF
 
 -- Statuses
 
@@ -246,23 +204,43 @@ Have the results of tehse studies been published in a peer reviewed journal, oth
 
 -- Routing Stuff
 
-INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (1, 5, 2)
-INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 2, 3)
-INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 5, 4)
-INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 4, 4)
-INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, 5, 2)
-INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 2, 3)
-INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 5, 4)
+
+DECLARE @ROLEID1 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Data Entry'),
+		@ROLEID2 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Assigner'),
+		@ROLEID3 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Principal Investigator'), 
+		@ROLEID4 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Lit Review'), 
+		@ROLEID5 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Review Coordinator'), 
+		@ROLEID6 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'DSG PRM'), 
+		@ROLEID7 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Mathematica Assigner'), 
+		@ROLEID8 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Reviewer')
+
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Data Entry');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Assigner');							   
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Principal Investigator');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Lit Review');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Review Coordinator');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'DSG PRM');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Mathematica Assigner');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Reviewer');
+
+
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (1, @ROLEID5, 2)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, @ROLEID2, 3)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, @ROLEID5, 4)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, @ROLEID4, 4)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (3, @ROLEID5, 2)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, @ROLEID2, 3)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, @ROLEID5, 4)
 INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, null, 92)
-INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (4, 2, 3)
-INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (4, 6, 5)
-INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, 12, 13)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (4, @ROLEID2, 3)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (4, @ROLEID6, 5)
+INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, @ROLEID7, 13)
 
 
 -- Permissions Stuff
 
 INSERT INTO Permissions (Id, PermissionName) VALUES (1, 'TestPermission')
 
-INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, 7, NULL, cast(1 as Bit))
-INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, 7, 3, CAST(0 AS BIT))
-INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, 7, 1, CAST(1 as BIT))
+INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, @ROLEID8, NULL, cast(1 as Bit))
+INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, @ROLEID8, 3, CAST(0 AS BIT))
+INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, @ROLEID8, 1, CAST(1 as BIT))

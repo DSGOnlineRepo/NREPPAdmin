@@ -126,4 +126,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="SAMHSAOutcome" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="e49c9583-bba5-43fc-baf7-a6f0efc943b4" ChangeDateTime="04/28/2015 15:08:12">
+    <Property Name="ElementName" Value="[dbo].[Interventions].[Submitter]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Interventions]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SubmitterId" />
+  </Operation>
 </Operations>

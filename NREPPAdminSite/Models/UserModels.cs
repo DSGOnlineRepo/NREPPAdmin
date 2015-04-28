@@ -131,22 +131,26 @@ namespace NREPPAdminSite.Models
         public int UserId { get; set; }
         public int Degree { get; set; }
         public int ReviewerType { get; set; }
-        public bool isActive { get; set; }
+        public bool IsActive { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string StreetAddress { get; set; }
-        public string PhoneNumber { get; set; }
+        public string HomeAddressLine1 { get; set; }
+        public string HomeAddressLine2 { get; set; }
+        public string HomeCity { get; set; }
         public string State { get; set; }
-        public string ZIP { get; set; }
+        public string Zip { get; set; }
+        public string PhoneNumber { get; set; }
         public string FaxNumber { get; set; }
         public string Employer { get; set; }
         public string Email { get; set; }
         public string Department { get; set; }
 
-        public string WorkStreetAddress { get; set; }
-        public string WorkPhone { get; set; }
+        public string WorkAddressLine1 { get; set; }
+        public string WorkAddressLine2 { get; set; }
+        public string WorkCity { get; set; }
         public string WorkState { get; set; }
-        public string WorkZIP { get; set; }
+        public string WorkZip { get; set; }
+        public string WorkPhone { get; set; }
         public string WorkFaxNumber { get; set; }
         public string WorkEmployer { get; set; }
         public string WorkEmail { get; set; }
@@ -259,8 +263,47 @@ namespace NREPPAdminSite.Models
     public sealed class ExtendedUser : IdentityUser
     {
         public override string Id { get; set; }
+        [StringLength(250)]
         public string FirstName { get; set; }
+        [StringLength(250)]
         public string LastName { get; set; }
+        [StringLength(128)]
+        public string Degree { get; set; }
+        [StringLength(128)]
+        public string ReviewerType { get; set; }
+        [StringLength(128)]
+        public string HomeAddressLine1 { get; set; }
+        [StringLength(128)]
+        public string HomeAddressLine2 { get; set; }
+        [StringLength(50)]
+        public string HomeCity { get; set; }
+        [StringLength(30)]
+        public string HomeState { get; set; }
+        [StringLength(11)]
+        public string HomeZip { get; set; }
+        [StringLength(15)]
+        public string HomeFaxNumber { get; set; }
+        [StringLength(128)]
+        public string Employer { get; set; }
+        [StringLength(128)]
+        public string Department { get; set; }
+        [StringLength(128)]
+        public string WorkEmail { get; set; }
+        [StringLength(128)]
+        public string WorkAddressLine1 { get; set; }
+        [StringLength(128)]
+        public string WorkAddressLine2 { get; set; }
+        [StringLength(50)]
+        public string WorkCity { get; set; }
+        [StringLength(30)]
+        public string WorkState { get; set; }
+        [StringLength(11)]
+        public string WorkZip { get; set; }
+        [StringLength(15)]
+        public string WorkPhoneNumber { get; set; }
+        [StringLength(15)]
+        public string WorkFaxNumber { get; set; }
+        public string ExperienceSummary { get; set; }
 
         public ExtendedUser() { }
 

@@ -4,7 +4,7 @@
 
 CREATE PROCEDURE [dbo].[SPChangeInterventionStatus]
 	@IntervId int,
-	@User int, -- Person performing the operation
+	@User nvarchar(128), -- Person performing the operation
 	@DestStatus int,
 	@DestUser int = NULL
 AS SET NOCOUNT ON

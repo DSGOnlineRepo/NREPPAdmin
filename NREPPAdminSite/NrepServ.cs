@@ -36,162 +36,6 @@ namespace NREPPAdminSite
 
         #region Service-Like Methods
 
-        #region Login Functionality
-
-        /// <summary>
-        /// Registers a user
-        /// </summary>
-        /// <param name="uName">User Name</param>
-        /// <param name="fname">First Name (null allowed)</param>
-        /// <param name="lname">Last Name (null allowed)</param>
-        /// <param name="passwd">Password Desired</param>
-        /// <param name="RoleId">RoleId</param>
-        /// <returns></returns>
-        public int registerUser(string uName, string fname, string lname, string passwd, int RoleId)
-        {
-            CheckConn();
-
-            SqlCommand cmd = new SqlCommand("SPAdminRegisterUser", conn);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-            Tuple<string, string> saltedResult = DoHash(passwd);
-            
-            // Parameters
-            cmd.Parameters.Add("@userName", System.Data.SqlDbType.VarChar);
-            cmd.Parameters.Add("@fname", System.Data.SqlDbType.VarChar);
-            cmd.Parameters.Add("@lname", System.Data.SqlDbType.VarChar);
-            cmd.Parameters.Add("@hash", System.Data.SqlDbType.VarChar);
-            cmd.Parameters.Add("@salt", System.Data.SqlDbType.VarChar);
-            cmd.Parameters.Add("@RoleId", System.Data.SqlDbType.Int);
-
-            cmd.Parameters["@userName"].Value = uName;
-            cmd.Parameters["@fname"].Value = fname;
-            cmd.Parameters["@lname"].Value = lname;
-            cmd.Parameters["@hash"].Value = saltedResult.Item2;
-            cmd.Parameters["@salt"].Value = saltedResult.Item1;
-            cmd.Parameters["@RoleId"].Value = RoleId;
-            
-            int returnValue = cmd.ExecuteNonQuery();
-
-            conn.Close();
-
-            return returnValue;
-        }
-
-        /// <summary>
-        /// Logs in user and obtains their user information if successful.
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public DataSet LoginUser(string username, string password)
-        {
-            DataSet outUser = null;
-            SqlCommand cmdGetCreds = new SqlCommand("SPGetLogonCreds", conn);
-            SqlCommand cmdGetUser = new SqlCommand("SPGetUser", conn);
-
-            try 
-            {
-                CheckConn(); // Check to make sure that the connection is open
-
-                // Get the user's login credentials
-
-                cmdGetCreds.Parameters.Add("@userName", SqlDbType.VarChar);
-                cmdGetCreds.Parameters["@userName"].Value = username;
-                cmdGetCreds.CommandType = System.Data.CommandType.StoredProcedure;
-
-                DataTable hashStuff = new DataTable();
-                SqlDataReader dr = cmdGetCreds.ExecuteReader();
-                dr.Read();
-
-                
-                if (PasswordHash.ValidateMe(password, dr["hash"].ToString(), dr["salt"].ToString()))
-                {
-                    dr.Close();
-                    outUser = new DataSet();
-                    cmdGetUser.Parameters.Add("@userName", SqlDbType.VarChar);
-                    cmdGetUser.Parameters["@userName"].Value = username;
-                    cmdGetUser.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter da = new SqlDataAdapter();
-                    da.SelectCommand = cmdGetUser;
-                    da.Fill(outUser);
-                }
-                else
-                {
-                    throw new Exception("Invalid username/password combination");
-                }
-
-            } catch (Exception ex) {
-                outUser = new DataSet();
-                outUser.Tables.Add(SystemConstants.ERR_TABLE);
-                DataColumn col = new DataColumn(SystemConstants.ERR_MSG_COL, Type.GetType("System.String"));
-                outUser.Tables[SystemConstants.ERR_TABLE].Columns.Add(col);
-                DataRow errRow = outUser.Tables[SystemConstants.ERR_TABLE].NewRow();
-                errRow[SystemConstants.ERR_MSG_COL] = ex.Message;
-                outUser.Tables[SystemConstants.ERR_TABLE].Rows.Add(errRow);
-            }
-            finally
-            {
-                conn.Close();
-            }
-
-            return outUser;
-        }
-
-        /// <summary>
-        /// Hashes Passwords during Registration
-        /// </summary>
-        /// <param name="inPwd">Desired Password to be hashed</param>
-        /// <returns></returns>
-        public Tuple<string, string> DoHash(string inPwd)
-        {
-            string someSalt = Convert.ToBase64String(PasswordHash.getSalt());
-            return Tuple.Create(someSalt, PasswordHash.HashMe(inPwd, someSalt));
-        }
-
-        public NreppUser LoginComplete(string username, string password)
-        {
-            DataSet rawUser = LoginUser(username, password); // TODO: What happens when this fails?
-            Dictionary<string, bool> roleStatus = new Dictionary<string, bool>();
-            DataRow UserRow = rawUser.Tables[0].Rows[0];
-            NreppUser currentUser;
-
-            if (rawUser.Tables[0].Columns.Contains(SystemConstants.ERR_MSG_COL))
-            {
-                currentUser = new NreppUser(-1, rawUser.Tables[0].Rows[0][SystemConstants.ERR_MSG_COL].ToString(), "Failed", "Login");
-            }
-            else
-            {
-
-                DataRow RoleRow = rawUser.Tables[1].Rows[0];
-
-                foreach (DataColumn col in rawUser.Tables[1].Columns)
-                {
-                    if (col.ColumnName != "RoleId" && col.ColumnName != "RoleName")
-                        roleStatus.Add(col.ColumnName, (bool)RoleRow[col]); // This is totally clear. :D
-                }
-
-                //Role userRole = new Role((int)RoleRow["RoleId"], RoleRow["RoleName"].ToString(), roleStatus);
-                Role userRole = new Role((int)RoleRow["RoleId"], RoleRow["RoleName"].ToString());
-
-                currentUser = new NreppUser((int)UserRow["Id"], userRole, UserRow["Username"].ToString(), UserRow["Firstname"].ToString(), UserRow["Lastname"].ToString());
-
-                currentUser.Authenticate(true);
-            }
-
-            return currentUser;
-
-        }
-
-
-        public static NreppUser GetFromCookie(HttpCookie inCookie)
-        {
-            return (new JavaScriptSerializer()).Deserialize<NreppUser>(inCookie.Value);
-        }
-
-        #endregion
-
         #region Misc Functionality
 
         public void ChangeStatus(int inId, int inUser, int ToStatus)
@@ -360,10 +204,10 @@ namespace NREPPAdminSite
         /// </summary>
         /// <param name="RoleId">User's Role Id</param>
         /// <returns></returns>
-        public List<Intervention> GetInterventions(int RoleId) // This needs to take some parameters, so there should be a bunch of functions for it
+        public List<Intervention> GetInterventions(string RoleName) // This needs to take some parameters, so there should be a bunch of functions for it
         {
             List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
-            nullParams.Add(new SqlParameter() { ParameterName = "@UserRoleId", SqlDbType = SqlDbType.Int, Value = RoleId });
+            nullParams.Add(new SqlParameter() { ParameterName = "@RoleName", SqlDbType = SqlDbType.NVarChar, Value = RoleName });
             return this.GetInterventions(nullParams);
         }
 
@@ -395,7 +239,7 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in interVs.Rows)
                 {
                     inv = new Intervention((int)dr["InterventionId"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), NullDate(dr["PublishDate"]),
-                        Convert.ToDateTime(dr["UpdateDate"]), (int)dr["SubmitterId"], dr["StatusName"].ToString(), (int)dr["StatusId"],
+                        Convert.ToDateTime(dr["UpdateDate"]), dr["SubmitterId"].ToString(), dr["StatusName"].ToString(), (int)dr["StatusId"],
                         dr["ProgramType"] == DBNull.Value ? 0 : (int)dr["ProgramType"], dr["Acronym"].ToString(), false);
 
                     inv.PreScreenMask = (int)dr["PreScreenAnswers"];
@@ -408,7 +252,8 @@ namespace NREPPAdminSite
             }
             catch (Exception ex)
             {
-                interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1, "Submitted", 1, 0, "", false));
+                //TODO: Why are we adding dummy intervention in case of a error
+                //interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, User, "Submitted", 1, 0, "", false));
             }
 
             return interventions;
@@ -452,8 +297,8 @@ namespace NREPPAdminSite
             }
             catch (Exception ex)
             {
-                //interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, -1, "Submitted", 1, 0));
-                documents.Add(new InterventionDoc() { FileDescription = ex.Message, Link = "Error" });
+                //TODO: Why are we adding dummy intervention in case of a error
+                //documents.Add(new InterventionDoc() { FileDescription = ex.Message, Link = "Error" });
             }
 
             return documents;
@@ -473,7 +318,7 @@ namespace NREPPAdminSite
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@IntervId", SqlDbType = SqlDbType.Int, Value = inData.Id });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@title", SqlDbType = SqlDbType.VarChar, Value = inData.Title });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@fulldescription", SqlDbType = SqlDbType.NText, Value = inData.FullDescription });
-            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@submitter", SqlDbType = SqlDbType.Int, Value = inData.SubmitterId });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@submitterId", SqlDbType = SqlDbType.NVarChar, Value = inData.SubmitterId });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@updateDate", SqlDbType = SqlDbType.DateTime, Value = inData.UpdatedDate });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@publishDate", SqlDbType = SqlDbType.DateTime, Value = inData.PublishDate });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@status", SqlDbType = SqlDbType.Int, Value = inData.StatusId > 0 ? inData.StatusId : 1 });
@@ -507,7 +352,7 @@ namespace NREPPAdminSite
             return returnValue;
         }
 
-        public int SaveFileToDB(byte[] inData, string fileName, int theUser, string MIMEType, int IntervId, bool isDelete, int ItemId, string DisplayName,
+        public int SaveFileToDB(byte[] inData, string fileName, string uploaderName, string MIMEType, int IntervId, bool isDelete, int ItemId, string DisplayName,
             int documentType)
         {
 
@@ -520,7 +365,7 @@ namespace NREPPAdminSite
             cmdSaveFile.Parameters.Add(new SqlParameter("@MIMEType", MIMEType));
             cmdSaveFile.Parameters.Add(new SqlParameter("@IsDelete", isDelete));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ItemId", ItemId));
-            cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderId", theUser));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderName", uploaderName));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ReviewerId", null));
             cmdSaveFile.Parameters.Add(new SqlParameter("@DocumentTypeId", documentType));
             //cmdSaveFile.Parameters.Add(new SqlParameter("@OutPut", null));
@@ -1061,7 +906,7 @@ namespace NREPPAdminSite
             return outList;
         }
 
-        public bool CanDo(string Permission, int UserId, int? InterventionId)
+        public bool CanDo(string Permission, string UserName, int? InterventionId)
         {
             bool result = false;
 
@@ -1073,7 +918,7 @@ namespace NREPPAdminSite
 
             cmd.Parameters.Add(new SqlParameter("@inPermission", Permission));
             cmd.Parameters.Add(new SqlParameter("@InterventionId", InterventionId));
-            cmd.Parameters.Add(new SqlParameter("@UserId", UserId));
+            cmd.Parameters.Add(new SqlParameter("@UserName", UserName));
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Ret", Direction = ParameterDirection.ReturnValue, SqlDbType = SqlDbType.Bit });
 
             try

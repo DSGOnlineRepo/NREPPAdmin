@@ -2,7 +2,7 @@
 (
 	@inPermission VARCHAR(30),
 	@InterventionId INT = NULL,
-	@UserId INT
+	@UserName nvarchar(128)
 )
 RETURNS BIT
 AS
@@ -23,6 +23,7 @@ BEGIN
 		-- Do Intervention-Based Rules First
 
 		DECLARE @IntervRole INT
+		DECLARE @UserId NVARCHAR(128) = (SELECT ID FROM ASPNETUSERS WHERE USERNAME = @UserName)
 		
 		SELECT @IntervRole = WkRoleId from Inter_User_Roles
 		WHERE InterventionId = @InterventionId AND UserId = @UserId
@@ -40,8 +41,10 @@ BEGIN
 		END
 	END
 	ELSE BEGIN
-		SELECT @UserRole = RoleID from Users
-		WHERE Id = @UserId
+		SELECT @UserRole = RoleId from AspNetRoles r
+		INNER JOIN AspNetUserRoles ur ON ur.RoleId = r.Id
+		INNER JOIN AspNetUsers u on u.Id = ur.UserId
+		WHERE u.Id = @UserId
 
 		SELECT @CanDo = Allowed from Role_Permissions
 		WHERE RoleID = @UserRole AND PermissionID = @ThePermission

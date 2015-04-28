@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.ComponentModel.DataAnnotations;
 
 namespace NREPPAdminSite.Models
@@ -12,7 +10,7 @@ namespace NREPPAdminSite.Models
         
         [Display(Name = "Title")]
         public string Title { get; set; }
-        public int SubmitterId { get; set; }
+        public string SubmitterId { get; set; }
 
         [Display(Name = "Full Description")]
         public string FullDescription { get; set; }
@@ -48,7 +46,7 @@ namespace NREPPAdminSite.Models
             Title = "";
             FullDescription = "";
             Submitter = "";
-            SubmitterId = 0;
+            SubmitterId = "";
             PublishDate = DateTime.Now;
             UpdatedDate = DateTime.Now;
             Status = "Submitted";
@@ -59,7 +57,7 @@ namespace NREPPAdminSite.Models
         }
 
         public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate,
-            int submitterId, string status, int statusId, int programType, string acronym, bool fromLitSearch)
+            string submitterId, string status, int statusId, int programType, string acronym, bool fromLitSearch)
         {
             Id = inId;
             Title = title;

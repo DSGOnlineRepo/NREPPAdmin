@@ -1,6 +1,6 @@
 ﻿CREATE FUNCTION [dbo].[FNGetStatusesByRole]
 (
-	@RoleID INT
+	@RoleName nvarchar(256)
 )
 RETURNS @returntable TABLE
 (
@@ -8,14 +8,14 @@ RETURNS @returntable TABLE
 )
 AS
 BEGIN
-
-	IF @RoleID = 5 BEGIN -- Use the english versions?
+	
+	IF @RoleName = 'Review Coordinator' BEGIN -- Use the english versions?
 		INSERT @returntable
 		SELECT Id from InterventionStatus where Id > 1
-	END ELSE IF @RoleID = 3
+	END ELSE IF @RoleName = 'Principal Investigator'
 		INSERT INTO @returntable 
 			SELECT Id from InterventionStatus WHERE Id < 90
-	ELSE IF @RoleID = 6
+	ELSE IF @RoleName = 'DSG PRM'
 		INSERT INTO @returntable
 			SELECT Id from InterventionStatus WHERE Id = 5
 	RETURN

@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Reviewers]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
-    [UserId] INT NULL, 
+	[Id] NVARCHAR(128) NOT NULL PRIMARY KEY, 
+    [UserId] NVARCHAR(128) NULL, 
     [Degree] INT NULL, 
     [ReviewerType] INT NULL, 
     [IsActive] BIT NULL, 
@@ -24,5 +24,5 @@
     [WorkFax] VARCHAR(15) NULL, 
     [WorkEmail] NCHAR(10) NULL, 
     [ExperienceSummary] VARCHAR(MAX) NULL, 
-    CONSTRAINT [FK_Reviewers_User] FOREIGN KEY ([UserId]) REFERENCES [Users]([Id])
+    CONSTRAINT [FK_Reviewers_User] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([Id])
 )

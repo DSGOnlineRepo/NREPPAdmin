@@ -305,13 +305,13 @@ namespace NREPPAdminSite.Models
         //private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>();
         private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>();
 
-        public void SetPermissions(IEnumerable<string> lookingFor, int UserId, int? interVentionId)
+        public void SetPermissions(IEnumerable<string> lookingFor, string UserName, int? interVentionId)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
             foreach (string permission in lookingFor)
             {
-                permissionsList.Add(permission, localService.CanDo(permission, UserId, interVentionId));
+                permissionsList.Add(permission, localService.CanDo(permission, UserName, interVentionId));
             }
         }
 

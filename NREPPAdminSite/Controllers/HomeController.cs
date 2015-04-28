@@ -1,16 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
-using Newtonsoft.Json;
-using NREPPAdminSite.Constants;
+using System.Web.Security;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using NREPPAdminSite.Models;
+using NREPPAdminSite.Security;
 
 namespace NREPPAdminSite.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public HomeController()
+        {
+            MyIdentityDbContext db = new MyIdentityDbContext();
+
+            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
+            _roleManager = new RoleManager<IdentityRole>(roleStore);
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public ActionResult Index()
@@ -43,45 +52,14 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Programs()
         {
             ViewBag.Message = "Some Message Here";
-            NreppUser usr = ReadCookie(Request);
-            ViewBag.Fname = usr.Firstname;
-
+            var userRoles = Roles.GetRolesForUser(User.Identity.Name);
+            
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
-            List<Intervention> interventionList = localService.GetInterventions(usr.UserRole.RoleId);
+            List<Intervention> interventionList = localService.GetInterventions(userRoles[0]);
 
 
             return View(interventionList);
         }
-
-        #region Helper Functions
-
-        protected NreppUser ReadCookie(HttpRequestBase req)
-        {
-            NreppUser outUser = new NreppUser();
-
-            HttpCookie usrStuff = req.Cookies.Get(SystemConstants.USR_COOKIE);
-            //NreppUser usr;
-
-            if (usrStuff.Value != "")
-            {
-                try
-                {
-                    outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
-                    dynamic dyn = JsonConvert.DeserializeObject(usrStuff.Value);
-
-                    outUser.setRole(Convert.ToInt32(dyn["UserRole"]["RoleId"]), Convert.ToString(dyn["UserRole"]["RoleName"]));
-                }
-                catch (Exception)
-                {
-                    Request.Cookies.Remove(SystemConstants.USR_COOKIE);
-                    outUser = null;
-                }
-            }
-
-            return outUser;
-        }
-
-        #endregion
     }
 }

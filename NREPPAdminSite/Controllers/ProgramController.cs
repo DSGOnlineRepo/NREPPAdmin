@@ -6,6 +6,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Web.Security;
+using Microsoft.AspNet.Identity;
 using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
 
@@ -24,8 +26,7 @@ namespace NREPPAdminSite.Controllers
             ViewBag.Id = InvId;
             IntervPageModel pageModel;
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            NreppUser usr = ReadCookie(Request);
-
+            
             // Probably don't need to seed these
 
             //List<Answer> docTypez = new List<Answer>(); 
@@ -40,11 +41,8 @@ namespace NREPPAdminSite.Controllers
 
             if (InvId > 0)
             {
-                HttpCookie usrStuff = Request.Cookies.Get(SystemConstants.USR_COOKIE);
-                NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
-
                 SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
-                SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserRoleId", Value = 1 };
+                SqlParameter roleParam = new SqlParameter() { ParameterName = "@RoleName", Value = Roles.GetRolesForUser(User.Identity.Name)[0] };
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(idParam);
                 parameters.Add(roleParam);
@@ -55,7 +53,7 @@ namespace NREPPAdminSite.Controllers
             }
             else
             {
-                theIntervention = new Intervention(-1, "", "", "", null, DateTime.Now, -1, "", -1, 0, "", false);
+                theIntervention = new Intervention(-1, "", "", User.Identity.Name, null, DateTime.Now, User.Identity.GetUserId(), "", -1, 0, "", false);
                 pageModel = new IntervPageModel();
                 documentz = new List<InterventionDoc>();
             }
@@ -69,7 +67,7 @@ namespace NREPPAdminSite.Controllers
 
             perms.Add("UploadDocs");
 
-            pageModel.SetPermissions(perms, usr.Id, InvId);
+            pageModel.SetPermissions(perms, User.Identity.Name, InvId);
             pageModel.TheIntervention = theIntervention;
 
             return View(pageModel);
@@ -199,9 +197,7 @@ namespace NREPPAdminSite.Controllers
                 string Destination = col["selDest"];
 
                 string[] DestStuff = Destination.Split(',');
-                HttpCookie usrStuff = Request.Cookies.Get(SystemConstants.USR_COOKIE);
-                NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
-                destUser = int.Parse(DestStuff[0]);
+               destUser = int.Parse(DestStuff[0]);
                 destLoc = int.Parse(DestStuff[1]);
             }
             else
@@ -218,8 +214,8 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Edit(IntervPageModel inInterv)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            NreppUser usr = ReadCookie(Request);
-            inInterv.TheIntervention.SubmitterId = usr.Id;
+            
+            inInterv.TheIntervention.SubmitterId = User.Identity.Name;
             int returnValue = localService.SaveIntervention(inInterv.TheIntervention);
 
             return RedirectToAction("View", new { InvId = returnValue });
@@ -229,9 +225,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Upload(FormCollection formCollection)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            HttpCookie usrStuff = Request.Cookies.Get(SystemConstants.USR_COOKIE);
-            NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
-
+           
             if (Request != null)
             {
                 HttpPostedFileBase file = Request.Files["UploadedFile"];
@@ -242,7 +236,7 @@ namespace NREPPAdminSite.Controllers
                     byte[] fileBytes = new byte[file.ContentLength];
                     file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
 
-                    localService.SaveFileToDB(fileBytes, fileName, 1, "NOT IMPLEMENTED!", int.Parse(Request.Form["TheIntervention.Id"]), false,
+                    localService.SaveFileToDB(fileBytes, fileName, User.Identity.Name, "NOT IMPLEMENTED!", int.Parse(Request.Form["TheIntervention.Id"]), false,
                         -1, Request.Form["FileDescription"], int.Parse(Request.Form["docTypeDD"])); // TODO: Add UserId to the Cookie. :|
                 }
             }
@@ -348,8 +342,6 @@ namespace NREPPAdminSite.Controllers
             string Destination = col["selDest"];
 
             string[] DestStuff = Destination.Split(',');
-            HttpCookie usrStuff = Request.Cookies.Get(SystemConstants.USR_COOKIE);
-            NreppUser outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
 
             NrepServ localservice = new NrepServ(NrepServ.ConnString);
 
@@ -361,29 +353,6 @@ namespace NREPPAdminSite.Controllers
         #endregion
 
         #region Helper Methods
-
-        protected NreppUser ReadCookie(HttpRequestBase req)
-        {
-            NreppUser outUser = new NreppUser();
-
-            HttpCookie usrStuff = req.Cookies.Get(SystemConstants.USR_COOKIE);
-            //NreppUser usr;
-
-            if (usrStuff.Value != "")
-            {
-                try
-                {
-                    outUser = (new JavaScriptSerializer()).Deserialize<NreppUser>(usrStuff.Value);
-                }
-                catch (Exception)
-                {
-                    Request.Cookies.Remove(SystemConstants.USR_COOKIE);
-                    outUser = null;
-                }
-            }
-
-            return outUser;
-        }
 
         protected void UpdateRCDocument(RCDocument doc, NrepServ localService)
         {
