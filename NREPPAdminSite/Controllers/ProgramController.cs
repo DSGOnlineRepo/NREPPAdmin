@@ -8,14 +8,26 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.Security;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
+using NREPPAdminSite.Security;
 
 namespace NREPPAdminSite.Controllers
 {
     [Authorize]
     public partial class ProgramController : Controller
     {
+
+         private readonly UserManager<ExtendedUser> _userManager;
+
+        public ProgramController()
+        {
+            MyIdentityDbContext db = new MyIdentityDbContext();
+
+            UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
+            _userManager = new UserManager<ExtendedUser>(userStore);
+         }
 
         #region Get Methods
 
@@ -41,8 +53,10 @@ namespace NREPPAdminSite.Controllers
 
             if (InvId > 0)
             {
+                var user = _userManager.FindByName(User.Identity.Name);
+                var userRoles = _userManager.GetRoles(user.Id);
                 SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
-                SqlParameter roleParam = new SqlParameter() { ParameterName = "@RoleName", Value = Roles.GetRolesForUser(User.Identity.Name)[0] };
+                SqlParameter roleParam = new SqlParameter() { ParameterName = "@RoleName", Value = userRoles[0] };
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(idParam);
                 parameters.Add(roleParam);
