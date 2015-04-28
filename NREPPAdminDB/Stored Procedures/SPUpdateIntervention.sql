@@ -10,6 +10,7 @@
 	@status int,
 	@IsLitSearch bit = 0,
 	@PreScreenAnswers INT = 0,
+	@UserPreScreenAnswer INT = 0,
 	@Output INT OUTPUT
 AS SET NOCOUNT ON
 

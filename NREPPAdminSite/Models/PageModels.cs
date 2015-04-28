@@ -298,6 +298,36 @@ namespace NREPPAdminSite.Models
 
     #endregion
 
+    public class JoinProgramModel
+    {
+        private Reviewer rev;
+        private Intervention theIntervention;
+
+        public Reviewer Reviewer
+        {
+            get { return rev; }
+        }
+
+        public Intervention TheIntervention
+        {
+            get { return theIntervention; }
+        }
+
+        public bool CanAccess { get; set; }
+
+        public JoinProgramModel(Reviewer inReviewer, Intervention inInterv)
+        {
+            rev = inReviewer;
+            theIntervention = inInterv;
+        }
+
+        public JoinProgramModel()
+        {
+            rev = null;
+            theIntervention = null;
+        }
+    }
+
     #region Extra Stuff
 
     public class NREPPPermissions

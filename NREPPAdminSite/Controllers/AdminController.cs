@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -250,6 +251,7 @@ namespace NREPPAdminSite.Controllers
             return View(model);
         }
 
+
         //public async Task RegisterAdmin()
         //{
         //    IdentityUser admin = await UserManager<ExtendedUser>.FindByNameAsync(UserConstants.Admin);
@@ -278,5 +280,45 @@ namespace NREPPAdminSite.Controllers
         //    }
         //}
 
+
+        public ActionResult JoinProgram(string ID)
+        {
+            string nonURLVersion = HttpUtility.UrlDecode(ID).Replace(' ', '+');
+            string decryptedString = PasswordHash.AESDecrypt(nonURLVersion);
+            string[] idBits = decryptedString.Split(';');
+            TempClass aClass = new TempClass();
+
+            // Check the date of the token
+            DateTime TokenDate = DateTime.Parse(idBits[2]);
+            TimeSpan difference = DateTime.Now - TokenDate;
+            if (difference.Days >  5) // This should be made into some kind of app setting/constant
+            {
+                aClass.CanView = false;
+            }
+            else
+            {
+                aClass.CanView = true;
+                aClass.InterventionId = int.Parse(idBits[0]);
+            }
+
+            return View(aClass);
+        }
+
+        public ActionResult GenReviewLink(int Id, int ReviewerId)
+        {
+            ViewBag.SomeString = "somestring";
+
+            string combinedString = string.Format("{0};{1};{2}", Id, ReviewerId, DateTime.Now.ToShortDateString());
+            ViewBag.OutString = HttpUtility.UrlEncode(PasswordHash.AESCrypt(combinedString));
+
+            return View();
+        }
+
+    }
+
+    public class TempClass
+    {
+        public bool CanView { get; set; }
+        public int InterventionId { get; set; }
     }
 }
