@@ -83,6 +83,7 @@ namespace NREPPAdminSite.Models
     public class InterventionDoc
     {
         [Display(Name = "Description")]
+        [Required]
         public string FileDescription { get; set; }
         public string Link { get; set; }
 

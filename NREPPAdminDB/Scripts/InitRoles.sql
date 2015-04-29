@@ -231,9 +231,11 @@ INSERT INTO RoutingTable (CurrentStatus, DestUserRole, DestStatus) VALUES (2, @R
 
 INSERT INTO Permissions (Id, PermissionName) VALUES (1, 'TestPermission')
 INSERT INTO Permissions (Id, PermissionName) VALUES (2, 'EditBaseSubmission')
+INSERT INTO Permissions (Id, PermissionName) VALUES (3, 'UploadDocs')
 
 INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, @ROLEID8, NULL, cast(1 as Bit))
 INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, @ROLEID8, 3, CAST(0 AS BIT))
 INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, @ROLEID8, 1, CAST(1 as BIT))
+INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (3, @ROLEID3, 1, 1)
 
 INSERT INTO Role_Permissions (PermissionID, RoleId, StatusId, Allowed) values (2, @ROLEID3, NULL, CAST(1 AS BIT))

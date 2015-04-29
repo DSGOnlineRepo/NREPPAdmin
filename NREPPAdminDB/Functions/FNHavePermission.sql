@@ -22,7 +22,7 @@ BEGIN
 
 		-- Do Intervention-Based Rules First
 
-		DECLARE @IntervRole INT
+		DECLARE @IntervRole NVARCHAR(128)
 		DECLARE @UserId NVARCHAR(128) = (SELECT ID FROM ASPNETUSERS WHERE USERNAME = @UserName)
 		
 		SELECT @IntervRole = WkRoleId from Inter_User_Roles
