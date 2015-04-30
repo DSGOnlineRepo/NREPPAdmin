@@ -11,7 +11,7 @@
 	@IsLitSearch bit = 0,
 	@PreScreenAnswers INT = 0,
 	@UserPreScreenAnswer INT = 0,
-	@ScreeningNotes VARCHAR(MAX),
+	@ScreeningNotes VARCHAR(MAX) = NULL,
 	@Output INT OUTPUT
 AS SET NOCOUNT ON
 
@@ -20,8 +20,9 @@ AS SET NOCOUNT ON
 	-- Do the insert portion first
 	IF @IntervId = -1 BEGIN
 
-		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, SubmitterId, Status, ProgramType, Acronym, PreScreenAnswers, ScreeningNotes) VALUES
-			(@title, @fulldescription, @publishDate, @updateDate, @submitterId, @status, @programType, @Acronym, @PreScreenAnswers, @ScreeningNotes)
+		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, SubmitterId, Status, ProgramType, Acronym, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes) VALUES
+			(@title, @fulldescription, @publishDate, @updateDate, @submitterId, @status, @programType, @Acronym, @PreScreenAnswers, @UserPreScreenAnswer, @ScreeningNotes)
+
 
 		if @@ERROR <> 0 BEGIN
 			ROLLBACK TRANSACTION
@@ -29,6 +30,23 @@ AS SET NOCOUNT ON
 		END
 
 		SELECT @Output = @@IDENTITY
+
+		DECLARE @nUserId VARCHAR(128)
+		DECLARE @nSubmitterRole VARCHAR(128)
+
+		SELECT @nUserId = Id from AspNetUsers WHERE UserName = @submitterId
+		SELECT @nSubmitterRole = Id from AspNetRoles where Name = 'Principal Investigator'
+
+		INSERT INTO Inter_User_Roles (InterventionId, WkRoleId, UserId) VALUES (@Output, @nSubmitterRole, @nUserId)
+
+		if @@ERROR <> 0 BEGIN
+			ROLLBACK TRANSACTION
+			RETURN -11
+		END
+
+		--INSERT INTO Inter_User_Roles (UserId, 
+
+		
 	END
 	ELSE BEGIN
 		-- Now do update portion
@@ -42,6 +60,7 @@ AS SET NOCOUNT ON
 			ProgramType = @programType,
 			Acronym = @Acronym,
 			PreScreenAnswers = @PreScreenAnswers,
+			UserPreScreenAnswer = @UserPreScreenAnswer,
 			ScreeningNotes = @ScreeningNotes
 		WHERE Id = @IntervId
 

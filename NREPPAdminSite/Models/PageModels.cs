@@ -51,6 +51,7 @@ namespace NREPPAdminSite.Models
 
         private List<MaskValue> programType = new List<MaskValue>();
         private List<MaskValue> prescreen = new List<MaskValue>();
+        private List<MaskValue> userprescreen = new List<MaskValue>();
         private List<Answer> documentType = new List<Answer>();
         private List<Destination> dests = new List<Destination>();
 
@@ -108,6 +109,11 @@ namespace NREPPAdminSite.Models
             get { return prescreen; }
         }
 
+        public List<MaskValue> UserPreScreen
+        {
+            get { return userprescreen;}
+        }
+
         public List<Answer> DocumentType
         {
             get { return documentType; }
@@ -142,6 +148,8 @@ namespace NREPPAdminSite.Models
         {
             documents.RemoveAt(index);
         }
+
+        pub
     }
 
     #endregion
