@@ -127,13 +127,12 @@ namespace NREPPAdminSite.Models
     /// </summary>
     public class Reviewer
     {
-        public int ReviewerId { get; set; }
-        public int UserId { get; set; }
-        public int Degree { get; set; }
-        public int ReviewerType { get; set; }
-        public bool IsActive { get; set; }
+        public string Id { get; set; }
+        public string UsedId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Degree { get; set; }
+        public string ReviewerType { get; set; }
         public string HomeAddressLine1 { get; set; }
         public string HomeAddressLine2 { get; set; }
         public string HomeCity { get; set; }
@@ -141,10 +140,9 @@ namespace NREPPAdminSite.Models
         public string Zip { get; set; }
         public string PhoneNumber { get; set; }
         public string FaxNumber { get; set; }
-        public string Employer { get; set; }
         public string Email { get; set; }
+        public string Employer { get; set; }
         public string Department { get; set; }
-
         public string WorkAddressLine1 { get; set; }
         public string WorkAddressLine2 { get; set; }
         public string WorkCity { get; set; }
@@ -152,9 +150,9 @@ namespace NREPPAdminSite.Models
         public string WorkZip { get; set; }
         public string WorkPhone { get; set; }
         public string WorkFaxNumber { get; set; }
-        public string WorkEmployer { get; set; }
         public string WorkEmail { get; set; }
         public string ExpSummary { get; set; }
+        public bool IsActive { get; set; }
     }
 
     public class UserProfileModel
