@@ -4,9 +4,9 @@
 
 CREATE PROCEDURE [dbo].[SPChangeInterventionStatus]
 	@IntervId int,
-	@User nvarchar(128), -- Person performing the operation
+	@User nvarchar(128) = NULL, -- Person performing the operation
 	@DestStatus int,
-	@DestUser int = NULL
+	@DestUser nvarchar(128) = NULL
 AS SET NOCOUNT ON
 
 	BEGIN TRANSACTION
@@ -27,16 +27,17 @@ AS SET NOCOUNT ON
 			END
 
 			IF @DestStatus = 2 BEGIN
-				DECLARE @NewUser INT
-				DECLARE @OldUser INT
+				DECLARE @NewUser nvarchar(128)
+				DECLARE @OldUser NVARCHAR(128)
 
-				SELECT @NewUser = CAST(Value AS INT) FROM AppSettings
+				SELECT @NewUser = Value FROM AppSettings
 					WHERE  SettingID = 'NextPreScreen'
 
-				SELECT @OldUser = CAST(Value AS INT) FROM AppSettings
+				SELECT @OldUser = Value FROM AppSettings
 					WHERE  SettingID = 'CurrentPreScreen'
 
-				INSERT Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @NewUser, 2)
+					-- Need to add a new role for this.
+				INSERT Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @NewUser, (select id from AspNetRoles where NAME = 'Assigner')) 
 
 				IF @@ERROR <> 0 BEGIN
 					ROLLBACK TRANSACTION
@@ -44,7 +45,7 @@ AS SET NOCOUNT ON
 				END
 
 				UPDATE AppSettings
-					SET Value = CAST(@OldUser as VARCHAR)
+					SET Value = @OldUser
 					WHERE SettingID = 'NextPreScreen'
 
 				IF @@ERROR <> 0 BEGIN
@@ -53,7 +54,7 @@ AS SET NOCOUNT ON
 				END
 
 				UPDATE AppSettings
-					SET Value = CAST(@NewUser as VARCHAR)
+					SET Value = @NewUser
 					WHERE SettingID = 'CurrentPreScreen'
 
 				IF @@ERROR <> 0 BEGIN
@@ -72,7 +73,7 @@ AS SET NOCOUNT ON
 			END
 
 			IF @DestStatus = 4 BEGIN
-				INSERT INTO Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @DestUser, 5)
+				INSERT INTO Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @DestUser, (select id from AspNetRoles where NAME = 'Review Coordinator'))
 
 				IF @@ERROR <> 0 BEGIN
 					ROLLBACK TRANSACTION
@@ -81,7 +82,7 @@ AS SET NOCOUNT ON
 			END
 
 			IF @DestStatus = 5 BEGIN
-				INSERT INTO Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @DestUser, 6)
+				INSERT INTO Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @DestUser, (select id from AspNetRoles where NAME = 'DSG PRM'))
 
 				IF @@ERROR <> 0 BEGIN
 					ROLLBACK TRANSACTION

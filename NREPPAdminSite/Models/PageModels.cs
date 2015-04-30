@@ -75,13 +75,14 @@ namespace NREPPAdminSite.Models
         }
 
         public IntervPageModel(List<InterventionDoc> inDocuments, List<MaskValue> inProgTypes, List<Answer> inDocTypes,
-            List<Destination> inDests, List<MaskValue> preScreen)
+            List<Destination> inDests, List<MaskValue> preScreen, List<MaskValue> userPreScreen)
         {
             documents = inDocuments;
             programType = inProgTypes;
             documentType = inDocTypes;
             dests = inDests;
             prescreen = preScreen;
+            userprescreen = userPreScreen;
         }
 
         #endregion
@@ -149,7 +150,6 @@ namespace NREPPAdminSite.Models
             documents.RemoveAt(index);
         }
 
-        pub
     }
 
     #endregion

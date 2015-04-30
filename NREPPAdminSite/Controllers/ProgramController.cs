@@ -75,7 +75,8 @@ namespace NREPPAdminSite.Controllers
             List<Destination> nDests = localService.GetDestinations(theIntervention.Id).ToList();
 
             pageModel = new IntervPageModel(documentz, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
-                documentTypes, nDests, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>());
+                documentTypes, nDests, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>(),
+                MaskValue.SplitMask(preScreen, theIntervention.UserPreScreenMask).ToList<MaskValue>());
 
             List<string> perms = new List<string>();
 
@@ -202,8 +203,9 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Submit(IntervPageModel model, FormCollection col)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            
-            int destLoc = 0, destUser = -1;
+
+            int destLoc = 0;
+            string destUser = null;
 
             if (col["selDest"] != null)
             {
@@ -211,7 +213,7 @@ namespace NREPPAdminSite.Controllers
                 string Destination = col["selDest"];
 
                 string[] DestStuff = Destination.Split(',');
-               destUser = int.Parse(DestStuff[0]);
+               destUser = DestStuff[0];
                 destLoc = int.Parse(DestStuff[1]);
             }
             else
@@ -359,7 +361,7 @@ namespace NREPPAdminSite.Controllers
 
             NrepServ localservice = new NrepServ(NrepServ.ConnString);
 
-            localservice.ChangeStatus(IntervId, int.Parse(DestStuff[0]), int.Parse(DestStuff[1]));
+            localservice.ChangeStatus(IntervId, DestStuff[0], int.Parse(DestStuff[1]));
 
             return RedirectToAction("Screen", new { InterventionId = int.Parse(col["IntervId"]) });
         }

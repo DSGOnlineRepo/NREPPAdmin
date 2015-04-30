@@ -38,7 +38,7 @@ namespace NREPPAdminSite
 
         #region Misc Functionality
 
-        public void ChangeStatus(int inId, int inUser, int ToStatus)
+        public void ChangeStatus(int inId, string inUser, int ToStatus)
         {
             SqlCommand cmd = new SqlCommand("SPChangeInterventionStatus", conn);
 
@@ -458,13 +458,13 @@ namespace NREPPAdminSite
             cmdSaveFile.CommandType = CommandType.StoredProcedure;
 
             cmdSaveFile.Parameters.Add(new SqlParameter("@IntervId", -1));
-            //cmdSaveFile.Parameters.Add(new SqlParameter("@Description", DisplayName));
+            
             cmdSaveFile.Parameters.Add(new SqlParameter("@MIMEType", ""));
             cmdSaveFile.Parameters.Add(new SqlParameter("@IsDelete", true));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ItemId", DocId));
             cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderId", theUser));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ReviewerId", null));
-            //cmdSaveFile.Parameters.Add(new SqlParameter("@OutPut", null));
+            
 
             SqlParameter OutPut = new SqlParameter("@Output", -1);
             OutPut.Direction = ParameterDirection.Output;
@@ -891,7 +891,7 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in dt.Rows)
                 {
 
-                    outList.Add(new Destination() { UserId = dr.IsNull("UserId") ? -1 : (int)dr["UserId"], StatusId = (int)dr["StatusId"], StatusName = dr["StatusName"].ToString(),
+                    outList.Add(new Destination() { UserId = dr["UserId"].ToString(), StatusId = (int)dr["StatusId"], StatusName = dr["StatusName"].ToString(),
                         UserName = dr["UserName"].ToString(), RoleName = dr["RoleName"].ToString()
                     });
                 }
