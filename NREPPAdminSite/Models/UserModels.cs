@@ -127,12 +127,13 @@ namespace NREPPAdminSite.Models
     /// </summary>
     public class Reviewer
     {
-        public string Id { get; set; }
-        public string UsedId { get; set; }
+        public string ReviewerId { get; set; }
+        public string UserId { get; set; }
+        public string Degree { get; set; }
+        public string  ReviewerType { get; set; }
+        public bool IsActive { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Degree { get; set; }
-        public string ReviewerType { get; set; }
         public string HomeAddressLine1 { get; set; }
         public string HomeAddressLine2 { get; set; }
         public string HomeCity { get; set; }
@@ -140,9 +141,10 @@ namespace NREPPAdminSite.Models
         public string Zip { get; set; }
         public string PhoneNumber { get; set; }
         public string FaxNumber { get; set; }
-        public string Email { get; set; }
         public string Employer { get; set; }
+        public string Email { get; set; }
         public string Department { get; set; }
+
         public string WorkAddressLine1 { get; set; }
         public string WorkAddressLine2 { get; set; }
         public string WorkCity { get; set; }
@@ -150,10 +152,56 @@ namespace NREPPAdminSite.Models
         public string WorkZip { get; set; }
         public string WorkPhone { get; set; }
         public string WorkFaxNumber { get; set; }
+        public string WorkEmployer { get; set; }
         public string WorkEmail { get; set; }
         public string ExpSummary { get; set; }
-        public bool IsActive { get; set; }
+
+        public Reviewer(string reviewerId, string userId, string degree, string reviewerType, string firstName, string lastName, string department)
+        {
+            ReviewerId = reviewerId;
+            UserId = userId;
+            Degree = degree;
+            ReviewerType = reviewerType;            
+            FirstName = firstName;
+            LastName = lastName;
+            Department = department;
+
+        }
+       
     }
+
+    public class ReviewersWrapper
+    {
+
+        private List<Reviewer> Reviewers;
+
+
+        #region Constructors
+
+        public ReviewersWrapper()
+        {
+            Reviewers = new List<Reviewer>();
+
+        }
+
+        public ReviewersWrapper(List<Reviewer> inOutcomes)
+        {
+            Reviewers = inOutcomes;
+        }
+
+        #endregion
+
+        public List<Reviewer> OutcomesReviewers;
+        
+    }
+
+    public class ReviewerWrapper
+    {
+
+        public Reviewer Reviewer;       
+
+    }
+    
 
     public class UserProfileModel
     {
@@ -323,5 +371,7 @@ namespace NREPPAdminSite.Models
             LastName = registerViewModel.LastName;
             PhoneNumber = registerViewModel.PhoneNumber;
         }
+        
+
     }
 }

@@ -1,0 +1,149 @@
+﻿@*//@model NREPPAdminSite.Models.ReviewersPageModel*@
+
+@{
+    ViewBag.Title = "Reviewers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@ViewBag.Title.</h2>
+
+
+
+
+
+<div>
+    <table id="Reviewertable" class="table table-striped table-bordered" >
+        <thead>
+            <tr>
+                <th>ReviewerId</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Employer</th>
+                <th>Department</th>
+                <th>Reviewer Type</th>
+                <th>Degree</th>
+                <th colspan="2">Action</th>
+               
+               
+
+            </tr>
+        </thead>
+        @*@foreach (NREPPAdminSite.Models.Reviewer reviewer in Model.Outcomes.OutcomesReviewers)
+    {
+
+            <tr>
+                <td>@reviewer.UserId</td>
+                <td>@reviewer.FirstName</td>
+                <td>@reviewer.LastName</td>
+                <td>@reviewer.Employer</td>
+                <td>@reviewer.Department</td>
+                <td>@reviewer.ReviewerType</td>
+                <td>@reviewer.Degree</td>
+                <td>@Html.ActionLink("Delete", "Delete")</td>
+            </tr>
+
+    }*@
+    </table>
+</div>
+<div>
+    <table id="Reviewertable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>@Html.ActionLink("Add New Reviewer", "Reviewer", "Home")</th>
+               
+            </tr>
+        </thead>
+
+        </table>
+</div>
+
+
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/jqueryval")
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        console.log("ts");
+        bindreviewers();
+    });
+    $(document).ready(function () {
+        $('#Reviewertable').dataTable();
+    });
+   
+    function bindreviewers() {
+        console.log("inside function");
+        $.ajax({
+            url: "@(Url.Action("ReviewersList", "Home"))",
+            dataType: "json",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(),
+            async: true,
+            processData: false,
+            cache: false,
+            success: function (data) {
+                drawtable(data);
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        })
+
+        function drawtable(data) {
+            for (var i = 0; i < data.length; i++) {
+                drawrow(data[i]);
+
+            }
+        }
+        function drawrow(rowdata) {
+            var row = $("<tr/>")
+            var edit = "<a id=editclick onclick='editreviewers();'>Edit </a>"
+            var delet = "<a id=deleteclick href='#' onclick='deletereviewer();'>Delete </a>"
+            $("#Reviewertable").append(row)
+            row.append($("<td>" + rowdata.UserId + "</td>"));
+            row.append($("<td>" + rowdata.FirstName + "</td>"));
+            row.append($("<td>" + rowdata.LastName + "</td>"));
+            row.append($("<td>" + rowdata.Employer + "</td>"));
+            row.append($("<td>" + rowdata.Department + "</td>"));
+            row.append($("<td>" + rowdata.ReviewerType + "</td>"));
+            row.append($("<td>" + rowdata.Degree + "</td>"));
+            row.append($("<td>" + edit + "</td>"));
+            row.append($("<td>" + delet + "</td>"));
+
+        }
+
+       
+        }
+
+        function editreviewers() {
+            console.log("inside function");
+            $.ajax({
+                url: "@(Url.Action("Reviewer", "Home"))",
+                dataType: "json",
+                data:{id:1},
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(),
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    open("http://localhost:49560/Home/Reviewer", "popupwindow", "width=1000,height=800,scrollbars=yes");
+                },
+                error: function (xhr) {
+                    open("http://localhost:49560/Home/Reviewer", "popupwindow", "width=1000,height=800,scrollbars=yes");
+                 
+                }
+            })
+
+            var w = window.open("http://localhost:49560/Home/Reviewer", "popupwindow", "width=1000,height=800,scrollbars=yes");
+            w.open();
+
+        }
+    
+</script>
+
+
+

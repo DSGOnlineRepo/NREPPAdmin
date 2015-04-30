@@ -52,11 +52,17 @@
                     }
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    
                     <!-- You need to add something to check for logged in user before this -->
 
                     @if (Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Profile", "Profile", "Admin")</li>
+
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Manage</a>
+                        <ul class="dropdown-menu"><li>@Html.ActionLink("Reviewers", "Reviewers", "Home")</li></ul>
+                    </li>
+
                         <li>
                             @using (Html.BeginForm("Logout", "Admin", FormMethod.Post, new {id = "logoutForm"}))
                             {
