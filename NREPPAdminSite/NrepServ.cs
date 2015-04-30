@@ -942,7 +942,94 @@ namespace NREPPAdminSite
 
         #region Other User Functionality
 
-        
+        public ReviewersWrapper GetOutComesReviewers(int? id)
+        {
+            ReviewersWrapper rw = new ReviewersWrapper();
+            try
+            {
+                rw.OutcomesReviewers = GetReviewers();
+            }
+            catch (Exception ex)
+            {
+                
+            }          
+            return rw;
+        }
+
+
+        public ReviewerWrapper GetOutComesReviewer(int? id)
+        {
+            ReviewerWrapper reviewerWrapper = new ReviewerWrapper();
+            try
+            {
+                reviewerWrapper.Reviewer = GetReviewer(id);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return reviewerWrapper;
+        }
+
+
+        public Reviewer GetReviewer(int? id)
+        {
+            Reviewer reviewer=null; //= new Reviewer();
+            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewerList", conn);
+            cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
+            
+
+            try
+            {
+                CheckConn();
+                DataTable reviewers = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmdGetReviewerList);
+                da.Fill(reviewers);
+                DataRow dr = reviewers.Rows[0];
+                reviewer = new Reviewer(dr["Id"].ToString(), dr["UserId"].ToString(), dr["Degree"].ToString(), dr["ReviewerType"].ToString(), dr["FirstName"].ToString(),
+                        dr["LastName"].ToString(), dr["Department"].ToString());
+                return reviewer;
+                
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return reviewer;
+            
+        }
+
+        public List<Reviewer> GetReviewers()
+        {
+            List<Reviewer> reviewer = new List<Reviewer>();
+            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewerList", conn);
+            cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
+            Reviewer Rev;
+
+            try
+            {
+                CheckConn();
+                DataTable reviewers = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmdGetReviewerList);
+                da.Fill(reviewers);
+
+                foreach (DataRow dr in reviewers.Rows)
+                {
+                    Rev = new Reviewer(dr["Id"].ToString(), dr["UserId"].ToString(), dr["Degree"].ToString() ,dr["ReviewerType"].ToString(), dr["FirstName"].ToString(),
+                        dr["LastName"].ToString(), dr["Department"].ToString());
+
+                    reviewer.Add(Rev);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return reviewer;
+        }
 
         #endregion
 

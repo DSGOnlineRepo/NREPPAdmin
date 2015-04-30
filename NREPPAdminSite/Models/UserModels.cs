@@ -127,10 +127,10 @@ namespace NREPPAdminSite.Models
     /// </summary>
     public class Reviewer
     {
-        public int ReviewerId { get; set; }
-        public int UserId { get; set; }
-        public int Degree { get; set; }
-        public int ReviewerType { get; set; }
+        public string ReviewerId { get; set; }
+        public string UserId { get; set; }
+        public string Degree { get; set; }
+        public string  ReviewerType { get; set; }
         public bool IsActive { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -155,7 +155,53 @@ namespace NREPPAdminSite.Models
         public string WorkEmployer { get; set; }
         public string WorkEmail { get; set; }
         public string ExpSummary { get; set; }
+
+        public Reviewer(string reviewerId, string userId, string degree, string reviewerType, string firstName, string lastName, string department)
+        {
+            ReviewerId = reviewerId;
+            UserId = userId;
+            Degree = degree;
+            ReviewerType = reviewerType;            
+            FirstName = firstName;
+            LastName = lastName;
+            Department = department;
+
+        }
+       
     }
+
+    public class ReviewersWrapper
+    {
+
+        private List<Reviewer> Reviewers;
+
+
+        #region Constructors
+
+        public ReviewersWrapper()
+        {
+            Reviewers = new List<Reviewer>();
+
+        }
+
+        public ReviewersWrapper(List<Reviewer> inOutcomes)
+        {
+            Reviewers = inOutcomes;
+        }
+
+        #endregion
+
+        public List<Reviewer> OutcomesReviewers;
+        
+    }
+
+    public class ReviewerWrapper
+    {
+
+        public Reviewer Reviewer;       
+
+    }
+    
 
     public class UserProfileModel
     {
@@ -325,5 +371,7 @@ namespace NREPPAdminSite.Models
             LastName = registerViewModel.LastName;
             PhoneNumber = registerViewModel.PhoneNumber;
         }
+        
+
     }
 }

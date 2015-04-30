@@ -336,6 +336,54 @@ namespace NREPPAdminSite.Models
         }
     }
 
+    #region Reviewer models
+    public class ReviewersPageModel : NREPPPermissions
+    {
+       
+
+        public ReviewersWrapper Outcomes { get; set; }
+    }
+    public class ReviewerPageModel : NREPPPermissions
+    {
+        public string ReviewerId { get; set; }
+        public string UserId { get; set; }
+        public string Degree { get; set; }
+        public string ReviewerType { get; set; }
+        public bool IsActive { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string HomeAddressLine1 { get; set; }
+        public string HomeAddressLine2 { get; set; }
+        public string HomeCity { get; set; }
+       // public string State { get; set; }
+        public string Zip { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Phone { get; set; }
+        public string City { get; set; }
+        public string FaxNumber { get; set; }
+        public string Employer { get; set; }
+        public string Email { get; set; }
+        public string Department { get; set; }
+        public string StreetAddress { get; set; }
+        public string WorkAddressLine1 { get; set; }
+        public string WorkAddressLine2 { get; set; }
+        public string WorkCity { get; set; }
+        public string WorkState { get; set; }
+        public string WorkZip { get; set; }
+        public string WorkPhone { get; set; }
+        public string WorkFaxNumber { get; set; }
+        public string WorkEmployer { get; set; }
+        public string WorkEmail { get; set; }
+        public string ExpSummary { get; set; }
+        public string State { get; set; }
+         public string   ZIP { get; set; }
+          
+          public string  WorkStreetAddress { get; set; }
+          public string  WorkFax { get; set; }
+          public string ExperienceSummary { get; set; }
+        public ReviewerWrapper Outcomes { get; set; }
+    }
+    #endregion
     #region Extra Stuff
 
     public class NREPPPermissions

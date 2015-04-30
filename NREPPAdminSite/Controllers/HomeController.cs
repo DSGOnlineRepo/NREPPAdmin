@@ -49,6 +49,37 @@ namespace NREPPAdminSite.Controllers
             return View();
         }
 
+       [AllowAnonymous]
+        public ActionResult Reviewers()
+        {
+            ViewBag.Message = "Your Reviewers page.";
+           //NrepServ localService = new NrepServ(NrepServ.ConnString);
+          // ReviewersWrapper reviewersWrapper = localService.GetOutComesReviewer(null);
+           //ReviewersPageModel reviewersPageModel = new ReviewersPageModel();
+           //reviewersPageModel.Outcomes = reviewersWrapper;
+           return View();//reviewersPageModel);
+        }
+
+        [AllowAnonymous]
+       public ActionResult Reviewer(int? id)
+       {
+           ViewBag.Message = "Your Reviewer page.";
+           NrepServ localService = new NrepServ(NrepServ.ConnString);
+           ReviewerWrapper reviewerWrapper = localService.GetOutComesReviewer(id);
+           ReviewerPageModel reviewerPageModel = new ReviewerPageModel();
+           reviewerPageModel.Outcomes = reviewerWrapper;
+           return PartialView(reviewerPageModel);
+          // return View("Reviewer");
+       }
+
+       [AcceptVerbs(HttpVerbs.Post)]
+       public JsonResult ReviewersList()
+       {
+           NrepServ localService = new NrepServ(NrepServ.ConnString);
+           List<Reviewer> reviewers = localService.GetReviewers();
+           return Json(reviewers);
+       }
+         
         [Authorize]
         public ActionResult Programs()
         {
