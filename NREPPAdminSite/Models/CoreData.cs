@@ -318,4 +318,10 @@ namespace NREPPAdminSite.Models
         }
     }
 
+    public struct SubmissionPd
+    {
+        public DateTime StartDate;
+        public DateTime EndDate;
+    }
+
 }

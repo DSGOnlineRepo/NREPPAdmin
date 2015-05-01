@@ -185,6 +185,30 @@ namespace NREPPAdminSite
             return OutAnswers;
         }
 
+        public SubmissionPd GetCurrentSubmissionPd()
+        {
+            SubmissionPd pd = new SubmissionPd();
+            SqlCommand cmd = new SqlCommand("SPGetRecentSubPd");
+            cmd.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+            try
+            {
+                CheckConn();
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                pd.StartDate = Convert.ToDateTime(dt.Rows[0]["StartDate"]);
+                pd.EndDate = Convert.ToDateTime(dt.Rows[0]["EndDate"]);
+
+            } catch(Exception) {
+                pd.StartDate = new DateTime(1901, 1, 1);
+                pd.EndDate = new DateTime(1901, 1, 1);
+            }
+
+
+            return pd;
+        }
+
         #endregion
 
         #region Intervention Functionality
