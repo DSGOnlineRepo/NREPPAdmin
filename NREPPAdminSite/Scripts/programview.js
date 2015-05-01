@@ -46,4 +46,10 @@ $(".userPreScreenMask").click(function () {
     });
 
     $("#userPreScreenAns").val(sum);
+    if (sum == 10 || sum == 18 || sum == 12 || sum == 20)
+    {
+        $(".formContent").removeClass("hidden");
+    } else {
+        $(".formContent").addClass("hidden");
+    }
 });

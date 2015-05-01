@@ -21,7 +21,37 @@ else if (Model.TheIntervention.StatusId == 5)
     @Html.ActionLink("View Screening Results", "ScreenResults", new { IntervId = Model.TheIntervention.Id });
 }
 <div>
+    @if (Model.TheIntervention.Id < 0)
+    {
+        <div>
+            <p>
+                Welcome to the NREPP submission process. Our open submission period runs from [month, year] to [month, year]. You will be prompted for information required to submit an application for your program. If you are submitting more than one program, you will need to submit information about one program at a time.
+            </p>
+            <p>
+                Your account allows you to initiate an application and save your work until you complete the submission.  After you have entered and uploaded all of the required information, you must press the Submit button for your application to be processed.
+            </p>
 
+            <p>
+                For more information about the submission and review process, click here. Questions regarding your submission can be sent to nreppadmin@dsgonline.com. <b>All applications must be completed and submitted by [month, year]</b>.
+            </p>
+        </div>
+    }
+    
+    <div>
+    @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" })
+
+    @foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
+    {
+        bool isChecked = mask.Selected;
+
+        @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "userPreScreenMask" }) @mask.Name <br />
+    }
+    </div>
+
+    <div class="formContent hidden">
+
+    @if (Model.TheIntervention.StatusId > 1) { 
+        
     <div style="height: 100px;">
         <span style="float: left; clear: left;">
             Last Updated On:
@@ -38,8 +68,11 @@ else if (Model.TheIntervention.StatusId == 5)
             <button id="btnToggleEdit">Edit</button>
         </div>
     </div>
+        
+    }
+    else { 
 
-    <div class="someform hidden">
+    <div class="mainForm">
         @using(Html.BeginForm("Edit", "Program"))
         {
             @Html.HiddenFor(m => m.TheIntervention.Id);
@@ -69,6 +102,7 @@ else if (Model.TheIntervention.StatusId == 5)
             <input type="submit" value="Update" />
         }
     </div>
+    }
 
     @if (Model.TheIntervention.Id > 0)
     {
@@ -112,13 +146,25 @@ else if (Model.TheIntervention.StatusId == 5)
                 //@Html.HiddenFor(m => )
                 
                 if (Model.CanDo("UploadDocs"))
-                { 
+                {
+                    
+                    if (Model.TheIntervention.StatusId == 1)
+                    {
+                        <p>
+                            You may now upload key documents relevant to the review of your program. This includes  program evaluation (journal articles, evaluation reports), , dissemination materials, and other supporting documents.
+                        </p>
+                        <ul>
+                            <li><u>Program evaluation</u> materials include studies using an experimental or quasi-experimental design, with a comparison or control group (treatment as usual or no treatment, but not an alternative treatment) designed to assess the impact of the program on key outcomes.</li>
+                            <li><u>Dissemination materials</u>, though no longer required, are encouraged. These include manuals, curricula, quality assurance materials, training materials, activity props, and such. You may upload documents electronically. Note: You will have the option to list materials that cannot be submitted electronically.</li>
+                            <li><u>Other supporting</u> documents could include a more detailed description of your program, its conceptual framework or logic model, materials related to the reliability and validity of your measures, etc.</li>
+                        </ul>
                 
-                    <span style="font-size: large; font-weight: bold;">Upload a File: </span><input type="file" name="UploadedFile" /> <br />
-                    <span>Document Title: </span><input type="text" name="FileDescription" />
-                    @Html.DropDownList("docTypeDD", DocTypez);
-                    <br /><br />
-                    <input type="submit" value="Attach" /> <input type="checkbox" /> <span>from Lit Search</span>
+                        <span style="font-size: large; font-weight: bold;">Upload a File: </span><input type="file" name="UploadedFile" /> <br />
+                        <span>Document Title: </span><input type="text" name="FileDescription" />
+                        @Html.DropDownList("docTypeDD", DocTypez);
+                        <br /><br />
+                        <input type="submit" value="Attach" /> <input type="checkbox" /> <span>from Lit Search</span>
+                    }
                 }
             }
         </div>
@@ -138,9 +184,6 @@ else if (Model.TheIntervention.StatusId == 5)
             DestinationOpts.Add(new SelectListItem() { Text = dest.UserName, Value = dest.UserId.ToString() + "," + dest.StatusId.ToString() });
         }
     }
-
-    @if (Model.TheIntervention.StatusId < 5)
-    { 
         <div class="submitDiv">
             Please submit your completed program.
 
@@ -175,29 +218,18 @@ else if (Model.TheIntervention.StatusId == 5)
                     {
                        @Html.DropDownList("selDest", DestinationOpts)
                     }
-                
+
                 }
                 else
                 {
-                    @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" });
-
-                    foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
-                    {
-                        bool isChecked = mask.Selected;
-                        
-                        @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "userPreScreenMask" }) @mask.Name <br />
-                        
-                        
-                                                                                                                                                                                                                                                                 }
-
                     @Html.Hidden("destStatus", 2)
-                }
+                } 
+             }
 
-                if (Model.TheIntervention.StatusId < 3 && Model.Documents.Count > 0) {
+                @if (Model.TheIntervention.StatusId < 3 && Model.Documents.Count > 0) {
                     <input type="submit" value="Submit" />
                 }
-            }
         </div>
-    }
+    </div>
 </div>
 
