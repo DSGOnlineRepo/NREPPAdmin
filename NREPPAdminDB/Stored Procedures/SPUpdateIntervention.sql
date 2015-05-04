@@ -34,10 +34,10 @@ AS SET NOCOUNT ON
 		DECLARE @nUserId VARCHAR(128)
 		DECLARE @nSubmitterRole VARCHAR(128)
 
-		SELECT @nUserId = Id from AspNetUsers WHERE UserName = @submitterId
+		--SELECT @nUserId = Id from AspNetUsers WHERE UserName = @submitterId
 		SELECT @nSubmitterRole = Id from AspNetRoles where Name = 'Principal Investigator'
 
-		INSERT INTO Inter_User_Roles (InterventionId, WkRoleId, UserId) VALUES (@Output, @nSubmitterRole, @nUserId)
+		INSERT INTO Inter_User_Roles (InterventionId, WkRoleId, UserId) VALUES (@Output, @nSubmitterRole, @submitterId)
 
 		if @@ERROR <> 0 BEGIN
 			ROLLBACK TRANSACTION

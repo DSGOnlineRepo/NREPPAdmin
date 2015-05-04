@@ -403,7 +403,9 @@ namespace NREPPAdminSite.Models
 
         public bool CanDo(string permission)
         {
-            return permissionsList[permission];
+            if (permissionsList.ContainsKey(permission))
+                return permissionsList[permission];
+            else return false;
         }
     }
 
