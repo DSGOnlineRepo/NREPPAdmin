@@ -1,4 +1,9 @@
-﻿$(".programMask").click(function () {
+﻿function getParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+$(".programMask").click(function () {
     var sum = 0;
     $(".programMask").each(function () {
         if ($(this).prop("checked"))
@@ -46,10 +51,11 @@ $(".userPreScreenMask").click(function () {
     });
 
     $("#userPreScreenAns").val(sum);
-    if (sum == 10 || sum == 18 || sum == 12 || sum == 20)
-    {
-        $(".formContent").removeClass("hidden");
-    } else {
-        $(".formContent").addClass("hidden");
+    if (parseInt(getParameterByName("InvId")) < 0) {
+        if (sum == 10 || sum == 18 || sum == 12 || sum == 20) {
+            $(".formContent").removeClass("hidden");
+        } else {
+            $(".formContent").addClass("hidden");
+        }
     }
 });
