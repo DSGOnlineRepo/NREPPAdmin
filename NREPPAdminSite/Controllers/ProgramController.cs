@@ -51,6 +51,7 @@ namespace NREPPAdminSite.Controllers
             List<MaskValue> programTypes = localService.GetMaskList("ProgramType").ToList<MaskValue>();
             List<MaskValue> preScreen = localService.GetMaskList("PreScreen").ToList<MaskValue>();
             List<InterventionDoc> documentz;
+            List<RCDocument> reviewerDocs;
 
             SubmissionPd pd = localService.GetCurrentSubmissionPd();
             ViewBag.StartDate = pd.StartDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.StartDate.Year.ToString();
@@ -69,17 +70,19 @@ namespace NREPPAdminSite.Controllers
                 theIntervention = interventionList[0];
 
                 documentz = localService.GetDocuments(InvId, null, null).ToList<InterventionDoc>();
+                reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
             }
             else
             {
                 theIntervention = new Intervention(-1, "", "", User.Identity.Name, null, DateTime.Now, User.Identity.GetUserId(), "", -1, 0, "", false);
                 pageModel = new IntervPageModel();
                 documentz = new List<InterventionDoc>();
+                reviewerDocs = new List<RCDocument>();
             }
 
             List<Destination> nDests = localService.GetDestinations(theIntervention.Id).ToList();
 
-            pageModel = new IntervPageModel(documentz, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
+            pageModel = new IntervPageModel(documentz, reviewerDocs, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
                 documentTypes, nDests, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>(),
                 MaskValue.SplitMask(preScreen, theIntervention.UserPreScreenMask).ToList<MaskValue>());
 

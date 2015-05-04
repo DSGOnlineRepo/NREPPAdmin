@@ -54,6 +54,7 @@ namespace NREPPAdminSite.Models
         private List<MaskValue> userprescreen = new List<MaskValue>();
         private List<Answer> documentType = new List<Answer>();
         private List<Destination> dests = new List<Destination>();
+        private List<RCDocument> rcDocuments = new List<RCDocument>();
 
         private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>();
 
@@ -83,6 +84,18 @@ namespace NREPPAdminSite.Models
             dests = inDests;
             prescreen = preScreen;
             userprescreen = userPreScreen;
+        }
+
+        public IntervPageModel(List<InterventionDoc> inDocuments, List<RCDocument> rcDocs, List<MaskValue> inProgTypes, List<Answer> inDocTypes,
+            List<Destination> inDests, List<MaskValue> preScreen, List<MaskValue> userPreScreen)
+        {
+            documents = inDocuments;
+            programType = inProgTypes;
+            documentType = inDocTypes;
+            dests = inDests;
+            prescreen = preScreen;
+            userprescreen = userPreScreen;
+            rcDocuments = rcDocs;
         }
 
         #endregion
@@ -130,6 +143,11 @@ namespace NREPPAdminSite.Models
             get { return permissionsList; }
         }
 
+        public List<RCDocument> RCDocuments
+        {
+            get { return rcDocuments; }
+        }
+
         #endregion
 
         /// <summary>
@@ -148,6 +166,16 @@ namespace NREPPAdminSite.Models
         public void DeleteDocument(int index)
         {
             documents.RemoveAt(index);
+        }
+
+        public void AddRCDocument(RCDocument inRCDoc)
+        {
+            rcDocuments.Add(inRCDoc);
+        }
+
+        public void DeleteRCDocument(int index)
+        {
+            rcDocuments.RemoveAt(index);
         }
 
     }
