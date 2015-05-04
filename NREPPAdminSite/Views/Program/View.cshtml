@@ -25,14 +25,14 @@ else if (Model.TheIntervention.StatusId == 5)
     {
         <div>
             <p>
-                Welcome to the NREPP submission process. Our open submission period runs from [month, year] to [month, year]. You will be prompted for information required to submit an application for your program. If you are submitting more than one program, you will need to submit information about one program at a time.
+                Welcome to the NREPP submission process. Our open submission period runs from @ViewBag.StartDate to @ViewBag.EndDate. You will be prompted for information required to submit an application for your program. If you are submitting more than one program, you will need to submit information about one program at a time.
             </p>
             <p>
                 Your account allows you to initiate an application and save your work until you complete the submission.  After you have entered and uploaded all of the required information, you must press the Submit button for your application to be processed.
             </p>
 
             <p>
-                For more information about the submission and review process, click here. Questions regarding your submission can be sent to nreppadmin@dsgonline.com. <b>All applications must be completed and submitted by [month, year]</b>.
+                For more information about the submission and review process, click here. Questions regarding your submission can be sent to nreppadmin@dsgonline.com. <b>All applications must be completed and submitted by @ViewBag.EndDate</b>.
             </p>
         </div>
     }

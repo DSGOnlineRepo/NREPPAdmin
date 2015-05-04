@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
 using NREPPAdminSite.Security;
+using System.Globalization;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -52,8 +53,8 @@ namespace NREPPAdminSite.Controllers
             List<InterventionDoc> documentz;
 
             SubmissionPd pd = localService.GetCurrentSubmissionPd();
-            ViewBag.StartDate = pd.StartDate.ToShortDateString();
-            ViewBag.EndDate = pd.EndDate.ToShortDateString();
+            ViewBag.StartDate = pd.StartDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.StartDate.Year.ToString();
+            ViewBag.EndDate = pd.EndDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.EndDate.Year.ToString();
 
             if (InvId > 0)
             {
