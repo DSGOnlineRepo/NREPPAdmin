@@ -127,47 +127,51 @@ namespace NREPPAdminSite.Models
     /// </summary>
     public class Reviewer
     {
-        public string ReviewerId { get; set; }
+        public string Id { get; set; }
         public string UserId { get; set; }
-        public string Degree { get; set; }
-        public string  ReviewerType { get; set; }
-        public bool IsActive { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Degree { get; set; }
+        public string ReviewerType { get; set; }
         public string HomeAddressLine1 { get; set; }
         public string HomeAddressLine2 { get; set; }
         public string HomeCity { get; set; }
-        public string State { get; set; }
-        public string Zip { get; set; }
+        public string HomeState { get; set; }
+        public string HomeZip { get; set; }
         public string PhoneNumber { get; set; }
         public string FaxNumber { get; set; }
-        public string Employer { get; set; }
         public string Email { get; set; }
-        public string Department { get; set; }
 
+        public string Employer { get; set; }
+        public string Department { get; set; }
         public string WorkAddressLine1 { get; set; }
         public string WorkAddressLine2 { get; set; }
         public string WorkCity { get; set; }
         public string WorkState { get; set; }
         public string WorkZip { get; set; }
-        public string WorkPhone { get; set; }
+        public string WorkPhoneNumber { get; set; }
         public string WorkFaxNumber { get; set; }
-        public string WorkEmployer { get; set; }
         public string WorkEmail { get; set; }
-        public string ExpSummary { get; set; }
+        public string ExperienceSummary { get; set; }
+        public bool IsActive { get; set; }
 
-        public Reviewer(string reviewerId, string userId, string degree, string reviewerType, string firstName, string lastName, string department)
+        public Reviewer(string reviewerId, string userId, string firstName, string lastName, string employer, string department, string reviewerType, string degree)
         {
-            ReviewerId = reviewerId;
+            Id = reviewerId;
             UserId = userId;
-            Degree = degree;
-            ReviewerType = reviewerType;            
             FirstName = firstName;
             LastName = lastName;
+            Employer = employer;
             Department = department;
-
+            ReviewerType = reviewerType;
+            Degree = degree;
         }
-       
+    }
+
+    public class ReviewerSearchResult
+    {
+        public List<Reviewer> Reviewers = new List<Reviewer>();
+        public int TotalSearchCount;
     }
 
     public class ReviewersWrapper

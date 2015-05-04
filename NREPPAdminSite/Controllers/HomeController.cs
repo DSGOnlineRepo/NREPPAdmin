@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Security;
+using DataTables.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using NREPPAdminSite.Models;
@@ -49,35 +50,30 @@ namespace NREPPAdminSite.Controllers
             return View();
         }
 
-       [AllowAnonymous]
+        [Authorize]
         public ActionResult Reviewers()
         {
-            ViewBag.Message = "Your Reviewers page.";
-           //NrepServ localService = new NrepServ(NrepServ.ConnString);
-          // ReviewersWrapper reviewersWrapper = localService.GetOutComesReviewer(null);
-           //ReviewersPageModel reviewersPageModel = new ReviewersPageModel();
-           //reviewersPageModel.Outcomes = reviewersWrapper;
-           return View();//reviewersPageModel);
+            return View();
         }
 
-        [AllowAnonymous]
+       [Authorize]
        public ActionResult Reviewer(int? id)
        {
            ViewBag.Message = "Your Reviewer page.";
            NrepServ localService = new NrepServ(NrepServ.ConnString);
-           ReviewerWrapper reviewerWrapper = localService.GetOutComesReviewer(id);
+           var reviewerList = localService.GetOutComesReviewer(id);
            ReviewerPageModel reviewerPageModel = new ReviewerPageModel();
-           reviewerPageModel.Outcomes = reviewerWrapper;
+           //reviewerPageModel.Outcomes = reviewerWrapper;
            return PartialView(reviewerPageModel);
-          // return View("Reviewer");
+           // return View("Reviewer");
        }
-
-       [AcceptVerbs(HttpVerbs.Post)]
-       public JsonResult ReviewersList()
+       
+       [Authorize]
+       public JsonResult ReviewersList([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
        {
            NrepServ localService = new NrepServ(NrepServ.ConnString);
-           List<Reviewer> reviewers = localService.GetReviewers();
-           return Json(reviewers);
+           ReviewerSearchResult reviewerSearchResult = localService.GetReviewers(requestModel);
+           return Json(new DataTablesResponse(requestModel.Draw, reviewerSearchResult.Reviewers, reviewerSearchResult.TotalSearchCount, reviewerSearchResult.TotalSearchCount), JsonRequestBehavior.AllowGet);
        }
          
         [Authorize]

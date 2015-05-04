@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -337,53 +338,67 @@ namespace NREPPAdminSite.Models
     }
 
     #region Reviewer models
+
     public class ReviewersPageModel : NREPPPermissions
     {
-       
-
         public ReviewersWrapper Outcomes { get; set; }
     }
+
     public class ReviewerPageModel : NREPPPermissions
     {
-        public string ReviewerId { get; set; }
+        public string Id { get; set; }
         public string UserId { get; set; }
-        public string Degree { get; set; }
-        public string ReviewerType { get; set; }
-        public bool IsActive { get; set; }
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
+        public string Degree { get; set; }
+        [Display(Name = "Reviewer Type")]
+        public string ReviewerType { get; set; }
+        [Display(Name = "Home Address Line 1")]
         public string HomeAddressLine1 { get; set; }
+        [Display(Name = "Home Address Line 2")]
         public string HomeAddressLine2 { get; set; }
+        [Display(Name = "Home City")]
         public string HomeCity { get; set; }
-       // public string State { get; set; }
-        public string Zip { get; set; }
+        [Display(Name = "Home State")]
+        public string HomeState { get; set; }
+        [Display(Name = "Home Zip")]
+        public string HomeZip { get; set; }
+        [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
-        public string Phone { get; set; }
-        public string City { get; set; }
+        [Display(Name = "Fax Number")]
         public string FaxNumber { get; set; }
-        public string Employer { get; set; }
         public string Email { get; set; }
+
+        public string Employer { get; set; }
         public string Department { get; set; }
-        public string StreetAddress { get; set; }
+        [Display(Name = "Work Address Line 1")]
         public string WorkAddressLine1 { get; set; }
+        [Display(Name = "Work Address Line 2")]
         public string WorkAddressLine2 { get; set; }
+        [Display(Name = "Work City")]
         public string WorkCity { get; set; }
+        [Display(Name = "Work State")]
         public string WorkState { get; set; }
+        [Display(Name = "Work Zip")]
         public string WorkZip { get; set; }
-        public string WorkPhone { get; set; }
+        [Display(Name = "Work Phone Number")]
+        public string WorkPhoneNumber { get; set; }
+        [Display(Name = "Work Fax Number")]
         public string WorkFaxNumber { get; set; }
-        public string WorkEmployer { get; set; }
+        [Display(Name = "Work Email")]
         public string WorkEmail { get; set; }
-        public string ExpSummary { get; set; }
-        public string State { get; set; }
-         public string   ZIP { get; set; }
-          
-          public string  WorkStreetAddress { get; set; }
-          public string  WorkFax { get; set; }
-          public string ExperienceSummary { get; set; }
+        [Display(Name = "Experience Summary")]
+        public string ExperienceSummary { get; set; }
+
+        public bool IsActive { get; set; }
+
         public ReviewerWrapper Outcomes { get; set; }
     }
+
     #endregion
+
     #region Extra Stuff
 
     public class NREPPPermissions

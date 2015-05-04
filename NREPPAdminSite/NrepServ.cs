@@ -12,6 +12,8 @@ using System.Security.Principal;
 using System.Web.Script.Serialization;
 using System.Data.SqlTypes;
 using System.IO;
+using System.Web.Mvc;
+using DataTables.Mvc;
 using NREPPAdminSite.Constants;
 
 namespace NREPPAdminSite
@@ -947,7 +949,8 @@ namespace NREPPAdminSite
             ReviewersWrapper rw = new ReviewersWrapper();
             try
             {
-                rw.OutcomesReviewers = GetReviewers();
+                //TODO: Remove Later
+                //rw.OutcomesReviewers = GetReviewers();
             }
             catch (Exception ex)
             {
@@ -974,10 +977,10 @@ namespace NREPPAdminSite
 
         public Reviewer GetReviewer(int? id)
         {
-            Reviewer reviewer=null; //= new Reviewer();
+            Reviewer reviewer = null; //= new Reviewer();
             SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewerList", conn);
             cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
-            
+
 
             try
             {
@@ -986,10 +989,10 @@ namespace NREPPAdminSite
                 SqlDataAdapter da = new SqlDataAdapter(cmdGetReviewerList);
                 da.Fill(reviewers);
                 DataRow dr = reviewers.Rows[0];
-                reviewer = new Reviewer(dr["Id"].ToString(), dr["UserId"].ToString(), dr["Degree"].ToString(), dr["ReviewerType"].ToString(), dr["FirstName"].ToString(),
-                        dr["LastName"].ToString(), dr["Department"].ToString());
+                reviewer = new Reviewer(dr["Id"].ToString(), dr["UserId"].ToString(), dr["FirstName"].ToString(),
+                        dr["LastName"].ToString(), dr["Employer"].ToString(), dr["Department"].ToString(), dr["ReviewerType"].ToString(), dr["Degree"].ToString());
                 return reviewer;
-                
+
             }
             catch (Exception ex)
             {
@@ -997,16 +1000,61 @@ namespace NREPPAdminSite
             }
 
             return reviewer;
-            
+
         }
 
-        public List<Reviewer> GetReviewers()
+        public ReviewerSearchResult GetReviewers([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
         {
-            List<Reviewer> reviewer = new List<Reviewer>();
-            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewerList", conn);
-            cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
-            Reviewer Rev;
+            string id = null;
+            string firstName = null;
+            string lastName = null;
+            string employer = null;
+            string department = null;
+            string reviewerType = null;
+            string degree = null;
 
+            var reviewerSearchResult = new ReviewerSearchResult();
+            var reviewerList = new List<Reviewer>();
+            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewers", conn);
+            cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
+
+            var filteredColumns = requestModel.Columns.GetFilteredColumns();
+            foreach (var filter in filteredColumns)
+            {
+                switch (filter.Data)
+                {
+                    case "Id":
+                        id = filter.Search.Value;
+                        break;
+                    case "FirstName":
+                        firstName = filter.Search.Value;
+                        break;
+                    case "LastName":
+                        lastName = filter.Search.Value;
+                        break;
+                    case "Employer":
+                        employer = filter.Search.Value;
+                        break;
+                    case "Department":
+                        department = filter.Search.Value;
+                        break;
+                    case "ReviewerType":
+                        reviewerType = filter.Search.Value;
+                        break;
+                    case "Degree":
+                        degree = filter.Search.Value;
+                        break;
+                }
+            }
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@Id", Utilities.ToDbNull(id)));
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@FirstName", Utilities.ToDbNull(firstName)));
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@LastName", Utilities.ToDbNull(lastName)));
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@Employer", Utilities.ToDbNull(employer)));
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@Department", Utilities.ToDbNull(department)));
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@ReviewerType", Utilities.ToDbNull(reviewerType)));
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@Degree", Utilities.ToDbNull(degree)));
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@Page", requestModel.Start + 1));
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@PageLength", requestModel.Length));
             try
             {
                 CheckConn();
@@ -1016,19 +1064,23 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in reviewers.Rows)
                 {
-                    Rev = new Reviewer(dr["Id"].ToString(), dr["UserId"].ToString(), dr["Degree"].ToString() ,dr["ReviewerType"].ToString(), dr["FirstName"].ToString(),
-                        dr["LastName"].ToString(), dr["Department"].ToString());
-
-                    reviewer.Add(Rev);
+                    reviewerList.Add(new Reviewer(dr["Id"].ToString(), dr["UserId"].ToString(),
+                        dr["FirstName"].ToString(),
+                        dr["LastName"].ToString(), dr["Employer"].ToString(), dr["Department"].ToString(),
+                        dr["ReviewerType"].ToString(), dr["Degree"].ToString()));
                 }
-
+                if (reviewers.Rows.Count > 0)
+                {
+                    reviewerSearchResult.Reviewers = reviewerList;
+                    reviewerSearchResult.TotalSearchCount = Convert.ToInt16(reviewers.Rows[0]["searchTotal"].ToString());
+                }
             }
             catch (Exception ex)
             {
-
+                throw;
             }
 
-            return reviewer;
+            return reviewerSearchResult;
         }
 
         #endregion
