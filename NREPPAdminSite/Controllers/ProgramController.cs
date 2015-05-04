@@ -51,6 +51,10 @@ namespace NREPPAdminSite.Controllers
             List<MaskValue> preScreen = localService.GetMaskList("PreScreen").ToList<MaskValue>();
             List<InterventionDoc> documentz;
 
+            SubmissionPd pd = localService.GetCurrentSubmissionPd();
+            ViewBag.StartDate = pd.StartDate.ToShortDateString();
+            ViewBag.EndDate = pd.EndDate.ToShortDateString();
+
             if (InvId > 0)
             {
                 var user = _userManager.FindByName(User.Identity.Name);

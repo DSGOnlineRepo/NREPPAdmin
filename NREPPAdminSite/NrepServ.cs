@@ -1091,6 +1091,11 @@ namespace NREPPAdminSite
                 return Convert.ToDateTime(inObj);
         }
 
+        public bool IsInSubPd(SubmissionPd pd)
+        {
+            return pd.StartDate < DateTime.Now && pd.EndDate > DateTime.Now;
+        }
+
         #endregion
     }
 
