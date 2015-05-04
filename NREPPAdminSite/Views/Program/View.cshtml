@@ -142,13 +142,11 @@ else if (Model.TheIntervention.StatusId == 5)
                 @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
                 @Html.HiddenFor(m => m.TheIntervention.StatusId);
                 @Html.HiddenFor(m => m.TheIntervention.ProgramType);
-                //@Html.HiddenFor(m => )
                 
-                if (Model.CanDo("UploadDocs"))
-                {
+                
                     
-                    if (Model.TheIntervention.StatusId == 1)
-                    {
+                if (Model.TheIntervention.StatusId == 1 && Model.CanDo("UploadDocs"))
+                {
                         <p>
                             You may now upload key documents relevant to the review of your program. This includes  program evaluation (journal articles, evaluation reports), , dissemination materials, and other supporting documents.
                         </p>
@@ -163,7 +161,6 @@ else if (Model.TheIntervention.StatusId == 5)
                         @Html.DropDownList("docTypeDD", DocTypez);
                         <br /><br />
                         <input type="submit" value="Attach" /> <input type="checkbox" /> <span>from Lit Search</span>
-                    }
                 }
             }
         </div>
