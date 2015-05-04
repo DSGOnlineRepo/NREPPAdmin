@@ -38,7 +38,6 @@ else if (Model.TheIntervention.StatusId == 5)
     }
     
     <div>
-    @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" })
 
     @foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
     {
@@ -78,7 +77,8 @@ else if (Model.TheIntervention.StatusId == 5)
             @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
             @Html.HiddenFor(m => m.TheIntervention.StatusId);
             @Html.HiddenFor(m => m.TheIntervention.ProgramType, new { Id = "programType" });
-            
+            @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" })
+
             @Html.LabelFor(m => m.TheIntervention.Title, new { style = "margin-right: 5px;" });
             @Html.TextBoxFor(m => m.TheIntervention.Title);<br />
             
