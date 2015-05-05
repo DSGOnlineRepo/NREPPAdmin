@@ -13,17 +13,16 @@ SET NOCOUNT ON
 		SELECT TOP 100 i.Id as InterventionId, Title, FullDescription, u.Firstname + ' ' + u.Lastname as [Submitter], i.SubmitterId as [SubmitterId], StatusName,
 		s.Id as [StatusId], PublishDate, UpdateDate, ProgramType, Acronym, Owner, FromListSearch, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes
 		from Interventions i 
-		inner join AspNetUsers u ON i.SubmitterId = u.UserName
+		inner join AspNetUsers u ON i.SubmitterId = u.Id
 		inner join InterventionStatus s on i.Status = s.Id
 		WHERE s.Id in (SELECT statusId from @AvailStatus)
 
 	END
 	ELSE BEGIN
-
 		SELECT i.Id as InterventionId, Title, FullDescription, u.Firstname + ' ' + u.Lastname as [Submitter], i.SubmitterId as [SubmitterId], StatusName,
 		s.Id as [StatusId], PublishDate, UpdateDate, ProgramType, Acronym, Owner, FromListSearch, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes
 		from Interventions i 
-		inner join AspNetUsers u ON i.SubmitterId = u.UserName
+		inner join AspNetUsers u ON i.SubmitterId = u.Id
 		inner join InterventionStatus s on i.Status = s.Id
 		WHERE i.Id = @Id
 	END

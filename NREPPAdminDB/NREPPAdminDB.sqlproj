@@ -120,6 +120,8 @@
     <Build Include="Tables\AspNetUserClaims.sql" />
     <Build Include="Tables\AspNetUserLogins.sql" />
     <Build Include="Tables\AspNetUserRoles.sql" />
+    <Build Include="Tables\SubmissionPds.sql" />
+    <Build Include="Tables\SPGetRecentSubPd.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />
