@@ -48,6 +48,8 @@ else if (Model.TheIntervention.StatusId == 5)
             }
         }
 
+    @if (Model.TheIntervention.StatusId < 2) // Only show these to the submitter during the initial submission
+    { 
     @foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
     {
         bool isChecked = mask.Selected;
@@ -59,6 +61,7 @@ else if (Model.TheIntervention.StatusId == 5)
             string formContentClass = Model.TheIntervention.Id > 0 ?  "formContent" : "formContent hidden";
             int i = 0;
         }
+    }
     </div>
 
     <div class="@formContentClass">
