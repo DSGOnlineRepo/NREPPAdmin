@@ -9,9 +9,10 @@ AS
 BEGIN
 	DECLARE @InterventionStatus INT
 	DECLARE @CanDo BIT
-	DECLARE @UserRole INT
+	DECLARE @UserRole nvarchar(256)
 
 	DECLARE @ThePermission INT
+	DECLARE @UserId NVARCHAR(128) = (SELECT ID FROM ASPNETUSERS WHERE USERNAME = @UserName)
 
 	SELECT @ThePermission = Id FROM
 	Permissions WHERE PermissionName = @inPermission
@@ -23,7 +24,6 @@ BEGIN
 		-- Do Intervention-Based Rules First
 
 		DECLARE @IntervRole NVARCHAR(128)
-		DECLARE @UserId NVARCHAR(128) = (SELECT ID FROM ASPNETUSERS WHERE USERNAME = @UserName)
 		
 		SELECT @IntervRole = WkRoleId from Inter_User_Roles
 		WHERE InterventionId = @InterventionId AND UserId = @UserId
@@ -38,6 +38,15 @@ BEGIN
 				SELECT @CanDo = Allowed from Role_Permissions
 				WHERE RoleID = @IntervRole AND PermissionID = @ThePermission
 			END
+		END
+		ELSE BEGIN
+			SELECT @UserRole = RoleId from AspNetRoles r
+			INNER JOIN AspNetUserRoles ur ON ur.RoleId = r.Id
+			INNER JOIN AspNetUsers u on u.Id = ur.UserId
+			WHERE u.Id = @UserId
+
+			SELECT @CanDo = Allowed from Role_Permissions
+			WHERE RoleID = @UserRole AND PermissionID = @ThePermission
 		END
 	END
 	ELSE BEGIN

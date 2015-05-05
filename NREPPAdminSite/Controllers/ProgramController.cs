@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
 using NREPPAdminSite.Security;
+using System.Globalization;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -50,6 +51,11 @@ namespace NREPPAdminSite.Controllers
             List<MaskValue> programTypes = localService.GetMaskList("ProgramType").ToList<MaskValue>();
             List<MaskValue> preScreen = localService.GetMaskList("PreScreen").ToList<MaskValue>();
             List<InterventionDoc> documentz;
+            List<RCDocument> reviewerDocs;
+
+            SubmissionPd pd = localService.GetCurrentSubmissionPd();
+            ViewBag.StartDate = pd.StartDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.StartDate.Year.ToString();
+            ViewBag.EndDate = pd.EndDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.EndDate.Year.ToString();
 
             if (InvId > 0)
             {
@@ -64,23 +70,26 @@ namespace NREPPAdminSite.Controllers
                 theIntervention = interventionList[0];
 
                 documentz = localService.GetDocuments(InvId, null, null).ToList<InterventionDoc>();
+                reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
             }
             else
             {
                 theIntervention = new Intervention(-1, "", "", User.Identity.Name, null, DateTime.Now, User.Identity.GetUserId(), "", -1, 0, "", false);
                 pageModel = new IntervPageModel();
                 documentz = new List<InterventionDoc>();
+                reviewerDocs = new List<RCDocument>();
             }
 
             List<Destination> nDests = localService.GetDestinations(theIntervention.Id).ToList();
 
-            pageModel = new IntervPageModel(documentz, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
+            pageModel = new IntervPageModel(documentz, reviewerDocs, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
                 documentTypes, nDests, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>(),
                 MaskValue.SplitMask(preScreen, theIntervention.UserPreScreenMask).ToList<MaskValue>());
 
             List<string> perms = new List<string>();
 
             perms.Add("UploadDocs");
+            perms.Add("SeeRCDocs");
 
             pageModel.SetPermissions(perms, User.Identity.Name, InvId);
             pageModel.TheIntervention = theIntervention;
@@ -231,7 +240,7 @@ namespace NREPPAdminSite.Controllers
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             
-            inInterv.TheIntervention.SubmitterId = User.Identity.GetUserId();
+            //inInterv.TheIntervention.SubmitterId = User.Identity.GetUserId();
             int returnValue = localService.SaveIntervention(inInterv.TheIntervention);
 
             return RedirectToAction("View", new { InvId = returnValue });
@@ -348,7 +357,7 @@ namespace NREPPAdminSite.Controllers
                 
             }
 
-            return RedirectToAction("Screen", new { InterventionId = int.Parse(col["InterventionId"]) });
+            return RedirectToAction("View", new { InterventionId = int.Parse(col["IntervId"]) });
         }
 
         [HttpPost]

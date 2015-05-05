@@ -25,20 +25,19 @@ else if (Model.TheIntervention.StatusId == 5)
     {
         <div>
             <p>
-                Welcome to the NREPP submission process. Our open submission period runs from [month, year] to [month, year]. You will be prompted for information required to submit an application for your program. If you are submitting more than one program, you will need to submit information about one program at a time.
+                Welcome to the NREPP submission process. Our open submission period runs from @ViewBag.StartDate to @ViewBag.EndDate. You will be prompted for information required to submit an application for your program. If you are submitting more than one program, you will need to submit information about one program at a time.
             </p>
             <p>
                 Your account allows you to initiate an application and save your work until you complete the submission.  After you have entered and uploaded all of the required information, you must press the Submit button for your application to be processed.
             </p>
 
             <p>
-                For more information about the submission and review process, click here. Questions regarding your submission can be sent to nreppadmin@dsgonline.com. <b>All applications must be completed and submitted by [month, year]</b>.
+                For more information about the submission and review process, click here. Questions regarding your submission can be sent to nreppadmin@dsgonline.com. <b>All applications must be completed and submitted by @ViewBag.EndDate</b>.
             </p>
         </div>
     }
     
     <div>
-    @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" })
 
     @foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
     {
@@ -46,10 +45,14 @@ else if (Model.TheIntervention.StatusId == 5)
 
         @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "userPreScreenMask" }) @mask.Name <br />
     }
+
+        @{
+            string formContentClass = Model.TheIntervention.Id > 0 ?  "formContent" : "formContent hidden";
+            int i = 0;
+        }
     </div>
 
-    <div class="formContent hidden">
-
+    <div class="@formContentClass">
     @if (Model.TheIntervention.StatusId > 1) { 
         
     <div style="height: 100px;">
@@ -78,7 +81,8 @@ else if (Model.TheIntervention.StatusId == 5)
             @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
             @Html.HiddenFor(m => m.TheIntervention.StatusId);
             @Html.HiddenFor(m => m.TheIntervention.ProgramType, new { Id = "programType" });
-            
+            @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" })
+
             @Html.LabelFor(m => m.TheIntervention.Title, new { style = "margin-right: 5px;" });
             @Html.TextBoxFor(m => m.TheIntervention.Title);<br />
             
@@ -112,21 +116,79 @@ else if (Model.TheIntervention.StatusId == 5)
         
         <div class="upload-div hidden">
             <span class="collapsedText hidden">@NumDocs Documents On this Intervention</span>
+            @if (Model.CanDo("SeeRCDocs"))
+            {
+                <div>
+
+                    <table>
+                        <tr>
+                            <th class="withborder">Description</th>
+                            <th class="withborder">RC File Name</th>
+                            <th class="withborder">Reference</th>
+                            <th class="withborder">Publication Year</th>
+                            <th class="withborder"> </th>
+                        </tr>
+                        @using (Html.BeginForm("UpdateRCDocs", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
+
+                            foreach (NREPPAdminSite.Models.RCDocument doc in Model.RCDocuments)
+                            {
+                                <tr>
+                                    <td class="withborder">
+                                        @Html.Hidden("hid_" + i.ToString(), @doc.DocId)
+                                        @Html.Hidden("isdirty_" + i.ToString(), "false")
+                                        @doc.FileDescription
+                                    </td>
+                                    <td class="withborder">
+                                        @doc.RCName
+                                        @Html.TextBox("txtRCName_" + i.ToString(), @doc.RCName, new { @class = "hidden" })
+                                    </td>
+                                    <td class="withborder">
+                                        @if (doc.Reference != null && doc.Reference != string.Empty)
+                                        {
+                                            @Html.ActionLink(@doc.Reference, "GetFile", "Admin", new { FileId = doc.DocId }, null);
+                                        }
+                                        else
+                                        {
+                                            <label>@doc.Reference</label>
+                                        }
+                                        @Html.TextArea("txtRef_" + i.ToString(), @doc.Reference, new { @class = "hidden" })
+                                    </td>
+                                    <td class="withborder">
+                                        @doc.PubYear
+                                        @Html.TextBox("txtPubYear_" + i.ToString(), @doc.PubYear, new { @class = "hidden" })
+                                    </td>
+                                    <td class="withborder">
+                                        <button name="btnEdit" onclick="setEdit(@i); return false;">Edit</button>
+                                        <button name="cancel_@i" class="hidden" onclick="clearEdit(@i); return false;">Cancel</button>
+                                        <input type="submit" value="Save" class="hidden" />
+                                    </td>
+                                </tr>
+                                        i++;
+                            }
+                        }
+                    </table>
+
+                </div>
+            } else { 
             <table style="border: 1px solid;">
                 <tr> <!-- Header -->
                     <th class="withborder" style="text-align: center;">Description</th>
                     <th class="withborder" style="text-align: center;">Type</th>
                     <th class="withborder" style="text-align: center;">&nbsp;</th>
                 </tr>
-                @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
-                {
-                    <tr>
-                        <td class="withborder">@Html.ActionLink(@doc.FileDescription, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
-                        <td class="withborder">@doc.DocumentTypeName</td>
-                        <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.TheIntervention.Id, DocId = doc.DocId })</td>
-                    </tr>
-                }
+                    @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
+                    {
+                        <tr>
+                            <td class="withborder">@Html.ActionLink(@doc.FileDescription, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
+                            <td class="withborder">@doc.DocumentTypeName</td>
+                            <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.TheIntervention.Id, DocId = doc.DocId })</td>
+                        </tr>
+                    }   
             </table>
+            }
+
             @{
                 List<SelectListItem> DocTypez = new List<SelectListItem>();
                 
@@ -142,13 +204,11 @@ else if (Model.TheIntervention.StatusId == 5)
                 @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
                 @Html.HiddenFor(m => m.TheIntervention.StatusId);
                 @Html.HiddenFor(m => m.TheIntervention.ProgramType);
-                //@Html.HiddenFor(m => )
                 
-                if (Model.CanDo("UploadDocs"))
-                {
+                
                     
-                    if (Model.TheIntervention.StatusId == 1)
-                    {
+                if (Model.TheIntervention.StatusId == 1 && Model.CanDo("UploadDocs"))
+                {
                         <p>
                             You may now upload key documents relevant to the review of your program. This includes  program evaluation (journal articles, evaluation reports), , dissemination materials, and other supporting documents.
                         </p>
@@ -163,7 +223,6 @@ else if (Model.TheIntervention.StatusId == 5)
                         @Html.DropDownList("docTypeDD", DocTypez);
                         <br /><br />
                         <input type="submit" value="Attach" /> <input type="checkbox" /> <span>from Lit Search</span>
-                    }
                 }
             }
         </div>
@@ -222,12 +281,14 @@ else if (Model.TheIntervention.StatusId == 5)
                 else
                 {
                     @Html.Hidden("destStatus", 2)
-                } 
-             }
+                }
 
-                @if (Model.TheIntervention.StatusId < 3 && Model.Documents.Count > 0) {
+                if (Model.TheIntervention.StatusId < 3 && Model.Documents.Count > 0)
+                {
                     <input type="submit" value="Submit" />
                 }
+            }
+
         </div>
     </div>
 </div>
