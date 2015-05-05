@@ -357,7 +357,7 @@ namespace NREPPAdminSite.Controllers
                 
             }
 
-            return RedirectToAction("Screen", new { InterventionId = int.Parse(col["InterventionId"]) });
+            return RedirectToAction("View", new { InterventionId = int.Parse(col["IntervId"]) });
         }
 
         [HttpPost]
