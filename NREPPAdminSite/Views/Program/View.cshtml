@@ -48,6 +48,7 @@ else if (Model.TheIntervention.StatusId == 5)
 
         @{
             string formContentClass = Model.TheIntervention.Id > 0 ?  "formContent" : "formContent hidden";
+            int i = 0;
         }
     </div>
 
@@ -117,7 +118,59 @@ else if (Model.TheIntervention.StatusId == 5)
             <span class="collapsedText hidden">@NumDocs Documents On this Intervention</span>
             @if (Model.CanDo("SeeRCDocs"))
             {
-                <div>RC Doc Display here</div>
+                <div>
+
+                    <table>
+                        <tr>
+                            <th class="withborder">Description</th>
+                            <th class="withborder">RC File Name</th>
+                            <th class="withborder">Reference</th>
+                            <th class="withborder">Publication Year</th>
+                            <th class="withborder"> </th>
+                        </tr>
+                        @using (Html.BeginForm("UpdateRCDocs", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
+
+                            foreach (NREPPAdminSite.Models.RCDocument doc in Model.RCDocuments)
+                            {
+                                <tr>
+                                    <td class="withborder">
+                                        @Html.Hidden("hid_" + i.ToString(), @doc.DocId)
+                                        @Html.Hidden("isdirty_" + i.ToString(), "false")
+                                        @doc.FileDescription
+                                    </td>
+                                    <td class="withborder">
+                                        @doc.RCName
+                                        @Html.TextBox("txtRCName_" + i.ToString(), @doc.RCName, new { @class = "hidden" })
+                                    </td>
+                                    <td class="withborder">
+                                        @if (doc.Reference != null && doc.Reference != string.Empty)
+                                        {
+                                            @Html.ActionLink(@doc.Reference, "GetFile", "Admin", new { FileId = doc.DocId }, null);
+                                        }
+                                        else
+                                        {
+                                            <label>@doc.Reference</label>
+                                        }
+                                        @Html.TextArea("txtRef_" + i.ToString(), @doc.Reference, new { @class = "hidden" })
+                                    </td>
+                                    <td class="withborder">
+                                        @doc.PubYear
+                                        @Html.TextBox("txtPubYear_" + i.ToString(), @doc.PubYear, new { @class = "hidden" })
+                                    </td>
+                                    <td class="withborder">
+                                        <button name="btnEdit" onclick="setEdit(@i); return false;">Edit</button>
+                                        <button name="cancel_@i" class="hidden" onclick="clearEdit(@i); return false;">Cancel</button>
+                                        <input type="submit" value="Save" class="hidden" />
+                                    </td>
+                                </tr>
+                                        i++;
+                            }
+                        }
+                    </table>
+
+                </div>
             } else { 
             <table style="border: 1px solid;">
                 <tr> <!-- Header -->
@@ -228,12 +281,14 @@ else if (Model.TheIntervention.StatusId == 5)
                 else
                 {
                     @Html.Hidden("destStatus", 2)
-                } 
-             }
+                }
 
-                @if (Model.TheIntervention.StatusId < 3 && Model.Documents.Count > 0) {
+                if (Model.TheIntervention.StatusId < 3 && Model.Documents.Count > 0)
+                {
                     <input type="submit" value="Submit" />
                 }
+            }
+
         </div>
     </div>
 </div>

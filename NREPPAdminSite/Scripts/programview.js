@@ -59,3 +59,44 @@ $(".userPreScreenMask").click(function () {
         }
     }
 });
+
+function setEdit(index) {
+    var rcnameId = "txtRCName_" + index.toString();
+    var referenceId = "txtRef_" + index.toString();
+    var pubyear = "txtPubYear_" + index.toString();
+    var cancelName = "cancel_" + index.toString();
+    var dirtyId = "#" + "isdirty_" + index.toString();
+
+    $("#" + rcnameId).removeClass("hidden");
+    $("#" + referenceId).removeClass("hidden");
+    $("#" + pubyear).removeClass("hidden");
+    $("button[name*=" + cancelName + "]").removeClass("hidden");
+    $("button[name*=" + cancelName + "]").siblings("input[type=submit]").removeClass("hidden");
+
+    $("button[name*=btnEdit]").each(function () {
+        $(this).prop("disabled", true);
+    });
+
+    $(dirtyId).val("true");
+}
+
+function clearEdit(index) {
+    var rcnameId = "txtRCName_" + index.toString();
+    var referenceId = "txtRef_" + index.toString();
+    var pubyear = "txtPubYear_" + index.toString();
+    var cancelName = "cancel_" + index.toString();
+    var dirtyId = "#" + "isdirty_" + index.toString();
+
+    $("#" + rcnameId).addClass("hidden");
+    $("#" + referenceId).addClass("hidden");
+    $("#" + pubyear).addClass("hidden");
+    $("button[name*=" + cancelName + "]").addClass("hidden");
+    $("button[name*=" + cancelName + "]").siblings("input[type=submit]").addClass("hidden");
+
+    $("button[name*=btnEdit]").each(function () {
+        $(this).prop("disabled", false);
+    });
+
+    $(dirtyId).val("false");
+
+}

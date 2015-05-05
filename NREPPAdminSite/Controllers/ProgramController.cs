@@ -89,6 +89,7 @@ namespace NREPPAdminSite.Controllers
             List<string> perms = new List<string>();
 
             perms.Add("UploadDocs");
+            perms.Add("SeeRCDocs");
 
             pageModel.SetPermissions(perms, User.Identity.Name, InvId);
             pageModel.TheIntervention = theIntervention;
