@@ -39,6 +39,15 @@ else if (Model.TheIntervention.StatusId == 5)
     
     <div>
 
+        @{
+            List<SelectListItem> DocTypez = new List<SelectListItem>();
+
+            foreach (NREPPAdminSite.Models.Answer ans in Model.DocumentType)
+            {
+                DocTypez.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+            }
+        }
+
     @foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
     {
         bool isChecked = mask.Selected;
@@ -169,6 +178,24 @@ else if (Model.TheIntervention.StatusId == 5)
                             }
                         }
                     </table>
+                    @using (Html.BeginForm("UploadFull", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.HiddenFor(m => m.TheIntervention.Id);
+                        @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
+                        @Html.HiddenFor(m => m.TheIntervention.StatusId);
+                        @Html.HiddenFor(m => m.TheIntervention.ProgramType);
+                        
+                        <span style="font-size: large; font-weight: bold;">Upload a File: </span>
+                        <input type="file" name="RCUploadFile" /><br />
+                        <span>Document Title: </span>
+                        <input type="text" name="FileDescription" />
+
+                        @Html.DropDownList("docTypeDD", DocTypez);<br /><br />
+
+                        <input type="submit" value="Attach" />
+                        <input type="checkbox" />
+                        <span>from Lit Search</span>
+                    }
 
                 </div>
             } else { 
@@ -187,15 +214,6 @@ else if (Model.TheIntervention.StatusId == 5)
                         </tr>
                     }   
             </table>
-            }
-
-            @{
-                List<SelectListItem> DocTypez = new List<SelectListItem>();
-                
-                foreach(NREPPAdminSite.Models.Answer ans in Model.DocumentType)
-                {
-                    DocTypez.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
-                }
             }
 
             @using (Html.BeginForm("Upload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
