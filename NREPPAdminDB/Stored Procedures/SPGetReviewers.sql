@@ -1,11 +1,4 @@
-﻿USE [NREPPAdmin]
-GO
-/****** Object:  StoredProcedure [dbo].[SPGetReviewers]    Script Date: 5/3/2015 2:16:32 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-ALTER PROCEDURE [dbo].[SPGetReviewers]
+﻿CREATE PROCEDURE [dbo].[SPGetReviewers]
 	@Id NVARCHAR(128),
 	@FirstName NVARCHAR(250),
 	@LastName NVARCHAR(250),

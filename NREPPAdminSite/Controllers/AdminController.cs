@@ -250,6 +250,21 @@ namespace NREPPAdminSite.Controllers
 
             return View(model);
         }
+       
+        [Authorize]
+        public ActionResult SubmissionPeriods()
+        {
+            return View();
+        }
+        
+        [Authorize]
+        public ActionResult GetSubmissionPeriods()
+        {
+
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            return null;
+
+        }
 
 
         //public async Task RegisterAdmin()

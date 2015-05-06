@@ -164,6 +164,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\SubmissionPeriod.cs" />
+    <Compile Include="Models\Base.cs" />
     <Compile Include="Models\CoreData.cs" />
     <Compile Include="Models\PageModels.cs" />
     <Compile Include="Models\UserModels.cs" />
