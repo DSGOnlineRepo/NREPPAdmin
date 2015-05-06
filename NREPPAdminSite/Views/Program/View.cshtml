@@ -39,18 +39,33 @@ else if (Model.TheIntervention.StatusId == 5)
     
     <div>
 
-    @foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
-    {
-        bool isChecked = mask.Selected;
-
-        @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "userPreScreenMask" }) @mask.Name <br />
-    }
-
         @{
-            string formContentClass = Model.TheIntervention.Id > 0 ?  "formContent" : "formContent hidden";
-            int i = 0;
+            List<SelectListItem> DocTypez = new List<SelectListItem>();
+
+            foreach (NREPPAdminSite.Models.Answer ans in Model.DocumentType)
+            {
+                DocTypez.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+            }
         }
+
+    @if (Model.TheIntervention.StatusId < 2) // Only show these to the submitter during the initial submission
+    { 
+        
+        foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
+        {
+            bool isChecked = mask.Selected;
+
+            @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "userPreScreenMask" }) @mask.Name <br />
+        }
+
+        
+    }
     </div>
+
+    @{
+        string formContentClass = Model.TheIntervention.Id > 0 ? "formContent" : "formContent hidden";
+        int i = 0;
+    }
 
     <div class="@formContentClass">
     @if (Model.TheIntervention.StatusId > 1) { 
@@ -169,6 +184,24 @@ else if (Model.TheIntervention.StatusId == 5)
                             }
                         }
                     </table>
+                    @using (Html.BeginForm("UploadFull", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.HiddenFor(m => m.TheIntervention.Id);
+                        @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
+                        @Html.HiddenFor(m => m.TheIntervention.StatusId);
+                        @Html.HiddenFor(m => m.TheIntervention.ProgramType);
+                        
+                        <span style="font-size: large; font-weight: bold;">Upload a File: </span>
+                        <input type="file" name="RCUploadFile" /><br />
+                        <span>Document Title: </span>
+                        <input type="text" name="FileDescription" />
+
+                        @Html.DropDownList("docTypeDD", DocTypez);<br /><br />
+
+                        <input type="submit" value="Attach" />
+                        <input type="checkbox" />
+                        <span>from Lit Search</span>
+                    }
 
                 </div>
             } else { 
@@ -187,15 +220,6 @@ else if (Model.TheIntervention.StatusId == 5)
                         </tr>
                     }   
             </table>
-            }
-
-            @{
-                List<SelectListItem> DocTypez = new List<SelectListItem>();
-                
-                foreach(NREPPAdminSite.Models.Answer ans in Model.DocumentType)
-                {
-                    DocTypez.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
-                }
             }
 
             @using (Html.BeginForm("Upload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -262,20 +286,38 @@ else if (Model.TheIntervention.StatusId == 5)
                 if (Model.TheIntervention.StatusId > 1)
                 {
                     @Html.HiddenFor(m => m.TheIntervention.PreScreenMask, new { Id = "preScreenAns" });
-               
-                    foreach (NREPPAdminSite.Models.MaskValue mask in Model.PreScreen)
-                    {
-                        bool isChecked = mask.Selected;
-                        if (Model.TheIntervention.StatusId == 2) {
-                            @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "preScreenMask"}) @mask.Name <br />
-                        }
-                        else { @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "preScreenMask", disabled = "disabled" }) @mask.Name <br /> }
-                    }
 
-                    if (Model.TheIntervention.StatusId == 2)
-                    {
+                                                                                                      /*foreach (NREPPAdminSite.Models.MaskValue mask in Model.PreScreen)
+                                                                                                      {
+                                                                                                          bool isChecked = mask.Selected;
+                                                                                                          if (Model.TheIntervention.StatusId == 2) {
+                                                                                                              @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "preScreenMask"}) @mask.Name <br />
+                                                                                                          }
+                                                                                                          else { @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "preScreenMask", disabled = "disabled" }) @mask.Name <br /> }
+                                                                                                      }*/
+
+                                                                                                      for (i = 0; i < Model.PreScreen.Count; i++)
+                                                                                                      {
+                                                                                                          bool isChecked = Model.PreScreen[i].Selected;
+                                                                                                          if (Model.TheIntervention.StatusId == 2)
+                                                                                                          {
+                                                                                                            @Html.CheckBox(Model.PreScreen[i].Name, isChecked, new { Value = Math.Pow(2, Model.PreScreen[i].Value), @class = "preScreenMask" }) @Model.PreScreen[i].Name
+                                                                                                              if (Model.UserPreScreen[i].Selected) { <span>User Selected</span>}
+                
+            <br />
+                                                                                                          }
+                                                                                                          else
+                                                                                                          { @Html.CheckBox(Model.PreScreen[i].Name, isChecked, new { Value = Math.Pow(2, Model.PreScreen[i].Value), @class = "preScreenMask", disabled = "disabled" }) @Model.PreScreen[i].Name
+                                                                                                              if (Model.UserPreScreen[i].Selected)
+                                                                                                              { <span>User Selected</span>}
+                                                                                                                                          <br />
+            }
+                                                                                                      }
+
+                                                                                                      if (Model.TheIntervention.StatusId == 2)
+                                                                                                      {
                        @Html.DropDownList("selDest", DestinationOpts)
-                    }
+                                                                                                          }
 
                 }
                 else
