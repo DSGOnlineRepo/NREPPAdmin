@@ -174,6 +174,13 @@ namespace NREPPAdminSite.Models
         public int TotalSearchCount;
     }
 
+    public class UsersSearchResult
+    {
+        public List<ExtendedUser> ExtendedUsers = new List<ExtendedUser>();
+        public List<Role> Roles = new List<Role>();
+        public int TotalSearchCount;
+    }
+
     public class ReviewersWrapper
     {
 
@@ -318,10 +325,10 @@ namespace NREPPAdminSite.Models
         [StringLength(250)]
         public string LastName { get; set; }
         [StringLength(128)]
-        public string Degree { get; set; }
-        [StringLength(128)]
-        public string ReviewerType { get; set; }
-        [StringLength(128)]
+        //public string Degree { get; set; }
+        //[StringLength(128)]
+        //public string ReviewerType { get; set; }
+        //[StringLength(128)]
         public string HomeAddressLine1 { get; set; }
         [StringLength(128)]
         public string HomeAddressLine2 { get; set; }
@@ -353,18 +360,19 @@ namespace NREPPAdminSite.Models
         public string WorkPhoneNumber { get; set; }
         [StringLength(15)]
         public string WorkFaxNumber { get; set; }
-        public string ExperienceSummary { get; set; }
+        //public string ExperienceSummary { get; set; }
 
         public ExtendedUser() { }
 
         public ExtendedUser(string username, string email, string firstName, string lastName,
-            bool lockoutEnabled)
+            bool lockoutEnabled,string id)
         {
             UserName = username;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             LockoutEnabled = lockoutEnabled;
+            Id = id;
         }
 
         public ExtendedUser(RegisterViewModel registerViewModel)
