@@ -246,6 +246,7 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("View", new { InvId = returnValue });
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult Upload(FormCollection formCollection)
         {
@@ -269,6 +270,52 @@ namespace NREPPAdminSite.Controllers
             return RedirectToAction("View", new { InvId = int.Parse(Request.Form["TheIntervention.Id"]) });
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult UploadFull(FormCollection col)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            // TODO: Put this in a function so that I can use it in the function above, too
+            if (Request != null)
+            {
+                HttpPostedFileBase file = Request.Files["RCUploadFile"];
+                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                {
+                    string fileName = file.FileName;
+                    string fileContentType = file.ContentType;
+                    byte[] fileBytes = new byte[file.ContentLength];
+                    file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+
+                    localService.SaveFileToDB(fileBytes, fileName, User.Identity.Name, "NOT IMPLEMENTED!", int.Parse(Request.Form["TheIntervention.Id"]), false,
+                        -1, Request.Form["FileDescription"], int.Parse(Request.Form["docTypeDD"])); // TODO: Add UserId to the Cookie. :|
+                }
+            }
+
+            // See Above
+
+            string RCNameText = "txtRCName_", ReferenceText = "txtRef_", hiddenText = "hid_", dirtyText = "isdirty_";
+            string PubYearText = "txtPubYear_";
+
+            int i = 0;
+
+            while (i < col.Count) // break if i gets too big
+            {
+                if (col[dirtyText + i.ToString()] == "true")
+                {
+                    // TODO: Check to see if an RCDocinfo Exists
+                    localService.UpdateRCDocInfo(-1, int.Parse(col[hiddenText + i.ToString()]), col[ReferenceText + i.ToString()],
+                        col[RCNameText + i.ToString()], col[PubYearText + i.ToString()] == string.Empty ? null : (int?)int.Parse(col[PubYearText + i.ToString()]));
+                    break;
+                }
+                else i++;
+
+            }
+
+            return RedirectToAction("View", new { InvId = int.Parse(Request.Form["TheIntervention.Id"]) });
+        }
+
+        [Authorize]
         [HttpPost]
         public ActionResult AddStudy()
         {
@@ -357,7 +404,7 @@ namespace NREPPAdminSite.Controllers
                 
             }
 
-            return RedirectToAction("View", new { InterventionId = int.Parse(col["IntervId"]) });
+            return RedirectToAction("View", new { InvId = int.Parse(col["InterventionId"]) });
         }
 
         [HttpPost]

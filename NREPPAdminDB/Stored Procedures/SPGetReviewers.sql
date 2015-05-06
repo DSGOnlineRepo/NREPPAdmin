@@ -1,5 +1,12 @@
-﻿CREATE PROCEDURE [dbo].[SPGetReviewers]
-	@Id VARCHAR(128),
+﻿USE [NREPPAdmin]
+GO
+/****** Object:  StoredProcedure [dbo].[SPGetReviewers]    Script Date: 5/3/2015 2:16:32 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[SPGetReviewers]
+	@Id NVARCHAR(128),
 	@FirstName NVARCHAR(250),
 	@LastName NVARCHAR(250),
 	@Employer VARCHAR(35),
@@ -13,12 +20,12 @@ AS
 DECLARE @intStartRow int;
 DECLARE @intEndRow int;
 
-SET @intStartRow = (@Page -1) * @PageLength + 1;
-SET @intEndRow = @Page * @PageLength;    
+SET @intStartRow = @Page;
+SET @intEndRow = (@Page + @PageLength) - 1;    
 
 WITH reviewerList AS
     (
-	SELECT  ROW_NUMBER() Over(ORDER BY FirstName) as rowNum, Id, FirstName, LastName, Degree, ReviewerType, HomeAddressLine1, HomeAddressLine2, HomeCity, HomeState, HomeZip, PhoneNumber, FaxNumber,
+	SELECT  ROW_NUMBER() Over(ORDER BY FirstName) as rowNum, COUNT(Id) OVER() AS searchTotal, Id, UserId, FirstName, LastName, Degree, ReviewerType, HomeAddressLine1, HomeAddressLine2, HomeCity, HomeState, HomeZip, PhoneNumber, FaxNumber,
 	Email, Employer, Department, WorkAddressLine1, WorkAddressLine2, WorkCity, WorkState, WorkZip, WorkPhoneNumber, WorkFaxNumber, ExperienceSummary,
 	WorkEmail from Reviewers
 	WHERE (@Id IS NULL OR Id LIKE '%' + @Id + '%')
@@ -30,9 +37,9 @@ WITH reviewerList AS
 		AND (@Degree IS NULL OR Degree LIKE '%' + @Degree + '%')
 		)
 
-	SELECT Id, FirstName, LastName, Degree, ReviewerType, HomeAddressLine1, HomeAddressLine2, HomeCity, HomeState, HomeZip, PhoneNumber, FaxNumber,
+	SELECT Id, UserId, FirstName, LastName, Degree, ReviewerType, HomeAddressLine1, HomeAddressLine2, HomeCity, HomeState, HomeZip, PhoneNumber, FaxNumber,
 	Email, Employer, Department, WorkAddressLine1, WorkAddressLine2, WorkCity, WorkState, WorkZip, WorkPhoneNumber, WorkFaxNumber, ExperienceSummary,
-	WorkEmail FROM reviewerList
+	WorkEmail, searchTotal FROM reviewerList
 WHERE rowNum BETWEEN @intStartRow AND @intEndRow
 
 	--SELECT InterventionId from Inter_User_Roles

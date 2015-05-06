@@ -13,62 +13,9 @@
 
 <h2>Screening tool for @Model.TheIntervention.Title</h2>
 
-<div style="margin-bottom: 10px; border: 1px solid;">
-    <h3>Available Documents</h3>
-
-    @{
-        int i = 0;
-    }
-    <table>
-        <tr>
-            <th class="withborder">Description</th>
-            <th class="withborder">RC File Name</th>
-            <th class="withborder">Reference</th>
-            <th class="withborder">Publication Year</th>
-            <th class="withborder"> </th>
-        </tr>
-        @using (Html.BeginForm("UpdateRCDocs", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
-            
-            foreach (NREPPAdminSite.Models.RCDocument doc in Model.TheDocuments)
-            {
-                <tr>
-                    <td class="withborder">
-                        @Html.Hidden("hid_" + i.ToString(), @doc.DocId)
-                        @Html.Hidden("isdirty_" + i .ToString(), "false")
-                        @doc.FileDescription
-                    </td>
-                    <td class="withborder">
-                        @doc.RCName
-                        @Html.TextBox("txtRCName_" + i.ToString(), @doc.RCName, new { @class = "hidden" })
-                    </td>
-                    <td class="withborder">
-                        @if (doc.Reference != null && doc.Reference != string.Empty)
-                        {
-                            @Html.ActionLink(@doc.Reference, "GetFile", "Admin", new { FileId = doc.DocId }, null);
-                        }
-                        else
-                        {
-                            <label>@doc.Reference</label>
-                        }
-                        @Html.TextArea("txtRef_" + i.ToString(), @doc.Reference, new { @class = "hidden" })
-                    </td>
-                    <td class="withborder">
-                        @doc.PubYear
-                        @Html.TextBox("txtPubYear_" + i.ToString(), @doc.PubYear, new { @class = "hidden" })
-                    </td>
-                    <td class="withborder">
-                        <button name="btnEdit" onclick="setEdit(@i); return false;">Edit</button>
-                        <button name="cancel_@i" class="hidden" onclick="clearEdit(@i); return false;">Cancel</button>
-                        <input type="submit" value="Save" class="hidden" />
-                    </td>
-                </tr>
-                i++;
-            }
-        }
-    </table>
-</div>
+@{
+    int i = 0;
+}
 
 <div>
     @{
