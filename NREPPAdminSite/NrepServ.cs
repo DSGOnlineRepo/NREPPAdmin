@@ -1107,6 +1107,106 @@ namespace NREPPAdminSite
             return reviewerSearchResult;
         }
 
+
+        public UsersSearchResult GetUsers([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
+        {
+            string userName = null;
+            string firstName = null;
+            string lastName = null;
+            string email = null;
+            bool lockoutEnabled = false;
+
+            var usersSearchResult = new UsersSearchResult();
+            var extendedUserList = new List<ExtendedUser>();
+            SqlCommand cmdGetUserList = new SqlCommand("SPGetUsers", conn);
+            cmdGetUserList.CommandType = CommandType.StoredProcedure;
+
+            var filteredColumns = requestModel.Columns.GetFilteredColumns();
+            foreach (var filter in filteredColumns)
+            {
+                switch (filter.Data)
+                {
+                    case "UserName":
+                        userName = filter.Search.Value;
+                        break;
+                    case "FirstName":
+                        firstName = filter.Search.Value;
+                        break;
+                    case "LastName":
+                        lastName = filter.Search.Value;
+                        break;
+                    case "Email":
+                        email = filter.Search.Value;
+                        break;
+                    case "LockoutEnabled":
+                        lockoutEnabled = Convert.ToBoolean(filter.Search.Value);
+                        break;                  
+                }
+            }
+            cmdGetUserList.Parameters.Add(new SqlParameter("@UserName", Utilities.ToDbNull(userName)));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@FirstName", Utilities.ToDbNull(firstName)));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@LastName", Utilities.ToDbNull(lastName)));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@Email", Utilities.ToDbNull(email)));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@LockoutEnabled", Utilities.ToDbNull(lockoutEnabled)));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@Page", requestModel.Start + 1));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@PageLength", requestModel.Length));
+            try
+            {
+                CheckConn();
+                DataTable users = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmdGetUserList);
+                da.Fill(users);
+
+                foreach (DataRow dr in users.Rows)
+                {
+                    extendedUserList.Add(new ExtendedUser(dr["UserName"].ToString(), dr["Email"].ToString(),
+                        dr["FirstName"].ToString(), dr["LastName"].ToString(), Convert.ToBoolean(dr["LockoutEnabled"].ToString()), dr["Id"].ToString()));
+                }
+                if (users.Rows.Count > 0)
+                {
+                    usersSearchResult.ExtendedUsers = extendedUserList;
+                    usersSearchResult.TotalSearchCount = Convert.ToInt16(users.Rows[0]["searchTotal"].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return usersSearchResult;
+        }
+
+        public ExtendedUser GetUser(string id)
+        {
+            ExtendedUser reviewer =  new ExtendedUser();
+            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewerList", conn);
+            cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
+
+
+            try
+            {
+                CheckConn();
+                
+                SqlDataReader dr = cmdGetReviewerList.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    while (dr.Read())
+                    {
+                        reviewer.Id = Convert.ToString(dr["Id"]);
+                    }
+                }
+               
+                return reviewer;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return reviewer;
+        }        
+
         #endregion
 
         #endregion
@@ -1269,6 +1369,32 @@ namespace NREPPAdminSite
         }
     }
 
+    public class NreppServiceResponseBase
+    {
+        public NreppServiceResponseBase()
+        {
+            Errors = new List<string>();
+        }
+
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public List<string> Errors { get; set; }
+
+        public bool HasErrors { get { return Errors != null && Errors.Count > 0; } }
+
+        public void ResponseSet(bool success, string message)
+        {
+            Success = success;
+            Message = message;
+        }
+
+        public void ErrorsAdd(string error)
+        {
+            if (Errors == null)
+                Errors = new List<string>();
+            Errors.Add(error);
+        }
+    }
     #endregion
 
     #region Constants

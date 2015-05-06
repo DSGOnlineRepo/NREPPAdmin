@@ -1,0 +1,269 @@
+﻿
+@model NREPPAdminSite.Models.UserPageModel
+@{
+    ViewBag.Title = "User";
+}
+
+<h2>@ViewBag.Title</h2>
+<h3 id="myModalLabel">Manage User</h3>
+<style>
+    input,
+    select,
+    textarea {
+    max-width: 350px;
+    margin:0px 10px;
+    border: 1px solid #cccccc;
+    border-radius:4px;
+    }
+  .modal-body {
+    padding: 0 40px;
+    position: relative;
+}
+  .modal-header{
+      border-bottom:none;
+  }
+</style>
+<div class="">
+
+    @using (Html.BeginForm("SaveUser", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+       
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.FirstName, "First Name", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.FirstName, new { @class = "form-control" })
+                        @Html.HiddenFor(m => m.User.Id, new { @class = "" })
+                        @Html.HiddenFor(m => m.User.PasswordHash, new { @class = "" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.LastName, "Last Name", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.LastName, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>      
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeAddressLine1, "Home Address Line1", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeAddressLine1, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeAddressLine2, "Home Address Line2", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeAddressLine2, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeCity, "Home City", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeCity, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeState, "Home State", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeState, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeZip, "Home Zip", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeZip, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.Email, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.PhoneNumber, "Phone Number", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.PhoneNumber, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeFaxNumber, "Home FaxNumber", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeFaxNumber, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row voffset3"><h4> Information:</h4></div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.UserName, "User Name", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, "Password", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    <div class='row'>
+        <div class='col-sm-6'>
+            <div class="form-group">               
+                @Html.LabelFor(m => m.User.TwoFactorEnabled, "TwoFactor Enabled", new { @class = "col-sm-3 control-label" })
+                <div class="col-sm-2">
+                    @Html.CheckBoxFor(m => m.User.TwoFactorEnabled, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-6'>
+            <div class="form-group">
+                @Html.LabelFor(m => m.UserRole, "Role",new { @class = "col-sm-3 control-label" })
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.UserRole, Model.Roles.Select(x => new SelectListItem() { Selected = x.Selected, Text = x.Text, Value = x.Value }), "--Select Role--",new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row voffset3"><h4>Professional Information:</h4></div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.Employer, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.Employer, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.Department, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.Department, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkAddressLine1, "Work Address Line1", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkAddressLine1, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkAddressLine2, "Work Address Line2", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkAddressLine2, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkCity, "Work City", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkCity, new { @class = "form-control" })
+
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkState, "Work State", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkState, new { @class = "form-control" })
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkZip, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkZip, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkEmail, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkEmail, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkPhoneNumber, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkPhoneNumber, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkFaxNumber, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkFaxNumber, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+        </div>      
+
+
+        <div class="col-sm-offset-3 col-sm-9">
+           
+        </div>
+    <div class="row">
+        <div class="modal-footer col-sm-12">
+            <input type="submit" value="Save" class="btn btn-default" />
+            <input type="submit" value="Cancel" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+        </div>
+    </div>
+    }
+
+</div>
