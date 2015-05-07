@@ -243,7 +243,9 @@ else if (Model.TheIntervention.StatusId == 5)
                         </ul>
                 
                         <span style="font-size: large; font-weight: bold;">Upload a File: </span><input type="file" name="UploadedFile" /> <br />
-                        <span>Document Title: </span><input type="text" name="FileDescription" />
+                        <span>Document Title: </span><input type="text" name="FileTitle" />
+                        <span>Description:</span><br />
+                        <textarea name="FileDescription"></textarea>
                         @Html.DropDownList("docTypeDD", DocTypez);
                         <br /><br />
                         <input type="submit" value="Attach" /> <input type="checkbox" /> <span>from Lit Search</span>
