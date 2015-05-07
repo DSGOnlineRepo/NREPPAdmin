@@ -1013,10 +1013,17 @@ namespace NREPPAdminSite
                 SqlDataAdapter da = new SqlDataAdapter(cmdGetReviewerList);
                 da.Fill(reviewers);
                 DataRow dr = reviewers.Rows[0];
-                reviewer = new Reviewer(dr["Id"].ToString(), dr["UserId"].ToString(), dr["FirstName"].ToString(),
-                        dr["LastName"].ToString(), dr["Employer"].ToString(), dr["Department"].ToString(), dr["ReviewerType"].ToString(), dr["Degree"].ToString());
+                reviewer = new Reviewer {
+                    Id = dr["Id"].ToString(), 
+                    UserId = dr["UserId"].ToString(), 
+                    FirstName = dr["FirstName"].ToString(),
+                    LastName = dr["LastName"].ToString(),
+                    Employer = dr["Employer"].ToString(),
+                    Department = dr["Department"].ToString(),
+                    ReviewerType = dr["ReviewerType"].ToString(),
+                    Degree = dr["Degree"].ToString()
+                };
                 return reviewer;
-
             }
             catch (Exception ex)
             {
@@ -1086,13 +1093,14 @@ namespace NREPPAdminSite
                 SqlDataAdapter da = new SqlDataAdapter(cmdGetReviewerList);
                 da.Fill(reviewers);
 
-                foreach (DataRow dr in reviewers.Rows)
-                {
-                    reviewerList.Add(new Reviewer(dr["Id"].ToString(), dr["UserId"].ToString(),
-                        dr["FirstName"].ToString(),
-                        dr["LastName"].ToString(), dr["Employer"].ToString(), dr["Department"].ToString(),
-                        dr["ReviewerType"].ToString(), dr["Degree"].ToString()));
-                }
+                reviewerList.AddRange(from DataRow dr in reviewers.Rows
+                    select new Reviewer
+                    {
+                        Id = dr["Id"].ToString(), UserId = dr["UserId"].ToString(), FirstName = dr["FirstName"].ToString(), 
+                        LastName = dr["LastName"].ToString(), Employer = dr["Employer"].ToString(), 
+                        Department = dr["Department"].ToString(), ReviewerType = dr["ReviewerType"].ToString(), 
+                        Degree = dr["Degree"].ToString()
+                    });
                 if (reviewers.Rows.Count > 0)
                 {
                     reviewerSearchResult.Reviewers = reviewerList;
@@ -1107,6 +1115,56 @@ namespace NREPPAdminSite
             return reviewerSearchResult;
         }
 
+        public bool AddReviewer(RegisterViewModel model)
+        {
+            SqlCommand cmd = new SqlCommand("SPAddReviewer", conn) {CommandType = CommandType.StoredProcedure};
+            cmd.Parameters.Add(new SqlParameter() {ParameterName = "@UserId", SqlDbType = SqlDbType.Int, Value = model.UserId});
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FirstName", SqlDbType = SqlDbType.NVarChar, Value = model.FirstName });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@LastName", SqlDbType = SqlDbType.NVarChar, Value = model.LastName });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Degree", SqlDbType = SqlDbType.NVarChar, Value = model.Degree });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ReviewerType", SqlDbType = SqlDbType.NVarChar, Value = model.ReviewerType });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeAddressLine1", SqlDbType = SqlDbType.Int, Value = model.HomeAddressLine1 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeAddressLine2", SqlDbType = SqlDbType.Int, Value = model.HomeAddressLine2 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeCity", SqlDbType = SqlDbType.Int, Value = model.HomeCity });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeState", SqlDbType = SqlDbType.Int, Value = model.HomeState });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeZip", SqlDbType = SqlDbType.Int, Value = model.HomeZip });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PhoneNumber", SqlDbType = SqlDbType.Int, Value = model.PhoneNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FaxNumber", SqlDbType = SqlDbType.Int, Value = model.FaxNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Email", SqlDbType = SqlDbType.Int, Value = model.Email });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Employer", SqlDbType = SqlDbType.Int, Value = model.Employer });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Department", SqlDbType = SqlDbType.Int, Value = model.Department });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkAddressLine1", SqlDbType = SqlDbType.Int, Value = model.WorkAddressLine1 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkAddressLine2", SqlDbType = SqlDbType.Int, Value = model.WorkAddressLine2 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkCity", SqlDbType = SqlDbType.Int, Value = model.WorkCity });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkState", SqlDbType = SqlDbType.Int, Value = model.WorkState });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkZip", SqlDbType = SqlDbType.Int, Value = model.WorkZip });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkPhoneNumber", SqlDbType = SqlDbType.Int, Value = model.WorkPhoneNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkFaxNumber", SqlDbType = SqlDbType.Int, Value = model.WorkFaxNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkEmail", SqlDbType = SqlDbType.Int, Value = model.WorkEmail });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ExperienceSummary", SqlDbType = SqlDbType.Int, Value = model.ExperienceSummary });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Active", SqlDbType = SqlDbType.Bit, Value = true });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@CreatedBy", SqlDbType = SqlDbType.VarChar, Value = model.CreatedBy });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.VarChar, Value = model.ModifiedBy });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@CreatedOn", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ModifiedOn", SqlDbType = SqlDbType.Int, Value = DateTime.Now });
+
+           try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return true;
+        }
 
         public UsersSearchResult GetUsers([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
         {

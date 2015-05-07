@@ -5,10 +5,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using DataTables.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
-using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
 using NREPPAdminSite.Security;
 
@@ -45,11 +45,6 @@ namespace NREPPAdminSite.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.Roles = _roleManager.Roles.ToList().Select(u => new SelectListItem
-            {
-                Text = u.Name,
-                Value = u.Name
-            });
             return View();
         }
 
@@ -57,6 +52,8 @@ namespace NREPPAdminSite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterViewModel model)
         {
+            ModelState.Remove("Role");
+            model.Role = "Principal Investigator";
             if (ModelState.IsValid)
             {
                 var user = new ExtendedUser
@@ -66,6 +63,7 @@ namespace NREPPAdminSite.Controllers
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     PhoneNumber = model.PhoneNumber
+
                 };
 
                 IdentityResult result = _userManager.Create(user, model.Password);
@@ -77,7 +75,20 @@ namespace NREPPAdminSite.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("UserName", "Error while creating the user!");
+                    var isDuplicateUser = false;
+                    foreach (string error in result.Errors)
+                    {
+                        if (error.Contains("is already taken."))
+                        {
+                            ModelState.AddModelError("UserName", error);
+                            isDuplicateUser = true;
+                        }
+                    }
+                    if (!isDuplicateUser)
+                    {
+                        var errors = string.Join("<br />", result.Errors);
+                        ModelState.AddModelError("", errors);
+                    }
                 }
             }
             return View(model);
@@ -266,36 +277,6 @@ namespace NREPPAdminSite.Controllers
 
         }
 
-
-        //public async Task RegisterAdmin()
-        //{
-        //    IdentityUser admin = await UserManager<ExtendedUser>.FindByNameAsync(UserConstants.Admin);
-
-        //    if (admin == null)
-        //    {
-        //        if (!_roleManager.RoleExists(UserConstants.Admin))
-        //        {
-        //            _roleManager.Create(new IdentityRole(UserConstants.Admin));
-        //        }
-
-        //        if (!_roleManager.RoleExists(UserConstants.Guest))
-        //        {
-        //            _roleManager.Create(new IdentityRole(UserConstants.Guest));
-        //        }
-
-        //        var user = new ExtendedUser(UserConstants.Admin, string.Empty, UserConstants.Admin,
-        //            UserConstants.Admin, false);
-
-        //        var adminResult = _userManager.Create(user, UserConstants.Password);
-
-        //        if (adminResult.Succeeded)
-        //        {
-        //            _userManager.AddToRole(user.Id, UserConstants.Admin);
-        //        }
-        //    }
-        //}
-
-
         public ActionResult JoinProgram(string ID)
         {
             string nonURLVersion = HttpUtility.UrlDecode(ID).Replace(' ', '+');
@@ -328,6 +309,102 @@ namespace NREPPAdminSite.Controllers
 
             return View();
         }
+
+        [Authorize]
+        public ActionResult Reviewers()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult Reviewer(int? id)
+        {
+            ViewBag.Roles = _roleManager.Roles.ToList().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Name
+            });
+            return View();
+        }
+
+        [Authorize]
+        public JsonResult ReviewersList([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            ReviewerSearchResult reviewerSearchResult = localService.GetReviewers(requestModel);
+            return Json(new DataTablesResponse(requestModel.Draw, reviewerSearchResult.Reviewers, reviewerSearchResult.TotalSearchCount, reviewerSearchResult.TotalSearchCount), JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public JsonResult AddReviewer(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ExtendedUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber
+                };
+
+                IdentityResult result = _userManager.Create(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    _userManager.AddToRole(user.Id, model.Role);
+                }
+                else
+                {
+                    ModelState.AddModelError("UserName", "Error while creating the user!");
+                    return Json(new { Status = "Success", Message = "Error while creating the user!" });
+                }
+                model.UserId = user.Id;
+                model.CreatedBy = User.Identity.Name;
+                model.ModifiedBy = User.Identity.Name;
+                NrepServ localService = new NrepServ(NrepServ.ConnString);
+                if (localService.AddReviewer(model))
+                {
+                    return Json(new { Status = "Success", Message = "User created successfully" });
+                }
+                else
+                {
+                    DeleteUserById(user.Id);
+                    return Json(new { Status = "Success", Message = "Error while creating the user!" });
+                }
+            }
+            return Json(new { Status = "Success", Message = "Error while creating the user!" });
+        }
+
+
+        private void DeleteUserById(string id)
+        {
+            if (id != null)
+            {
+                var user = _userManager.FindById(id);
+                var logins = user.Logins;
+
+                foreach (var login in logins.ToList())
+                {
+                    _userManager.RemoveLogin(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
+                }
+
+                var rolesForUser = _userManager.GetRoles(id);
+
+                if (rolesForUser.Any())
+                {
+                    foreach (var item in rolesForUser.ToList())
+                    {
+                        _userManager.RemoveFromRole(user.Id, item);
+                    }
+                }
+
+                _userManager.Delete(user);
+            }
+        }
+
 
     }
 

@@ -20,7 +20,7 @@ WITH reviewerList AS
     (
 	SELECT  ROW_NUMBER() Over(ORDER BY FirstName) as rowNum, COUNT(Id) OVER() AS searchTotal, Id, UserId, FirstName, LastName, Degree, ReviewerType, HomeAddressLine1, HomeAddressLine2, HomeCity, HomeState, HomeZip, PhoneNumber, FaxNumber,
 	Email, Employer, Department, WorkAddressLine1, WorkAddressLine2, WorkCity, WorkState, WorkZip, WorkPhoneNumber, WorkFaxNumber, ExperienceSummary,
-	WorkEmail from Reviewers
+	WorkEmail, Active from Reviewers
 	WHERE (@Id IS NULL OR Id LIKE '%' + @Id + '%')
 		AND (@FirstName IS NULL OR FirstName LIKE '%' + @FirstName + '%')
 		AND (@LastName IS NULL OR LastName LIKE '%' + @LastName + '%')
@@ -32,7 +32,7 @@ WITH reviewerList AS
 
 	SELECT Id, UserId, FirstName, LastName, Degree, ReviewerType, HomeAddressLine1, HomeAddressLine2, HomeCity, HomeState, HomeZip, PhoneNumber, FaxNumber,
 	Email, Employer, Department, WorkAddressLine1, WorkAddressLine2, WorkCity, WorkState, WorkZip, WorkPhoneNumber, WorkFaxNumber, ExperienceSummary,
-	WorkEmail, searchTotal FROM reviewerList
+	WorkEmail, Active, searchTotal FROM reviewerList
 WHERE rowNum BETWEEN @intStartRow AND @intEndRow
 
 	--SELECT InterventionId from Inter_User_Roles

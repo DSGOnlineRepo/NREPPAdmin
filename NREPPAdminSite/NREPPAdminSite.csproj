@@ -272,6 +272,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -302,15 +304,16 @@
     <Content Include="Views\Program\UploadFile.cshtml" />
     <Content Include="Views\Admin\Lookups.cshtml" />
     <Content Include="Views\Program\Screen.cshtml" />
-    <Content Include="Views\Home\Reviewers.cshtml" />
+    <Content Include="Views\Admin\Reviewers.cshtml" />
     <Content Include="Views\Program\ScreenResults.cshtml" />
     <Content Include="Views\Admin\Profile.cshtml" />
     <Content Include="Views\Admin\ChangePassword.cshtml" />
     <Content Include="Views\Admin\GenReviewLink.cshtml" />
     <Content Include="Views\Admin\JoinProgram.cshtml" />
-    <Content Include="Views\Home\Reviewer.cshtml" />
+    <Content Include="Views\Admin\Reviewer.cshtml" />
     <Content Include="Views\Home\Users.cshtml" />
     <Content Include="Views\Home\_AddUser.cshtml" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
