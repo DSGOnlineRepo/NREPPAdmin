@@ -94,6 +94,9 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Uploaded By")]
         public string Uploader { get; set; }
 
+        [Display(Name = "Title")]
+        public string Title { get; set; }
+
         protected string documentTypeName;
         protected int documentType;
         protected int docId;

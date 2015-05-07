@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Document]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [Description] VARCHAR(50) NULL, 
+    [Description] VARCHAR(500) NULL, 
     [FileName] VARCHAR(100) NOT NULL, 
     [MIME] VARCHAR(20) NULL, 
     [InterventionId] INT NULL, 
@@ -10,6 +10,7 @@
     [ReviewerId] NVARCHAR(128) NULL, 
     [IsLitSearch] BIT NOT NULL DEFAULT 0, 
     [ReviewerName] VARCHAR(100) NULL, 
+    [Title] VARCHAR(50) NULL, 
     CONSTRAINT [FK_InvervDoc_Intervention] FOREIGN KEY ([InterventionId]) REFERENCES [Interventions]([Id]), 
     CONSTRAINT [FK_InvervDoc_Users] FOREIGN KEY ([UploadedBy]) REFERENCES [AspNetUsers]([Id])
 )
