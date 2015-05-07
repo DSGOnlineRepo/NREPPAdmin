@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using NREPPAdminSite.Models;
 using NREPPAdminSite.Security;
 using System.Linq;
+using System.Data.Entity.Validation;
+using System;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -14,11 +16,9 @@ namespace NREPPAdminSite.Controllers
     {
         private readonly UserManager<ExtendedUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-
+        MyIdentityDbContext db = new MyIdentityDbContext();
         public HomeController()
         {
-            MyIdentityDbContext db = new MyIdentityDbContext();
-
             UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
             _userManager = new UserManager<ExtendedUser>(userStore);
 
@@ -116,7 +116,6 @@ namespace NREPPAdminSite.Controllers
             userPageModel.User = _userManager.FindById(id);
             if (!string.IsNullOrEmpty(id)) { 
              userPageModel.UserRole = _userManager.GetRoles(id).ToList().FirstOrDefault();
-            //userPageModel.User.PasswordHash = PasswordHash.AESDecrypt(userPageModel.User.PasswordHash);
             }
             userPageModel.Roles = _roleManager.Roles.ToList().Select(u => new SelectListItem
             {
@@ -129,27 +128,85 @@ namespace NREPPAdminSite.Controllers
         [Authorize]
         public JsonResult SaveUser(UserPageModel request)
         {
-            NrepServ localService = new NrepServ(NrepServ.ConnString);
-            IdentityResult result;
-            if (string.IsNullOrEmpty(request.User.Id))
+            IdentityResult result= new IdentityResult();
+            bool isNew = false;
+            try
             {
-               result = _userManager.Create(request.User,request.Password);
+                if (ModelState.IsValid)
+                {
+                    if (string.IsNullOrEmpty(request.User.Id))
+                    {
+                        isNew = true;
+                        var user = new ExtendedUser();
+                        request.User.Id = user.Id;
+                        result = _userManager.Create(request.User, request.Password);
+                    }
+                    else
+                    {
+                        db.Entry(request.User).State = System.Data.Entity.EntityState.Modified;
+                        result = _userManager.Update(request.User);
+                    }
+                }
             }
-            else
+            catch (DbEntityValidationException e)
             {
-                result = _userManager.Update(request.User);
+                string sErrors = string.Empty;
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    sErrors += eve.Entry.Entity.GetType().Name + eve.Entry.State + "\n";
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        sErrors += ve.PropertyName + "message:" + ve.ErrorMessage;
+                    }
+                }
+                ModelState.AddModelError("UserName", sErrors);
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("UserName", ex.Message);
             }
 
-            if (result.Succeeded)
+            if (result.Succeeded && isNew)
             {
                 _userManager.AddToRole(request.User.Id, request.UserRole);               
+            }
+            else if (result.Succeeded && !isNew)
+            {
+                var oldRoleName = _userManager.GetRoles(request.User.Id).ToList().FirstOrDefault();
+                if (oldRoleName != request.UserRole)
+                {
+                    _userManager.RemoveFromRole(request.User.Id, oldRoleName);
+                    _userManager.AddToRole(request.User.Id, request.UserRole);                       
+                }
             }
             else
             {
                 ModelState.AddModelError("UserName", "Error while creating the user!");
             }
             return Json(result);
-        }      
+        }
+
+        [HttpPost]
+        public JsonResult UpdateStatus(string Id,bool Status)
+        {
+            var response = new NreppServiceResponseBase();
+            try
+            {
+                var user = new ExtendedUser();
+                user = _userManager.FindById(Id);
+                user.LockoutEnabled =Status;
+                _userManager.Update(user);
+                response.ResponseSet(true, "Status updated.");
+            }
+            catch (System.Exception ex)
+            {
+                response.ResponseSet(false, ex.Message);
+            }
+
+            return Json(response,JsonRequestBehavior.AllowGet);
+        }
+      
+
 
 
     }
