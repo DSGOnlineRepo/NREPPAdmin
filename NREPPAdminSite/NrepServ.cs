@@ -1115,7 +1115,7 @@ namespace NREPPAdminSite
             string lastName = null;
             string email = null;
             bool lockoutEnabled = false;
-
+            bool isStatus=false;
             var usersSearchResult = new UsersSearchResult();
             var extendedUserList = new List<ExtendedUser>();
             SqlCommand cmdGetUserList = new SqlCommand("SPGetUsers", conn);
@@ -1139,6 +1139,7 @@ namespace NREPPAdminSite
                         email = filter.Search.Value;
                         break;
                     case "LockoutEnabled":
+                        isStatus = true;
                         lockoutEnabled = Convert.ToBoolean(filter.Search.Value);
                         break;                  
                 }
@@ -1147,7 +1148,10 @@ namespace NREPPAdminSite
             cmdGetUserList.Parameters.Add(new SqlParameter("@FirstName", Utilities.ToDbNull(firstName)));
             cmdGetUserList.Parameters.Add(new SqlParameter("@LastName", Utilities.ToDbNull(lastName)));
             cmdGetUserList.Parameters.Add(new SqlParameter("@Email", Utilities.ToDbNull(email)));
-            cmdGetUserList.Parameters.Add(new SqlParameter("@LockoutEnabled", Utilities.ToDbNull(lockoutEnabled)));
+            if (isStatus)
+            {
+                cmdGetUserList.Parameters.Add(new SqlParameter("@LockoutEnabled", Utilities.ToDbNull(lockoutEnabled)));
+            }
             cmdGetUserList.Parameters.Add(new SqlParameter("@Page", requestModel.Start + 1));
             cmdGetUserList.Parameters.Add(new SqlParameter("@PageLength", requestModel.Length));
             try
