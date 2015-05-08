@@ -11,6 +11,10 @@ using System.Web.Mvc;
 using DataTables.Mvc;
 using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Web;
 
 namespace NREPPAdminSite
 {
@@ -1460,6 +1464,58 @@ namespace NREPPAdminSite
                 Errors = new List<string>();
             Errors.Add(error);
         }
+    }
+
+    public class CaptchaUtil
+    {
+        public byte[] GetCaptchaImage(string checkCode)
+        {
+            Bitmap image = new Bitmap(Convert.ToInt32(Math.Ceiling((decimal)(checkCode.Length * 15))), 25);
+            Graphics g = Graphics.FromImage(image);
+            try
+            {
+                Random random = new Random();
+                g.Clear(Color.AliceBlue);
+                Font font = new Font("Comic Sans MS", 14, FontStyle.Bold);
+                string str = "";
+                Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);               
+                HatchBrush hatchBrush = new HatchBrush(HatchStyle.Shingle, Color.LightGray, Color.White);
+                g.FillRectangle(hatchBrush, rect);
+                for (int i = 0; i < checkCode.Length; i++)
+                {
+                    str = str + checkCode.Substring(i, 1);
+                }
+                g.DrawString(str, font, new SolidBrush(Color.Green), 0, 0);
+                g.Flush();
+                
+
+                System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+                return ms.ToArray();
+            }
+            finally
+            {
+                g.Dispose();
+                image.Dispose();
+            }
+        }
+
+        public byte[] VerificationTextGenerator()
+        {           
+            string randomCode = "";        
+            string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890";
+            char[] chars = new char[7];
+            Random rd = new Random();
+            for (int i = 0; i < 7; i++)
+            {
+                chars[i] = allowedChars[rd.Next(0, allowedChars.Length)];
+            }
+            randomCode= new string(chars);
+            GetCaptchaImage(randomCode);
+            HttpContext.Current.Session["Captcha"] = randomCode;
+            return GetCaptchaImage(randomCode);
+        }
+
     }
     #endregion
 

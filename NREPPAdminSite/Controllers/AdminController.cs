@@ -45,7 +45,10 @@ namespace NREPPAdminSite.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            RegisterViewModel modal = new RegisterViewModel();
+            modal.CapImage = "data:image/png;base64," + Convert.ToBase64String(new CaptchaUtil().VerificationTextGenerator());
+            modal.CapImageText = Convert.ToString(Session["Captcha"]);
+            return View(modal);
         }
 
         [HttpPost]
@@ -447,7 +450,11 @@ namespace NREPPAdminSite.Controllers
             }
         }
 
-
+        public JsonResult Captcha()
+        {
+            var result = new { CapImage = "data:image/png;base64," + Convert.ToBase64String(new CaptchaUtil().VerificationTextGenerator()), CapImageText = Convert.ToString(Session["Captcha"]) };
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 
     public class TempClass

@@ -63,11 +63,8 @@
     </div>
 </div>
 
-<div>@*@{Html.RenderAction("GetUser", "Home", new { id = "3322d8c5-a826-452c-b5e3-9785b418e81e" });}*@</div>
-
-       <script type="text/javascript">
-            
-            var editor;
+   <script type="text/javascript">
+          
             $(document).ready(function () {
                 
                 var userTable = $('#tblUsers').DataTable({
@@ -124,8 +121,7 @@
                     userTable.column($(this).attr('data-column')).search($(this).val()).draw();
                 });
             });           
-
-
+       
             //Popup modal
             function openModel(id) {
                 $.ajaxSetup({ cache: false });
@@ -150,7 +146,8 @@
                             console.log(result);
                             if (result.Succeeded) {
                                 $('#dialogDiv').modal('hide');
-                                location.reload();
+                                var table = $('#tblUsers').dataTable();
+                                table.fnDraw();
                             }
                             else {
                                 $('#dialogContent').html(result.Errors);
@@ -161,9 +158,6 @@
                     return false;
                 });
             }
-
-
-
             //
 
             function updateStatus(status, id) {
@@ -194,9 +188,7 @@
                         
                     }
                 });
-            }
-
-            
+            }            
 
         </script>
 

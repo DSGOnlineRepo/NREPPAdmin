@@ -251,6 +251,18 @@
                     @Html.TextAreaFor(model => model.ExperienceSummary, new {@class = "form-control", placeholder = "Experience Summary", cols = 40, @rows = 3})                </div>
             </div>
         </div>
+        <div class='col-sm-6'>
+            <div class="form-group">
+                @Html.Label("Verification Code", new { @class = "col-sm-3 control-label" })
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(m => m.CaptchaCodeText, new { @class = "form-control", placeholder = "Verification Code" })
+                    <img src="@Model.CapImage" id="CapImage" alt="" style="margin-top:3px;" />
+                    @Html.HiddenFor(m => m.CapImageText)
+                    <a onclick="getCaptcha()" href="javascript:void(0);"><img alt="Captcha" style="width:20px;height:20px" src="/Content/images/refresh.png" /></a>
+                    
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-sm-offset-3 col-sm-9">
         <input type="submit" value="Register" class="btn btn-primary"/>
@@ -279,5 +291,12 @@
             }
         }
     });
+    function getCaptcha() {
+        $.getJSON('Captcha', function (data) {
+            $("#CapImageText").val(data.CapImageText);
+            $("#CapImage").attr("src", data.CapImage);
+        });
+    }
+   
 </script>
 
