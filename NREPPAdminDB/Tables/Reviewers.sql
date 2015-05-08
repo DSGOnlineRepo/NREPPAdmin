@@ -25,6 +25,10 @@
     [WorkFaxNumber] VARCHAR(15) NULL, 
     [WorkEmail] NCHAR(100) NULL, 
     [ExperienceSummary] VARCHAR(MAX) NULL, 
-	[IsActive] BIT NULL, 
+	[Active] bit not null default 1,
+	[CreatedBy] nvarchar(128) not null,
+	[CreatedOn] datetime not null,
+	[ModifiedBy] nvarchar(128) not null,
+	[ModifiedOn] datetime not null
     CONSTRAINT [FK_Reviewers_User] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([Id])
 )

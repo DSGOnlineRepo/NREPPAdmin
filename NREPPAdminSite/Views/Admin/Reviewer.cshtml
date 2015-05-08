@@ -1,30 +1,22 @@
 ﻿@model NREPPAdminSite.Models.RegisterViewModel
 @{
-    ViewBag.Title = "New User Registration";
+    ViewBag.Title = "Add/Edit Reviewer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewBag.Title</h2>
 
-@if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
-{
-    <div class="alert alert-danger">
-        <a href="#" class="close" data-dismiss="alert">×</a>
-        <h4>Validation Errors</h4>
-        @Html.ValidationSummary()
-    </div>
-}
+<div class="container-fluid">
 
-<div>
-@using (Html.BeginForm("Register", "Admin", FormMethod.Post, new {@class = "form-horizontal"}))
-{
-    @Html.AntiForgeryToken();
+    @using (Html.BeginForm("AddReviewer", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.UserName, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.UserName, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
-                    @Html.TextBoxFor(m => m.UserName, new {@class = "form-control", autofocus = "autofocus", placeholder = "User Name"})
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autofocus = "autofocus", placeholder = "User Name" })
                 </div>
             </div>
         </div>
@@ -32,15 +24,15 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.Email, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.Email, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
-                    @Html.TextBoxFor(m => m.Email, new {@class = "form-control", placeholder = "Email"})
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
                 </div>
             </div>
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.ConfirmEmail, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.ConfirmEmail, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.ConfirmEmail, new { @class = "form-control", placeholder = "Confirm Email" })
                 </div>
@@ -50,17 +42,17 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.Password, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.Password, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
-                    @Html.PasswordFor(m => m.Password, new {@class = "form-control", placeholder = "Password"})
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
                 </div>
             </div>
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.ConfirmPassword, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
-                    @Html.PasswordFor(m => m.ConfirmPassword, new {@class = "form-control", placeholder = "Confirm Password"})
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password" })
                 </div>
             </div>
         </div>
@@ -68,7 +60,7 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.FirstName, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.FirstName, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "First Name" })
                 </div>
@@ -76,7 +68,7 @@
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.LastName, new { @class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.LastName, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Last Name" })
                 </div>
@@ -86,7 +78,25 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.HomeAddressLine1, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.Degree, new { @class = "col-sm-3 control-label" })
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(m => m.Degree, new { @class = "form-control", placeholder = "Degree" })
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-6'>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ReviewerType, new { @class = "col-sm-3 control-label" })
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(m => m.ReviewerType, new { @class = "form-control", placeholder = "Reviewer Type" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-sm-6'>
+            <div class="form-group">
+                @Html.LabelFor(m => m.HomeAddressLine1, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.HomeAddressLine1, new { @class = "form-control", placeholder = "Address Line 1" })
                 </div>
@@ -94,7 +104,7 @@
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.HomeAddressLine2, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.HomeAddressLine2, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.HomeAddressLine2, new { @class = "form-control", placeholder = "Address Line 2" })
                 </div>
@@ -104,7 +114,7 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.HomeCity, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.HomeCity, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.HomeCity, new { @class = "form-control", placeholder = "City" })
                 </div>
@@ -112,7 +122,7 @@
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.HomeState, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.HomeState, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.HomeState, new { @class = "form-control", placeholder = "State" })
                 </div>
@@ -122,7 +132,7 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.HomeZip, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.HomeZip, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.HomeZip, new { @class = "form-control", placeholder = "Zip" })
                 </div>
@@ -132,7 +142,7 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.PhoneNumber, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Phone Number" })
                 </div>
@@ -140,7 +150,7 @@
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.FaxNumber, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.FaxNumber, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.FaxNumber, new { @class = "form-control", placeholder = "Fax Number" })
                 </div>
@@ -153,7 +163,7 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.Employer, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.Employer, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.Employer, new { @class = "form-control", placeholder = "Employer" })
                 </div>
@@ -161,7 +171,7 @@
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.Department, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.Department, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.Department, new { @class = "form-control", placeholder = "Department" })
                 </div>
@@ -171,7 +181,7 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.WorkAddressLine1, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.WorkAddressLine1, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.WorkAddressLine1, new { @class = "form-control", placeholder = "Address Line 1" })
                 </div>
@@ -179,7 +189,7 @@
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.WorkAddressLine2, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.WorkAddressLine2, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.WorkAddressLine2, new { @class = "form-control", placeholder = "Address Line 2" })
                 </div>
@@ -189,7 +199,7 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.WorkCity, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.WorkCity, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.WorkCity, new { @class = "form-control", placeholder = "City" })
 
@@ -198,7 +208,7 @@
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.WorkState, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.WorkState, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.WorkState, new { @class = "form-control", placeholder = "State" })
 
@@ -209,7 +219,7 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.WorkZip, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.WorkZip, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.WorkZip, new { @class = "form-control", placeholder = "Zip" })
                 </div>
@@ -217,7 +227,7 @@
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.WorkEmail, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.WorkEmail, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.WorkEmail, new { @class = "form-control", placeholder = "Email" })
                 </div>
@@ -227,7 +237,7 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.WorkPhoneNumber, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.WorkPhoneNumber, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.WorkPhoneNumber, new { @class = "form-control", placeholder = "Phone Number" })
                 </div>
@@ -235,7 +245,7 @@
         </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.WorkFaxNumber, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.WorkFaxNumber, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.WorkFaxNumber, new { @class = "form-control", placeholder = "Fax Number" })
                 </div>
@@ -246,18 +256,20 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.ExperienceSummary, new {@class = "col-sm-3 control-label"})
+                @Html.LabelFor(m => m.ExperienceSummary, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
-                    @Html.TextAreaFor(model => model.ExperienceSummary, new {@class = "form-control", placeholder = "Experience Summary", cols = 40, @rows = 3})                </div>
+                    @Html.TextAreaFor(model => model.ExperienceSummary, new { @class = "form-control", placeholder = "Experience Summary", cols = 40, @rows = 3 })
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-offset-3 col-sm-9">
-        <input type="submit" value="Register" class="btn btn-primary"/>
-        @Html.ActionLink("Login", "Login", "Admin")
-    </div>
 
-}
+
+    <div class="col-sm-offset-3 col-sm-9">
+        <input type="submit" value="Save" class="btn btn-primary" />
+        <input type="submit" value="Cancel" class="btn btn-default" />
+    </div>
+    }
 
 </div>
 
@@ -280,4 +292,3 @@
         }
     });
 </script>
-

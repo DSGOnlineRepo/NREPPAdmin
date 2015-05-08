@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Validation;
+using System.Linq;
 using System.Web.Mvc;
-using System.Web.Security;
 using DataTables.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -12,14 +15,15 @@ namespace NREPPAdminSite.Controllers
     public class HomeController : Controller
     {
         private readonly UserManager<ExtendedUser> _userManager;
-
+        private readonly RoleManager<IdentityRole> _roleManager;
+        MyIdentityDbContext db = new MyIdentityDbContext();
         public HomeController()
         {
-            MyIdentityDbContext db = new MyIdentityDbContext();
-
             UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
             _userManager = new UserManager<ExtendedUser>(userStore);
 
+            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
+            _roleManager = new RoleManager<IdentityRole>(roleStore);
         }
 
         [HttpGet]
@@ -49,33 +53,7 @@ namespace NREPPAdminSite.Controllers
 
             return View();
         }
-
-        [Authorize]
-        public ActionResult Reviewers()
-        {
-            return View();
-        }
-
-       [Authorize]
-       public ActionResult Reviewer(int? id)
-       {
-           ViewBag.Message = "Your Reviewer page.";
-           NrepServ localService = new NrepServ(NrepServ.ConnString);
-           var reviewerList = localService.GetOutComesReviewer(id);
-           ReviewerPageModel reviewerPageModel = new ReviewerPageModel();
-           //reviewerPageModel.Outcomes = reviewerWrapper;
-           return PartialView(reviewerPageModel);
-           // return View("Reviewer");
-       }
-       
-       [Authorize]
-       public JsonResult ReviewersList([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
-       {
-           NrepServ localService = new NrepServ(NrepServ.ConnString);
-           ReviewerSearchResult reviewerSearchResult = localService.GetReviewers(requestModel);
-           return Json(new DataTablesResponse(requestModel.Draw, reviewerSearchResult.Reviewers, reviewerSearchResult.TotalSearchCount, reviewerSearchResult.TotalSearchCount), JsonRequestBehavior.AllowGet);
-       }
-         
+        
         [Authorize]
         public ActionResult Programs()
         {
@@ -90,5 +68,143 @@ namespace NREPPAdminSite.Controllers
 
             return View(interventionList);
         }
+
+        [Authorize]
+        public ActionResult Users()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public JsonResult UsersList([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            UsersSearchResult usersSearchResult = localService.GetUsers(requestModel);
+            return Json(new DataTablesResponse(requestModel.Draw, usersSearchResult.UserList, usersSearchResult.TotalSearchCount, usersSearchResult.TotalSearchCount), JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public ActionResult GetUser(string id)
+        {
+            UserPageModel userPageModel = new UserPageModel {User = _userManager.FindById(id)};
+            if (!string.IsNullOrEmpty(id)) { 
+             userPageModel.UserRole = _userManager.GetRoles(id).ToList().FirstOrDefault();
+            }
+            userPageModel.Roles = _roleManager.Roles.ToList().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Name
+            });
+            return PartialView("_AddUser",userPageModel);
+        }
+
+         [Authorize]
+        public JsonResult SaveUser(UserPageModel request)
+        {
+            IdentityResult result= new IdentityResult();
+            bool isNew = false;
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (string.IsNullOrEmpty(request.User.Id))
+                    {
+                        isNew = true;
+                        var user = new ExtendedUser();
+                        request.User.Id = user.Id;
+                        result = _userManager.Create(request.User, request.Password);
+                    }
+                    else
+                    {
+                        var user = _userManager.FindById(request.User.Id);
+                        user.FirstName = request.User.FirstName;
+                        user.LastName = request.User.LastName;
+                        user.UserName = request.User.UserName;
+                        user.Email = request.User.Email;
+                        user.HomeAddressLine1 = request.User.HomeAddressLine1;
+                        user.HomeAddressLine2 = request.User.HomeAddressLine2;
+                        user.HomeCity = request.User.HomeCity;
+                        user.HomeState = request.User.HomeState;
+                        user.HomeZip = request.User.HomeZip;
+                        user.PhoneNumber = request.User.PhoneNumber;
+                        user.FaxNumber = request.User.FaxNumber;
+                        user.Employer = request.User.Employer;
+                        user.Department = request.User.Department;
+                        user.WorkAddressLine1 = request.User.WorkAddressLine1;
+                        user.WorkAddressLine2 = request.User.WorkAddressLine2;
+                        user.WorkCity = request.User.WorkCity;
+                        user.WorkState = request.User.WorkState;
+                        user.WorkZip = request.User.WorkZip;
+                        user.WorkPhoneNumber = request.User.WorkPhoneNumber;
+                        user.WorkFaxNumber = request.User.WorkFaxNumber;
+                        user.WorkEmail = request.User.WorkEmail;
+                        user.TwoFactorEnabled = request.User.TwoFactorEnabled;
+                        
+                        result = _userManager.Update(user);
+                    }
+                }
+            }           
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("UserName", ex.Message);
+            }
+
+            if (result.Succeeded && isNew)
+            {
+                _userManager.AddToRole(request.User.Id, request.UserRole);               
+            }
+            else if (result.Succeeded && !isNew)
+            {
+                var oldRoleName = _userManager.GetRoles(request.User.Id).ToList().FirstOrDefault();
+                if (oldRoleName != request.UserRole)
+                {
+                    _userManager.RemoveFromRole(request.User.Id, oldRoleName);
+                    _userManager.AddToRole(request.User.Id, request.UserRole);                       
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("UserName", "Error while creating the user!");
+                var isDuplicateUser = false;
+                foreach (string error in result.Errors)
+                {
+                    if (error.Contains("is already taken."))
+                    {
+                        ModelState.AddModelError("UserName", error);
+                        isDuplicateUser = true;
+                    }
+                }
+                if (!isDuplicateUser)
+                {
+                    var errors = string.Join("<br />", result.Errors);
+                    ModelState.AddModelError("", errors);
+                }                
+            }
+            return Json(result);
+        }
+
+        [HttpPost]
+        public JsonResult UpdateStatus(string Id,bool Status)
+        {
+            var response = new NreppServiceResponseBase();
+            try
+            {
+                var user = new ExtendedUser();
+                user = _userManager.FindById(Id);
+                user.LockoutEnabled =Status;
+                _userManager.Update(user);
+                response.ResponseSet(true, "Status updated.");
+            }
+            catch (System.Exception ex)
+            {
+                response.ResponseSet(false, ex.Message);
+            }
+
+            return Json(response,JsonRequestBehavior.AllowGet);
+        }
+      
+
+
+
     }
 }

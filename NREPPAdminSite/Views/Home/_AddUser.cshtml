@@ -1,0 +1,324 @@
+﻿
+@model NREPPAdminSite.Models.UserPageModel
+@{
+    ViewBag.Title = "User";
+}
+
+<h2>@ViewBag.Title</h2>
+@*<h3 id="myModalLabel">Manage User</h3>*@
+<style>
+    input,
+    select,
+    textarea {
+    max-width: 350px;
+    margin:0px 10px;
+    border: 1px solid #cccccc;
+    border-radius:4px;
+    }
+  .modal-body {
+    padding: 0 40px;
+    position: relative;
+}
+  .modal-header{
+      border-bottom:none;
+  }
+</style>
+
+@*@if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+{
+    <div class="alert alert-danger">
+        <a href="#" class="close" data-dismiss="alert">×</a>
+        <h4>Validation Errors</h4>
+        @Html.ValidationSummary()
+    </div>
+}*@
+<div class="">
+
+    @using (Html.BeginForm("SaveUser", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        bool isNew = false;
+        if (Model.User == null) { isNew = true; }           
+       
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.FirstName,  new { @class = "col-sm-3 control-label",@name="FirstName" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.FirstName, new { @class = "form-control", placeholder = "First Name", required=true, message="test" })
+                        @Html.HiddenFor(m => m.User.Id, new { @class = "" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.LastName, new { @class = "col-sm-3 control-label"})
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.LastName, new { @class = "form-control", placeholder = "Last Name" })
+                    </div>
+                </div>
+            </div>
+        </div>      
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeAddressLine1, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeAddressLine1, new { @class = "form-control", placeholder = "Address Line 1" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeAddressLine2, new { @class = "col-sm-3 control-label"  })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeAddressLine2, new { @class = "form-control", placeholder = "Address Line 2" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeCity, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeCity, new { @class = "form-control", placeholder = "City" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeState, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeState, new { @class = "form-control", placeholder = "State" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.HomeZip, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.HomeZip, new { @class = "form-control", placeholder = "Zip" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.Email, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control", placeholder = "Email" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.PhoneNumber, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.PhoneNumber, new { @class = "form-control", placeholder = "Phone Number" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.FaxNumber, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.FaxNumber, new { @class = "form-control", placeholder = "Fax Number" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row voffset3"><h4> Information:</h4></div>
+        <div class='row'>           
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.UserName, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control", placeholder = "User Name" })
+                    </div>
+                </div>
+            </div>        
+           
+            @if (isNew) {
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password,  new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                    </div>
+                </div>
+            </div>
+           }
+        </div>
+       <div class='row'>
+        <div class='col-sm-6'>
+            <div class="form-group">               
+                @Html.LabelFor(m => m.User.TwoFactorEnabled, new { @class = "col-sm-3 control-label" })
+                <div class="col-sm-2">
+                    @Html.CheckBoxFor(m => m.User.TwoFactorEnabled, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class='col-sm-6'>
+            <div class="form-group">
+                @Html.LabelFor(m => m.UserRole, new { @class = "col-sm-3 control-label" })
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.UserRole, Model.Roles.Select(x => new SelectListItem() { Selected = x.Selected, Text = x.Text, Value = x.Value }), "--Select Role--",new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row voffset3"><h4>Professional Information:</h4></div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.Employer, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.Employer, new { @class = "form-control", placeholder = "Employer" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.Department, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.Department, new { @class = "form-control", placeholder = "Department" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkAddressLine1, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkAddressLine1, new { @class = "form-control", placeholder = "Address Line1" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkAddressLine2,  new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkAddressLine2, new { @class = "form-control", placeholder = "Address Line2" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkCity, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkCity, new { @class = "form-control", placeholder = "City" })
+
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkState, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkState, new { @class = "form-control", placeholder = "State" })
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkZip, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkZip, new { @class = "form-control", placeholder = "Zip" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkEmail, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkEmail, new { @class = "form-control", placeholder = "Email" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkPhoneNumber, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkPhoneNumber, new { @class = "form-control", placeholder = "Phone Number" })
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.User.WorkFaxNumber, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.User.WorkFaxNumber, new { @class = "form-control", placeholder = "Fax Number" })
+                    </div>
+                </div>
+            </div>
+
+        </div>      
+
+
+        <div class="col-sm-offset-3 col-sm-9">
+           
+        </div>
+    <div class="row">
+        <div class="modal-footer col-sm-12">
+            <input type="submit" value="Save" class="btn btn-default" />
+            <input type="submit" value="Cancel" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+        </div>
+    </div>
+    }
+
+</div>
+
+<script>
+    $(".validation-summary-errors").removeClass("validation-summary-errors");
+    $(".input-validation-error").removeClass("input-validation-error").parent().addClass("has-error");
+    $.validator.setDefaults({
+        showErrors: function (errorMap, errorList) {
+            this.defaultShowErrors();
+
+            // If an element is valid, it doesn't need a tooltip
+            $("." + this.settings.validClass).tooltip("destroy");
+
+            // Add tooltips
+            for (var i = 0; i < errorList.length; i++) {
+                var error = errorList[i];
+                $(error.element).tooltip({ trigger: "focus" }) // Activate the tooltip on focus
+                                .attr("data-original-title", error.message);
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var elements = document.getElementsByTagName("INPUT");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].oninvalid = function (e) {
+                e.target.setCustomValidity("");
+                if (!e.target.validity.valid) {
+                    console.log(e);
+                    //switch (e.srcElement.id) {
+                    //    case "user_username":
+                    //        e.target.setCustomValidity("Username cannot be blank");
+                    //        break;
+                    //    case "password":
+                    //        e.target.setCustomValidity("Password cannot be blank");
+                    //        break;
+                    //}
+                }
+            };
+            elements[i].oninput = function (e) {
+                e.target.setCustomValidity("");
+            };
+        }
+    });
+
+</script>

@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Security.Cryptography;
-using System.Text;
-using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
-using NREPPAdminSite.Models;
-using System.Security.Principal;
-using System.Web.Script.Serialization;
-using System.Data.SqlTypes;
+using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Mvc;
 using DataTables.Mvc;
 using NREPPAdminSite.Constants;
+using NREPPAdminSite.Models;
 
 namespace NREPPAdminSite
 {
@@ -29,9 +25,9 @@ namespace NREPPAdminSite
             conn = null;
         }
 
-        public NrepServ(string ConnectionString)
+        public NrepServ(string connectionString)
         {
-            conn = new SqlConnection(ConnectionString);
+            conn = new SqlConnection(connectionString);
         }
 
         #endregion
@@ -40,7 +36,7 @@ namespace NREPPAdminSite
 
         #region Misc Functionality
 
-        public void ChangeStatus(int inId, string inUser, int ToStatus)
+        public void ChangeStatus(int inId, string inUser, int toStatus)
         {
             SqlCommand cmd = new SqlCommand("SPChangeInterventionStatus", conn);
 
@@ -48,7 +44,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter("@IntervId", inId));
             cmd.Parameters.Add(new SqlParameter("@User", inUser));
             cmd.Parameters.Add(new SqlParameter("@DestUser", inUser));
-            cmd.Parameters.Add(new SqlParameter("@DestStatus", ToStatus));
+            cmd.Parameters.Add(new SqlParameter("@DestStatus", toStatus));
 
             try
             {
@@ -64,15 +60,15 @@ namespace NREPPAdminSite
 
         public IEnumerable<Answer> GetTaxonomicOutcomes(int? inId)
         {
-            List<Answer> TheOutcomes = new List<Answer>();
+            List<Answer> theOutcomes = new List<Answer>();
 
             // SQL Stuff
-            SqlCommand GetTaxonomy = new SqlCommand("SPGetTaxOutcomes", conn);
+            SqlCommand getTaxonomy = new SqlCommand("SPGetTaxOutcomes", conn);
 
-            GetTaxonomy.CommandType = CommandType.StoredProcedure;
-            GetTaxonomy.Parameters.Add(new SqlParameter("@TaxId", inId));
+            getTaxonomy.CommandType = CommandType.StoredProcedure;
+            getTaxonomy.Parameters.Add(new SqlParameter("@TaxId", inId));
 
-            SqlDataAdapter da = new SqlDataAdapter(GetTaxonomy);
+            SqlDataAdapter da = new SqlDataAdapter(getTaxonomy);
 
 
             try
@@ -86,7 +82,7 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    TheOutcomes.Add(new Answer((int)dr["Id"], dr["Guidelines"].ToString(), dr["OutcomeName"].ToString()));
+                    theOutcomes.Add(new Answer((int)dr["Id"], dr["Guidelines"].ToString(), dr["OutcomeName"].ToString()));
                 }
 
             }
@@ -96,10 +92,10 @@ namespace NREPPAdminSite
                 nAnswer.ShortAnswer = "Error!";
                 nAnswer.LongAnswer = ex.Message;
                 nAnswer.AnswerId = -1;
-                TheOutcomes.Add(nAnswer);
+                theOutcomes.Add(nAnswer);
             }
 
-            return TheOutcomes;
+            return theOutcomes;
         }
         
         /// <summary>
@@ -109,15 +105,15 @@ namespace NREPPAdminSite
         /// <returns>The Answers as an IEnumerable</returns>
         public IEnumerable<Answer> GetAnswersByCategory(string inCategory)
         {
-            List<Answer> OutAnswers = new List<Answer>();
+            List<Answer> outAnswers = new List<Answer>();
 
             // SQL Stuff
-            SqlCommand GetAnswersByCategory = new SqlCommand("SPGetAnswersByCategory", conn);
+            SqlCommand getAnswersByCategory = new SqlCommand("SPGetAnswersByCategory", conn);
 
-            GetAnswersByCategory.CommandType = CommandType.StoredProcedure;
-            GetAnswersByCategory.Parameters.Add(new SqlParameter("@InCategoryName", inCategory));
+            getAnswersByCategory.CommandType = CommandType.StoredProcedure;
+            getAnswersByCategory.Parameters.Add(new SqlParameter("@InCategoryName", inCategory));
 
-            SqlDataAdapter da = new SqlDataAdapter(GetAnswersByCategory);
+            SqlDataAdapter da = new SqlDataAdapter(getAnswersByCategory);
          
 
             try
@@ -131,7 +127,7 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    OutAnswers.Add(new Answer((int)dr["AnswerId"], dr["ShortAnswer"].ToString(), dr["LongAnswer"].ToString()));
+                    outAnswers.Add(new Answer((int)dr["AnswerId"], dr["ShortAnswer"].ToString(), dr["LongAnswer"].ToString()));
                 }
 
             } catch (Exception ex)
@@ -140,20 +136,22 @@ namespace NREPPAdminSite
                 nAnswer.ShortAnswer = "Error!";
                 nAnswer.LongAnswer = ex.Message;
                 nAnswer.AnswerId = -1;
-                OutAnswers.Add(nAnswer);
+                outAnswers.Add(nAnswer);
             }
 
-            return OutAnswers;
+            return outAnswers;
         }
 
         public IEnumerable<MaskValue> GetMaskList(string inMaskName)
         {
-            List<MaskValue> OutAnswers = new List<MaskValue>();
+            List<MaskValue> outAnswers = new List<MaskValue>();
 
             // SQL Stuff
-            SqlCommand cmdGetMasks = new SqlCommand("SPGetMasksByCategory", conn);
+            SqlCommand cmdGetMasks = new SqlCommand("SPGetMasksByCategory", conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
 
-            cmdGetMasks.CommandType = CommandType.StoredProcedure;
             cmdGetMasks.Parameters.Add(new SqlParameter("@InCategory", inMaskName));
 
             SqlDataAdapter da = new SqlDataAdapter(cmdGetMasks);
@@ -164,13 +162,11 @@ namespace NREPPAdminSite
                 CheckConn();
 
                 DataTable dt = new DataTable();
-
-
                 da.Fill(dt);
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    OutAnswers.Add(new MaskValue() { Name = dr["MaskValueName"].ToString(), Value = (int)dr["MaskPower"], Selected = false });
+                    outAnswers.Add(new MaskValue() { Name = dr["MaskValueName"].ToString(), Value = (int)dr["MaskPower"], Selected = false });
                 }
 
             }
@@ -181,10 +177,10 @@ namespace NREPPAdminSite
                 nAnswer.Name = ex.Message;
                 nAnswer.Value = -1;
                 nAnswer.Selected = false;
-                OutAnswers.Add(nAnswer);
+                outAnswers.Add(nAnswer);
             }
 
-            return OutAnswers;
+            return outAnswers;
         }
 
         public SubmissionPd GetCurrentSubmissionPd()
@@ -222,19 +218,18 @@ namespace NREPPAdminSite
         public List<Intervention> GetInterventions() // This needs to take some parameters, so there should be a bunch of functions for it
         {
             List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
-            return this.GetInterventions(nullParams);
+            return GetInterventions(nullParams);
         }
 
         /// <summary>
         /// Gets the interventions list based on role
         /// </summary>
-        /// <param name="RoleId">User's Role Id</param>
         /// <returns></returns>
-        public List<Intervention> GetInterventions(string RoleName) // This needs to take some parameters, so there should be a bunch of functions for it
+        public List<Intervention> GetInterventions(string roleName) // This needs to take some parameters, so there should be a bunch of functions for it
         {
             List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
-            nullParams.Add(new SqlParameter() { ParameterName = "@RoleName", SqlDbType = SqlDbType.NVarChar, Value = RoleName });
-            return this.GetInterventions(nullParams);
+            nullParams.Add(new SqlParameter() { ParameterName = "@RoleName", SqlDbType = SqlDbType.NVarChar, Value = roleName });
+            return GetInterventions(nullParams);
         }
 
 
@@ -1017,10 +1012,17 @@ namespace NREPPAdminSite
                 SqlDataAdapter da = new SqlDataAdapter(cmdGetReviewerList);
                 da.Fill(reviewers);
                 DataRow dr = reviewers.Rows[0];
-                reviewer = new Reviewer(dr["Id"].ToString(), dr["UserId"].ToString(), dr["FirstName"].ToString(),
-                        dr["LastName"].ToString(), dr["Employer"].ToString(), dr["Department"].ToString(), dr["ReviewerType"].ToString(), dr["Degree"].ToString());
+                reviewer = new Reviewer {
+                    Id = dr["Id"].ToString(), 
+                    UserId = dr["UserId"].ToString(), 
+                    FirstName = dr["FirstName"].ToString(),
+                    LastName = dr["LastName"].ToString(),
+                    Employer = dr["Employer"].ToString(),
+                    Department = dr["Department"].ToString(),
+                    ReviewerType = dr["ReviewerType"].ToString(),
+                    Degree = dr["Degree"].ToString()
+                };
                 return reviewer;
-
             }
             catch (Exception ex)
             {
@@ -1090,13 +1092,14 @@ namespace NREPPAdminSite
                 SqlDataAdapter da = new SqlDataAdapter(cmdGetReviewerList);
                 da.Fill(reviewers);
 
-                foreach (DataRow dr in reviewers.Rows)
-                {
-                    reviewerList.Add(new Reviewer(dr["Id"].ToString(), dr["UserId"].ToString(),
-                        dr["FirstName"].ToString(),
-                        dr["LastName"].ToString(), dr["Employer"].ToString(), dr["Department"].ToString(),
-                        dr["ReviewerType"].ToString(), dr["Degree"].ToString()));
-                }
+                reviewerList.AddRange(from DataRow dr in reviewers.Rows
+                    select new Reviewer
+                    {
+                        Id = dr["Id"].ToString(), UserId = dr["UserId"].ToString(), FirstName = dr["FirstName"].ToString(), 
+                        LastName = dr["LastName"].ToString(), Employer = dr["Employer"].ToString(), 
+                        Department = dr["Department"].ToString(), ReviewerType = dr["ReviewerType"].ToString(), 
+                        Degree = dr["Degree"].ToString()
+                    });
                 if (reviewers.Rows.Count > 0)
                 {
                     reviewerSearchResult.Reviewers = reviewerList;
@@ -1110,6 +1113,169 @@ namespace NREPPAdminSite
 
             return reviewerSearchResult;
         }
+
+        public bool AddReviewer(RegisterViewModel model)
+        {
+            SqlCommand cmd = new SqlCommand("SPAddReviewer", conn) {CommandType = CommandType.StoredProcedure};
+            cmd.Parameters.Add(new SqlParameter() {ParameterName = "@UserId", SqlDbType = SqlDbType.Int, Value = model.UserId});
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FirstName", SqlDbType = SqlDbType.NVarChar, Value = model.FirstName });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@LastName", SqlDbType = SqlDbType.NVarChar, Value = model.LastName });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Degree", SqlDbType = SqlDbType.NVarChar, Value = model.Degree });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ReviewerType", SqlDbType = SqlDbType.NVarChar, Value = model.ReviewerType });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeAddressLine1", SqlDbType = SqlDbType.Int, Value = model.HomeAddressLine1 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeAddressLine2", SqlDbType = SqlDbType.Int, Value = model.HomeAddressLine2 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeCity", SqlDbType = SqlDbType.Int, Value = model.HomeCity });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeState", SqlDbType = SqlDbType.Int, Value = model.HomeState });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeZip", SqlDbType = SqlDbType.Int, Value = model.HomeZip });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PhoneNumber", SqlDbType = SqlDbType.Int, Value = model.PhoneNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FaxNumber", SqlDbType = SqlDbType.Int, Value = model.FaxNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Email", SqlDbType = SqlDbType.Int, Value = model.Email });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Employer", SqlDbType = SqlDbType.Int, Value = model.Employer });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Department", SqlDbType = SqlDbType.Int, Value = model.Department });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkAddressLine1", SqlDbType = SqlDbType.Int, Value = model.WorkAddressLine1 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkAddressLine2", SqlDbType = SqlDbType.Int, Value = model.WorkAddressLine2 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkCity", SqlDbType = SqlDbType.Int, Value = model.WorkCity });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkState", SqlDbType = SqlDbType.Int, Value = model.WorkState });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkZip", SqlDbType = SqlDbType.Int, Value = model.WorkZip });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkPhoneNumber", SqlDbType = SqlDbType.Int, Value = model.WorkPhoneNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkFaxNumber", SqlDbType = SqlDbType.Int, Value = model.WorkFaxNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkEmail", SqlDbType = SqlDbType.Int, Value = model.WorkEmail });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ExperienceSummary", SqlDbType = SqlDbType.Int, Value = model.ExperienceSummary });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Active", SqlDbType = SqlDbType.Bit, Value = true });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@CreatedBy", SqlDbType = SqlDbType.VarChar, Value = model.CreatedBy });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.VarChar, Value = model.ModifiedBy });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@CreatedOn", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ModifiedOn", SqlDbType = SqlDbType.Int, Value = DateTime.Now });
+
+           try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return true;
+        }
+
+        public UsersSearchResult GetUsers([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
+        {
+            string userName = null;
+            string firstName = null;
+            string lastName = null;
+            string email = null;
+            bool lockoutEnabled = false;
+            bool isStatus=false;
+            var usersSearchResult = new UsersSearchResult();
+            var userList = new List<GenericUser>();
+            SqlCommand cmdGetUserList = new SqlCommand("SPGetUsers", conn);
+            cmdGetUserList.CommandType = CommandType.StoredProcedure;
+
+            var filteredColumns = requestModel.Columns.GetFilteredColumns();
+            foreach (var filter in filteredColumns)
+            {
+                switch (filter.Data)
+                {
+                    case "UserName":
+                        userName = filter.Search.Value;
+                        break;
+                    case "FirstName":
+                        firstName = filter.Search.Value;
+                        break;
+                    case "LastName":
+                        lastName = filter.Search.Value;
+                        break;
+                    case "Email":
+                        email = filter.Search.Value;
+                        break;        
+                }
+            }
+            cmdGetUserList.Parameters.Add(new SqlParameter("@UserName", Utilities.ToDbNull(userName)));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@FirstName", Utilities.ToDbNull(firstName)));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@LastName", Utilities.ToDbNull(lastName)));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@Email", Utilities.ToDbNull(email)));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@Page", requestModel.Start + 1));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@PageLength", requestModel.Length));
+            CheckConn();
+            DataTable users = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(cmdGetUserList);
+            da.Fill(users);
+
+            foreach (DataRow dr in users.Rows)
+            {
+                userList.Add(new GenericUser
+                {
+                    Id = dr["Id"].ToString(),
+                    UserName = dr["UserName"].ToString(), 
+                    Email = dr["Email"].ToString(),
+                    FirstName = dr["FirstName"].ToString(), 
+                    LastName = dr["LastName"].ToString(),
+                    HomeAddressLine1 = dr["HomeAddressLine1"].ToString(),
+                    HomeAddressLine2 = dr["HomeAddressLine2"].ToString(),
+                    HomeCity = dr["HomeCity"].ToString(),
+                    HomeState = dr["HomeState"].ToString(),
+                    HomeZip = dr["HomeZip"].ToString(),
+                    PhoneNumber = dr["PhoneNumber"].ToString(),
+                    FaxNumber = dr["FaxNumber"].ToString(),
+                    Employer = dr["Employer"].ToString(),
+                    Department = dr["Department"].ToString(),
+                    WorkAddressLine1 = dr["WorkAddressLine1"].ToString(),
+                    WorkAddressLine2 = dr["WorkAddressLine2"].ToString(),
+                    WorkCity = dr["WorkCity"].ToString(),
+                    WorkState = dr["WorkState"].ToString(),
+                    WorkZip = dr["WorkZip"].ToString(),
+                    WorkPhoneNumber = dr["WorkPhoneNumber"].ToString(),
+                    WorkFaxNumber = dr["WorkFaxNumber"].ToString(),
+                    WorkEmail = dr["WorkEmail"].ToString(),
+                    IsLocked = dr["IsUserLocked"].ToString() == "1" ? true : false
+                });
+            }
+            if (users.Rows.Count > 0)
+            {
+                usersSearchResult.UserList = userList;
+                usersSearchResult.TotalSearchCount = Convert.ToInt16(users.Rows[0]["searchTotal"].ToString());
+            }
+
+            return usersSearchResult;
+        }
+
+        public ExtendedUser GetUser(string id)
+        {
+            ExtendedUser reviewer =  new ExtendedUser();
+            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewerList", conn);
+            cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
+
+
+            try
+            {
+                CheckConn();
+                
+                SqlDataReader dr = cmdGetReviewerList.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    while (dr.Read())
+                    {
+                        reviewer.Id = Convert.ToString(dr["Id"]);
+                    }
+                }
+               
+                return reviewer;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return reviewer;
+        }        
 
         #endregion
 
@@ -1125,7 +1291,7 @@ namespace NREPPAdminSite
             if (conn == null)
                 throw new Exception("There is no SQL Connection String!"); // TODO: Make own version of an exception to go here
 
-            if (conn.State != System.Data.ConnectionState.Open)
+            if (conn.State != ConnectionState.Open)
                 conn.Open();
         }
 
@@ -1217,8 +1383,8 @@ namespace NREPPAdminSite
         public static string AESCrypt(string plainText)
         {
             string retstring = string.Empty;
-            byte[] Key = Convert.FromBase64String(PasswordHash.AES_KEY);
-            byte[] IV = Convert.FromBase64String(PasswordHash.AES_IV);
+            byte[] Key = Convert.FromBase64String(AES_KEY);
+            byte[] IV = Convert.FromBase64String(AES_IV);
 
             using (AesCryptoServiceProvider aesAlg = new AesCryptoServiceProvider())
             {
@@ -1247,8 +1413,8 @@ namespace NREPPAdminSite
         {
            string retString = string.Empty;
            byte[] bitText = Convert.FromBase64String(cipherText);
-           byte[] Key = Convert.FromBase64String(PasswordHash.AES_KEY);
-           byte[] IV = Convert.FromBase64String(PasswordHash.AES_IV);
+           byte[] Key = Convert.FromBase64String(AES_KEY);
+           byte[] IV = Convert.FromBase64String(AES_IV);
 
            using (AesCryptoServiceProvider aesAlg = new AesCryptoServiceProvider())
            {
@@ -1273,6 +1439,32 @@ namespace NREPPAdminSite
         }
     }
 
+    public class NreppServiceResponseBase
+    {
+        public NreppServiceResponseBase()
+        {
+            Errors = new List<string>();
+        }
+
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public List<string> Errors { get; set; }
+
+        public bool HasErrors { get { return Errors != null && Errors.Count > 0; } }
+
+        public void ResponseSet(bool success, string message)
+        {
+            Success = success;
+            Message = message;
+        }
+
+        public void ErrorsAdd(string error)
+        {
+            if (Errors == null)
+                Errors = new List<string>();
+            Errors.Add(error);
+        }
+    }
     #endregion
 
     #region Constants

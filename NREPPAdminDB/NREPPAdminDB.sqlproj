@@ -122,6 +122,8 @@
     <Build Include="Tables\AspNetUserRoles.sql" />
     <Build Include="Tables\SubmissionPds.sql" />
     <Build Include="Tables\SPGetRecentSubPd.sql" />
+    <Build Include="Stored Procedures\SPAddReviewer.sql" />
+    <Build Include="Stored Procedures\SPGetUsers.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

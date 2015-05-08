@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace NREPPAdminSite.Models
 {
@@ -423,6 +424,18 @@ namespace NREPPAdminSite.Models
         public bool IsActive { get; set; }
 
         public ReviewerWrapper Outcomes { get; set; }
+    }
+
+    #endregion
+
+    #region UserPageModel
+
+    public class UserPageModel : NREPPPermissions
+    {
+        public ExtendedUser User { get; set; }
+        public IEnumerable<SelectListItem> Roles { get; set; }
+        public string Password { get; set; }
+        public string UserRole { get; set; }
     }
 
     #endregion

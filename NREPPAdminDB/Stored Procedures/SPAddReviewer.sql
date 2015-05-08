@@ -1,114 +1,96 @@
-﻿/*
-	Creation Date: 3/10/2015
-	Author: Patrick Taylor
-*/
-CREATE PROCEDURE [dbo].[SPAddReviewer]
-	@ReviewerId INT = -1, 
-	@UserId INT = NULL,
-	@Degree int = NULL,
-	@ReviewerType INT = NULL,
-	@IsActive BIT = 0,
-	@FirstName VARCHAR(30) = NULL,
-	@LastName VARCHAR(35) = NULL,
-	@StreetAddress VARCHAR(100) = NULL,
-	@City VARCHAR(30) = null,
-	@State CHAR(20) = NULL,
-	@ZIP VARCHAR(11) = NULL,
-	@HomeEmail VARCHAR(40) = NULL,
-	@WorkStreetAddress VARCHAR(100) = NULL,
-	@WorkCity VARCHAR(30) = null,
-	@WorkState CHAR(20) = NULL,
-	@WorkZIP VARCHAR(11) = NULL,
-	@WorkEmail VARCHAR(40) = NULL,
-	@Employer VARCHAR(40) = NULL,
-	@Department VARCHAR(30) = NULL,
-	@Experience VARCHAR(MAX),
-	@OutId INT OUTPUT
-AS set nocount on
-	
-	BEGIN TRANSACTION
-	
-	IF @ReviewerId < 1 BEGIN
-		INSERT INTO Reviewers (UserId, 
-			Degree, 
-			ReviewerType, 
-			IsActive, 
-			FirstName, 
-			LastName, 
-			StreetAddress, 
-			--Phone, 
-			City,
-			State, 
-			ZIP, 
-			--FaxNumber, 
-			HomeEmail, 
-			Employer, 
-			Department, 
-			WorkStreetAddress, 
-			WorkCity,
-			WorkState,
-			WorkZip, 
-			--WorkPhone, 
-			--WorkFax, 
-			WorkEmail, 
-			ExperienceSummary) VALUES
-			(@UserId,
-			@Degree,
-			@ReviewerType,
-			@IsActive,
-			@FirstName,
-			@LastName,
-			@StreetAddress,
-			@City,
-			@State,
-			@ZIP,
-			@HomeEmail,
-			@Employer,
-			@Department,
-			@WorkStreetAddress,
-			@WorkCity,
-			@WorkState,
-			@WorkZIP,
-			@WorkEmail,
-			@Experience)
+﻿CREATE PROCEDURE [dbo].[SPAddReviewer]
+	@UserId NVARCHAR(128) , 
+	@FirstName NVARCHAR(250) , 
+    @LastName NVARCHAR(250) , 
+    @Degree VARCHAR(35) , 
+    @ReviewerType VARCHAR(35) ,        
+    @HomeAddressLine1 VARCHAR(100) , 
+    @HomeAddressLine2 VARCHAR(100) , 
+	@HomeCity VARCHAR(30) ,
+    @HomeState CHAR(2) , 
+    @HomeZip VARCHAR(11) , 
+	@PhoneNumber VARCHAR(15) , 
+    @FaxNumber VARCHAR(15) , 
+    @Email VARCHAR(100) , 
+    @Employer VARCHAR(40) , 
+    @Department VARCHAR(30) , 
+    @WorkAddressLine1 VARCHAR(100) , 
+	@WorkAddressLine2 VARCHAR(100) , 
+    @WorkCity VARCHAR(30) ,
+	@WorkState CHAR(2) ,
+    @WorkZip VARCHAR(11) , 
+    @WorkPhoneNumber VARCHAR(15) , 
+    @WorkFaxNumber VARCHAR(15) , 
+    @WorkEmail NCHAR(100) , 
+    @ExperienceSummary VARCHAR(MAX) , 
+	@Active BIT,
+	@CreatedBy nvarchar(128),
+	@ModifiedBy nvarchar(128),
+	@CreatedOn datetime,
+	@ModifiedOn nvarchar(128)
+AS
 
-		IF @@ERROR <> 0 BEGIN
-			ROLLBACK TRANSACTION
-			RETURN -1
-		END
+INSERT INTO [dbo].[Reviewers]
+           ([Id]
+           ,[UserId]
+           ,[FirstName]
+           ,[LastName]
+           ,[Degree]
+           ,[ReviewerType]
+           ,[HomeAddressLine1]
+           ,[HomeAddressLine2]
+           ,[HomeCity]
+           ,[HomeState]
+           ,[HomeZip]
+           ,[PhoneNumber]
+           ,[FaxNumber]
+           ,[Email]
+           ,[Employer]
+           ,[Department]
+           ,[WorkAddressLine1]
+           ,[WorkAddressLine2]
+           ,[WorkCity]
+           ,[WorkState]
+           ,[WorkZip]
+           ,[WorkPhoneNumber]
+           ,[WorkFaxNumber]
+           ,[WorkEmail]
+           ,[ExperienceSummary]
+           ,[Active]
+		   ,[CreatedBy]
+		   ,[ModifiedBy]
+		   ,[CreatedOn]
+		   ,[ModifiedOn])
+     VALUES
+           (NewId()
+           ,@UserId
+           ,@FirstName
+           ,@LastName
+           ,@Degree
+           ,@ReviewerType
+           ,@HomeAddressLine1
+           ,@HomeAddressLine2
+           ,@HomeCity
+           ,@HomeState
+           ,@HomeZip
+           ,@PhoneNumber
+           ,@FaxNumber
+           ,@Email
+           ,@Employer
+           ,@Department
+           ,@WorkAddressLine1
+           ,@WorkAddressLine2
+           ,@WorkCity
+           ,@WorkState
+           ,@WorkZip
+           ,@WorkPhoneNumber
+           ,@WorkFaxNumber
+           ,@WorkEmail
+           ,@ExperienceSummary
+           ,@Active
+		   ,@CreatedBy
+		   ,@ModifiedBy
+		   ,@CreatedOn
+		   ,@ModifiedOn)
 
-		SET @OutId = @@IDENTITY
-	END
-	ELSE BEGIN
-		UPDATE Reviewers
-		SET UserId = @UserId,
-			Degree = @Degree,
-			ReviewerType = @ReviewerType,
-			IsActive = @IsActive,
-			FirstName = @FirstName,
-			LastName = @LastName,
-			StreetAddress = @StreetAddress,
-			City = @City,
-			State = @State,
-			ZIP = @ZIP,
-			HomeEmail = @HomeEmail,
-			WorkStreetAddress = @WorkStreetAddress,
-			WorkCity = @WorkCity,
-			WorkState = @WorkState,
-			WorkZIP = @WorkZIP,
-			WorkEmail = @WorkEmail,
-			Employer = @Employer,
-			Department = @Department,
-			ExperienceSummary = @Experience
-		WHERE Id = @ReviewerId
-
-		IF @@ERROR <> 0 BEGIN
-			ROLLBACK TRANSACTION
-			RETURN -2
-		END
-
-		SET @OutId = @ReviewerId
-	END
-
-	COMMIT TRANSACTION
 RETURN 0

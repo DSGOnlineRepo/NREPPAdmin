@@ -5,10 +5,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using DataTables.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
-using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
 using NREPPAdminSite.Security;
 
@@ -45,11 +45,6 @@ namespace NREPPAdminSite.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.Roles = _roleManager.Roles.ToList().Select(u => new SelectListItem
-            {
-                Text = u.Name,
-                Value = u.Name
-            });
             return View();
         }
 
@@ -57,6 +52,8 @@ namespace NREPPAdminSite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterViewModel model)
         {
+            ModelState.Remove("Role");
+            model.Role = "Principal Investigator";
             if (ModelState.IsValid)
             {
                 var user = new ExtendedUser
@@ -65,7 +62,25 @@ namespace NREPPAdminSite.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    PhoneNumber = model.PhoneNumber
+                    LockoutEnabled = false,
+                    LockoutEndDateUtc = DateTime.UtcNow.AddYears(100),
+                    HomeAddressLine1 = model.HomeAddressLine1,
+                    HomeAddressLine2 = model.HomeAddressLine2,
+                    HomeCity = model.HomeCity,
+                    HomeState = model.HomeState,
+                    HomeZip = model.HomeZip,
+                    PhoneNumber = model.PhoneNumber,
+                    FaxNumber = model.FaxNumber,
+                    Employer = model.Employer,
+                    Department = model.Department,
+                    WorkAddressLine1 = model.WorkAddressLine1,
+                    WorkAddressLine2 = model.WorkAddressLine2,
+                    WorkCity = model.WorkCity,
+                    WorkState = model.WorkState,
+                    WorkZip = model.WorkZip,
+                    WorkPhoneNumber = model.WorkPhoneNumber,
+                    WorkFaxNumber = model.WorkFaxNumber,
+                    WorkEmail = model.WorkEmail
                 };
 
                 IdentityResult result = _userManager.Create(user, model.Password);
@@ -77,7 +92,20 @@ namespace NREPPAdminSite.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("UserName", "Error while creating the user!");
+                    var isDuplicateUser = false;
+                    foreach (string error in result.Errors)
+                    {
+                        if (error.Contains("is already taken."))
+                        {
+                            ModelState.AddModelError("UserName", error);
+                            isDuplicateUser = true;
+                        }
+                    }
+                    if (!isDuplicateUser)
+                    {
+                        var errors = string.Join("<br />", result.Errors);
+                        ModelState.AddModelError("", errors);
+                    }
                 }
             }
             return View(model);
@@ -107,14 +135,21 @@ namespace NREPPAdminSite.Controllers
                     ClaimsIdentity identity = _userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
                     AuthenticationProperties props = new AuthenticationProperties();
                     props.IsPersistent = model.RememberMe;
-                    authenticationManager.SignIn(props, identity);
-                    if (Url.IsLocalUrl(returnUrl))
+                    if (!_userManager.GetLockoutEnabled(user.Id))
                     {
-                        return Redirect(returnUrl);
+                        authenticationManager.SignIn(props, identity);
+                        if (Url.IsLocalUrl(returnUrl))
+                        {
+                            return Redirect(returnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Programs", "Home");
+                        }
                     }
                     else
                     {
-                        return RedirectToAction("Programs", "Home");
+                        ModelState.AddModelError("", "Account Locked. Please contact the administrator");
                     }
                 }
                 else
@@ -250,36 +285,21 @@ namespace NREPPAdminSite.Controllers
 
             return View(model);
         }
+       
+        [Authorize]
+        public ActionResult SubmissionPeriods()
+        {
+            return View();
+        }
+        
+        [Authorize]
+        public ActionResult GetSubmissionPeriods()
+        {
 
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            return null;
 
-        //public async Task RegisterAdmin()
-        //{
-        //    IdentityUser admin = await UserManager<ExtendedUser>.FindByNameAsync(UserConstants.Admin);
-
-        //    if (admin == null)
-        //    {
-        //        if (!_roleManager.RoleExists(UserConstants.Admin))
-        //        {
-        //            _roleManager.Create(new IdentityRole(UserConstants.Admin));
-        //        }
-
-        //        if (!_roleManager.RoleExists(UserConstants.Guest))
-        //        {
-        //            _roleManager.Create(new IdentityRole(UserConstants.Guest));
-        //        }
-
-        //        var user = new ExtendedUser(UserConstants.Admin, string.Empty, UserConstants.Admin,
-        //            UserConstants.Admin, false);
-
-        //        var adminResult = _userManager.Create(user, UserConstants.Password);
-
-        //        if (adminResult.Succeeded)
-        //        {
-        //            _userManager.AddToRole(user.Id, UserConstants.Admin);
-        //        }
-        //    }
-        //}
-
+        }
 
         public ActionResult JoinProgram(string ID)
         {
@@ -313,6 +333,120 @@ namespace NREPPAdminSite.Controllers
 
             return View();
         }
+
+        [Authorize]
+        public ActionResult Reviewers()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult Reviewer(int? id)
+        {
+            ViewBag.Roles = _roleManager.Roles.ToList().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Name
+            });
+            return View();
+        }
+
+        [Authorize]
+        public JsonResult ReviewersList([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            ReviewerSearchResult reviewerSearchResult = localService.GetReviewers(requestModel);
+            return Json(new DataTablesResponse(requestModel.Draw, reviewerSearchResult.Reviewers, reviewerSearchResult.TotalSearchCount, reviewerSearchResult.TotalSearchCount), JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public JsonResult AddReviewer(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ExtendedUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    LockoutEnabled = false,
+                    LockoutEndDateUtc = DateTime.UtcNow.AddYears(100),
+                    HomeAddressLine1 = model.HomeAddressLine1,
+                    HomeAddressLine2 = model.HomeAddressLine2,
+                    HomeCity = model.HomeCity,
+                    HomeState = model.HomeState,
+                    HomeZip = model.HomeZip,
+                    PhoneNumber = model.PhoneNumber,
+                    FaxNumber = model.FaxNumber,
+                    Employer = model.Employer,
+                    Department = model.Department,
+                    WorkAddressLine1 = model.WorkAddressLine1,
+                    WorkAddressLine2 = model.WorkAddressLine2,
+                    WorkCity = model.WorkCity,
+                    WorkState = model.WorkState,
+                    WorkZip = model.WorkZip,
+                    WorkPhoneNumber = model.WorkPhoneNumber,
+                    WorkFaxNumber = model.WorkFaxNumber,
+                    WorkEmail = model.WorkEmail
+                };
+
+                IdentityResult result = _userManager.Create(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    _userManager.AddToRole(user.Id, model.Role);
+                }
+                else
+                {
+                    ModelState.AddModelError("UserName", "Error while creating the user!");
+                    return Json(new { Status = "Success", Message = "Error while creating the user!" });
+                }
+                model.UserId = user.Id;
+                model.CreatedBy = User.Identity.Name;
+                model.ModifiedBy = User.Identity.Name;
+                NrepServ localService = new NrepServ(NrepServ.ConnString);
+                if (localService.AddReviewer(model))
+                {
+                    return Json(new { Status = "Success", Message = "User created successfully" });
+                }
+                else
+                {
+                    DeleteUserById(user.Id);
+                    return Json(new { Status = "Success", Message = "Error while creating the user!" });
+                }
+            }
+            return Json(new { Status = "Success", Message = "Error while creating the user!" });
+        }
+
+
+        private void DeleteUserById(string id)
+        {
+            if (id != null)
+            {
+                var user = _userManager.FindById(id);
+                var logins = user.Logins;
+
+                foreach (var login in logins.ToList())
+                {
+                    _userManager.RemoveLogin(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
+                }
+
+                var rolesForUser = _userManager.GetRoles(id);
+
+                if (rolesForUser.Any())
+                {
+                    foreach (var item in rolesForUser.ToList())
+                    {
+                        _userManager.RemoveFromRole(user.Id, item);
+                    }
+                }
+
+                _userManager.Delete(user);
+            }
+        }
+
 
     }
 

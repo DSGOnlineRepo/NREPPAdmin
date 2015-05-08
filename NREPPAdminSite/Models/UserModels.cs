@@ -125,52 +125,170 @@ namespace NREPPAdminSite.Models
     /// <summary>
     /// Reviewer Class
     /// </summary>
-    public class Reviewer
+    public class GenericUser : Base
     {
+
+        [Display(Name = "Id")]
+        [StringLength(128)]
         public string Id { get; set; }
-        public string UserId { get; set; }
+
+        [Required]
+        [Display(Name = "First Name")]
+        [StringLength(250)]
         public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        [StringLength(250)]
         public string LastName { get; set; }
-        public string Degree { get; set; }
-        public string ReviewerType { get; set; }
-        public string HomeAddressLine1 { get; set; }
-        public string HomeAddressLine2 { get; set; }
-        public string HomeCity { get; set; }
-        public string HomeState { get; set; }
-        public string HomeZip { get; set; }
-        public string PhoneNumber { get; set; }
-        public string FaxNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Email")]
+        [EmailAddress]
+        [StringLength(128)]
         public string Email { get; set; }
 
-        public string Employer { get; set; }
-        public string Department { get; set; }
-        public string WorkAddressLine1 { get; set; }
-        public string WorkAddressLine2 { get; set; }
-        public string WorkCity { get; set; }
-        public string WorkState { get; set; }
-        public string WorkZip { get; set; }
-        public string WorkPhoneNumber { get; set; }
-        public string WorkFaxNumber { get; set; }
-        public string WorkEmail { get; set; }
-        public string ExperienceSummary { get; set; }
-        public bool IsActive { get; set; }
+        [Required]
+        [Display(Name = "Phone Number")]
+        [Phone]
+        [StringLength(15)]
+        public string PhoneNumber { get; set; }
+        
+        [Display(Name = "Fax Number")]
+        [Phone]
+        [StringLength(15)]
+        public string FaxNumber { get; set; }
 
-        public Reviewer(string reviewerId, string userId, string firstName, string lastName, string employer, string department, string reviewerType, string degree)
-        {
-            Id = reviewerId;
-            UserId = userId;
-            FirstName = firstName;
-            LastName = lastName;
-            Employer = employer;
-            Department = department;
-            ReviewerType = reviewerType;
-            Degree = degree;
-        }
+        [Required]
+        [Display(Name = "Address Line 1")]
+        [StringLength(128)]
+        public string HomeAddressLine1 { get; set; }
+
+        [Display(Name = "Address Line 2")]
+        [StringLength(128)]
+        public string HomeAddressLine2 { get; set; }
+
+        [Required]
+        [Display(Name = "City", Prompt = "City")]
+        [StringLength(50)]
+        public string HomeCity { get; set; }
+
+        [Required]
+        [Display(Name = "State", Prompt = "State")]
+        [StringLength(2, ErrorMessage = "Please enter state code")]
+        public string HomeState { get; set; }
+
+        [Required]
+        [Display(Name = "Zip")]
+        [StringLength(11)]
+        public string HomeZip { get; set; }
+
+        [Display(Name = "Employer")]
+        [StringLength(128)]
+        public string Employer { get; set; }
+
+        [Display(Name = "Department")]
+        [StringLength(128)]
+        public string Department { get; set; }
+
+        [Display(Name = "Address Line 1")]
+        [StringLength(128)]
+        public string WorkAddressLine1 { get; set; }
+
+        [Display(Name = "Address Line 2")]
+        [StringLength(128)]
+        public string WorkAddressLine2 { get; set; }
+
+        [Display(Name = "City")]
+        [StringLength(50)]
+        public string WorkCity { get; set; }
+
+        [Display(Name = "State")]
+        [StringLength(2, ErrorMessage = "Please enter state code")]
+        public string WorkState { get; set; }
+
+        [Display(Name = "Zip")]
+        public string WorkZip { get; set; }
+
+        [Display(Name = "Phone Number")]
+        [StringLength(11)]
+        public string WorkPhoneNumber { get; set; }
+
+        [Display(Name = "Fax Number")]
+        [StringLength(11)]
+        public string WorkFaxNumber { get; set; }
+
+        [Display(Name = "Email")]
+        [EmailAddress]
+        [StringLength(128)]
+        public string WorkEmail { get; set; }
+
+        public bool IsLocked { get; set; }
+
+        public string UserName { get; set; }
+       
+    }
+
+    public class Reviewer : GenericUser
+    {
+        [Display(Name = "User Id")]
+        [StringLength(128)]
+        public string UserId { get; set; }
+
+        [Display(Name = "Degree")]
+        [StringLength(50)]
+        public string Degree { get; set; }
+
+        [Display(Name = "Reviewer Type")]
+        [StringLength(50)]
+        public string ReviewerType { get; set; }
+
+        [Display(Name = "Experience Summary")]
+        public string ExperienceSummary { get; set; }
+
+    }
+
+    public class RegisterViewModel : Reviewer
+    {
+
+        [Required(ErrorMessage = "You most provide a user name.")]
+        [Display(Name = "User Name")]
+        [StringLength(50)]
+        public string UserName { get; set; }
+
+        [Required]
+        [Display(Name = "Confirm Email")]
+        [Compare("Email", ErrorMessage = "The email and confirmation email do not match.")]
+        [StringLength(128)]
+        public string ConfirmEmail { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+        
+        [Required]
+        [Display(Name = "Role")]
+        [StringLength(256)]
+        public string Role { get; set; }
     }
 
     public class ReviewerSearchResult
     {
         public List<Reviewer> Reviewers = new List<Reviewer>();
+        public int TotalSearchCount;
+    }
+
+    public class UsersSearchResult
+    {
+        public List<GenericUser> UserList = new List<GenericUser>();
+        public List<Role> Roles = new List<Role>();
         public int TotalSearchCount;
     }
 
@@ -251,50 +369,6 @@ namespace NREPPAdminSite.Models
         public string ConfirmNewPassword { get; set; }
     }
 
-
-    public class RegisterViewModel
-    {
-        [Required(ErrorMessage="You most provide a user name.")]
-        [Display(Name = "User Name")]
-        public string UserName { get; set; }
-
-        [Required]
-        [Display(Name = "First name")]
-        public string FirstName { get; set; }
-
-        [Required]
-        [Display(Name = "Last name")]
-        public string LastName { get; set; }
-
-        [Required]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Required]
-        [Display(Name = "Confirm Email")]
-        [Compare("Email", ErrorMessage = "The email and confirmation email do not match.")]
-        public string ConfirmEmail { get; set; }
-
-        [Required]
-        [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
-
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
-
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
-
-        [Required]
-        [Display(Name = "Role")]
-        public string Role { get; set; }
-    }
-
     public class LoginViewModel
     {
         [Required]
@@ -312,70 +386,95 @@ namespace NREPPAdminSite.Models
 
     public sealed class ExtendedUser : IdentityUser
     {
-        public override string Id { get; set; }
+        [Required]
+        [Display(Name = "First Name")]
         [StringLength(250)]
         public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
         [StringLength(250)]
         public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "Email")]
+        [EmailAddress]
         [StringLength(128)]
-        public string Degree { get; set; }
-        [StringLength(128)]
-        public string ReviewerType { get; set; }
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Phone Number")]
+        [Phone]
+        [StringLength(15)]
+        public string PhoneNumber { get; set; }
+
+        [Display(Name = "Fax Number")]
+        [Phone]
+        [StringLength(15)]
+        public string FaxNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Address Line 1")]
         [StringLength(128)]
         public string HomeAddressLine1 { get; set; }
+
+        [Display(Name = "Address Line 2")]
         [StringLength(128)]
         public string HomeAddressLine2 { get; set; }
+
+        [Required]
+        [Display(Name = "City", Prompt = "City")]
         [StringLength(50)]
         public string HomeCity { get; set; }
-        [StringLength(30)]
+
+        [Required]
+        [Display(Name = "State", Prompt = "State")]
+        [StringLength(2, ErrorMessage = "Please enter state code")]
         public string HomeState { get; set; }
+
+        [Required]
+        [Display(Name = "Zip")]
         [StringLength(11)]
         public string HomeZip { get; set; }
-        [StringLength(15)]
-        public string HomeFaxNumber { get; set; }
+
+        [Display(Name = "Employer")]
         [StringLength(128)]
         public string Employer { get; set; }
+
+        [Display(Name = "Department")]
         [StringLength(128)]
         public string Department { get; set; }
-        [StringLength(128)]
-        public string WorkEmail { get; set; }
+
+        [Display(Name = "Address Line 1")]
         [StringLength(128)]
         public string WorkAddressLine1 { get; set; }
+
+        [Display(Name = "Address Line 2")]
         [StringLength(128)]
         public string WorkAddressLine2 { get; set; }
+
+        [Display(Name = "City")]
         [StringLength(50)]
         public string WorkCity { get; set; }
-        [StringLength(30)]
+
+        [Display(Name = "State")]
+        [StringLength(2, ErrorMessage = "Please enter state code")]
         public string WorkState { get; set; }
-        [StringLength(11)]
+
+        [Display(Name = "Zip")]
         public string WorkZip { get; set; }
-        [StringLength(15)]
+
+        [Display(Name = "Phone Number")]
+        [StringLength(11)]
         public string WorkPhoneNumber { get; set; }
-        [StringLength(15)]
+
+        [Display(Name = "Fax Number")]
+        [StringLength(11)]
         public string WorkFaxNumber { get; set; }
-        public string ExperienceSummary { get; set; }
 
-        public ExtendedUser() { }
-
-        public ExtendedUser(string username, string email, string firstName, string lastName,
-            bool lockoutEnabled)
-        {
-            UserName = username;
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            LockoutEnabled = lockoutEnabled;
-        }
-
-        public ExtendedUser(RegisterViewModel registerViewModel)
-        {
-            UserName = registerViewModel.UserName;
-            Email = registerViewModel.Email;
-            FirstName = registerViewModel.FirstName;
-            LastName = registerViewModel.LastName;
-            PhoneNumber = registerViewModel.PhoneNumber;
-        }
-        
-
+        [Display(Name = "Email")]
+        [EmailAddress]
+        [StringLength(128)]
+        public string WorkEmail { get; set; }
     }
 }
