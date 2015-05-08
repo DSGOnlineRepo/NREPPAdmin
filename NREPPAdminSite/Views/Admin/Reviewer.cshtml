@@ -1,5 +1,5 @@
 ﻿@model NREPPAdminSite.Models.RegisterViewModel
-
+@{
     ViewBag.Title = "Add/Edit Reviewer";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -8,7 +8,7 @@
 
 <div class="container-fluid">
 
-    @using (Html.BeginForm("AddReviewer", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("AddReviewer", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
     {
 
     <div class='row'>
@@ -266,9 +266,29 @@
 
 
     <div class="col-sm-offset-3 col-sm-9">
-        <input type="submit" value="Save" class="btn btn-default" />
+        <input type="submit" value="Save" class="btn btn-primary" />
         <input type="submit" value="Cancel" class="btn btn-default" />
     </div>
     }
 
 </div>
+
+<script>
+    $(".validation-summary-errors").removeClass("validation-summary-errors");
+    $(".input-validation-error").removeClass("input-validation-error").parent().addClass("has-error");
+    $.validator.setDefaults({
+        showErrors: function (errorMap, errorList) {
+            this.defaultShowErrors();
+
+            // If an element is valid, it doesn't need a tooltip
+            $("." + this.settings.validClass).tooltip("destroy");
+
+            // Add tooltips
+            for (var i = 0; i < errorList.length; i++) {
+                var error = errorList[i];
+                $(error.element).tooltip({ trigger: "focus" }) // Activate the tooltip on focus
+                                .attr("data-original-title", error.message);
+            }
+        }
+    });
+</script>

@@ -8,8 +8,12 @@ namespace NREPPAdminSite.Models
     {
         //private int id;
         
-        [Display(Name = "Title")]
+        [Display(Name = "Program Name")]
         public string Title { get; set; }
+
+        [Display(Name = "Previous Program Name")]
+        public string PrevProgName { get; set; }
+
         public string SubmitterId { get; set; }
 
         [Display(Name = "Full Description")]
@@ -27,7 +31,7 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Program Type")]
         public int ProgramType { get; set; }
 
-        [Display(Name = "Acronym")]
+        [Display(Name = "Program Acronym")]
         public string Acronym { get; set; }
 
         [Display(Name = "From Literature Search?")]

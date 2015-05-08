@@ -27,6 +27,8 @@
 
     @using (Html.BeginForm("SaveUser", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
     {
+        bool isNew = false;
+        if (Model.User == null) { isNew = true; }           
        
         <div class='row'>
             <div class='col-sm-6'>
@@ -121,7 +123,7 @@
             </div>
         </div>
         <div class="row voffset3"><h4> Information:</h4></div>
-        <div class='row'>
+        <div class='row'>           
             <div class='col-sm-6'>
                 <div class="form-group">
                     @Html.LabelFor(m => m.User.UserName, "User Name", new { @class = "col-sm-3 control-label" })
@@ -129,8 +131,9 @@
                         @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control" })
                     </div>
                 </div>
-            </div>
-            
+            </div>        
+           
+            @if (isNew) {
             <div class='col-sm-6'>
                 <div class="form-group">
                     @Html.LabelFor(m => m.Password, "Password", new { @class = "col-sm-3 control-label" })
@@ -139,9 +142,9 @@
                     </div>
                 </div>
             </div>
-            
+           }
         </div>
-    <div class='row'>
+       <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">               
                 @Html.LabelFor(m => m.User.TwoFactorEnabled, "TwoFactor Enabled", new { @class = "col-sm-3 control-label" })

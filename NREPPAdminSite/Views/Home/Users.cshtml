@@ -64,14 +64,47 @@
 </div>
 
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @Scripts.Render("~/bundles/jqueryval")
-
-        <script type="text/javascript">
-
+       <script type="text/javascript">
+            
+            var editor;
             $(document).ready(function () {
-                var reviewerTable = $('#tblUsers').DataTable({
+
+                //editor = new $.fn.dataTable.Editor({
+                //    ajax: "UsersList",
+                //    table: "#tblUsers",
+                //    fields: [{
+                //        label: "User Name:",
+                //        name: "UserName"
+                //    },
+                //       {
+                //           label: "First name:",
+                //           name: "FirstName"
+                //       }, {
+                //           label: "Last name:",
+                //           name: "LastName"
+                //       }, {
+                //           label: "Email:",
+                //           name: "Email"
+                //       }, {
+                //           label: "LockoutEnabled:",
+                //           name: "LockoutEnabled"
+                //       }, {
+                //           label: "Action",
+                //           name: ""
+                //       }, {
+                //           label: "Id:",
+                //           name: "Id"
+                //       }
+                //]
+                //});
+                //// Activate an inline edit on click of a table cell
+                //$('#tblUsers').on('click', 'tbody td:not(:first-child)', function (e) {
+                //    editor.inline(this, {
+                //        buttons: { label: '&gt;', fn: function () { this.submit(); } }
+                //    });
+                //});
+
+                var userTable = $('#tblUsers').DataTable({
                     sDom: '<"top"pl>it<"clear">',
                     ajax: "UsersList",
                     scrollX: true,
@@ -82,7 +115,7 @@
                         { "data": "FirstName" },
                         { "data": "LastName" },
                         { "data": "Email" },
-                        { "data": "LockoutEnabled" },
+                        { "data": "IsLocked" },
                         { "data": "" },
                         { "data": "Id" }
                     ],
@@ -94,8 +127,22 @@
                         },
                         targets: 5
                         },
-                        { visible: false, targets: [6] }
+                        { visible: false, targets: [6] },
+                        {
+                            render: function (data, type, row) {
+                                if (data) {
+                                    return '<a href="#" onclick="updateStatus(' + data + ",'" + row["Id"] + "'" + ');"><img src="/Content/images/lock.png" alt="Locked"></a>';
+                                }
+                                else {
+                                    return '<a href="#" onclick="updateStatus(' + data + ",'" + row["Id"] + "'" + ');"><img src="/Content/images/unlock.png" alt="Un-Locked"></a>';
+                                }
+                            }, targets: 4
+                        }
                     ],
+                    tableTools: {
+                        sRowSelect: "os",
+                        sRowSelector: 'td:first-child'
+                    }
                     //,
                     //aoColumns: [
                     //    { "bSortable": true },
@@ -108,10 +155,9 @@
                 });
 
                 $(".filter-input").on("keyup", function () {
-                    reviewerTable.column($(this).attr('data-column')).search($(this).val()).draw();
+                    userTable.column($(this).attr('data-column')).search($(this).val()).draw();
                 });
-            });
-
+            });           
 
 
             //Popup modal
@@ -150,6 +196,37 @@
             }
             //
 
+            function updateStatus(status, id) {
+                if (status) { status = false } else { status = true };
+                var request = { Id: id, Status: status };
+                $.ajax({
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(request),
+                    //dataType: dataType,
+                    type: "POST",
+                    url: "UpdateStatus",
+                    async: true,
+                    success: function (response) {                   
+                        if (response.Success) {
+                                var table = $('#tblUsers').dataTable();
+                                table.fnDraw();
+                        }
+                        else {
+                            console.log(response.Message);
+                        }
+                    },
+                    error: function (jqXHR, timeout, message) {
+                        var contentType = jqXHR.getResponseHeader("Content-Type");
+                        if (jqXHR.status === 200 && contentType.toLowerCase().indexOf("text/html") >= 0) {
+                            window.location.reload();
+                            return;
+                        }
+                        
+                    }
+                });
+            }
+
+            
 
         </script>
 

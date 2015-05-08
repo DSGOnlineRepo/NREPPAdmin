@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Security.Cryptography;
-using System.Text;
-using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
-using NREPPAdminSite.Models;
-using System.Security.Principal;
-using System.Web.Script.Serialization;
-using System.Data.SqlTypes;
+using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Mvc;
 using DataTables.Mvc;
 using NREPPAdminSite.Constants;
+using NREPPAdminSite.Models;
 
 namespace NREPPAdminSite
 {
@@ -29,9 +25,9 @@ namespace NREPPAdminSite
             conn = null;
         }
 
-        public NrepServ(string ConnectionString)
+        public NrepServ(string connectionString)
         {
-            conn = new SqlConnection(ConnectionString);
+            conn = new SqlConnection(connectionString);
         }
 
         #endregion
@@ -40,7 +36,7 @@ namespace NREPPAdminSite
 
         #region Misc Functionality
 
-        public void ChangeStatus(int inId, string inUser, int ToStatus)
+        public void ChangeStatus(int inId, string inUser, int toStatus)
         {
             SqlCommand cmd = new SqlCommand("SPChangeInterventionStatus", conn);
 
@@ -48,7 +44,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter("@IntervId", inId));
             cmd.Parameters.Add(new SqlParameter("@User", inUser));
             cmd.Parameters.Add(new SqlParameter("@DestUser", inUser));
-            cmd.Parameters.Add(new SqlParameter("@DestStatus", ToStatus));
+            cmd.Parameters.Add(new SqlParameter("@DestStatus", toStatus));
 
             try
             {
@@ -64,15 +60,15 @@ namespace NREPPAdminSite
 
         public IEnumerable<Answer> GetTaxonomicOutcomes(int? inId)
         {
-            List<Answer> TheOutcomes = new List<Answer>();
+            List<Answer> theOutcomes = new List<Answer>();
 
             // SQL Stuff
-            SqlCommand GetTaxonomy = new SqlCommand("SPGetTaxOutcomes", conn);
+            SqlCommand getTaxonomy = new SqlCommand("SPGetTaxOutcomes", conn);
 
-            GetTaxonomy.CommandType = CommandType.StoredProcedure;
-            GetTaxonomy.Parameters.Add(new SqlParameter("@TaxId", inId));
+            getTaxonomy.CommandType = CommandType.StoredProcedure;
+            getTaxonomy.Parameters.Add(new SqlParameter("@TaxId", inId));
 
-            SqlDataAdapter da = new SqlDataAdapter(GetTaxonomy);
+            SqlDataAdapter da = new SqlDataAdapter(getTaxonomy);
 
 
             try
@@ -86,7 +82,7 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    TheOutcomes.Add(new Answer((int)dr["Id"], dr["Guidelines"].ToString(), dr["OutcomeName"].ToString()));
+                    theOutcomes.Add(new Answer((int)dr["Id"], dr["Guidelines"].ToString(), dr["OutcomeName"].ToString()));
                 }
 
             }
@@ -96,10 +92,10 @@ namespace NREPPAdminSite
                 nAnswer.ShortAnswer = "Error!";
                 nAnswer.LongAnswer = ex.Message;
                 nAnswer.AnswerId = -1;
-                TheOutcomes.Add(nAnswer);
+                theOutcomes.Add(nAnswer);
             }
 
-            return TheOutcomes;
+            return theOutcomes;
         }
         
         /// <summary>
@@ -109,15 +105,15 @@ namespace NREPPAdminSite
         /// <returns>The Answers as an IEnumerable</returns>
         public IEnumerable<Answer> GetAnswersByCategory(string inCategory)
         {
-            List<Answer> OutAnswers = new List<Answer>();
+            List<Answer> outAnswers = new List<Answer>();
 
             // SQL Stuff
-            SqlCommand GetAnswersByCategory = new SqlCommand("SPGetAnswersByCategory", conn);
+            SqlCommand getAnswersByCategory = new SqlCommand("SPGetAnswersByCategory", conn);
 
-            GetAnswersByCategory.CommandType = CommandType.StoredProcedure;
-            GetAnswersByCategory.Parameters.Add(new SqlParameter("@InCategoryName", inCategory));
+            getAnswersByCategory.CommandType = CommandType.StoredProcedure;
+            getAnswersByCategory.Parameters.Add(new SqlParameter("@InCategoryName", inCategory));
 
-            SqlDataAdapter da = new SqlDataAdapter(GetAnswersByCategory);
+            SqlDataAdapter da = new SqlDataAdapter(getAnswersByCategory);
          
 
             try
@@ -131,7 +127,7 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    OutAnswers.Add(new Answer((int)dr["AnswerId"], dr["ShortAnswer"].ToString(), dr["LongAnswer"].ToString()));
+                    outAnswers.Add(new Answer((int)dr["AnswerId"], dr["ShortAnswer"].ToString(), dr["LongAnswer"].ToString()));
                 }
 
             } catch (Exception ex)
@@ -140,20 +136,22 @@ namespace NREPPAdminSite
                 nAnswer.ShortAnswer = "Error!";
                 nAnswer.LongAnswer = ex.Message;
                 nAnswer.AnswerId = -1;
-                OutAnswers.Add(nAnswer);
+                outAnswers.Add(nAnswer);
             }
 
-            return OutAnswers;
+            return outAnswers;
         }
 
         public IEnumerable<MaskValue> GetMaskList(string inMaskName)
         {
-            List<MaskValue> OutAnswers = new List<MaskValue>();
+            List<MaskValue> outAnswers = new List<MaskValue>();
 
             // SQL Stuff
-            SqlCommand cmdGetMasks = new SqlCommand("SPGetMasksByCategory", conn);
+            SqlCommand cmdGetMasks = new SqlCommand("SPGetMasksByCategory", conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
 
-            cmdGetMasks.CommandType = CommandType.StoredProcedure;
             cmdGetMasks.Parameters.Add(new SqlParameter("@InCategory", inMaskName));
 
             SqlDataAdapter da = new SqlDataAdapter(cmdGetMasks);
@@ -164,13 +162,11 @@ namespace NREPPAdminSite
                 CheckConn();
 
                 DataTable dt = new DataTable();
-
-
                 da.Fill(dt);
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    OutAnswers.Add(new MaskValue() { Name = dr["MaskValueName"].ToString(), Value = (int)dr["MaskPower"], Selected = false });
+                    outAnswers.Add(new MaskValue() { Name = dr["MaskValueName"].ToString(), Value = (int)dr["MaskPower"], Selected = false });
                 }
 
             }
@@ -181,10 +177,10 @@ namespace NREPPAdminSite
                 nAnswer.Name = ex.Message;
                 nAnswer.Value = -1;
                 nAnswer.Selected = false;
-                OutAnswers.Add(nAnswer);
+                outAnswers.Add(nAnswer);
             }
 
-            return OutAnswers;
+            return outAnswers;
         }
 
         public SubmissionPd GetCurrentSubmissionPd()
@@ -222,19 +218,18 @@ namespace NREPPAdminSite
         public List<Intervention> GetInterventions() // This needs to take some parameters, so there should be a bunch of functions for it
         {
             List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
-            return this.GetInterventions(nullParams);
+            return GetInterventions(nullParams);
         }
 
         /// <summary>
         /// Gets the interventions list based on role
         /// </summary>
-        /// <param name="RoleId">User's Role Id</param>
         /// <returns></returns>
-        public List<Intervention> GetInterventions(string RoleName) // This needs to take some parameters, so there should be a bunch of functions for it
+        public List<Intervention> GetInterventions(string roleName) // This needs to take some parameters, so there should be a bunch of functions for it
         {
             List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
-            nullParams.Add(new SqlParameter() { ParameterName = "@RoleName", SqlDbType = SqlDbType.NVarChar, Value = RoleName });
-            return this.GetInterventions(nullParams);
+            nullParams.Add(new SqlParameter() { ParameterName = "@RoleName", SqlDbType = SqlDbType.NVarChar, Value = roleName });
+            return GetInterventions(nullParams);
         }
 
 
@@ -1173,9 +1168,9 @@ namespace NREPPAdminSite
             string lastName = null;
             string email = null;
             bool lockoutEnabled = false;
-
+            bool isStatus=false;
             var usersSearchResult = new UsersSearchResult();
-            var extendedUserList = new List<ExtendedUser>();
+            var userList = new List<GenericUser>();
             SqlCommand cmdGetUserList = new SqlCommand("SPGetUsers", conn);
             cmdGetUserList.CommandType = CommandType.StoredProcedure;
 
@@ -1195,40 +1190,53 @@ namespace NREPPAdminSite
                         break;
                     case "Email":
                         email = filter.Search.Value;
-                        break;
-                    case "LockoutEnabled":
-                        lockoutEnabled = Convert.ToBoolean(filter.Search.Value);
-                        break;                  
+                        break;        
                 }
             }
             cmdGetUserList.Parameters.Add(new SqlParameter("@UserName", Utilities.ToDbNull(userName)));
             cmdGetUserList.Parameters.Add(new SqlParameter("@FirstName", Utilities.ToDbNull(firstName)));
             cmdGetUserList.Parameters.Add(new SqlParameter("@LastName", Utilities.ToDbNull(lastName)));
             cmdGetUserList.Parameters.Add(new SqlParameter("@Email", Utilities.ToDbNull(email)));
-            cmdGetUserList.Parameters.Add(new SqlParameter("@LockoutEnabled", Utilities.ToDbNull(lockoutEnabled)));
             cmdGetUserList.Parameters.Add(new SqlParameter("@Page", requestModel.Start + 1));
             cmdGetUserList.Parameters.Add(new SqlParameter("@PageLength", requestModel.Length));
-            try
-            {
-                CheckConn();
-                DataTable users = new DataTable();
-                SqlDataAdapter da = new SqlDataAdapter(cmdGetUserList);
-                da.Fill(users);
+            CheckConn();
+            DataTable users = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(cmdGetUserList);
+            da.Fill(users);
 
-                foreach (DataRow dr in users.Rows)
-                {
-                    extendedUserList.Add(new ExtendedUser(dr["UserName"].ToString(), dr["Email"].ToString(),
-                        dr["FirstName"].ToString(), dr["LastName"].ToString(), Convert.ToBoolean(dr["LockoutEnabled"].ToString()), dr["Id"].ToString()));
-                }
-                if (users.Rows.Count > 0)
-                {
-                    usersSearchResult.ExtendedUsers = extendedUserList;
-                    usersSearchResult.TotalSearchCount = Convert.ToInt16(users.Rows[0]["searchTotal"].ToString());
-                }
-            }
-            catch (Exception ex)
+            foreach (DataRow dr in users.Rows)
             {
-                throw;
+                userList.Add(new GenericUser
+                {
+                    Id = dr["Id"].ToString(),
+                    UserName = dr["UserName"].ToString(), 
+                    Email = dr["Email"].ToString(),
+                    FirstName = dr["FirstName"].ToString(), 
+                    LastName = dr["LastName"].ToString(),
+                    HomeAddressLine1 = dr["HomeAddressLine1"].ToString(),
+                    HomeAddressLine2 = dr["HomeAddressLine2"].ToString(),
+                    HomeCity = dr["HomeCity"].ToString(),
+                    HomeState = dr["HomeState"].ToString(),
+                    HomeZip = dr["HomeZip"].ToString(),
+                    PhoneNumber = dr["PhoneNumber"].ToString(),
+                    FaxNumber = dr["FaxNumber"].ToString(),
+                    Employer = dr["Employer"].ToString(),
+                    Department = dr["Department"].ToString(),
+                    WorkAddressLine1 = dr["WorkAddressLine1"].ToString(),
+                    WorkAddressLine2 = dr["WorkAddressLine2"].ToString(),
+                    WorkCity = dr["WorkCity"].ToString(),
+                    WorkState = dr["WorkState"].ToString(),
+                    WorkZip = dr["WorkZip"].ToString(),
+                    WorkPhoneNumber = dr["WorkPhoneNumber"].ToString(),
+                    WorkFaxNumber = dr["WorkFaxNumber"].ToString(),
+                    WorkEmail = dr["WorkEmail"].ToString(),
+                    IsLocked = dr["IsUserLocked"].ToString() == "1" ? true : false
+                });
+            }
+            if (users.Rows.Count > 0)
+            {
+                usersSearchResult.UserList = userList;
+                usersSearchResult.TotalSearchCount = Convert.ToInt16(users.Rows[0]["searchTotal"].ToString());
             }
 
             return usersSearchResult;
@@ -1279,7 +1287,7 @@ namespace NREPPAdminSite
             if (conn == null)
                 throw new Exception("There is no SQL Connection String!"); // TODO: Make own version of an exception to go here
 
-            if (conn.State != System.Data.ConnectionState.Open)
+            if (conn.State != ConnectionState.Open)
                 conn.Open();
         }
 
@@ -1371,8 +1379,8 @@ namespace NREPPAdminSite
         public static string AESCrypt(string plainText)
         {
             string retstring = string.Empty;
-            byte[] Key = Convert.FromBase64String(PasswordHash.AES_KEY);
-            byte[] IV = Convert.FromBase64String(PasswordHash.AES_IV);
+            byte[] Key = Convert.FromBase64String(AES_KEY);
+            byte[] IV = Convert.FromBase64String(AES_IV);
 
             using (AesCryptoServiceProvider aesAlg = new AesCryptoServiceProvider())
             {
@@ -1401,8 +1409,8 @@ namespace NREPPAdminSite
         {
            string retString = string.Empty;
            byte[] bitText = Convert.FromBase64String(cipherText);
-           byte[] Key = Convert.FromBase64String(PasswordHash.AES_KEY);
-           byte[] IV = Convert.FromBase64String(PasswordHash.AES_IV);
+           byte[] Key = Convert.FromBase64String(AES_KEY);
+           byte[] IV = Convert.FromBase64String(AES_IV);
 
            using (AesCryptoServiceProvider aesAlg = new AesCryptoServiceProvider())
            {

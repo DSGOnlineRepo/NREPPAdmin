@@ -62,8 +62,25 @@ namespace NREPPAdminSite.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    PhoneNumber = model.PhoneNumber
-
+                    LockoutEnabled = false,
+                    LockoutEndDateUtc = DateTime.UtcNow.AddYears(100),
+                    HomeAddressLine1 = model.HomeAddressLine1,
+                    HomeAddressLine2 = model.HomeAddressLine2,
+                    HomeCity = model.HomeCity,
+                    HomeState = model.HomeState,
+                    HomeZip = model.HomeZip,
+                    PhoneNumber = model.PhoneNumber,
+                    FaxNumber = model.FaxNumber,
+                    Employer = model.Employer,
+                    Department = model.Department,
+                    WorkAddressLine1 = model.WorkAddressLine1,
+                    WorkAddressLine2 = model.WorkAddressLine2,
+                    WorkCity = model.WorkCity,
+                    WorkState = model.WorkState,
+                    WorkZip = model.WorkZip,
+                    WorkPhoneNumber = model.WorkPhoneNumber,
+                    WorkFaxNumber = model.WorkFaxNumber,
+                    WorkEmail = model.WorkEmail
                 };
 
                 IdentityResult result = _userManager.Create(user, model.Password);
@@ -118,14 +135,21 @@ namespace NREPPAdminSite.Controllers
                     ClaimsIdentity identity = _userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
                     AuthenticationProperties props = new AuthenticationProperties();
                     props.IsPersistent = model.RememberMe;
-                    authenticationManager.SignIn(props, identity);
-                    if (Url.IsLocalUrl(returnUrl))
+                    if (!_userManager.GetLockoutEnabled(user.Id))
                     {
-                        return Redirect(returnUrl);
+                        authenticationManager.SignIn(props, identity);
+                        if (Url.IsLocalUrl(returnUrl))
+                        {
+                            return Redirect(returnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Programs", "Home");
+                        }
                     }
                     else
                     {
-                        return RedirectToAction("Programs", "Home");
+                        ModelState.AddModelError("", "Account Locked. Please contact the administrator");
                     }
                 }
                 else
@@ -347,7 +371,25 @@ namespace NREPPAdminSite.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    PhoneNumber = model.PhoneNumber
+                    LockoutEnabled = false,
+                    LockoutEndDateUtc = DateTime.UtcNow.AddYears(100),
+                    HomeAddressLine1 = model.HomeAddressLine1,
+                    HomeAddressLine2 = model.HomeAddressLine2,
+                    HomeCity = model.HomeCity,
+                    HomeState = model.HomeState,
+                    HomeZip = model.HomeZip,
+                    PhoneNumber = model.PhoneNumber,
+                    FaxNumber = model.FaxNumber,
+                    Employer = model.Employer,
+                    Department = model.Department,
+                    WorkAddressLine1 = model.WorkAddressLine1,
+                    WorkAddressLine2 = model.WorkAddressLine2,
+                    WorkCity = model.WorkCity,
+                    WorkState = model.WorkState,
+                    WorkZip = model.WorkZip,
+                    WorkPhoneNumber = model.WorkPhoneNumber,
+                    WorkFaxNumber = model.WorkFaxNumber,
+                    WorkEmail = model.WorkEmail
                 };
 
                 IdentityResult result = _userManager.Create(user, model.Password);
