@@ -83,6 +83,7 @@ namespace NREPPAdminSite.Controllers
             return Json(new DataTablesResponse(requestModel.Draw, usersSearchResult.UserList, usersSearchResult.TotalSearchCount, usersSearchResult.TotalSearchCount), JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize]
         public ActionResult GetUser(string id)
         {
             UserPageModel userPageModel = new UserPageModel {User = _userManager.FindById(id)};
@@ -115,24 +116,34 @@ namespace NREPPAdminSite.Controllers
                     }
                     else
                     {
-                        db.Entry(request.User).State = System.Data.Entity.EntityState.Modified;
-                        result = _userManager.Update(request.User);
+                        var user = _userManager.FindById(request.User.Id);
+                        user.FirstName = request.User.FirstName;
+                        user.LastName = request.User.LastName;
+                        user.UserName = request.User.UserName;
+                        user.Email = request.User.Email;
+                        user.HomeAddressLine1 = request.User.HomeAddressLine1;
+                        user.HomeAddressLine2 = request.User.HomeAddressLine2;
+                        user.HomeCity = request.User.HomeCity;
+                        user.HomeState = request.User.HomeState;
+                        user.HomeZip = request.User.HomeZip;
+                        user.PhoneNumber = request.User.PhoneNumber;
+                        user.FaxNumber = request.User.FaxNumber;
+                        user.Employer = request.User.Employer;
+                        user.Department = request.User.Department;
+                        user.WorkAddressLine1 = request.User.WorkAddressLine1;
+                        user.WorkAddressLine2 = request.User.WorkAddressLine2;
+                        user.WorkCity = request.User.WorkCity;
+                        user.WorkState = request.User.WorkState;
+                        user.WorkZip = request.User.WorkZip;
+                        user.WorkPhoneNumber = request.User.WorkPhoneNumber;
+                        user.WorkFaxNumber = request.User.WorkFaxNumber;
+                        user.WorkEmail = request.User.WorkEmail;
+                        user.TwoFactorEnabled = request.User.TwoFactorEnabled;
+                        
+                        result = _userManager.Update(user);
                     }
                 }
-            }
-            catch (DbEntityValidationException e)
-            {
-                string sErrors = string.Empty;
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    sErrors += eve.Entry.Entity.GetType().Name + eve.Entry.State + "\n";
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        sErrors += ve.PropertyName + "message:" + ve.ErrorMessage;
-                    }
-                }
-                ModelState.AddModelError("UserName", sErrors);
-            }
+            }           
             catch(Exception ex)
             {
                 ModelState.AddModelError("UserName", ex.Message);
@@ -154,6 +165,20 @@ namespace NREPPAdminSite.Controllers
             else
             {
                 ModelState.AddModelError("UserName", "Error while creating the user!");
+                var isDuplicateUser = false;
+                foreach (string error in result.Errors)
+                {
+                    if (error.Contains("is already taken."))
+                    {
+                        ModelState.AddModelError("UserName", error);
+                        isDuplicateUser = true;
+                    }
+                }
+                if (!isDuplicateUser)
+                {
+                    var errors = string.Join("<br />", result.Errors);
+                    ModelState.AddModelError("", errors);
+                }                
             }
             return Json(result);
         }

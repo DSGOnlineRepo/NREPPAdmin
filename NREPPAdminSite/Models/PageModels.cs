@@ -430,7 +430,7 @@ namespace NREPPAdminSite.Models
 
     #region UserPageModel
 
-    public class UserPageModel
+    public class UserPageModel : NREPPPermissions
     {
         public ExtendedUser User { get; set; }
         public IEnumerable<SelectListItem> Roles { get; set; }

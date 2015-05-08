@@ -63,47 +63,13 @@
     </div>
 </div>
 
+<div>@*@{Html.RenderAction("GetUser", "Home", new { id = "3322d8c5-a826-452c-b5e3-9785b418e81e" });}*@</div>
 
        <script type="text/javascript">
             
             var editor;
             $(document).ready(function () {
-
-                //editor = new $.fn.dataTable.Editor({
-                //    ajax: "UsersList",
-                //    table: "#tblUsers",
-                //    fields: [{
-                //        label: "User Name:",
-                //        name: "UserName"
-                //    },
-                //       {
-                //           label: "First name:",
-                //           name: "FirstName"
-                //       }, {
-                //           label: "Last name:",
-                //           name: "LastName"
-                //       }, {
-                //           label: "Email:",
-                //           name: "Email"
-                //       }, {
-                //           label: "LockoutEnabled:",
-                //           name: "LockoutEnabled"
-                //       }, {
-                //           label: "Action",
-                //           name: ""
-                //       }, {
-                //           label: "Id:",
-                //           name: "Id"
-                //       }
-                //]
-                //});
-                //// Activate an inline edit on click of a table cell
-                //$('#tblUsers').on('click', 'tbody td:not(:first-child)', function (e) {
-                //    editor.inline(this, {
-                //        buttons: { label: '&gt;', fn: function () { this.submit(); } }
-                //    });
-                //});
-
+                
                 var userTable = $('#tblUsers').DataTable({
                     sDom: '<"top"pl>it<"clear">',
                     ajax: "UsersList",
@@ -179,6 +145,7 @@
                         url: this.action,
                         type: this.method,
                         data: $(this).serialize(),
+                        
                         success: function (result) {
                             console.log(result);
                             if (result.Succeeded) {
@@ -194,6 +161,9 @@
                     return false;
                 });
             }
+
+
+
             //
 
             function updateStatus(status, id) {
