@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[SPGetReviewers]
+CREATE PROCEDURE [dbo].[SPGetReviewers]
 	@Id NVARCHAR(128),
 	@FirstName NVARCHAR(250),
 	@LastName NVARCHAR(250),
