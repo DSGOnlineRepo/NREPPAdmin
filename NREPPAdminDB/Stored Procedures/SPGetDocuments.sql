@@ -3,7 +3,7 @@
 	@ReviewerId int = NULL,
 	@DocumentId int = NULL
 AS
-	SELECT d.Id as DocId,  Description, FileName, MIME as MIMEType, UploadedBy, u.Firstname + ' ' + u.Lastname as [Uploader], ReviewerId, TypeOfDocument,
+	SELECT d.Id as DocId, Description, FileName, MIME as MIMEType, UploadedBy, u.Firstname + ' ' + u.Lastname as [Uploader], ReviewerId, TypeOfDocument, Title,
 	a.LongAnswer as [Document Type Name]
 	from Document d
 		INNER JOIN AspNetUsers u ON u.Id = d.UploadedBy

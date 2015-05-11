@@ -266,6 +266,7 @@ namespace NREPPAdminSite
                     inv.PreScreenMask = (int)dr["PreScreenAnswers"];
                     inv.UserPreScreenMask = dr.IsNull("UserPreScreenAnswer") ? 0 :  (int)dr["UserPreScreenAnswer"];
                     inv.ScreeningNotes = dr.IsNull("ScreeningNotes")? "" : dr["ScreeningNotes"].ToString();
+                    //inv.FullDescription
 
                     interventions.Add(inv);
 
@@ -313,6 +314,8 @@ namespace NREPPAdminSite
                     doc.Link = dr["FileName"].ToString(); // This needs some work
                     doc.Uploader = dr["Uploader"].ToString();
                     doc.SetDocType((int)dr["TypeOfDocument"], dr["Document Type Name"].ToString());
+                    doc.Title = dr["Title"].ToString();
+                    
 
                     documents.Add(doc);
                 }
@@ -378,7 +381,7 @@ namespace NREPPAdminSite
         }
 
         public int SaveFileToDB(byte[] inData, string fileName, string uploaderName, string MIMEType, int IntervId, bool isDelete, int ItemId, string DisplayName,
-            int documentType)
+            int documentType, string Title)
         {
 
             SqlCommand cmdSaveFile = new SqlCommand("SPAddOrRemoveDoc", conn);
@@ -393,6 +396,7 @@ namespace NREPPAdminSite
             cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderName", uploaderName));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ReviewerId", null));
             cmdSaveFile.Parameters.Add(new SqlParameter("@DocumentTypeId", documentType));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@Title", Title));
             //cmdSaveFile.Parameters.Add(new SqlParameter("@OutPut", null));
 
             SqlParameter OutPut = new SqlParameter("@Output", -1);
