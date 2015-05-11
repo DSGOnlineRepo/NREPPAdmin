@@ -277,6 +277,12 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Role")]
         [StringLength(256)]
         public string Role { get; set; }
+
+        public string CapImage { get; set; }
+        [Required(ErrorMessage = "Varification code is required.")]
+        [Compare("CapImageText", ErrorMessage = "Captcha code Invalid")]
+        public string CaptchaCodeText { get; set; }
+        public string CapImageText { get; set; }
     }
 
     public class ReviewerSearchResult

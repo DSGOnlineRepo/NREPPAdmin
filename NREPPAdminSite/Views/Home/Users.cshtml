@@ -62,12 +62,9 @@
         </div>
     </div>
 </div>
-
-<div>@*@{Html.RenderAction("GetUser", "Home", new { id = "3322d8c5-a826-452c-b5e3-9785b418e81e" });}*@</div>
-
-       <script type="text/javascript">
-            
-            var editor;
+   @Scripts.Render("~/bundles/jqueryval")
+   <script type="text/javascript">
+          
             $(document).ready(function () {
                 
                 var userTable = $('#tblUsers').DataTable({
@@ -124,14 +121,13 @@
                     userTable.column($(this).attr('data-column')).search($(this).val()).draw();
                 });
             });           
-
-
+       
             //Popup modal
             function openModel(id) {
                 $.ajaxSetup({ cache: false });
                 $('#dialogContent').load("\GetUser?id=" + id, function () {
                     $('#dialogDiv').modal({
-                        backdrop: 'static',
+                       // backdrop: 'static',
                         keyboard: true
                     }, 'show');
                     bindForm(this);
@@ -140,30 +136,33 @@
             }
 
             function bindForm(dialog) {
+                $.validator.unobtrusive.parse('form');
                 $('form', dialog).submit(function () {
-                    $.ajax({
-                        url: this.action,
-                        type: this.method,
-                        data: $(this).serialize(),
-                        
-                        success: function (result) {
-                            console.log(result);
-                            if (result.Succeeded) {
-                                $('#dialogDiv').modal('hide');
-                                location.reload();
+                    if ($(this).valid()) {
+                        console.log("submit-valid");
+                        $.ajax({
+                            url: this.action,
+                            type: this.method,
+                            data: $(this).serialize(),
+
+                            success: function (result) {
+                                console.log(result);
+                                if (result.Succeeded) {
+                                    $('#dialogDiv').modal('hide');
+                                    var table = $('#tblUsers').dataTable();
+                                    table.fnDraw();
+                                }
+                                else {
+                                    $('#dialogContent').html(result.Errors);
+                                    bindForm();
+                                }
                             }
-                            else {
-                                $('#dialogContent').html(result.Errors);
-                                bindForm();
-                            }
-                        }
-                    });
+                        });
+                    }
                     return false;
                 });
+                return false;
             }
-
-
-
             //
 
             function updateStatus(status, id) {
@@ -194,9 +193,7 @@
                         
                     }
                 });
-            }
-
-            
+            }            
 
         </script>
 
