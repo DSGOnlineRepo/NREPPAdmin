@@ -87,8 +87,10 @@ namespace NREPPAdminSite.Controllers
         public ActionResult GetUser(string id)
         {
             UserPageModel userPageModel = new UserPageModel {User = _userManager.FindById(id)};
-            if (!string.IsNullOrEmpty(id)) { 
+            if (!string.IsNullOrEmpty(id) && userPageModel != null)
+            { 
              userPageModel.UserRole = _userManager.GetRoles(id).ToList().FirstOrDefault();
+             userPageModel.UserName = userPageModel.User.UserName;
             }
             userPageModel.Roles = _roleManager.Roles.ToList().Select(u => new SelectListItem
             {
@@ -102,16 +104,21 @@ namespace NREPPAdminSite.Controllers
         public JsonResult SaveUser(UserPageModel request)
         {
             IdentityResult result= new IdentityResult();
-            bool isNew = false;
+            bool isNew = true;
             try
-            {
+            {                
+                if (!string.IsNullOrEmpty(request.User.Id))
+                {
+                    isNew = false;
+                    ModelState.Remove("Password");//for Update user
+                }
                 if (ModelState.IsValid)
                 {
-                    if (string.IsNullOrEmpty(request.User.Id))
+                    if (isNew)
                     {
-                        isNew = true;
                         var user = new ExtendedUser();
                         request.User.Id = user.Id;
+                        request.User.UserName = request.UserName;
                         result = _userManager.Create(request.User, request.Password);
                     }
                     else
@@ -119,7 +126,7 @@ namespace NREPPAdminSite.Controllers
                         var user = _userManager.FindById(request.User.Id);
                         user.FirstName = request.User.FirstName;
                         user.LastName = request.User.LastName;
-                        user.UserName = request.User.UserName;
+                        user.UserName = request.UserName;
                         user.Email = request.User.Email;
                         user.HomeAddressLine1 = request.User.HomeAddressLine1;
                         user.HomeAddressLine2 = request.User.HomeAddressLine2;

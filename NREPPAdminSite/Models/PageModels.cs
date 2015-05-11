@@ -434,8 +434,21 @@ namespace NREPPAdminSite.Models
     {
         public ExtendedUser User { get; set; }
         public IEnumerable<SelectListItem> Roles { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         public string Password { get; set; }
+
+        [Required]
+        [Display(Name = "Role")]
         public string UserRole { get; set; }
+
+        [Required(ErrorMessage = "You most provide a user name.")]
+        [Display(Name = "User Name")]
+        [StringLength(50)]
+        public string UserName { get; set; }
     }
 
     #endregion

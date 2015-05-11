@@ -62,7 +62,7 @@
         </div>
     </div>
 </div>
-
+   @Scripts.Render("~/bundles/jqueryval")
    <script type="text/javascript">
           
             $(document).ready(function () {
@@ -127,7 +127,7 @@
                 $.ajaxSetup({ cache: false });
                 $('#dialogContent').load("\GetUser?id=" + id, function () {
                     $('#dialogDiv').modal({
-                        backdrop: 'static',
+                       // backdrop: 'static',
                         keyboard: true
                     }, 'show');
                     bindForm(this);
@@ -136,27 +136,32 @@
             }
 
             function bindForm(dialog) {
+                $.validator.unobtrusive.parse('form');
                 $('form', dialog).submit(function () {
-                    $.ajax({
-                        url: this.action,
-                        type: this.method,
-                        data: $(this).serialize(),
-                        
-                        success: function (result) {
-                            console.log(result);
-                            if (result.Succeeded) {
-                                $('#dialogDiv').modal('hide');
-                                var table = $('#tblUsers').dataTable();
-                                table.fnDraw();
+                    if ($(this).valid()) {
+                        console.log("submit-valid");
+                        $.ajax({
+                            url: this.action,
+                            type: this.method,
+                            data: $(this).serialize(),
+
+                            success: function (result) {
+                                console.log(result);
+                                if (result.Succeeded) {
+                                    $('#dialogDiv').modal('hide');
+                                    var table = $('#tblUsers').dataTable();
+                                    table.fnDraw();
+                                }
+                                else {
+                                    $('#dialogContent').html(result.Errors);
+                                    bindForm();
+                                }
                             }
-                            else {
-                                $('#dialogContent').html(result.Errors);
-                                bindForm();
-                            }
-                        }
-                    });
+                        });
+                    }
                     return false;
                 });
+                return false;
             }
             //
 
