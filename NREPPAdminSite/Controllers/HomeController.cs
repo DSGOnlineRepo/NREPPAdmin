@@ -59,14 +59,24 @@ namespace NREPPAdminSite.Controllers
         {
             ViewBag.Message = "Some Message Here";
             var user = _userManager.FindByName(User.Identity.Name);
-            var userRoles = _userManager.GetRoles(user.Id);
+            //var userRoles = _userManager.GetRoles(user.Id);
             
+            //NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            //List<Intervention> interventionList = localService.GetInterventions(userRoles[0]);
+            //return View(interventionList);
+            ViewBag.Fname = user.FirstName;
+            return View();
+        }
+
+        [Authorize]
+        public JsonResult ProgramsList([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
+        {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-
-            List<Intervention> interventionList = localService.GetInterventions(userRoles[0]);
-
-
-            return View(interventionList);
+            var user = _userManager.FindByName(User.Identity.Name);
+            var userRoles = _userManager.GetRoles(user.Id);
+            List<Intervention> programsList = localService.GetInterventions(requestModel, userRoles[0]);
+            return Json(new DataTablesResponse(requestModel.Draw, programsList, programsList.Count, programsList.Count), JsonRequestBehavior.AllowGet);
         }
 
         [Authorize]
