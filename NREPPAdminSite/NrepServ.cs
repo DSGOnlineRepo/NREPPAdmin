@@ -412,7 +412,7 @@ namespace NREPPAdminSite
                 // TODO: file name collision
 
                 //string nFileName = ConfigurationManager.AppSettings["fileLocation"] + "\\" + IntervId.ToString() + "\\" + fileName;
-                string nDirectory = ConfigurationManager.AppSettings["fileLocation"] + "\\" + IntervId.ToString() + "\\";
+                string nDirectory = ConfigurationManager.AppSettings["fileLocation"].Trim('\\') + "\\" + IntervId.ToString() + "\\";
                 string nFileName = nDirectory + fileName;
 
                 if (!Directory.Exists(nDirectory))
@@ -434,7 +434,6 @@ namespace NREPPAdminSite
                 // TODO: delete the file if the transaction failed.
 
             }
-            catch (Exception) { }
             finally {
                 conn.Close();
             }
