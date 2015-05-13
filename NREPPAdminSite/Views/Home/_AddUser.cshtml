@@ -157,14 +157,6 @@
         <div class='row'>
             <div class='col-sm-6'>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.User.TwoFactorEnabled, new { @class = "col-sm-3 control-label" })
-                    <div class="col-sm-2">
-                        @Html.CheckBoxFor(m => m.User.TwoFactorEnabled, new { @class = "form-control" })
-                    </div>
-                </div>
-            </div>
-            <div class='col-sm-6'>
-                <div class="form-group">
                     @Html.LabelFor(m => m.UserRole, new { @class = "col-sm-3 control-label" })
                     <div class="col-sm-9">
                         @Html.DropDownListFor(m => m.UserRole, Model.Roles.Select(x => new SelectListItem() { Selected = x.Selected, Text = x.Text, Value = x.Value }), "--Select Role--", new { @class = "form-control" })
