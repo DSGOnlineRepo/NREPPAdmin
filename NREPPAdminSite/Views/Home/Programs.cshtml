@@ -6,51 +6,79 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Welcome, @ViewBag.Fname</h2>
-<div class="row">
-    <div class="col-sm-12">
-        <ul class="list-inline">
-            <li class="col-sm-3">
-                <input type="text" class="form-control filter-input" placeholder="Title" data-fieldname="Title" data-column="0">
+<div class="dashboard-page-nav">
+    <nav class="navbar navbar_top">
+        <ul class="nav navbar-nav nav_top pull-right">
+            <li role="presentation"><a href="/Program/View?InvId=-1">New&nbsp;&nbsp;<i class="fa fa-plus"></i></a></li>
+           
+            <li role="sort" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sort&nbsp;&nbsp;<strong><i class="fa fa-angle-down"></i></strong></a>
+                <ul class="dropdown-menu">
+                    <br>
+                    <li><a href="#">Title</a></li>
+                    <li><a href="#">Description</a></li>
+                    <li><a href="#">Date</a></li>
+                    <li><a href="#">Submitter</a></li>
+                </ul>
             </li>
-            <li class="col-sm-3">
-                <input type="text" class="form-control filter-input" placeholder="Full Description" data-fieldname="FullDescription" data-column="1">
-            </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" id="updatedDate" placeholder="Updated Date" data-fieldname="UpdatedDate" data-column="3">
-            </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" placeholder="Submitter" data-fieldname="Submitter" data-column="4">
-            </li>
+           
         </ul>
+    </nav>
+</div>
+<h2>Welcome, @ViewBag.Fname</h2>
+<div class="container-fluid">
+    <div class="">        
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="list-inline">
+                    <li class="col-sm-3">
+                        <input type="text" class="form-control filter-input" placeholder="Title" data-fieldname="Title" data-column="0">
+                    </li>
+                    <li class="col-sm-3">
+                        <input type="text" class="form-control filter-input" placeholder="Full Description" data-fieldname="FullDescription" data-column="1">
+                    </li>
+                    <li class="col-sm-3" style="padding-bottom: 5px">
+                        <input type="text" class="form-control filter-input" id="updatedDate" placeholder="Updated Date" data-fieldname="UpdatedDate" data-column="3">
+                    </li>
+                    <li class="col-sm-3" style="padding-bottom: 5px">
+                        <input type="text" class="form-control filter-input" placeholder="Submitter" data-fieldname="Submitter" data-column="4">
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row voffset3"></div>
-@Html.ActionLink("Create a New Submission", "View", "Program", new { InvId = "-1" }, null)<br />
-<div>
-    <table id="tblPrograms" class="display">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Full Description</th>
-                <th>Status</th>
-                <th>Updated Date</th>
-                <th>Submitter</th>    
-            </tr>
-        </thead>
-    </table>
+@*@Html.ActionLink("Create a New Submission", "View", "Program", new { InvId = "-1" }, null)<br />*@
+<div class="container-fluid">
+    <div class="container_module">
+        <div>
+            <table id="tblPrograms" class="display">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Full Description</th>
+                        <th>Status</th>
+                        <th>Updated Date</th>
+                        <th>Submitter</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 </div>
-
-<script type="text/javascript">    
+<script type="text/javascript">
     $(document).ready(function () {
         $("#updatedDate").datepicker();
 
         var userTable = $('#tblPrograms').DataTable({
-            sDom: '<"top"pl>it<"clear">',
+            //sDom: '<"top"pl>it<"clear">',
+            dom: '<"top"i>rt<"bottom"lp><"clear">',
             ajax: "ProgramsList",
             scrollX: true,
             scrollCollapse: true,
             serverSide: true,
+            pagingType: "full",
             columns: [
                 { "data": "Title", "bSortable": true },
                 { "data": "FullDescription" },
@@ -82,15 +110,15 @@
             }
         });
 
-        $(".filter-input").on("keyup", function () {            
-            if ($(this).attr('data-column')!=3) {
-            userTable.column($(this).attr('data-column')).search($(this).val()).draw();
-          }
+        $(".filter-input").on("keyup", function () {
+            if ($(this).attr('data-column') != 3) {
+                userTable.column($(this).attr('data-column')).search($(this).val()).draw();
+            }
         });
         $(".filter-input").change(function () {
             if ($(this).attr('data-column') == 3) {
                 userTable.column($(this).attr('data-column')).search($(this).val()).draw();
             }
         });
-     });
- </script>
+    });
+</script>

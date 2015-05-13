@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Fonts/css")
     @Scripts.Render("~/bundles/modernizr")
     <style>
         .navbar-nav > li > form > a {
@@ -42,9 +43,9 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            @Html.ActionLink("NREPP Admin Beta", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
+            @Html.ActionLink(" ", "Index", "Home", new { area = "" }, new { @class = "navbar-brand logo" })
         </div>
-        <div class="navbar-collapse collapse">
+        <div class="navbar-collapse collapse pull-right">
             <ul class="nav navbar-nav">
                 @if (Request.IsAuthenticated)
                 {
@@ -63,20 +64,20 @@
                     </li>
                 }
                 <!-- You need to add something to check for logged in user before this -->
-
                 @if (Request.IsAuthenticated)
                 {
                     <li>@Html.ActionLink("Profile", "Profile", "Admin")</li>
 
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Manage</a>
+                    @*<li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Manage</a>
                         <ul class="dropdown-menu"><li>@Html.ActionLink("Reviewers", "Reviewers", "Home")</li></ul>
-                    </li>
+                    </li>*@
 
                     <li>
-                        @using (Html.BeginForm("Logout", "Admin", FormMethod.Post, new {id = "logoutForm"}))
+                        @using (Html.BeginForm("Logout", "Admin", FormMethod.Post, new { id = "logoutForm" }))
                         {
                             @Html.AntiForgeryToken()
-                            <a href="javascript:document.getElementById('logoutForm').submit()">Log Out</a>
+                            <a href="javascript:document.getElementById('logoutForm').submit()" style="color:#ffffff">Log Out</a>
                         }
                     </li>
                 }
@@ -90,7 +91,7 @@
 @Scripts.Render("~/bundles/jqueryval")
 @Scripts.Render("~/bundles/datatables")
 
-<div class="container body-content">
+    <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>

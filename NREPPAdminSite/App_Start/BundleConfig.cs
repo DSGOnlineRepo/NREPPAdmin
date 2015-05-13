@@ -32,7 +32,9 @@ namespace NREPPAdminSite
                       "~/Content/site.css",
                       "~/Content/chosen.min.css",
                       "~/Content/Datatables/css/jquery.datatables.css",
-                      "~/Content/bootstrap-datepicker3.css"));
+                      "~/Content/bootstrap-datepicker3.css",
+                      "~/Content/styles.css"));
+            bundles.Add(new StyleBundle("~/Fonts/css").Include("~/fonts/font-awesome/css/font-awesome.css"));
         }
     }
 }
