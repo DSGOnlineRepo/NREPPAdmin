@@ -236,6 +236,50 @@ namespace NREPPAdminSite
             return GetInterventions(nullParams);
         }
 
+        public List<Intervention> GetInterventions([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel, string roleName)
+        {
+            List<Intervention> interventions = new List<Intervention>();
+
+            string title = null;
+            string fullDescription = null;
+            string submitter = null;
+            string updatedDate = null;
+
+            var reviewerSearchResult = new ReviewerSearchResult();
+            var reviewerList = new List<Reviewer>();
+            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetInterventionList", conn);
+            cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
+
+            var filteredColumns = requestModel.Columns.GetFilteredColumns();
+            foreach (var filter in filteredColumns)
+            {
+                switch (filter.Data)
+                {
+                    case "Title":
+                        title = filter.Search.Value;
+                        break;
+                    case "FullDescription":
+                        fullDescription = filter.Search.Value;
+                        break;
+                    case "Submitter":
+                        submitter = filter.Search.Value;
+                        break;
+                    case "UpdatedDate":
+                        updatedDate = filter.Search.Value;
+                        break;
+                                    
+                }
+            }
+            List<SqlParameter> paramsList = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
+            paramsList.Add(new SqlParameter() { ParameterName = "@RoleName", SqlDbType = SqlDbType.NVarChar, Value = roleName });
+            paramsList.Add(new SqlParameter() { ParameterName = "@Title", SqlDbType = SqlDbType.NVarChar, Value = title });
+            paramsList.Add(new SqlParameter() { ParameterName = "@FullDescription", SqlDbType = SqlDbType.NVarChar, Value = fullDescription });
+            paramsList.Add(new SqlParameter() { ParameterName = "@UpdatedDate", Value = updatedDate });
+            paramsList.Add(new SqlParameter("@Submitter", submitter));
+            paramsList.Add(new SqlParameter("@Page", requestModel.Start + 1));
+            paramsList.Add(new SqlParameter("@PageLength", requestModel.Length));
+            return GetInterventions(paramsList);
+        }
 
         // TODO: Generalize the parameter passing better? I need something that will be easier to maintain
 
