@@ -29,8 +29,8 @@ namespace NREPPAdminSite
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/chosen.min.css",
+                      //"~/Content/site.css",
+                      //"~/Content/chosen.min.css",
                       "~/Content/Datatables/css/jquery.datatables.css",
                       "~/Content/bootstrap-datepicker3.css",
                       "~/Content/styles.css"));

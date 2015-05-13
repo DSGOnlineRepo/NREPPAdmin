@@ -237,8 +237,10 @@
     <Content Include="Content\DataTables\swf\copy_csv_xls.swf" />
     <Content Include="Content\DataTables\swf\copy_csv_xls_pdf.swf" />
     <Content Include="Content\images\lock.png" />
+    <Content Include="Content\images\logo_hhs.png" />
     <Content Include="Content\images\logo_nrepp.png" />
     <Content Include="Content\images\logo_samhsa.png" />
+    <Content Include="Content\images\logo_usa.png" />
     <Content Include="Content\images\refresh.png" />
     <Content Include="Content\images\unlock.png" />
     <Content Include="Content\styles.css" />
@@ -314,7 +316,9 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\screenTool.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

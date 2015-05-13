@@ -4409,6 +4409,16 @@ tbody.collapse.in {
   white-space: nowrap;
 }
 
+.dropdown-menu > li > form {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.428571429;
+  color: #333333;
+  white-space: nowrap;
+}
+
 /* line 76, ../../../../../../../../../Applications/compass.app/Contents/Resources/lib/ruby/compass_extensions/bootstrap-sass-3.2.0.1/assets/stylesheets/bootstrap/_dropdowns.scss */
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
   text-decoration: none;
@@ -5580,7 +5590,7 @@ tbody.collapse.in {
 }
 /* line 546, ../../../../../../../../../Applications/compass.app/Contents/Resources/lib/ruby/compass_extensions/bootstrap-sass-3.2.0.1/assets/stylesheets/bootstrap/_navbar.scss */
 .navbar-inverse .navbar-nav > li > a {
-  color: #ffffff;
+  color: #777777;
 }
 /* line 549, ../../../../../../../../../Applications/compass.app/Contents/Resources/lib/ruby/compass_extensions/bootstrap-sass-3.2.0.1/assets/stylesheets/bootstrap/_navbar.scss */
 .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
@@ -5683,7 +5693,7 @@ tbody.collapse.in {
 }
 /* line 16, ../../../../../../../../../Applications/compass.app/Contents/Resources/lib/ruby/compass_extensions/bootstrap-sass-3.2.0.1/assets/stylesheets/bootstrap/_breadcrumbs.scss */
 .breadcrumb > li + li:before {
-  content: "/ ";
+  content: "/ ";
   padding: 0 5px;
   color: #ccc;
 }
@@ -8339,7 +8349,7 @@ body h6 {
   height: 80px;
 }
 /* line 225, ../sass/_globalelements.scss */
-#navbar-fixed-top ul.navbar-nav li:nth-child(5) {
+#navbar-fixed-top ul.navbar-nav li.profileImage {
   border: 1px solid #ffffff;
   border-radius: 50px;
   -moz-border-radius: 50px;
@@ -8349,6 +8359,12 @@ body h6 {
 /* line 233, ../sass/_globalelements.scss */
 #navbar-fixed-top ul.navbar-nav li a {
   color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+#navbar-fixed-top ul.navbar-nav li ul li a {
+  color: #000;
   text-decoration: none;
   text-transform: uppercase;
 }
@@ -8373,7 +8389,7 @@ body h6 {
 
 /* line 256, ../sass/_globalelements.scss */
 .dashboard-page-nav {
-  margin-top: 3px;
+  margin-top: 80px;
   /* END UL */
 }
 /* line 259, ../sass/_globalelements.scss */
@@ -8395,7 +8411,6 @@ body h6 {
   font-size: .8em;
   font-weight: 600;
   letter-spacing: 0;
-  padding: 4px 15px;
 }
 /* line 274, ../sass/_globalelements.scss */
 .dashboard-page-nav ul.navbar-nav li a:hover,
@@ -11983,74 +11998,4 @@ button.close:hover {
 /* line 596, ../sass/font-awesome/scss/_icons.scss */
 .fa-medium:before {
   content: "";
-}
-
-
-/* Custom CSS*/
-
-table.dataTable thead .sorting_asc {
-    background:#e0b32b;
-
-}
-
-table.dataTable thead .sorting {
-    background:#e0b32b;
-
-}
-
-
-table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
-    border-top:none;
-}
-
-/* Line:86 jquery.datatables.css*/
-
-table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
-    background: none;
-}
-
-
-table.dataTable.stripe tbody td.odd, table.dataTable.display tbody td.odd {
-    background-color: #f9f9f9;
-}
-
-table.dataTable.stripe tbody td.even, table.dataTable.display tbody td.even {
-    background-color: #ffffff;
-}
-
-
-table.dataTable.display tbody td.even > .sorting_1, table.dataTable.order-column.stripe tbody td.even > .sorting_1 {
-    background: none;
-}
-/* Line:106 jquery.datatables.css*/
-table.dataTable.order-column tbody tr > .sorting_1, table.dataTable.order-column tbody tr > .sorting_2, table.dataTable.order-column tbody tr > .sorting_3, table.dataTable.display tbody tr > .sorting_1, table.dataTable.display tbody tr > .sorting_2, table.dataTable.display tbody tr > .sorting_3 {
-    background:none;
-}
-
-/* Line:138 jquery.datatables.css*/
-
-table.dataTable.display tbody tr.even > .sorting_1, table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
-    background-color: #efefef;
-}
-/* Line:21 jquery.datatables.css*/
-table.dataTable thead th, table.dataTable thead td {
-    border-bottom: none;
-}
-
-
-.logo {
-  background-image: url('images/logo_nrepp.png');
-  background-repeat:no-repeat;
-   height: 30px;
-    width: 150px;
-    margin: 20px 10px;
-}
-
-.nav > li > a {
-    display: block;
-    padding: 26px 15px;
-    position: relative;
-}
-.navbar-nav > li > form > a {
-    padding: 26px 15px !important;
 }
