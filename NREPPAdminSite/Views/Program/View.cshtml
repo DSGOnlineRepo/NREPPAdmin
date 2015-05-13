@@ -139,13 +139,7 @@ else if (Model.TheIntervention.StatusId == 5)
 
     @if (Model.TheIntervention.Id > 0)
     {
-        <div class="numOfDocs">
-            <span>@Model.Documents.Count Documents Attached to This Program</span>
-            <button id="DocButton">View Documents</button>
-        </div>
-        
-        <div class="upload-div hidden">
-            <span class="collapsedText hidden">@NumDocs Documents On this Intervention</span>
+        <div class="upload-div">
             @if (Model.CanDo("SeeRCDocs"))
             {
                 <div>
@@ -222,6 +216,7 @@ else if (Model.TheIntervention.StatusId == 5)
             } else { 
             <table style="border: 1px solid;">
                 <tr> <!-- Header -->
+                    <th class="withborder" style="text-align: center;">Title</th>
                     <th class="withborder" style="text-align: center;">Description</th>
                     <th class="withborder" style="text-align: center;">Type</th>
                     <th class="withborder" style="text-align: center;">&nbsp;</th>
@@ -229,7 +224,8 @@ else if (Model.TheIntervention.StatusId == 5)
                     @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
                     {
                         <tr>
-                            <td class="withborder">@Html.ActionLink(@doc.FileDescription, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
+                            <td class="withborder">@Html.ActionLink(@doc.Title, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
+                            <td class="withborder">@doc.FileDescription</td>
                             <td class="withborder">@doc.DocumentTypeName</td>
                             <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.TheIntervention.Id, DocId = doc.DocId })</td>
                         </tr>
