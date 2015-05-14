@@ -90,6 +90,8 @@ namespace NREPPAdminSite.Controllers
 
             perms.Add("UploadDocs");
             perms.Add("SeeRCDocs");
+            perms.Add("EditBaseSubmission");
+            perms.Add("UserPreScreen");
 
             pageModel.SetPermissions(perms, User.Identity.Name, InvId);
             pageModel.TheIntervention = theIntervention;
