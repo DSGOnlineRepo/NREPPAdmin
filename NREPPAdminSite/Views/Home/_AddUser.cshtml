@@ -39,7 +39,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         bool isNew = false;
-        if (Model.User == null) { isNew = true; }
+        if (Model.User == null) { isNew = true;}
 
         <div class='row'>
             <div class='col-sm-6'>
@@ -135,10 +135,11 @@
         <div class="row voffset3"><h4> Information:</h4></div>
         <div class='row'>
             <div class='col-sm-6'>
-                <div class="form-group">
+                <div class="form-group"> 
                     @Html.LabelFor(m => m.UserName, new { @class = "col-sm-3 control-label" })
                     <div class="col-sm-9">
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User Name" })
+                        @if (!isNew) { @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User Name", @readonly="readonly" }) } 
+                        else { @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User Name" }) }
                     </div>
                 </div>
             </div>
