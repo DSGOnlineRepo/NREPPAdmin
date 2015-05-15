@@ -18,11 +18,11 @@ The following steps should be performed when locally deploying in order to make 
  1. Insert the users into the AppSettings table as the CurrentPreScreen and NextPreScreen (see example below)
   ```
   update AppSettings
-  SET Value = '6da271c6-90e2-4726-bd51-56b98a7917e1'
+  SET Value = <UserId of one of the Round Robin Prescreeners >
   WHERE SettingID = 'NextPreScreen'
 
   update AppSettings
-  SET Value = 'd1cdaecb-f56d-4f80-9818-f9c71288cf77'
+SET Value = <UserId of second Round Robin Prescreeners >
   WHERE SettingID = 'CurrentPreScreen'
   ```
   _Note:_ this will change slightly once I fix the SP to use UserNames
