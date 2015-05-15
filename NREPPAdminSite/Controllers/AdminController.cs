@@ -366,6 +366,9 @@ namespace NREPPAdminSite.Controllers
         [HttpPost]
         public JsonResult AddReviewer(RegisterViewModel model)
         {
+            ModelState.Remove("Role");
+            ModelState.Remove("CaptchaCodeText");
+            model.Role = "Reviewer";
             if (ModelState.IsValid)
             {
                 var user = new ExtendedUser

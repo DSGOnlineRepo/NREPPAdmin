@@ -27,7 +27,7 @@
 	@CreatedBy nvarchar(128),
 	@ModifiedBy nvarchar(128),
 	@CreatedOn datetime,
-	@ModifiedOn nvarchar(128)
+	@ModifiedOn datetime
 AS
 
 INSERT INTO [dbo].[Reviewers]
