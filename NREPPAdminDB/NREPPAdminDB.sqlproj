@@ -64,6 +64,7 @@
     <Folder Include="Stored Procedures" />
     <Folder Include="Scripts" />
     <Folder Include="Functions" />
+    <Folder Include="Maintanence" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NREPPAdminDB.publish.xml" />
