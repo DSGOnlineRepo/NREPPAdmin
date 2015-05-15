@@ -51,24 +51,12 @@ $(".userPreScreenMask").click(function () {
     });
 
     $("#userPreScreenAns").val(sum);
-    if (parseInt(getParameterByName("InvId")) < 0) {
+    
         if (sum === 10 || sum === 18 || sum === 12 || sum === 20) {
-            $(".formContent").removeClass("hidden");
+            $(".prescreenWarnDiv").addClass("hidden");
         } else {
-            $(".formContent").addClass("hidden");
+            $(".prescreenWarnDiv").removeClass("hidden");
         }
-        if (($(".userPreScreenMask[value=2]").is(":checked"))) {
-            $(".preQuestion_2").addClass("hidden");
-        } else if (!($(".userPreScreenMask[value=2]").is(":checked"))) {
-            $(".preQuestion_2").removeClass("hidden");
-        }
-
-        if (($(".userPreScreenMask[value=3]").is(":checked"))) {
-            $(".preQuestion_4").addClass("hidden");
-        } else if (!($(".userPreScreenMask[value=3]").is(":checked"))) {
-            $(".preQuestion_4").removeClass("hidden");
-        }
-    }
 });
 
 function setEdit(index) {
