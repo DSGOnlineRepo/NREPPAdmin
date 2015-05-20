@@ -37,7 +37,7 @@ AS SET NOCOUNT ON
 					WHERE  SettingID = 'CurrentPreScreen'
 
 					-- Need to add a new role for this.
-				INSERT Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @NewUser, (select id from AspNetRoles where NAME = 'Pre-Screener')) 
+				INSERT Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @NewUser, (select id from AspNetRoles where NAME = 'PreScreener')) 
 
 				IF @@ERROR <> 0 BEGIN
 					ROLLBACK TRANSACTION

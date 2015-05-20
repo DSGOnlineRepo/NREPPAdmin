@@ -74,8 +74,8 @@ BEGIN
 				WHERE Status BETWEEN 10 AND 19 -- This will change if the mathematica definition changes
 			END
 			ELSE BEGIN
-				INSERT INTO @returntable SELECT Id from Interventions i 
-				INNER JOIN Inter_User_Roles iru ON i.Id = iru.InterventionId
+				INSERT INTO @returntable SELECT Id from Interventions i
+				WHERE Status > 1
 			END
 		END
 
