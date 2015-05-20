@@ -125,6 +125,7 @@
     <Build Include="Tables\SPGetRecentSubPd.sql" />
     <Build Include="Stored Procedures\SPAddReviewer.sql" />
     <Build Include="Stored Procedures\SPGetUsers.sql" />
+    <Build Include="Functions\FNGetAvailIntervs.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

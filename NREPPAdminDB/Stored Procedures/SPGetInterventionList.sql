@@ -1,23 +1,26 @@
 ﻿CREATE PROCEDURE [dbo].[SPGetInterventionList]
 @Id INT = NULL,
-@RoleName nvarchar(128) = NULL,
+@UserName nvarchar(256) = NULL,
 @Title NVARCHAR(50) = NULL,
 @FullDescription NVARCHAR(100) = NULL,
 @UpdatedDate DATETIME = NULL,
 @Submitter NVARCHAR(100) = NULL,
 @Page INT=NULL,
-@PageLength INT=NULL
-
+@PageLength INT=NULL,
+@IsRelevant BIT = 1
 AS
 SET NOCOUNT ON
 
 	DECLARE @AvailStatus table (statusId INT)
 	DECLARE @intStartRow int;
 	DECLARE @intEndRow int;
+	DECLARE @UserId NVARCHAR(128)
 
 	SET @intStartRow = @Page;
 	SET @intEndRow = (@Page + @PageLength) - 1; 
-	INSERT INTO @AvailStatus SELECT statusId from FNGetStatusesByRole(@RoleName)
+
+	select @UserId = Id from AspNetUsers WHERE UserName = @UserName
+	INSERT INTO @AvailStatus SELECT Id from FNGetAvailIntervs(@UserId, @IsRelevant)
 
 	IF @Id IS NULL BEGIN
 	WITH InterventionsList AS
@@ -46,7 +49,7 @@ SET NOCOUNT ON
 		from Interventions i 
 		inner join AspNetUsers u ON i.SubmitterId = u.Id
 		inner join InterventionStatus s on i.Status = s.Id
-		WHERE i.Id = @Id
+		WHERE i.Id = @Id and i.Id in (SELECT statusId from @AvailStatus)
 	END
 		
 RETURN 0
