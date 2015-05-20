@@ -91,11 +91,11 @@ else if (Model.TheIntervention.StatusId == 5)
     </div>
 
     @{
-        string formContentClass = Model.TheIntervention.Id > 0 ? "formContent" : "formContent hidden";
+        //string formContentClass = Model.TheIntervention.Id > 0 ? "formContent" : "formContent hidden";
         int i = 0;
     }
 
-    <div class="@formContentClass">
+    <div class="formContent">
         @if (!Model.CanDo("EditBaseSubmission"))
         {
 

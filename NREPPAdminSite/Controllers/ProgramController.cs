@@ -62,7 +62,7 @@ namespace NREPPAdminSite.Controllers
                 var user = _userManager.FindByName(User.Identity.Name);
                 var userRoles = _userManager.GetRoles(user.Id);
                 SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
-                SqlParameter roleParam = new SqlParameter() { ParameterName = "@RoleName", Value = userRoles[0] };
+                SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserName", Value = User.Identity.Name };
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(idParam);
                 parameters.Add(roleParam);

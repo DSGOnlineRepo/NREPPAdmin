@@ -75,7 +75,7 @@ namespace NREPPAdminSite.Controllers
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             var user = _userManager.FindByName(User.Identity.Name);
             var userRoles = _userManager.GetRoles(user.Id);
-            List<Intervention> programsList = localService.GetInterventions(requestModel, userRoles[0]);
+            List<Intervention> programsList = localService.GetInterventions(requestModel, User.Identity.Name);
             return Json(new DataTablesResponse(requestModel.Draw, programsList, programsList.Count, programsList.Count), JsonRequestBehavior.AllowGet);
         }
 
