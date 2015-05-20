@@ -65,16 +65,16 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/datatables")
-
+<br/><br/><br/><br/>
     @RenderBody()
     @Html.AntiForgeryToken()
     @RenderSection("scripts", required: false) <!-- Put the page scripts in here -->
 
     <div class="col-sm-12 footer">
-        <div class="col-sm-1 pull-left">
-            <a href="http://www.nrepp.samhsa.gov/Index.aspx" target="_blank"><img src="~/Content/images/logo_usa.png" width="174" height="58" class="logo_image" border="0" alt="" /></a>
-        </div>
-        <div class="col-sm-11">
+	<div class="col-sm-2">
+	<a href="http://www.nrepp.samhsa.gov/Index.aspx" target="_blank"><img src="~/Content/images/logo_usa.png" width="90" height="30" class="footer_logo_image" border="0" alt="" /></a>&nbsp;&nbsp;<a href="http://www.nrepp.samhsa.gov/Index.aspx" target="_blank"><img src="~/Content/images/logo_hhs.png" width="44" height="40" class="footer_logo_image" border="0" alt="" /></a>
+	</div>
+        <div class="col-sm-10">
             <h5 class="footer-links pull-right">
                 <ul>
                     <li><a href="#" target="_blank">Home</a></li>
@@ -88,30 +88,20 @@
                     <li><a href="#" target="_blank">Learning Center</a></li>
                     <br />
                     <li class="adobe">Adobe&trade; PDF and MS Office™ formatted files require software viewer programs to properly read them. Click here to download these FREE programs now.</li>
+
+			<br />
+			<li><a href="#" target="_blank">U.S. Department of Health and Human Services</a></li>
+			<li><a href="#" target="_blank">Substance Abuse and Mental Health Services Administration</a></li>
+			<li><a href="#" target="_blank">www.samhsa.gov</a></li>
+			<br />
+			<div class="social"><a href="#" target="_blank"><i class="fa fa-facebook"></i></a> <a href="#" target="_blank"><i class="fa fa-twitter"></i></a> <a href="#" target="_blank"><i class="fa fa-linkedin"></i></a> <a href="#" target="_blank"><i class="fa fa-flickr"></i></a></div>
+
                 </ul>
             </h5>
         </div>
     </div>
 
-    <div class="col-xs-12 footer-sub">
-        <h5 class="footer-links">
-            <div class="col-sm-1 pull-left">
-                <a href="http://www.nrepp.samhsa.gov/Index.aspx" target="_blank"><img src="~/Content/images/logo_hhs.png" width="114" height="103" class="logo_image" border="0" alt="" /></a>
-            </div>
-            <div class="col-sm-11">
-                <ul class="pull-right">
-                    <li><a href="#" target="_blank">U.S. Department of Health and Human Services</a></li>
-                    <br />
-                    <li><a href="#" target="_blank">Substance Abuse and Mental Health Services Administration</a></li>
-                    <br />
-                    <li><a href="#" target="_blank">www.samhsa.gov</a></li>
-                    <br />
-                    <div class="social"><a href="#" target="_blank"><i class="fa fa-facebook"></i></a> <a href="#" target="_blank"><i class="fa fa-twitter"></i></a> <a href="#" target="_blank"><i class="fa fa-linkedin"></i></a> <a href="#" target="_blank"><i class="fa fa-flickr"></i></a></div>
-                </ul>
-            </div>
-        </h5>
-    </div>
-
 </body>
+
 
 </html>
