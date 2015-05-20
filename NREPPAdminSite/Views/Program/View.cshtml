@@ -9,8 +9,10 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/programview.js")"></script>
 }
 
+<div class="page-wrapper">
+
 <h2>Viewing @Model.TheIntervention.Title</h2>
-<h3>Submitted by @Model.TheIntervention.Submitter</h3>
+<h4>Submitted by @Model.TheIntervention.Submitter</h4>
 <label>@Model.TheIntervention.Status</label><br />
 
 @if (Model.TheIntervention.StatusId == 4) {
@@ -48,42 +50,31 @@ else if (Model.TheIntervention.StatusId == 5)
             }
         }
 
-    @if (Model.CanDo("UserPreScreen")) // Only show these to the submitter during the initial submission
+    @if (Model.TheIntervention.StatusId < 2) // Only show these to the submitter during the initial submission
     {
-        int maskTotal = 0;
-        string warnClass = "prescreenWarnDiv";
 
         foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
         {
             bool isChecked = mask.Selected;
-            string maskString = string.Format("{0}. {1}", mask.Value, mask.Name);
-            maskTotal += mask.Selected ? (int)Math.Pow(2, mask.Value) : 0;
-            
 
             //@Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "userPreScreenMask" }) @mask.Name <br />
             if (mask.Value > 2)
             { 
             <span class="preQuestion_@mask.Value.ToString()">
-                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
+                <span>@mask.Name</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
                 @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
             </span>
             }
             else
             {
                 <span class="preQuestion_@mask.Value.ToString()">
-                    <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
+                    <span>@mask.Name</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
                     @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
                 </span>
             }
 
         }
-        
-        if (maskTotal == 10 || maskTotal == 18 || maskTotal == 12 || maskTotal == 20) {
-            warnClass += " hidden";
-        }
-        <div class="@warnClass">
-            If you have not answered "Yes" to questions 1 or 2 AND "Yes" to either question 3 or 4 or your submission will be rejected during pre-screening.
-        </div>
+
 
     }
     </div>
@@ -94,7 +85,7 @@ else if (Model.TheIntervention.StatusId == 5)
     }
 
     <div class="@formContentClass">
-    @if (!Model.CanDo("EditBaseSubmission")) { 
+    @if (Model.TheIntervention.StatusId > 1) { 
         
     <div style="height: 100px;">
         <span style="float: left; clear: left;">
@@ -150,8 +141,13 @@ else if (Model.TheIntervention.StatusId == 5)
 
     @if (Model.TheIntervention.Id > 0)
     {
-        <!-- include logic for uploading at the same time as saving -->
-        <div class="upload-div">
+        <div class="numOfDocs">
+            <span>@Model.Documents.Count Documents Attached to This Program</span>
+            <button id="DocButton">View Documents</button>
+        </div>
+        
+        <div class="upload-div hidden">
+            <span class="collapsedText hidden">@NumDocs Documents On this Intervention</span>
             @if (Model.CanDo("SeeRCDocs"))
             {
                 <div>
@@ -228,7 +224,6 @@ else if (Model.TheIntervention.StatusId == 5)
             } else { 
             <table style="border: 1px solid;">
                 <tr> <!-- Header -->
-                    <th class="withborder" style="text-align: center;">Title</th>
                     <th class="withborder" style="text-align: center;">Description</th>
                     <th class="withborder" style="text-align: center;">Type</th>
                     <th class="withborder" style="text-align: center;">&nbsp;</th>
@@ -236,8 +231,7 @@ else if (Model.TheIntervention.StatusId == 5)
                     @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
                     {
                         <tr>
-                            <td class="withborder">@Html.ActionLink(@doc.Title, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
-                            <td class="withborder">@doc.FileDescription</td>
+                            <td class="withborder">@Html.ActionLink(@doc.FileDescription, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
                             <td class="withborder">@doc.DocumentTypeName</td>
                             <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.TheIntervention.Id, DocId = doc.DocId })</td>
                         </tr>
@@ -356,7 +350,8 @@ else if (Model.TheIntervention.StatusId == 5)
                 }
             }
 
-        </div>
+      </div>
     </div>
+  </div>
 </div>
 
