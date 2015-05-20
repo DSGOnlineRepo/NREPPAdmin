@@ -18,7 +18,7 @@ namespace NREPPTests
             Assert.IsTrue(true);
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void TestDB()
         {
             NrepServ aService = new NrepServ(ServiceTests.ConnString);
@@ -27,7 +27,7 @@ namespace NREPPTests
 
             Assert.IsTrue(interVs.Count > 0);
             
-        }
+        }*/
 
         [TestMethod]
         public void LoginFailure()

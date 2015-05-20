@@ -219,24 +219,24 @@ namespace NREPPAdminSite
         /// Generically gets the interventions list
         /// </summary>
         /// <returns></returns>
-        public List<Intervention> GetInterventions() // This needs to take some parameters, so there should be a bunch of functions for it
+        /*public List<Intervention> GetInterventions() // This needs to take some parameters, so there should be a bunch of functions for it
         {
             List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
             return GetInterventions(nullParams);
-        }
+        }*/
 
         /// <summary>
         /// Gets the interventions list based on role
         /// </summary>
         /// <returns></returns>
-        public List<Intervention> GetInterventions(string roleName) // This needs to take some parameters, so there should be a bunch of functions for it
+        public List<Intervention> GetInterventions(string UserName) // This needs to take some parameters, so there should be a bunch of functions for it
         {
             List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
-            nullParams.Add(new SqlParameter() { ParameterName = "@RoleName", SqlDbType = SqlDbType.NVarChar, Value = roleName });
+            nullParams.Add(new SqlParameter() { ParameterName = "@UserName", SqlDbType = SqlDbType.NVarChar, Value = UserName });
             return GetInterventions(nullParams);
         }
 
-        public List<Intervention> GetInterventions([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel, string roleName)
+        public List<Intervention> GetInterventions([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel, string UserName)
         {
             List<Intervention> interventions = new List<Intervention>();
 
@@ -271,7 +271,7 @@ namespace NREPPAdminSite
                 }
             }
             List<SqlParameter> paramsList = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
-            paramsList.Add(new SqlParameter() { ParameterName = "@RoleName", SqlDbType = SqlDbType.NVarChar, Value = roleName });
+            paramsList.Add(new SqlParameter() { ParameterName = "@UserName", SqlDbType = SqlDbType.NVarChar, Value = UserName });
             paramsList.Add(new SqlParameter() { ParameterName = "@Title", SqlDbType = SqlDbType.NVarChar, Value = title });
             paramsList.Add(new SqlParameter() { ParameterName = "@FullDescription", SqlDbType = SqlDbType.NVarChar, Value = fullDescription });
             paramsList.Add(new SqlParameter() { ParameterName = "@UpdatedDate", Value = updatedDate });

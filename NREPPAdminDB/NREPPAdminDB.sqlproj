@@ -70,6 +70,7 @@
     <None Include="NREPPAdminDB.publish.xml" />
     <None Include="Scripts\DBUserSetup.sql" />
     <None Include="Scripts\DummyData.sql" />
+    <None Include="Maintanence\Patrick_5_20_2015.ddl.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Stored Procedures\SPGetLogonCreds.sql" />

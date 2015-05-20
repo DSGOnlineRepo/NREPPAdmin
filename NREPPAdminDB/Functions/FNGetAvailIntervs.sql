@@ -1,6 +1,6 @@
 ﻿CREATE FUNCTION [dbo].[FNGetAvailIntervs]
 (
-	@UserId int,
+	@UserId NVARCHAR(128),
 	@IsRelevant bit = 0
 )
 RETURNS @returntable TABLE
