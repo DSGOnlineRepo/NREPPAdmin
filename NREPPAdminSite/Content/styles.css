@@ -1539,7 +1539,7 @@ h6 .small,
 .h6 .small {
   font-weight: normal;
   line-height: 1;
-  color: #777777;
+  color: #444444;
 }
 
 /* line 24, ../../../../../../../../../Applications/compass.app/Contents/Resources/lib/ruby/compass_extensions/bootstrap-sass-3.2.0.1/assets/stylesheets/bootstrap/_type.scss */
@@ -3491,7 +3491,19 @@ output {
 }
 
 /* line 115, ../../../../../../../../../Applications/compass.app/Contents/Resources/lib/ruby/compass_extensions/bootstrap-sass-3.2.0.1/assets/stylesheets/bootstrap/_forms.scss */
+
 .form-control {
+  background: #ffffff;
+  padding: 20px 12px;
+  border: 1px solid transparent;
+  box-shadow: none; }
+
+  .form-control:focus {
+    outline: none;
+    border: 1px #66afe9 solid;
+    box-shadow: none; }
+
+/*.form-control {
   display: block;
   width: 100%;
   height: 34px;
@@ -3509,13 +3521,17 @@ output {
   -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
+*/
+
 /* line 53, ../../../../../../../../../Applications/compass.app/Contents/Resources/lib/ruby/compass_extensions/bootstrap-sass-3.2.0.1/assets/stylesheets/bootstrap/mixins/_forms.scss */
+/*
 .form-control:focus {
   border-color: #66afe9;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
+*/
 /* line 102, ../../../../../../../../../Applications/compass.app/Contents/Resources/lib/ruby/compass_extensions/bootstrap-sass-3.2.0.1/assets/stylesheets/bootstrap/mixins/_vendor-prefixes.scss */
 .form-control::-moz-placeholder {
   color: #777777;
@@ -8389,7 +8405,7 @@ body h6 {
 
 /* line 256, ../sass/_globalelements.scss */
 .dashboard-page-nav {
-  margin-top: 80px;
+  margin-top: -8px;
   /* END UL */
 }
 /* line 259, ../sass/_globalelements.scss */
@@ -8441,15 +8457,75 @@ body h6 {
 /* * * * * * * * * * * * * * * * * * * * * * TABLE ELEMENTS * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Desktops/Laptops */
 /* line 305, ../sass/_globalelements.scss */
+
 table {
   width: 100%;
 }
 
+div#tblPrograms_wrapper {
+  background: #f3f3f3;
+}
+
+div#tblPrograms_info {
+  font-size: 30px;
+  margin: 20px 0;
+}
+
+.dataTables_scrollHeadInner tr {
+  background: #e0b32b;
+}
+
+.dataTables_scrollHeadInner tr th {
+  padding-right: 20px;
+}
+
+.dataTables_scrollBody {
+  overflow: hidden!important;
+}
+
+div#tblPrograms_length label {
+  margin: 30px 0;
+}
+
+div#tblPrograms_paginate {
+  margin: 30px 0;
+  color: #ffffff;
+}
+
+div#tblPrograms_paginate a {
+  color: #ffffff!important;
+  font-weight: 600;
+  background: #444444;
+  margin-left: 2px;
+  cursor: pointer;
+}
+
+td:nth-child(1) {
+  width: 20%;
+}
+
+td:nth-child(2) {
+  width: 50%;
+}
+
+td:nth-child(3) {
+  width: 10%;
+}
+
+td:nth-child(4) {
+  width: 10%;
+}
+
+td:nth-child(5) {
+  width: 10%;
+}
+
 /* Zebra striping row */
-/* line 310, ../sass/_globalelements.scss */
+/* line 310, ../sass/_globalelements.scss 
 td:nth-of-type(odd) {
   background: #f3f3f3;
 }
+*/
 
 /* line 314, ../sass/_globalelements.scss */
 td, th {
@@ -8463,6 +8539,7 @@ th {
   text-align: left;
   border-right: 1px solid #fff;
 }
+
 /* line 323, ../sass/_globalelements.scss */
 th:nth-last-child(1) {
   border: none;
@@ -8516,13 +8593,79 @@ td {
   text-align: left;
 }
 
+
+/* * * * * * * * * * * * * * * * * * * * * * LOGIN * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * LOGIN * * * * * * * * * * * * * * * * * * * * * * * * * */
+.login-wrapper h2 {
+  font-size: 40px;
+  margin: auto 0;
+  padding: 30px 0;
+}
+
+.login-wrapper h3 {
+  font-size: 20px;
+  margin: auto 0;
+  padding-bottom: 30px;
+}
+
+.login-wrapper input[type='text'], .login-wrapper input[type='password'] {
+  border: 2px #eeeeee solid;
+  background: #fff;
+  padding: 8px 10px;
+  color: #777;
+  width: 60%;
+}
+
+.login-wrapper .form-horizontal .control-label {
+  font-size: 1em;
+  margin: auto 0;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * PAGE * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * PAGE * * * * * * * * * * * * * * * * * * * * * * * * * */
+.page-wrapper {
+  padding: 30px;
+}
+
+.page-wrapper h2 {
+  font-size: 40px;
+  margin: auto 0;
+  padding: 0 0 30px 0;
+}
+
+.page-wrapper h3 {
+  font-size: 30px;
+  margin: auto 0;
+  padding: 30px;
+}
+
+.page-wrapper h4 {
+  font-size: 20px;
+  margin: auto 0;
+  padding: 0 0 30px 0;
+}
+
 /* * * * * * * * * * * * * * * * * * * * * * FOOTER * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* * * * * * * * * * * * * * * * * * * * * * FOOTER * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* line 369, ../sass/_globalelements.scss */
+
 .footer {
   background: #444;
   padding: 30px;
   width: 100%;
+margin-top: 10em;
+/*
+  position: fixed;
+  bottom: 0;
+  left: 0;
+*/
+}
+
+.footer_logo_image {
+  margin: 0;
 }
 
 /* line 376, ../sass/_globalelements.scss */
