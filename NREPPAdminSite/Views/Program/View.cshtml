@@ -9,8 +9,10 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/programview.js")"></script>
 }
 
+<div class="page-wrapper">
+
 <h2>Viewing @Model.TheIntervention.Title</h2>
-<h3>Submitted by @Model.TheIntervention.Submitter</h3>
+<h4>Submitted by @Model.TheIntervention.Submitter</h4>
 <label>@Model.TheIntervention.Status</label><br />
 
 @if (Model.TheIntervention.StatusId == 4)
@@ -366,4 +368,6 @@ else if (Model.TheIntervention.StatusId == 5)
 
         </div>
     </div>
+  </div>
 </div>
+
