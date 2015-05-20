@@ -1,4 +1,4 @@
-﻿ALTER FUNCTION [dbo].[FNGetAvailIntervs]
+﻿CREATE FUNCTION [dbo].[FNGetAvailIntervs]
 (
 	@UserId NVARCHAR(128),
 	@IsRelevant bit = 0

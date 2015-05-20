@@ -1,0 +1,18 @@
+﻿@model NREPPAdminSite.Models.JoinProgramModel
+
+@{
+    ViewBag.Title = "JoinProgram";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Join </h2>
+
+<div class="Program-Description">
+    @Model.TheIntervention.FullDescription
+</div>
+
+<!-- Use the "registered" information to show whether we're viewing this -->
+<div>
+    @Html.ActionLink("Accept", "AddReviewer")
+</div>
+

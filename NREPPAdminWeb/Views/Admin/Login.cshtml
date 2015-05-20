@@ -1,0 +1,59 @@
+﻿@model NREPPAdminSite.Models.LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Log in to NREPP";
+}
+
+    
+   
+<div class="login-wrapper">
+
+    @using (Html.BeginForm("Login", "Admin", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken();
+  <div class="row">
+    <div class="col-sm-12 text-center">
+      <h2>@ViewBag.Title</h2>
+      <h3>Enter your email address &amp; password below to log in to the system</h3>
+
+      <div class="form-group col-sm-12">
+      @Html.LabelFor(m => m.UserName, new {@class = "col-sm-12 text-center control-label"})
+      <br />@Html.TextBoxFor(m => m.UserName, new { @class = "text-center" })
+      </div>        
+
+      <div class="form-group col-sm-12">
+      @Html.LabelFor(m => m.Password, new {@class = "col-sm-12 text-center control-label"})
+      <br />@Html.PasswordFor(m => m.Password, new {@class = "text-center"})
+      </div>
+
+      <div class="form-group col-sm-12">
+      @Html.LabelFor(m => m.RememberMe, new {@class = "text-center control-label"}) &nbsp;@Html.CheckBoxFor(m => m.RememberMe)
+      </div>
+    </div>
+	</div>
+
+
+  <div class="row btn-navigation">
+    <div class="col-sm-4 col-sm-offset-2">
+			<!--<a type="button" href="#" class="btn btn-primary btn-block">Login</a>-->
+      <input type="submit" value="Login" class="btn btn-primary btn-block"/>
+    </div>
+    <div class="col-sm-4">
+      <a type="button" href="/Admin/Register" class="btn btn-info btn-block">Register</a>
+      <!--@Html.ActionLink("Register", "Register", "Admin")-->
+    </div>
+  </div>
+  
+  <!--
+  <div class="col-sm-offset-3 col-sm-9">
+  <input type="submit" value="Login" class="btn btn-primary"/>
+  @Html.ActionLink("Register", "Register", "Admin")
+  </div>
+  -->
+
+    }
+    @Html.ValidationSummary()
+</div>
+
+

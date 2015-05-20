@@ -1,0 +1,681 @@
+﻿@model NREPPAdminSite.Models.ScreeningModel
+
+@{
+    ViewBag.Title = "Screen";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("/Scripts/screenTool.js")"></script>
+    <script type="text/javascript" src="@Url.Content("/Scripts/chosen.jquery.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("/Scripts/programview.js")"></script>
+}
+
+<h2>Screening tool for @Model.TheIntervention.Title</h2>
+
+@{
+    int i = 0;
+}
+
+<div>
+    @{
+        i = 0;
+        List<SelectListItem> StudyDesigns = new List<SelectListItem>();
+        List<SelectListItem> YPYN = new List<SelectListItem>();
+        List<SelectListItem> Exclusions = new List<SelectListItem>();
+        List<SelectListItem> Docs = new List<SelectListItem>();
+        List<SelectListItem> AttritionAnswers = new List<SelectListItem>();
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.StudyDesigns)
+        {
+            StudyDesigns.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.YPYN)
+        {
+            YPYN.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.Exclusions)
+        {
+            Exclusions.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+        
+        foreach (NREPPAdminSite.Models.Answer ans in Model.AttritionAnswers)
+        {
+            AttritionAnswers.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.RCDocument doc in Model.TheDocuments)
+        {
+            Docs.Add(new SelectListItem() { Text = doc.FileDescription, Value = doc.DocId.ToString() });
+        }
+      }
+
+    @functions{
+        string getReference(List<NREPPAdminSite.Models.RCDocument> docs, int inDocId)
+        {
+            //string outRef = "";
+
+            foreach (NREPPAdminSite.Models.RCDocument d in docs)
+                if (d.DocId == inDocId)
+                    return d.Reference;
+
+            return "Error";
+        }
+
+        string getPubYear(List<NREPPAdminSite.Models.RCDocument> docs, int inDocId)
+        {
+
+            foreach (NREPPAdminSite.Models.RCDocument d in docs)
+                if (d.DocId == inDocId)
+                    return d.PubYear.ToString();
+
+            return "Error";
+        }
+
+        string isChecked(bool trueValue)
+        {
+            if (trueValue)
+                return "checked";
+            else return "";
+        }
+
+        string getAnswerText(List<NREPPAdminSite.Models.Answer> AnswerList, int inId)
+        {
+            foreach (NREPPAdminSite.Models.Answer anAnswer in AnswerList)
+            {
+                if (anAnswer.AnswerId == inId)
+                    return anAnswer.LongAnswer;
+            }
+
+            return "";
+        }
+        
+        string getRCDocId(List<NREPPAdminSite.Models.RCDocument> docs, int inDocId)
+        {
+            int retVal = -1;
+
+            foreach (NREPPAdminSite.Models.RCDocument d in docs)
+                if (d.DocId == inDocId)
+                    retVal = d.RCDocId;
+
+            return retVal.ToString();
+        }
+
+        string getDocName(List<NREPPAdminSite.Models.RCDocument> docs, int inDocId)
+        {
+            string retVal = "";
+
+            foreach (NREPPAdminSite.Models.RCDocument d in docs)
+                if (d.DocId == inDocId)
+                    retVal = d.RCName;
+
+            return retVal.ToString();
+        }
+    }
+
+    <table style="border: 1px solid;">
+        <tr>
+            <th class="withborder" style="text-align: center;">Reference</th>
+            <th class="withborder" style="text-align: center;">Year of Publication</th>
+            <th class="withborder">Found In Literature Search</th>
+            <th class="withborder">Reason for Exclusion</th>
+            <th class="withborder">Overall Attrition Data Available</th>
+            <th class="withborder">Differential Attrition Data Available</th>
+            <th class="withborder">Initial Study Design</th>
+            <th class="withborder">Total Sample Size</th>
+            <th class="withborder">Longest Follow-Up</th>
+            <th class="withborder">Recommend For Review</th>
+            <th class="withborder">Study #</th>
+            <th class="withborder">Article #</th>
+            <th> </th>
+        </tr>
+        
+        @foreach (NREPPAdminSite.Models.Study study in Model.StudyDocuments)
+        {
+            List<SelectListItem> thisStudyDesign = new List<SelectListItem>();
+            List<SelectListItem> thisDocList = new List<SelectListItem>();
+            List<SelectListItem> thisExclusion = new List<SelectListItem>();
+            
+            foreach (SelectListItem item in StudyDesigns)
+            {
+                if (item.Value == study.StudyDesign.ToString())
+                {
+                    thisStudyDesign.Add(new SelectListItem() { Value = item.Value, Text = item.Text, Selected = true });
+                }
+                else
+                {
+                    thisStudyDesign.Add(new SelectListItem() { Value = item.Value, Text = item.Text, Selected = false });
+                }
+            }
+            
+            foreach (SelectListItem item2 in Docs)
+            {
+                if (item2.Value == study.DocumentId.ToString())
+                {
+                    thisDocList.Add(new SelectListItem() { Value = item2.Value, Text = item2.Text, Selected = true });
+                }
+                else
+                {
+                    thisDocList.Add(new SelectListItem() { Value = item2.Value, Text = item2.Text, Selected = false });
+                }
+            }
+            
+            foreach (SelectListItem item3 in Exclusions)
+            {
+                if (item3.Value == study.Exclusion1.ToString())
+                {
+                    thisExclusion.Add(new SelectListItem() { Value = item3.Value, Text = item3.Text, Selected = true });
+                } else {
+                    thisExclusion.Add(new SelectListItem() { Value = item3.Value, Text = item3.Text, Selected = false });
+                }
+            }
+
+            string theClass = (i + 1) % 2 == 0 ? "screenEven" : "screenOdd";
+            <tr class="@theClass">
+                <td class="withborder">@getReference(Model.TheDocuments.ToList(), @study.DocumentId)</td>
+                <td class="withborder">@getPubYear(Model.TheDocuments.ToList(), @study.DocumentId)</td>
+                <td class="withborder"><input type="checkbox" checked="@isChecked(study.inLitSearch)" disabled /></td>
+                <td class="withborder">@getAnswerText(Model.Exclusions.ToList(), @study.Exclusion1)</td>
+                <td class="withborder">@getAnswerText(Model.AttritionAnswers.ToList(), @study.OverallAttrition)</td>
+                <td class="withborder">@getAnswerText(Model.AttritionAnswers.ToList(), @study.DiffAttrition)</td>
+                <td class="withborder">@getAnswerText(Model.StudyDesigns.ToList(), @study.StudyDesign)</td>
+                <td class="withborder">@study.TotalSampleSize</td>
+                <td class="withborder">@study.LongestFollowup</td>
+                <td class="withborder"><input type="checkbox" checked="@isChecked(study.RecommendReview)" disabled /></td>
+                <td class="withborder">@study.StudyId</td>
+                <td class="withborder">@study.DocOrdinal</td>
+                <td class="withborder">@Html.ActionLink("Delete", "DeleteStudyRecord", new { RecId = study.Id, InvId = Model.TheIntervention.Id }, new { @class = "actionLink" })</td>
+            </tr>
+            <tr id="formrow_@i" class="@theClass">
+                <td colspan="12" class="withborder">
+                    <div class="studyForm hidden">
+                        @using (Html.BeginForm("AddStudy", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
+                            @Html.Hidden("ActualId", @study.Id);
+                            @Html.Hidden("RCDocumentId", getRCDocId(Model.TheDocuments.ToList(), study.DocumentId))
+                            @Html.Hidden("RCDocumentName", getDocName(Model.TheDocuments.ToList(), study.DocumentId))
+
+                                <label for="docDropdown">Article:</label>
+
+                                @Html.DropDownList("docDropdown", thisDocList, new { onchange = "GetDocumentInfo($(this).val(), this);" });
+                                <br />
+
+
+                            <textarea name="newReference">@getReference(Model.TheDocuments.ToList(), study.DocumentId)</textarea><br />
+                            <label>Year of Publication: </label><input type="text" name="PubYear"
+                                                                       value="@getPubYear(Model.TheDocuments.ToList(), study.DocumentId)" /><br /><br />
+
+                            <input type="checkbox" name="IsLitSearch" /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <br />
+
+                            <div>
+                                <span style="float: left; clear: left;">Reason for Exclusion: </span>@Html.DropDownList("Exclusion1", thisExclusion)<br />
+                                <br />
+                                <span style="float: left; clear: left;">Overall Attrition Data Available: </span>@Html.DropDownList("OverallAttrition", AttritionAnswers)<br />
+                                <br />
+                                <span style="float: left; clear: left;">Differential Attrition Data Available: </span>@Html.DropDownList("DiffAttrition", AttritionAnswers)<br />
+                                <br />
+                            </div>
+
+                            <label>What was the Study Design?</label>
+                            @Html.DropDownList("StudyDesign", thisStudyDesign)<br /><br />
+
+                            <label>Total Sample Size:</label>
+                            <input type="text" name="TotalSampleSize" value="@study.TotalSampleSize" /><br />
+
+                            <label>Longest Followup:</label>
+                            <input type="text" name="LongestFollowup" value="@study.LongestFollowup" /><br /><br />
+
+                            <input type="checkbox" name="recommendReview" /><label style="margin-left: 2px;">Recommend for Review</label> <br />
+
+                            <label for="studyIdBox">Study #</label><input type="text" name="StudyId" value="@study.StudyId" /><br />
+                            <label for="articleIdBox">Article #</label><input type="text" name="articleIdBox" value="@study.DocOrdinal" /><br /><br />
+
+                            <label>Notes:</label><br />
+                            <textarea name="Notes"></textarea><br />
+
+                            <br /><br />
+                            <input type="submit" value="Submit" /> <button onclick="return false;">Clear</button>
+                        }
+                    </div>
+                    <button id="show_@i" onclick="toggleEdit('show_@i'); return false;">Edit</button>
+                </td>
+            </tr>
+            
+            i++;
+        }
+    </table>
+</div>
+
+<div class="AddStudy">
+    <button id="AddStudy">Add Study</button>
+</div>
+
+<div class="Add-div hidden" style="padding-top: 10px; padding-bottom: 10px;">
+   @using (Html.BeginForm("AddStudy", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+   {
+    @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
+    @Html.Hidden("ActualId");
+    @Html.Hidden("RCDocumentId")
+    @Html.Hidden("RCDocumentName");
+
+    <textarea name="newReference"></textarea><br />
+    <label>Year of Publication: </label><input type="text" name="PubYear"
+                                               /><br /><br />
+
+    <label for="docDropdown">Article:</label>
+
+    @Html.DropDownList("docDropdown", Docs, new { onchange = "GetDocumentInfo($(this).val(), this);", @class="mainDropDown" });
+    <br />
+
+    <input type="checkbox" name="IsLitSearch" /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <br />
+
+    <div>
+        <span style="float: left; clear: left;">Reason for Exclusion: </span>@Html.DropDownList("Exclusion1", Exclusions)<br />
+        <br />
+        <span style="float: left; clear: left;">Overall Attrition Data Available: </span>@Html.DropDownList("OverallAttrition", AttritionAnswers)<br />
+        <br />
+
+        <span style="float: left; clear: left;">Differential Attrition Data Available: </span>@Html.DropDownList("DiffAttrition", AttritionAnswers)<br />
+        <br />
+    </div>
+
+    <label>What was the Study Design?</label>
+    @Html.DropDownList("StudyDesign", StudyDesigns)<br /><br />
+
+    <label>Total Sample Size:</label>
+    <input type="text" name="TotalSampleSize" /><br />
+
+    <label>Longest Followup:</label><br />
+    <input type="text" name="LongestFollowup" /><br />
+
+    <input type="checkbox" name="recommendReview" /><label style="margin-left: 2px;">Recommend for Review</label> <br />
+
+    <label for="studyIdBox">Study #</label><input type="text" name="StudyId" /><br />
+    <label for="articleIdBox">Article #</label><input type="text" name="articleIdBox" /><br /><br />
+
+    <label>Notes:</label><br />
+    <textarea name="Notes"></textarea><br />
+
+    <br /><br />
+    <input type="submit" value="Submit" /> <button onclick="return false;">Clear</button>
+   }
+</div>
+
+<div>
+   
+
+    @{
+        List<SelectListItem> OutcomeList = new List<SelectListItem>();
+        List<SelectListItem> SAMHSAPops = new List<SelectListItem>();
+        List<SelectListItem> SAMHSAOutcomes = new List<SelectListItem>();
+        List<SelectListItem> EffectReports = new List<SelectListItem>();
+        List<SelectListItem> TaxOutcomes = new List<SelectListItem>();
+        
+        foreach (NREPPAdminSite.Models.Outcome outcome in Model.Outcomes.MacroOutcomes)
+        {
+            OutcomeList.Add(new SelectListItem() { Text = outcome.OutcomeName, Value = outcome.Id.ToString() });
+        }
+        
+        foreach (NREPPAdminSite.Models.Answer ans in Model.SAMHSAPops)
+        {
+            SAMHSAPops.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+        
+        foreach (NREPPAdminSite.Models.Answer ans in Model.SAMHSAOutcomes)
+        {
+            SAMHSAOutcomes.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.EffectReports)
+        {
+            EffectReports.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+        
+        foreach (NREPPAdminSite.Models.Answer ans in Model.TaxonomyOutcomes)
+        {
+            TaxOutcomes.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        OutcomeList.Add(new SelectListItem() { Text = "New Outcome", Value = "-1" });
+
+        List<int> studyz = Model.StudyDocuments.Select(m => m.StudyId).Distinct().ToList();
+
+        i = 0;
+    }
+
+    @functions {
+        string getOutcomeByNumber(int inNumber, List<SelectListItem> inList)
+        {
+            foreach (SelectListItem i in inList)
+                if (i.Value == inNumber.ToString())
+                    return i.Text;
+
+            return "Error";
+        }
+        
+       
+    }
+
+    <table>
+        <tr>
+            <th class="withborder" style="text-align: center;">Measure Resported in Study</th>
+            <th class="withborder" style="text-align: center;">Outcome Named in Article</th>
+            <th class="withborder">Study Id</th>
+            <th class="withborder">Reference</th>
+            <th class="withborder">SAMHSA-Related Population</th>
+            <th class="withborder">Describe Evaluated Population</th>
+            <th class="withborder">SAMHSA-Related Outcome</th>
+            <th class="withborder">Treatment Vs. Comparison Size</th>
+            <th> </th>
+        </tr>
+        @foreach (NREPPAdminSite.Models.OutcomeMeasure measure in Model.Outcomes.OutcomesMeasures)
+        {
+            string theClass = (i + 1) % 2 == 0 ? "screenEven" : "screenOdd";
+            string reviewIsChecked = measure.RecommendReview == true ? "checked" : "";
+            List<SelectListItem> thisDocList = new List<SelectListItem>();
+            List<SelectListItem> thisPopDrop = new List<SelectListItem>();
+            List<SelectListItem> thisOutcomeList = new List<SelectListItem>();
+            List<SelectListItem> thisTaxOutcomes = new List<SelectListItem>();
+            List<SelectListItem> thisSAMHSAOutcomes = new List<SelectListItem>();
+            List<SelectListItem> thisEffectReports = new List<SelectListItem>();
+            List<SelectListItem> thisStudys = new List<SelectListItem>();
+
+            foreach (SelectListItem item in SAMHSAPops)
+            {
+                if (item.Value == measure.SAMHSAPop.ToString())
+                {
+                    thisPopDrop.Add(new SelectListItem() { Value = item.Value, Text = item.Text, Selected = true });
+                }
+                else
+                {
+                    thisPopDrop.Add(new SelectListItem() { Value = item.Value, Text = item.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item2 in Docs)
+            {
+                if (item2.Value == measure.DocumentId.ToString())
+                {
+                    thisDocList.Add(new SelectListItem() { Value = item2.Value, Text = item2.Text, Selected = true });
+                }
+                else
+                {
+                    thisDocList.Add(new SelectListItem() { Value = item2.Value, Text = item2.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item3 in OutcomeList)
+            {
+                if (item3.Value == measure.OutcomeId.ToString())
+                {
+                    thisOutcomeList.Add(new SelectListItem() { Value = item3.Value, Text = item3.Text, Selected = true });
+                }
+                else
+                {
+                    thisOutcomeList.Add(new SelectListItem() { Value = item3.Value, Text = item3.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item4 in TaxOutcomes)
+            {
+                if (item4.Value == measure.TaxOutcome.ToString())
+                {
+                    thisTaxOutcomes.Add(new SelectListItem() { Value = item4.Value, Text = item4.Text, Selected = true });
+                }
+                else
+                {
+                    thisTaxOutcomes.Add(new SelectListItem() { Value = item4.Value, Text = item4.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item5 in SAMHSAOutcomes)
+            {
+                if (item5.Value == measure.SAMHSAOutcome.ToString())
+                {
+                    thisSAMHSAOutcomes.Add(new SelectListItem() { Value = item5.Value, Text = item5.Text, Selected = true });
+                }
+                else
+                {
+                    thisSAMHSAOutcomes.Add(new SelectListItem() { Value = item5.Value, Text = item5.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item6 in TaxOutcomes)
+            {
+                if (item6.Value == measure.EffectReport.ToString())
+                {
+                    thisEffectReports.Add(new SelectListItem() { Value = item6.Value, Text = item6.Text, Selected = true });
+                }
+                else
+                {
+                    thisEffectReports.Add(new SelectListItem() { Value = item6.Value, Text = item6.Text, Selected = false });
+                }
+            }
+
+            foreach (int j in studyz)
+            {
+                if (j == measure.StudyId)
+                {
+                    thisStudys.Add(new SelectListItem() { Value = j.ToString(), Text = "Study " + j.ToString(), Selected = true });
+                }
+                else
+                {
+                    thisStudys.Add(new SelectListItem() { Value = j.ToString(), Text = "Study " + j.ToString(), Selected = false });
+                }
+            }
+            
+            
+            <tr class="@theClass">
+                <td class="withborder">@measure.OutcomeMeasureName</td>
+                <td class="withborder">@getOutcomeByNumber(@measure.OutcomeId, OutcomeList)</td>
+                <td class="withborder">Study @measure.StudyId</td>
+                <td class="withborder">Reference Goes Here</td>
+                <td class="withborder">@getAnswerText(Model.SAMHSAPops.ToList(), @measure.SAMHSAPop)</td>
+                <td class="withborder">@measure.PopDescription</td>
+                <td class="withborder">@getAnswerText(Model.SAMHSAOutcomes.ToList(), @measure.SAMHSAOutcome)</td>
+                <td class="withborder">@getAnswerText(Model.EffectReports.ToList(), @measure.EffectReport)</td>
+                <td class="withborder">@Html.ActionLink("Delete", "DeleteOutcomeMeasure", new { MeasureId = measure.Id, InvId = Model.TheIntervention.Id })</td>
+            </tr>
+        <tr id="outFormrow_@i" class="@theClass">
+            <td colspan="9" class="withborder">
+                <div class="outcomeForm hidden">
+                     @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" })) { @Html.Hidden("IntervId", Model.TheIntervention.Id)   @Html.Hidden("OutcomeMeasureId", @measure.Id)
+                     
+                         <label>Choose An Outcome from the Article: </label>
+                            @Html.DropDownList("MacroOutcome", thisOutcomeList)
+
+                            <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
+                            <label>Outcome from Taxonomy:</label>@Html.DropDownList("TaxOutcome", thisTaxOutcomes)<br />
+                            <label for="measure">Measure Reported in the Study</label>
+                            <input type="text" id="measure" name="measure" value="@measure.OutcomeMeasureName" /><br /><br />
+
+                            <label>Document: </label>@Html.DropDownList("docDropdown", thisDocList)<br /><br />
+
+                            <label>SAMHSA-Related Population:</label>
+                            @Html.DropDownList("popDropDown", thisPopDrop)<br />
+
+                            <label for="popDescription">Describe Evaluated Population:</label><br />
+                            <textarea name="popDescription" id="popDescription">@measure.PopDescription</textarea><br /><br />
+
+                            <label>SAMHSA-Related Outcome:</label>
+                            @Html.DropDownList("samOutDropDown", thisSAMHSAOutcomes)<br />
+
+                            <label>What Treatment vs. Comparison Effect Size:</label>
+                            @Html.DropDownList("treatmentDropDown", thisEffectReports)<br />
+
+                            <input type="checkbox" name="reviewOutcome" checked="@reviewIsChecked" /><label>Recommend for Review</label><br />
+
+
+                            <label for="studySelector">Select Applicable Studies</label><br />
+                            <select id="studySelector" name="studySelector" style="width: 350px;">
+                                @foreach (int studyId in studyz)
+                                {
+                                    <option value="@studyId">Study @studyId</option>
+                                }
+                            </select>
+
+                            <input type="submit" value="Submit" />
+                     }
+                </div>
+                <button id="showOutcome_@i" onclick="toggleEdit('showOutcome_@i'); return false;">Edit</button>
+        </td>
+    </tr>
+
+i++;
+        }
+    </table>
+    <br />
+    <div class="AddOutcome">
+        <button id="AddOutcome">Add Outcome</button>
+    </div>
+    <br />
+    <br />
+
+
+    <div class="AddO-div hidden" style="padding: 10px 10px 10px 10px; border: 1px solid;">
+        @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.Hidden("IntervId", Model.TheIntervention.Id)
+            @Html.Hidden("OutcomeMeasureId")
+            <label>Choose An Outcome from the Article: </label>
+            @Html.DropDownList("MacroOutcome", OutcomeList)
+        
+            <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
+            <label>Outcome from Taxonomy:</label>@Html.DropDownList("TaxOutcome", TaxOutcomes)<br />
+            <label for="measure">Measure Reported in the Study</label>
+            <input type="text" id="measure" name="measure" /><br /><br />
+        
+            <label>Document: </label>@Html.DropDownList("docDropdown", Docs)<br /><br />
+
+            <label>SAMHSA-Related Population:</label>
+            @Html.DropDownList("popDropDown", SAMHSAPops)<br />
+            
+            <label for="popDescription">Describe Evaluated Population:</label><br />
+            <textarea name="popDescription" id="popDescription"></textarea><br /><br />
+            
+            <label>SAMHSA-Related Outcome:</label>
+            @Html.DropDownList("samOutDropDown", SAMHSAOutcomes)<br />
+
+            <label>What Treatment vs. Comparison Effect Size:</label>
+            @Html.DropDownList("treatmentDropDown", EffectReports)<br />
+            
+            <input type="checkbox" name="reviewOutcome" /><label>Recommend for Review</label><br />
+
+
+            <label for="studySelector">Select Applicable Studies</label><br />
+            <select id="studySelector" name="studySelector" style="width: 350px;">
+                @foreach (int studyId in studyz)
+                {
+                    <option value="@studyId">Study @studyId</option>
+                }
+            </select>
+        
+            <input type="submit" value="Submit" />
+        }
+    </div>
+
+    @{
+        List<SelectListItem> DestinationOpts = new List<SelectListItem>();
+
+        foreach (NREPPAdminSite.Models.Destination dest in Model.TheDestinations)
+        {
+            DestinationOpts.Add(new SelectListItem() { Text = dest.UserName, Value = dest.UserId.ToString() + "," + dest.StatusId.ToString() });
+        }
+    }
+
+    <div style="padding: 10px 10px 10px 10px; border: 1px solid;">
+        @using (Html.BeginForm("ChangeStatus", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.Hidden("IntervId", Model.TheIntervention.Id)
+            <label for="selDest">Destination:</label>
+            @Html.DropDownList("selDest", DestinationOpts)<br />
+            
+            <input type="submit" value="Send" />
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    var thisIsAThing = 5;
+    var currentStudy = new Array();
+    var currentOutcomes = new Array();
+    var docsList = new Array();
+    
+    function makeRecord(Id, StudyId, Reference, inLitSearch, Exclusion1, Exclusion2, Exclusion3, StudyDesign, BaselineEquiv,
+        UseMultivariate, SAMSHARelated, AuthorQueryNeeded, RecommendReview, Notes, DocumentId) {
+        var anObject = {};
+
+        anObject.Id = Id;
+        anObject.StudyId = StudyId;
+        anObject.Reference = Reference;
+        anObject.inLitSearch = inLitSearch != "False";
+        anObject.Exclusion1 = Exclusion1;
+        anObject.Exclusion2 = Exclusion2;
+        anObject.Exclusion3 = Exclusion3;
+        anObject.StudyDesign = StudyDesign;
+        anObject.BaselineEquiv = BaselineEquiv;
+        anObject.UseMultivariate = UseMultivariate != "False";
+        anObject.SAMSHARelated = SAMSHARelated;
+        anObject.AuthorQueryNeeded = AuthorQueryNeeded != "False";
+        anObject.RecommendReview = RecommendReview != "False";
+        anObject.Notes = Notes;
+        anObject.DocumentId = DocumentId;
+
+        return anObject;
+    }
+
+    function makeOutcomeRecord(OutcomeMeasureId, StudyId, Measure, PopDescrip, OutcomeId) {
+        var anObject = {};
+
+        anObject.Id = OutcomeMeasureId;
+        anObject.StudyId = StudyId;
+        anObject.Measure = Measure;
+        anObject.PopDescrip = PopDescrip;
+        anObject.OutcomeId = OutcomeId;
+
+        return anObject;
+    }
+
+    function makeDocRecord(inId, inReference, inYear, inrcDocId, inName)
+    {
+        var anObject = {};
+        anObject.Id = inId;
+        anObject.Reference = inReference;
+        anObject.inYear = inYear;
+        anObject.rcDocId = inrcDocId;
+        anObject.rcName = inName;
+
+        return anObject;
+    }
+
+    @foreach(NREPPAdminSite.Models.Study item in Model.StudyDocuments)
+    {
+        @:currentStudy.push(makeRecord(@item.Id, @item.StudyId, '@item.Reference', "@item.inLitSearch", @item.Exclusion1, @item.Exclusion2, @item.Exclusion3, @item.StudyDesign, '@item.BaselineEquiv', "@item.UseMultivariate", @item.SAMSHARelated, "@item.AuthorQueryNeeded", "@item.RecommendReview", "@item.Notes", @item.DocumentId));
+    }
+
+    @foreach(NREPPAdminSite.Models.OutcomeMeasure om in Model.Outcomes.OutcomesMeasures)
+    {
+        @:currentOutcomes.push(makeOutcomeRecord(@om.Id, @om.StudyId, "@om.OutcomeMeasureName", "@om.PopDescription", @om.OutcomeId));
+        }
+
+    @foreach (NREPPAdminSite.Models.RCDocument rcdoc in Model.TheDocuments)
+    {
+        @:docsList.push(makeDocRecord(@rcdoc.DocId, "@rcdoc.Reference", "@rcdoc.PubYear", "@rcdoc.RCDocId", "@rcdoc.RCName"));
+    }
+
+
+    function toggleEdit(this_id) {
+        //alert(this_id);
+        var crtl = $("#" + this_id).siblings("div");
+
+        if (crtl.hasClass("hidden"))
+            crtl.removeClass("hidden");
+        else
+            crtl.addClass("hidden");
+    }
+    
+</script>
+
