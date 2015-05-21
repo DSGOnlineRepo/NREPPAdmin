@@ -158,6 +158,7 @@
     <Compile Include="Constants\SystemConstants.cs" />
     <Compile Include="Constants\UserConstants.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\Submission.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProgramController.cs" />
     <Compile Include="Controllers\ReviewerProgs.cs" />
@@ -315,6 +316,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\screenTool.js" />
+    <Content Include="Scripts\submission2.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -350,6 +352,9 @@
     <Content Include="Views\Home\Users.cshtml" />
     <Content Include="Views\Home\_AddUser.cshtml" />
     <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.min.js.map" />
+    <Content Include="Views\Program\Submission1.cshtml" />
+    <Content Include="Views\Program\Submission2.cshtml" />
+    <Content Include="Views\Program\MinReq.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
