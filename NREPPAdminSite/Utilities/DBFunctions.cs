@@ -2,7 +2,7 @@
 
 namespace NREPPAdminSite.Constants
 {
-    public static class Utilities
+    public static class DBFunctions
     {
         public static object ToDbNull(object value)
         {

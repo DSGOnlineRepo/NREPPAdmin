@@ -154,7 +154,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Constants\Utilities.cs" />
+    <Compile Include="Constants\EmailConstants.cs" />
+    <Compile Include="Utilities\DBFunctions.cs" />
     <Compile Include="Constants\SystemConstants.cs" />
     <Compile Include="Constants\UserConstants.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -175,6 +176,10 @@
     <Compile Include="RegisterDatatablesModelBinder.cs" />
     <Compile Include="Security\MyIdentityDbContext.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\EmailService.cs" />
+    <Compile Include="Utilities\IEmailService.cs" />
+    <Compile Include="Utilities\ISmtpClientWrapper.cs" />
+    <Compile Include="Utilities\SmtpClientWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker3.css" />
