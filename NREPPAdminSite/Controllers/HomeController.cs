@@ -64,6 +64,7 @@ namespace NREPPAdminSite.Controllers
         {
             ViewBag.Message = "Some Message Here";
             var user = _userManager.FindByName(User.Identity.Name);
+            
             //var userRoles = _userManager.GetRoles(user.Id);
             
             //NrepServ localService = new NrepServ(NrepServ.ConnString);
@@ -173,7 +174,11 @@ namespace NREPPAdminSite.Controllers
 
             if (result.Succeeded && isNew)
             {
-                _userManager.AddToRole(request.User.Id, request.UserRole);               
+                _userManager.AddToRole(request.User.Id, request.UserRole);   
+                var mailMessage = new MailMessage("donotreply@dsgonline.com", request.User.Email, "User Account Created", "Dear " + request.User.FirstName +
+                "A User account has been created for you for the NREPPAdmin site. Your user name is " + request.UserName + " and password is " + request.Password);
+                _emailService.SendEmail(mailMessage);
+
             }
             else if (result.Succeeded && !isNew)
             {
@@ -183,12 +188,6 @@ namespace NREPPAdminSite.Controllers
                     _userManager.RemoveFromRole(request.User.Id, oldRoleName);
                     _userManager.AddToRole(request.User.Id, request.UserRole);                       
                 }
-
-
-                var mailMessage = new MailMessage("donotreply@dsgonline.com", request.User.Email, "User Account Created", "Dear " + request.User.FirstName + 
-                    "A User account has been created for you for the NREPPAdmin site. Your user name is " + request.User.UserName + " and password is " + request.Password);
-
-                _emailService.SendEmail(mailMessage);
             }
             else
             {

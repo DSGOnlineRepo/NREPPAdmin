@@ -60,22 +60,56 @@ namespace NREPPAdminSite
                 CheckConn();
 
                 cmd.ExecuteNonQuery();
+
                 MyIdentityDbContext db = new MyIdentityDbContext();
                 UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
                 UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
                 var destUser = _userManager.FindById(inUser);
                 IEmailService _emailService = new EmailService();
-
                 var mailMessage = new MailMessage("donotreply@dsgonline.com", destUser.Email, "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
-                    "The intervention has been assinged too you. Please login to the to view your interventions");
-
-                _emailService.SendEmail(mailMessage);
+                        "The intervention has been assinged too you. Please login to the to view your interventions");
+                
 
             } catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
         }
+
+        //public void notifyUsersOnStatusChange(int inId, string inUser, int toStatus)
+        //{
+            
+
+        //    _emailService.SendEmail(mailMessage);
+
+        //    SqlCommand getAnswersByCategory = new SqlCommand("SPGetNotifySettingsForInterventionStatusChange", conn);
+
+        //    getAnswersByCategory.CommandType = CommandType.StoredProcedure;
+        //    getAnswersByCategory.Parameters.Add(new SqlParameter("@IntervId", inId));
+        //    getAnswersByCategory.Parameters.Add(new SqlParameter("@DestUser", inUser));
+        //    getAnswersByCategory.Parameters.Add(new SqlParameter("@DestStatus", toStatus));
+
+        //    SqlDataAdapter da = new SqlDataAdapter(getAnswersByCategory);
+
+        //    CheckConn();
+
+        //    DataTable dt = new DataTable();
+
+
+        //    da.Fill(dt);
+
+        //    foreach (DataRow dr in dt.Rows)
+        //    {
+        //        theOutcomes.Add(new Answer((int)dr["Id"], dr["Guidelines"].ToString(), dr["OutcomeName"].ToString()));
+        //    }
+
+
+
+        //    var mailMessage = new MailMessage("donotreply@dsgonline.com", destUser.Email, "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
+        //            "The intervention has been assinged too you. Please login to the to view your interventions");
+
+        //    _emailService.SendEmail(mailMessage);
+        //}
 
         public IEnumerable<Answer> GetTaxonomicOutcomes(int? inId)
         {
