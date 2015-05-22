@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Net.Mail;
 using System.Web.Mvc;
 using DataTables.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using NREPPAdminSite.Models;
 using NREPPAdminSite.Security;
+using NREPPAdminSite.Utilities;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -17,6 +19,9 @@ namespace NREPPAdminSite.Controllers
         private readonly UserManager<ExtendedUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         MyIdentityDbContext db = new MyIdentityDbContext();
+
+        private readonly IEmailService _emailService = new EmailService();
+
         public HomeController()
         {
             UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
@@ -59,6 +64,7 @@ namespace NREPPAdminSite.Controllers
         {
             ViewBag.Message = "Some Message Here";
             var user = _userManager.FindByName(User.Identity.Name);
+            
             //var userRoles = _userManager.GetRoles(user.Id);
             
             //NrepServ localService = new NrepServ(NrepServ.ConnString);
@@ -168,7 +174,11 @@ namespace NREPPAdminSite.Controllers
 
             if (result.Succeeded && isNew)
             {
-                _userManager.AddToRole(request.User.Id, request.UserRole);               
+                _userManager.AddToRole(request.User.Id, request.UserRole);   
+                var mailMessage = new MailMessage("donotreply@dsgonline.com", request.User.Email, "User Account Created", "Dear " + request.User.FirstName +
+                "A User account has been created for you for the NREPPAdmin site. Your user name is " + request.UserName + " and password is " + request.Password);
+                _emailService.SendEmail(mailMessage);
+
             }
             else if (result.Succeeded && !isNew)
             {
