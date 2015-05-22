@@ -233,18 +233,59 @@ namespace NREPPAdminSite.Controllers
             return View();
         }
 
-        public ActionResult Assignment(int IntervId)
+        public ActionResult Assignment(int InvId)
         {
 
             NrepServ localService = new NrepServ(NrepServ.ConnString);
+            MyIdentityDbContext db = new MyIdentityDbContext();
+            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
+            RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>(roleStore);
+            UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
+            UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
 
-            if (!localService.CanDo("Assign", User.Identity.Name, IntervId))
+            var list =_roleManager.FindByName("Lit Review").Users;
+            //Intervention theInterv = localService.GetInterventions()
+
+
+            /*if (!localService.CanDo("Assign", User.Identity.Name, IntervId))
             {
-                return RedirectToAction("Home", "Programs");
+                return RedirectToAction("Programs", "Home");
+            }*/
+
+            List<Destination> LitReviews = new List<Destination>();
+            //var litRole = db.Roles.Where(x => x.Name == "Lit Review").First();
+            //var litRole = _roleManager.FindByName("Lit Review");
+            
+            /*foreach(ExtendedUser nUser in _userManager.Users.ToList())
+            {
+                foreach (IdentityUserRole iur in nUser.Roles)
+                {
+                    if (iur.RoleId == litRole.Id)
+                    {
+                        var nDest = new Destination();
+                        nDest.RoleName = litRole.Name;
+                        nDest.UserId = nUser.Id;
+                        nDest.UserName = nUser.FirstName + " " + nUser.LastName;
+                        LitReviews.Add(nDest);
+                    }
+                }
+            }*/
+
+            foreach (IdentityUserRole role in list)
+            {
+                var nDest = new Destination();
+                var nUser = _userManager.FindById(role.UserId);
+                nDest.RoleName = "Lit Review";
+                nDest.UserId = nUser.Id;
+                nDest.UserName = nUser.FirstName + " " + nUser.LastName;
+                LitReviews.Add(nDest);
             }
 
             List<Destination> nDests = localService.GetDestinations(IntervId).ToList();
-            return View(nDests);
+            AssignmentPageModel model = new AssignmentPageModel(nDests, LitReviews);
+
+            //List
+            return View(model);
         }
 
         #endregion
@@ -279,6 +320,15 @@ namespace NREPPAdminSite.Controllers
                 return View("ConfirmSub", model);
             }
             else return RedirectToAction("Submission6", new { InvId = model.TheIntervention.Id });
+        }
+
+        public ActionResult SetLitReview(FormCollection col)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            localService.AssignUser(col["UserId"], col["RoleId"], int.Parse(col["InvId"]));
+
+            return RedirectToAction("Assignment", new { InvId = col["InvId"] });
         }
 
         #endregion

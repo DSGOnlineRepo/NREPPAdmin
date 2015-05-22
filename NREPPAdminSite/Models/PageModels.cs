@@ -453,6 +453,28 @@ namespace NREPPAdminSite.Models
 
     #endregion
 
+    public class AssignmentPageModel : NREPPPermissions
+    {
+        private List<Destination> theDests = new List<Destination>();
+        private List<Destination> theLitReviews = new List<Destination>();
+
+        public AssignmentPageModel(List<Destination> Dests, List<Destination> LitReview)
+        {
+            theDests = Dests;
+            theLitReviews = LitReview;
+        }
+
+        public IEnumerable<Destination> TheDests
+        {
+            get { return theDests; }
+        }
+
+        public IEnumerable<Destination> TheLitReviews
+        {
+            get { return theLitReviews; }
+        }
+    }
+
     #region Extra Stuff
 
     public class NREPPPermissions

@@ -1,4 +1,4 @@
-﻿@model List<NREPPAdminSite.Models.Destination>
+﻿@model NREPPAdminSite.Models.AssignmentPageModel
 @{
     ViewBag.Title = "Assignment";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,9 +6,26 @@
 
 <h2>Assignment</h2>
 
+@{
+    List<SelectListItem> LitReviewOpts = new List<SelectListItem>();
+
+    foreach (NREPPAdminSite.Models.Destination dest in Model.TheLitReviews)
+    {
+        LitReviewOpts.Add(new SelectListItem() { Text = dest.UserName, Value = dest.UserId.ToString() + "," + dest.StatusId.ToString() });
+    }
+}
+
+<div>
+
+    @using(Html.BeginForm("AssignLitReview", "Program"))
+    {
+        @Html.DropDownList("LitReview", LitReviewOpts)
+    }
+</div>
+
 <div>
     <ul style="list-style-type: none;">
-        @foreach(NREPPAdminSite.Models.Destination dest in Model)
+        @foreach(NREPPAdminSite.Models.Destination dest in Model.TheDests)
         {
             <li>@dest.RoleName</li>
         }

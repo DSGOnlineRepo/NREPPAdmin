@@ -1013,6 +1013,32 @@ namespace NREPPAdminSite
             return result;
         }
 
+        public void AssignUser(string UserId, string RoleId, int InterventionId)
+        {
+            bool result;
+
+            SqlCommand cmd = new SqlCommand("SPAssignUser", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@InvId", InterventionId));
+            cmd.Parameters.Add(new SqlParameter("@RoleId", RoleId));
+            cmd.Parameters.Add(new SqlParameter("@UserId", UserId));
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Ret", Direction = ParameterDirection.ReturnValue, SqlDbType = SqlDbType.Bit });
+
+            try
+            {
+                CheckConn();
+                cmd.ExecuteNonQuery();
+                result = (bool)cmd.Parameters["@Ret"].Value;
+            }
+            catch (Exception) // Somehow we need to recover the error
+            {
+                result = false;
+            }
+
+            return;
+        }
+
         #endregion
 
         #region Other User Functionality
