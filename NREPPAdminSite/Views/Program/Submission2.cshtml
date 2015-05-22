@@ -1,0 +1,65 @@
+﻿@model NREPPAdminSite.Models.IntervPageModel
+
+@{
+    ViewBag.Title = "Submission2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("/Scripts/submission2.js")"></script>
+}
+
+<h2>Page 2 of Submission</h2>
+
+@using(Html.BeginForm("Submit2", "Program"))
+{
+    @Html.HiddenFor(m => m.TheIntervention.ProgramType, new { Id = "programType" });
+    @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" })
+
+    @Html.LabelFor(m => m.TheIntervention.Title)
+    @Html.TextBoxFor(m => m.TheIntervention.Title) <br /><br />
+    
+    @Html.LabelFor(m => m.TheIntervention.Acronym)
+    @Html.TextBoxFor(m => m.TheIntervention.Acronym)<br /><br />
+
+    <ul style="list-style-type: none;">
+        @foreach (NREPPAdminSite.Models.MaskValue mask in Model.ProgramType)
+        {
+            bool isChecked = mask.Selected;
+            <li>@Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "programMask" }) @mask.Name</li>
+        }
+    </ul>
+    
+    <p>
+        You must have at least one evaluation study that meets the <a href="#">NREPP minimum criteria</a>. Please respond to the following questions.
+    </p>
+
+    foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
+    {
+        bool isChecked = mask.Selected;
+        string maskString = string.Format("{0}. {1}", mask.Value, mask.Name);
+
+
+        //@Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "userPreScreenMask" }) @mask.Name <br />
+        if (mask.Value > 2)
+        {
+            <span class="preQuestion_@mask.Value.ToString()">
+                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
+                @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
+            </span>
+        }
+        else
+        {
+            <span class="preQuestion_@mask.Value.ToString()">
+                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
+                @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
+            </span>
+        }
+
+    }
+    
+    <div>
+        <input type="submit" value="Continue" />
+    </div>
+}
+

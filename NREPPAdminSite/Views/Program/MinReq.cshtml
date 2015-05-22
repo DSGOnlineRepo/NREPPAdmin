@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "Minimum Requirements";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Your program failed to meet minimum requirements</h2>
+
+<p>
+    According to your answers in the pre-screening your program does not meet the minimum requirements for review. Please refer to the guidelines <a href="#">here</a>
+</p>
+
+<p>
+    If you would like to review your program for consideration, @Html.ActionLink("click here", "ReSubmission2", new {InvId = ViewBag.Id})
+</p>
+
+
+
+
