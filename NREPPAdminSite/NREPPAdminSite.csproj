@@ -358,6 +358,8 @@
     <Content Include="Views\Program\Submission4.cshtml" />
     <Content Include="Views\Program\Submission6.cshtml" />
     <Content Include="Views\Program\ConfirmSub.cshtml" />
+    <Content Include="Views\Program\DoSubmit.cshtml" />
+    <Content Include="Views\Program\PostSubmit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -217,6 +217,22 @@ namespace NREPPAdminSite.Controllers
             return View();
         }
 
+        /// <summary>
+        /// This is hardcoded, and therefore unideal
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult DoSubmit(int InvId)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            localService.ChangeStatus(InvId, null, 2);
+            return RedirectToAction("PostSubmit");
+        }
+
+        public ActionResult PostSubmit()
+        {
+            return View();
+        }
+
         #endregion
 
         #region Post Methods

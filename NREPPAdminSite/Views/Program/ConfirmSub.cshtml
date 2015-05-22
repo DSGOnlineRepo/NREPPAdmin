@@ -13,5 +13,5 @@
     </p>
      
     @Html.ActionLink("No, edit the application.", "Submission2", new { InvId = Model.TheIntervention.Id })<br />
-    Yes, Submit.
+    @Html.ActionLink("Yes, submit.", "DoSubmit", new { InvId = Model.TheIntervention.Id })
 </div>
