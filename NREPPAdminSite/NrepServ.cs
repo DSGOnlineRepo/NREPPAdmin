@@ -1365,6 +1365,37 @@ namespace NREPPAdminSite
             return pd.StartDate < DateTime.Now && pd.EndDate > DateTime.Now;
         }
 
+        // Get the roles for the user.
+        public string[] GetRolesForUser(string loginNm)
+        {
+
+            IList<string> list = new List<string>();
+            SqlCommand cmdGetUserList = new SqlCommand("SPGetUserRoleByLoginName", conn);
+            cmdGetUserList.CommandType = CommandType.StoredProcedure;
+            cmdGetUserList.Parameters.Add(new SqlParameter("@LoginName", Utilities.ToDbNull(loginNm)));
+            CheckConn();
+            DataTable users = new DataTable();
+            SqlDataAdapter da = new SqlDataAdapter(cmdGetUserList);
+            da.Fill(users);
+
+            foreach (DataRow dr in users.Rows)
+            {
+                list.Add(dr["Name"].ToString());
+            }
+            return list.ToArray<string>();
+        }
+
+
+        public static bool IsManager(string loginNm)
+        {
+            if (!string.IsNullOrEmpty(loginNm))
+                return System.Web.Security.Roles.IsUserInRole(loginNm, SystemRoleNames.SystemAdmin.ToString()) ||
+                        System.Web.Security.Roles.IsUserInRole(loginNm, SystemRoleNames.MathematicaAssigner.ToString()) ||
+                        System.Web.Security.Roles.IsUserInRole(loginNm, SystemRoleNames.ReviewCoordinator.ToString());
+            else
+                return false;
+        }
+
         #endregion
     }
 

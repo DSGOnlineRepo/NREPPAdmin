@@ -35,7 +35,9 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Manage <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Reviewers", "Reviewers", "Admin")</li>
+                                @if (NrepServ.IsManager(User.Identity.Name)){
                                 <li>@Html.ActionLink("Users", "Users", "Home")</li>
+                                }
                             </ul>
                         </li>
                     }

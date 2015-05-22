@@ -19,6 +19,7 @@ INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'DSG PRM');
 INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Mathematica Assigner');
 INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Reviewer');
 INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'PreScreener');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'System Admin');
 
 
 -- Statuses
