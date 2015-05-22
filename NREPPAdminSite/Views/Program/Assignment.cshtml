@@ -1,0 +1,17 @@
+﻿@model List<NREPPAdminSite.Models.Destination>
+@{
+    ViewBag.Title = "Assignment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Assignment</h2>
+
+<div>
+    <ul style="list-style-type: none;">
+        @foreach(NREPPAdminSite.Models.Destination dest in Model)
+        {
+            <li>@dest.RoleName</li>
+        }
+    </ul>
+</div>
+

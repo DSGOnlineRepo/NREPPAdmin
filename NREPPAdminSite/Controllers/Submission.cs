@@ -233,6 +233,20 @@ namespace NREPPAdminSite.Controllers
             return View();
         }
 
+        public ActionResult Assignment(int IntervId)
+        {
+
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            if (!localService.CanDo("Assign", User.Identity.Name, IntervId))
+            {
+                return RedirectToAction("Home", "Programs");
+            }
+
+            List<Destination> nDests = localService.GetDestinations(IntervId).ToList();
+            return View(nDests);
+        }
+
         #endregion
 
         #region Post Methods

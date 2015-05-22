@@ -360,6 +360,7 @@
     <Content Include="Views\Program\ConfirmSub.cshtml" />
     <Content Include="Views\Program\DoSubmit.cshtml" />
     <Content Include="Views\Program\PostSubmit.cshtml" />
+    <Content Include="Views\Program\Assignment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
