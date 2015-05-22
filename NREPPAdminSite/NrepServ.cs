@@ -314,7 +314,8 @@ namespace NREPPAdminSite
                     inv.PreScreenMask = (int)dr["PreScreenAnswers"];
                     inv.UserPreScreenMask = dr.IsNull("UserPreScreenAnswer") ? 0 :  (int)dr["UserPreScreenAnswer"];
                     inv.ScreeningNotes = dr.IsNull("ScreeningNotes")? "" : dr["ScreeningNotes"].ToString();
-                    //inv.FullDescription
+                    inv.MaterialsList = dr.IsNull("MaterialsList") ? "" : dr["MaterialsList"].ToString();
+                    inv.HaveMaterials = dr.IsNull("HaveMaterials") ? false : (bool)dr["HaveMaterials"];
 
                     interventions.Add(inv);
 
@@ -391,7 +392,7 @@ namespace NREPPAdminSite
 
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@IntervId", SqlDbType = SqlDbType.Int, Value = inData.Id });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@title", SqlDbType = SqlDbType.VarChar, Value = inData.Title });
-            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@fulldescription", SqlDbType = SqlDbType.NText, Value = inData.FullDescription });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@fulldescription", SqlDbType = SqlDbType.NText, Value = string.IsNullOrEmpty(inData.FullDescription) ? "" : inData.FullDescription });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@submitterId", SqlDbType = SqlDbType.NVarChar, Value = inData.SubmitterId });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@updateDate", SqlDbType = SqlDbType.DateTime, Value = inData.UpdatedDate });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@publishDate", SqlDbType = SqlDbType.DateTime, Value = inData.PublishDate });
@@ -402,6 +403,8 @@ namespace NREPPAdminSite
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PreScreenAnswers", SqlDbType = SqlDbType.Int, Value = inData.PreScreenMask });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@UserPreScreenAnswer", SqlDbType = SqlDbType.Int, Value = inData.UserPreScreenMask });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@ScreeningNotes", SqlDbType = SqlDbType.VarChar, Value = string.IsNullOrEmpty(inData.ScreeningNotes) ? "" : inData.ScreeningNotes });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@MaterialsList", SqlDbType = SqlDbType.VarChar, Value = string.IsNullOrEmpty(inData.MaterialsList) ? "" : inData.MaterialsList });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@HaveMaterials", SqlDbType = SqlDbType.Bit, Value = inData.HaveMaterials });
 
             SqlParameter OutPut = new SqlParameter("@Output", -1);
             OutPut.Direction = ParameterDirection.Output;

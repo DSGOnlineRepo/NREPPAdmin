@@ -1,0 +1,40 @@
+﻿@model NREPPAdminSite.Models.IntervPageModel
+
+@{
+    ViewBag.Title = "Page 6 of Submission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Page 6 of Submission</h2>
+
+<h3>Dissemination Information</h3>
+
+<div>
+    @using (Html.BeginForm("Submit6", "Program"))
+    {
+        @Html.HiddenFor(m => m.TheIntervention.Id);
+        @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
+        @Html.HiddenFor(m => m.TheIntervention.StatusId);
+        @Html.HiddenFor(m => m.TheIntervention.ProgramType);
+        @Html.HiddenFor(m => m.TheIntervention.Title)
+        @Html.HiddenFor(m => m.TheIntervention.FromLitSearch)
+        @Html.HiddenFor(m => m.TheIntervention.FullDescription)
+        @Html.HiddenFor(m => m.TheIntervention.SubmitterId)
+        @Html.HiddenFor(m => m.TheIntervention.UpdatedDate)
+        @Html.HiddenFor(m => m.TheIntervention.Acronym)
+        @Html.Hidden("Dest");
+        
+        <span>Do you plan to mail any dissemination materials that are not available electronically?</span>
+        <ul style="list-style-type: none">
+            <li>@Html.RadioButton("HaveMaterials", 1, Model.TheIntervention.HaveMaterials) Yes</li>
+            <li>@Html.RadioButton("HaveMaterials", 0, !Model.TheIntervention.HaveMaterials) No</li>
+        </ul>
+        
+        <span>Please list the materials below:</span><br />
+        @Html.TextAreaFor(m => m.TheIntervention.MaterialsList)
+        
+        <input type="submit" value="Save" />
+        <input type="submit" value="Save and Continue" onclick="$('#Dest').val('continue'); return true;" />
+    }
+</div>
+

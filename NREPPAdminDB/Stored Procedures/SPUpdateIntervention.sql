@@ -12,6 +12,8 @@
 	@PreScreenAnswers INT = 0,
 	@UserPreScreenAnswer INT = 0,
 	@ScreeningNotes VARCHAR(MAX) = NULL,
+	@HaveMaterials BIT = 0,
+	@MaterialsList VARCHAR(MAX) = NULL,
 	@Output INT OUTPUT
 AS SET NOCOUNT ON
 
@@ -20,8 +22,9 @@ AS SET NOCOUNT ON
 	-- Do the insert portion first
 	IF @IntervId = -1 BEGIN
 
-		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, SubmitterId, Status, ProgramType, Acronym, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes) VALUES
-			(@title, @fulldescription, @publishDate, @updateDate, @submitterId, @status, @programType, @Acronym, @PreScreenAnswers, @UserPreScreenAnswer, @ScreeningNotes)
+		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, SubmitterId, Status, ProgramType, Acronym, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes,
+		HaveMaterials, MaterialsList) VALUES
+			(@title, @fulldescription, @publishDate, @updateDate, @submitterId, @status, @programType, @Acronym, @PreScreenAnswers, @UserPreScreenAnswer, @ScreeningNotes, @HaveMaterials, @MaterialsList)
 
 
 		if @@ERROR <> 0 BEGIN
@@ -61,7 +64,9 @@ AS SET NOCOUNT ON
 			Acronym = @Acronym,
 			PreScreenAnswers = @PreScreenAnswers,
 			UserPreScreenAnswer = @UserPreScreenAnswer,
-			ScreeningNotes = @ScreeningNotes
+			ScreeningNotes = @ScreeningNotes,
+			HaveMaterials = @HaveMaterials,
+			MaterialsList = @MaterialsList
 		WHERE Id = @IntervId
 
 		SET @Output = @IntervId

@@ -356,6 +356,8 @@
     <Content Include="Views\Program\Submission2.cshtml" />
     <Content Include="Views\Program\MinReq.cshtml" />
     <Content Include="Views\Program\Submission4.cshtml" />
+    <Content Include="Views\Program\Submission6.cshtml" />
+    <Content Include="Views\Program\ConfirmSub.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

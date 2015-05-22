@@ -26,7 +26,7 @@ SET NOCOUNT ON
 	WITH InterventionsList AS
     (
 		SELECT ROW_NUMBER() Over(ORDER BY FirstName) as rowNum, i.Id as InterventionId, Title, FullDescription, u.Firstname + ' ' + u.Lastname as [Submitter], i.SubmitterId as [SubmitterId], StatusName,
-		s.Id as [StatusId], PublishDate, UpdateDate, ProgramType, Acronym, Owner, FromListSearch, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes
+		s.Id as [StatusId], PublishDate, UpdateDate, ProgramType, Acronym, Owner, FromListSearch, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes, HaveMaterials, MaterialsList
 		from Interventions i 
 		inner join AspNetUsers u ON i.SubmitterId = u.Id
 		inner join InterventionStatus s on i.Status = s.Id
@@ -39,13 +39,13 @@ SET NOCOUNT ON
 		)
 
 		SELECT InterventionId, Title, FullDescription, Submitter, SubmitterId, StatusName,
-		StatusId, PublishDate, UpdateDate, ProgramType, Acronym, Owner, FromListSearch, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes
+		StatusId, PublishDate, UpdateDate, ProgramType, Acronym, Owner, FromListSearch, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes, HaveMaterials, MaterialsList
 		FROM InterventionsList
 		WHERE rowNum BETWEEN @intStartRow AND @intEndRow
 	END
 	ELSE BEGIN
 		SELECT i.Id as InterventionId, Title, FullDescription, u.Firstname + ' ' + u.Lastname as [Submitter], i.SubmitterId as [SubmitterId], StatusName,
-		s.Id as [StatusId], PublishDate, UpdateDate, ProgramType, Acronym, Owner, FromListSearch, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes
+		s.Id as [StatusId], PublishDate, UpdateDate, ProgramType, Acronym, Owner, FromListSearch, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes, HaveMaterials, MaterialsList
 		from Interventions i 
 		inner join AspNetUsers u ON i.SubmitterId = u.Id
 		inner join InterventionStatus s on i.Status = s.Id

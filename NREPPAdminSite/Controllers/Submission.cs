@@ -157,6 +157,59 @@ namespace NREPPAdminSite.Controllers
             return View(pageModel);
         }
 
+        public ActionResult Submission6(int InvId)
+        {
+            IntervPageModel pageModel;
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            List<MaskValue> intervTypez = new List<MaskValue>();
+
+            Intervention theIntervention;
+
+            List<Answer> documentTypes = localService.GetAnswersByCategory("DocumentType").ToList<Answer>();
+            List<MaskValue> programTypes = localService.GetMaskList("ProgramType").ToList<MaskValue>();
+            List<MaskValue> preScreen = localService.GetMaskList("PreScreen").ToList<MaskValue>();
+            List<InterventionDoc> documentz;
+            List<RCDocument> reviewerDocs;
+
+            SubmissionPd pd = localService.GetCurrentSubmissionPd();
+            ViewBag.StartDate = pd.StartDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.StartDate.Year.ToString();
+            ViewBag.EndDate = pd.EndDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.EndDate.Year.ToString();
+
+
+            var user = _userManager.FindByName(User.Identity.Name);
+            var userRoles = _userManager.GetRoles(user.Id);
+            SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
+            SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserName", Value = User.Identity.Name };
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(idParam);
+            parameters.Add(roleParam);
+            List<Intervention> interventionList = localService.GetInterventions(parameters);
+            theIntervention = interventionList[0];
+
+            documentz = localService.GetDocuments(InvId, null, null).ToList<InterventionDoc>();
+            reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
+
+            //List<Destination> nDests = localService.GetDestinations(theIntervention.Id).ToList();
+
+            pageModel = new IntervPageModel(documentz, reviewerDocs, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
+                documentTypes, null, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>(),
+                MaskValue.SplitMask(preScreen, theIntervention.UserPreScreenMask).ToList<MaskValue>());
+
+            pageModel.TheIntervention = theIntervention;
+
+            List<string> perms = new List<string>();
+
+            perms.Add("UploadDocs");
+
+            pageModel.SetPermissions(perms, User.Identity.Name, InvId);
+            pageModel.TheIntervention = theIntervention;
+
+
+            return View(pageModel);
+        }
+
+
         public ActionResult MinReq(int InvId)
         {
             ViewBag.Id = InvId;
@@ -181,6 +234,21 @@ namespace NREPPAdminSite.Controllers
                 return RedirectToAction("Submission4", new { InvId = returnValue }); // Do I need to do this action? I don't think so...
             else
                 return RedirectToAction("MinReq", new { InvId = returnValue });
+        }
+
+        public ActionResult Submit6(IntervPageModel model, FormCollection col)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            model.TheIntervention.HaveMaterials = col["HaveMaterials"] == "1";
+            int returnValue = localService.SaveIntervention(model.TheIntervention);
+
+            if (col["Dest"] == "continue")
+            {
+                //return RedirectToAction("ConfirmSub", model.TheIntervention.Id);
+                return View("ConfirmSub", model);
+            }
+            else return RedirectToAction("Submission6", new { InvId = model.TheIntervention.Id });
         }
 
         #endregion

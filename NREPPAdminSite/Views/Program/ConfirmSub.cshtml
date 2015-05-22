@@ -1,0 +1,17 @@
+﻿@model NREPPAdminSite.Models.IntervPageModel
+
+@{
+    ViewBag.Title = "Submit your Program";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Submit Your Application</h2>
+
+<div>
+    <p>
+        Have you completed your application?
+    </p>
+     
+    @Html.ActionLink("No, edit the application.", "Submission2", new { InvId = Model.TheIntervention.Id })<br />
+    Yes, Submit.
+</div>

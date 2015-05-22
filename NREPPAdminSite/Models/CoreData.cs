@@ -37,6 +37,11 @@ namespace NREPPAdminSite.Models
         [Display(Name = "From Literature Search?")]
         public bool FromLitSearch { get; set; }
 
+        [Display(Name = "Materials List")]
+        public string MaterialsList { get; set; }
+
+        public bool HaveMaterials { get; set; }
+
         public int Id {get; set;}
         /*{
             get { return id; }
