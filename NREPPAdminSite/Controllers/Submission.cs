@@ -281,7 +281,7 @@ namespace NREPPAdminSite.Controllers
                 LitReviews.Add(nDest);
             }
 
-            List<Destination> nDests = localService.GetDestinations(IntervId).ToList();
+            List<Destination> nDests = localService.GetDestinations(InvId).ToList();
             AssignmentPageModel model = new AssignmentPageModel(nDests, LitReviews);
 
             //List

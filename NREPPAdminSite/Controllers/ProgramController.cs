@@ -269,7 +269,10 @@ namespace NREPPAdminSite.Controllers
                 }
             }
 
-            return RedirectToAction("View", new { InvId = int.Parse(Request.Form["TheIntervention.Id"]) });
+            if (formCollection["OnPage"] == "Sub4")
+                return RedirectToAction("Submission4", new { InvId = int.Parse(Request.Form["TheIntervention.Id"]) });
+            else 
+                return RedirectToAction("View", new { InvId = int.Parse(Request.Form["TheIntervention.Id"]) });
         }
 
         [Authorize]

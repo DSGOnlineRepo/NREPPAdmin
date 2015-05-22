@@ -57,6 +57,7 @@
     @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
     @Html.HiddenFor(m => m.TheIntervention.StatusId);
     @Html.HiddenFor(m => m.TheIntervention.ProgramType);
+    @Html.Hidden("OnPage", "Sub4");
 
 
     if (Model.TheIntervention.StatusId == 1 && Model.CanDo("UploadDocs"))
