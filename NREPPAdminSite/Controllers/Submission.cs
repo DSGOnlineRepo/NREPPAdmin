@@ -253,23 +253,6 @@ namespace NREPPAdminSite.Controllers
             }*/
 
             List<Destination> LitReviews = new List<Destination>();
-            //var litRole = db.Roles.Where(x => x.Name == "Lit Review").First();
-            //var litRole = _roleManager.FindByName("Lit Review");
-            
-            /*foreach(ExtendedUser nUser in _userManager.Users.ToList())
-            {
-                foreach (IdentityUserRole iur in nUser.Roles)
-                {
-                    if (iur.RoleId == litRole.Id)
-                    {
-                        var nDest = new Destination();
-                        nDest.RoleName = litRole.Name;
-                        nDest.UserId = nUser.Id;
-                        nDest.UserName = nUser.FirstName + " " + nUser.LastName;
-                        LitReviews.Add(nDest);
-                    }
-                }
-            }*/
 
             foreach (IdentityUserRole role in list)
             {
@@ -283,6 +266,7 @@ namespace NREPPAdminSite.Controllers
 
             List<Destination> nDests = localService.GetDestinations(InvId).ToList();
             AssignmentPageModel model = new AssignmentPageModel(nDests, LitReviews);
+            ViewBag.InvId = InvId;
 
             //List
             return View(model);
@@ -329,6 +313,23 @@ namespace NREPPAdminSite.Controllers
             localService.AssignUser(col["UserId"], col["RoleId"], int.Parse(col["InvId"]));
 
             return RedirectToAction("Assignment", new { InvId = col["InvId"] });
+        }
+
+        public ActionResult Assign(FormCollection col)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            string valueString = col["ValueString"];
+            string[] valuez = valueString.Split(';');
+
+            int InterventionId = int.Parse(valuez[2]);
+            int DestStatus = int.Parse(valuez[0]);
+            string DestUser = valuez[1];
+            
+
+            localService.ChangeStatus(InterventionId, DestUser, DestStatus);
+
+            return RedirectToAction("Assignment", new { InvId = InterventionId });
         }
 
         #endregion

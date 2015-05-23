@@ -4,14 +4,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("/Scripts/assignmentjs.js")"></script>
+}
+
 <h2>Assignment</h2>
 
 @{
+    // Text = dest.UserName, Value = dest.UserId.ToString() + "," + dest.StatusId.ToString()
+    
     List<SelectListItem> LitReviewOpts = new List<SelectListItem>();
 
     foreach (NREPPAdminSite.Models.Destination dest in Model.TheLitReviews)
     {
         LitReviewOpts.Add(new SelectListItem() { Text = dest.UserName, Value = dest.UserId.ToString() + "," + dest.StatusId.ToString() });
+        
     }
 }
 
@@ -19,16 +26,21 @@
 
     @using(Html.BeginForm("AssignLitReview", "Program"))
     {
-        @Html.DropDownList("LitReview", LitReviewOpts)
+        @Html.DropDownList("LitReview", LitReviewOpts) <input type="submit" value="Assign Literature Review" />
     }
 </div>
 
 <div>
+    @using(Html.BeginForm("Assign", "Program"))
+    {
+        @Html.Hidden("ValueString") 
     <ul style="list-style-type: none;">
         @foreach(NREPPAdminSite.Models.Destination dest in Model.TheDests)
         {
-            <li>@dest.RoleName</li>
+            <li><input type="submit" value="@dest.UserName" onclick="selectAssignment(this); return true;" /> - @dest.RoleName, @dest.StatusName, @dest.StatusId
+        <input type="hidden" value="@string.Format("{0};{1};{2}", @dest.StatusId, @dest.UserId, ViewBag.InvId)" /></li>
         }
     </ul>
+    }
 </div>
 
