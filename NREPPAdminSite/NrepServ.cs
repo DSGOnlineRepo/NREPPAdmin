@@ -365,6 +365,7 @@ namespace NREPPAdminSite
                     inv.ScreeningNotes = dr.IsNull("ScreeningNotes")? "" : dr["ScreeningNotes"].ToString();
                     inv.MaterialsList = dr.IsNull("MaterialsList") ? "" : dr["MaterialsList"].ToString();
                     inv.HaveMaterials = dr.IsNull("HaveMaterials") ? false : (bool)dr["HaveMaterials"];
+                    inv.LitReviewDone = dr.IsNull("LitReviewDone") ? false : (bool)dr["LitReviewDone"];
 
                     interventions.Add(inv);
 
@@ -478,6 +479,37 @@ namespace NREPPAdminSite
             //cmdUpdate.Parameters["@RETURN_VALUE"].Direction = ParameterDirection.Output;
 
             return returnValue;
+        }
+
+        public IEnumerable<Tuple<string, string>> GetUsersRoles(int InterventionId)
+        {
+            List<Tuple<string, string>> results = new List<Tuple<string, string>>();
+
+            SqlCommand cmd = new SqlCommand("SPRolesOnInv", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@InvId", InterventionId));
+
+            try
+            {
+                CheckConn();
+                DataTable userRoles = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(userRoles);
+
+                foreach (DataRow dr in userRoles.Rows)
+                {
+                    results.Add(Tuple.Create(dr["Name"].ToString(), dr["UserId"].ToString()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //TODO: Why are we adding dummy intervention in case of a error
+                //documents.Add(new InterventionDoc() { FileDescription = ex.Message, Link = "Error" });
+            }
+
+            return results;
         }
 
         public int SaveFileToDB(byte[] inData, string fileName, string uploaderName, string MIMEType, int IntervId, bool isDelete, int ItemId, string DisplayName,

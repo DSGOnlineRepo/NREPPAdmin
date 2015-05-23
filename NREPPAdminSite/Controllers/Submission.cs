@@ -253,6 +253,7 @@ namespace NREPPAdminSite.Controllers
             }*/
 
             List<Destination> LitReviews = new List<Destination>();
+            List<Tuple<string, string>> UserRoles = localService.GetUsersRoles(InvId).ToList();
 
             foreach (IdentityUserRole role in list)
             {
@@ -266,6 +267,14 @@ namespace NREPPAdminSite.Controllers
 
             List<Destination> nDests = localService.GetDestinations(InvId).ToList();
             AssignmentPageModel model = new AssignmentPageModel(nDests, LitReviews);
+
+            foreach (Tuple<string, string> tuple in UserRoles)
+            {
+                if (tuple.Item1 == "Lit Review")
+                    model.HasReviewer = true;
+            }
+
+
             ViewBag.InvId = InvId;
 
             //List

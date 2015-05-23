@@ -23,10 +23,18 @@
 }
 
 <div>
-
-    @using(Html.BeginForm("AssignLitReview", "Program"))
+    @if(Model.HasReviewer)
+    { 
+        @using(Html.BeginForm("AssignLitReview", "Program"))
+        {
+            @Html.DropDownList("LitReview", LitReviewOpts)
+        
+            <input type="submit" value="Assign Literature Review" />
+        }
+    }
+    else
     {
-        @Html.DropDownList("LitReview", LitReviewOpts) <input type="submit" value="Assign Literature Review" />
+        <span>Literature Reviewer: </span><span>Literature Reviewer Goes Here</span>
     }
 </div>
 
