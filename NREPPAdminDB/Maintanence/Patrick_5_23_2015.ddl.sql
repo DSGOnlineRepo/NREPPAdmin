@@ -1,0 +1,4 @@
+﻿ALTER TABLE Interventions
+ADD LitReviewDone BIT NOT NULL
+CONSTRAINT LitReviewDone DEFAULT 0
+GO

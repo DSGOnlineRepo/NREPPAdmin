@@ -329,7 +329,7 @@ namespace NREPPAdminSite.Controllers
 
             localService.ChangeStatus(InterventionId, DestUser, DestStatus);
 
-            return RedirectToAction("Assignment", new { InvId = InterventionId });
+            return RedirectToAction("Programs", "Home");
         }
 
         #endregion

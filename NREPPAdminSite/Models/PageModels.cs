@@ -458,6 +458,8 @@ namespace NREPPAdminSite.Models
         private List<Destination> theDests = new List<Destination>();
         private List<Destination> theLitReviews = new List<Destination>();
 
+        public bool HasReviewer { get; set; }
+
         public AssignmentPageModel(List<Destination> Dests, List<Destination> LitReview)
         {
             theDests = Dests;

@@ -19,5 +19,6 @@
     [ScreeningNotes] VARCHAR(MAX) NULL, 
     [MaterialsList] VARCHAR(MAX) NULL, 
     [HaveMaterials] BIT NULL DEFAULT 0, 
+    [LitReviewDone] BIT NULL DEFAULT 0, 
     CONSTRAINT [FK_Interventions_InterventionStatus] FOREIGN KEY ([Status]) REFERENCES [InterventionStatus]([Id]) 
 )
