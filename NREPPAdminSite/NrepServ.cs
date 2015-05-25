@@ -485,7 +485,7 @@ namespace NREPPAdminSite
         {
             List<Tuple<string, string>> results = new List<Tuple<string, string>>();
 
-            SqlCommand cmd = new SqlCommand("SPRolesOnInv", conn);
+            SqlCommand cmd = new SqlCommand("SPGetRolesOnInv", conn);
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.Add(new SqlParameter("@InvId", InterventionId));
@@ -1096,7 +1096,7 @@ namespace NREPPAdminSite
 
         public void AssignUser(string UserId, string RoleId, int InterventionId)
         {
-            bool result;
+            //bool result;
 
             SqlCommand cmd = new SqlCommand("SPAssignUser", conn);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -1110,11 +1110,12 @@ namespace NREPPAdminSite
             {
                 CheckConn();
                 cmd.ExecuteNonQuery();
-                result = (bool)cmd.Parameters["@Ret"].Value;
+                //result = (bool)cmd.Parameters["@Ret"].Value;
             }
-            catch (Exception) // Somehow we need to recover the error
+            catch (Exception ex) // Somehow we need to recover the error
             {
-                result = false;
+                //result = false;
+                Console.WriteLine(ex.Message);
             }
 
             return;

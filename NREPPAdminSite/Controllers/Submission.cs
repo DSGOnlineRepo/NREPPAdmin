@@ -272,11 +272,16 @@ namespace NREPPAdminSite.Controllers
             foreach (Tuple<string, string> tuple in UserRoles)
             {
                 if (tuple.Item1 == "Lit Review")
+                {
                     model.HasReviewer = true;
+                    ExtendedUser exu = _userManager.FindById(tuple.Item2);
+                    model.LitReviewer = exu.FirstName + " " + exu.LastName;
+                }
             }
 
 
-            ViewBag.InvId = InvId;
+            //ViewBag.InvId = InvId;
+            model.InvId = InvId;
 
             //List
             return View(model);
@@ -319,8 +324,13 @@ namespace NREPPAdminSite.Controllers
         public ActionResult SetLitReview(FormCollection col)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
+            MyIdentityDbContext db = new MyIdentityDbContext();
+            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
+            RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>(roleStore);
 
-            localService.AssignUser(col["UserId"], col["RoleId"], int.Parse(col["InvId"]));
+            var aRole = _roleManager.FindByName("Lit Review");
+
+            localService.AssignUser(col["LitReview"], aRole.Id, int.Parse(col["InvId"]));
 
             return RedirectToAction("Assignment", new { InvId = col["InvId"] });
         }

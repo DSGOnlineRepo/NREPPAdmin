@@ -459,7 +459,8 @@ namespace NREPPAdminSite.Models
         private List<Destination> theLitReviews = new List<Destination>();
 
         public bool HasReviewer { get; set; }
-        public bool LitReviewDone { get; set; }
+        public string LitReviewer { get; set; }
+        public int InvId { get; set; }
 
         public AssignmentPageModel(List<Destination> Dests, List<Destination> LitReview)
         {

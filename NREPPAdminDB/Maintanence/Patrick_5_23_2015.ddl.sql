@@ -7,10 +7,12 @@ GO
 CREATE PROCEDURE [dbo].[SPGetRolesOnInv]
 	@InvId INT
 AS
-	SELECT WkRoleId, UserId, Name FROM Inter_User_Roles
+	SELECT WkRoleId, UserId, Name FROM Inter_User_Roles iur
+	INNER JOIN AspNetRoles r ON iur.WkRoleId = r.Id
 	WHERE InterventionId = @InvId
 RETURN 0
 GO
+
 
 ALTER PROCEDURE [dbo].[SPGetInterventionList]
 @Id INT = NULL,

@@ -17,25 +17,26 @@
 
     foreach (NREPPAdminSite.Models.Destination dest in Model.TheLitReviews)
     {
-        LitReviewOpts.Add(new SelectListItem() { Text = dest.UserName, Value = dest.UserId.ToString() + "," + dest.StatusId.ToString() });
+        LitReviewOpts.Add(new SelectListItem() { Text = dest.UserName, Value = dest.UserId.ToString() });
         
     }
 }
 
 <div>
-    @if(Model.HasReviewer)
-    { 
-        using(Html.BeginForm("AssignLitReview", "Program"))
-        {
-            @Html.DropDownList("LitReview", LitReviewOpts)
-        
-            <input type="submit" value="Assign Literature Review" />
-        }
-    }
-    else
+  @using(Html.BeginForm("SetLitReview", "Program"))
+  {
+      
+    @Html.Hidden("InvId", @Model.InvId);
+      
+    @Html.DropDownList("LitReview", LitReviewOpts)
+    <input type="submit" value="Assign Literature Review" />
+  }
+
+    @if (Model.HasReviewer)
     {
         <span>Literature Reviewer: </span><span>Literature Reviewer Goes Here</span>
     }
+    
 </div>
 
 <div>
@@ -46,7 +47,7 @@
         @foreach(NREPPAdminSite.Models.Destination dest in Model.TheDests)
         {
             <li><input type="submit" value="@dest.DestDescription" onclick="selectAssignment(this); return true;" /> - @dest.RoleName, @dest.StatusName
-        <input type="hidden" value="@string.Format("{0};{1};{2}", @dest.StatusId, @dest.UserId, ViewBag.InvId)" /></li>
+        <input type="hidden" value="@string.Format("{0};{1};{2}", @dest.StatusId, @dest.UserId, @Model.InvId)" /></li>
         }
     </ul>
     }
