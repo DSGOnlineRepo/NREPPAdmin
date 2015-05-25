@@ -266,6 +266,7 @@ namespace NREPPAdminSite.Controllers
             }
 
             List<Destination> nDests = localService.GetDestinations(InvId).ToList();
+            //Intervention theInterv = localService.GetInterventions(parameters)[0];
             AssignmentPageModel model = new AssignmentPageModel(nDests, LitReviews);
 
             foreach (Tuple<string, string> tuple in UserRoles)

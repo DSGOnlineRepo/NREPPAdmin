@@ -1048,7 +1048,7 @@ namespace NREPPAdminSite
                 {
 
                     outList.Add(new Destination() { UserId = dr["UserId"].ToString(), StatusId = (int)dr["StatusId"], StatusName = dr["StatusName"].ToString(),
-                        UserName = dr["UserName"].ToString(), RoleName = dr["RoleName"].ToString()
+                        UserName = dr["UserName"].ToString(), RoleName = dr["RoleName"].ToString(), DestDescription = dr["DestDescription"].ToString()
                     });
                 }
 

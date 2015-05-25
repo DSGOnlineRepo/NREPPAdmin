@@ -25,7 +25,7 @@
 <div>
     @if(Model.HasReviewer)
     { 
-        @using(Html.BeginForm("AssignLitReview", "Program"))
+        using(Html.BeginForm("AssignLitReview", "Program"))
         {
             @Html.DropDownList("LitReview", LitReviewOpts)
         
@@ -45,7 +45,7 @@
     <ul style="list-style-type: none;">
         @foreach(NREPPAdminSite.Models.Destination dest in Model.TheDests)
         {
-            <li><input type="submit" value="@dest.UserName" onclick="selectAssignment(this); return true;" /> - @dest.RoleName, @dest.StatusName, @dest.StatusId
+            <li><input type="submit" value="@dest.DestDescription" onclick="selectAssignment(this); return true;" /> - @dest.RoleName, @dest.StatusName
         <input type="hidden" value="@string.Format("{0};{1};{2}", @dest.StatusId, @dest.UserId, ViewBag.InvId)" /></li>
         }
     </ul>
