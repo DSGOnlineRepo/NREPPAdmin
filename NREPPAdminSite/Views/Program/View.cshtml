@@ -223,11 +223,9 @@ else if (Model.TheIntervention.StatusId == 5)
                             <span>Document Title: </span>
                             <input type="text" name="FileDescription" />
 
-                            @Html.DropDownList("docTypeDD", DocTypez);<br /><br />
+                            @Html.DropDownList("docTypeDD", DocTypez); <input type="checkbox" /><span>from Lit Search</span><br /><br />
 
                             <input type="submit" value="Attach" />
-                            <input type="checkbox" />
-                            <span>from Lit Search</span>
                         }
 
                     </div>
@@ -303,7 +301,7 @@ else if (Model.TheIntervention.StatusId == 5)
         <div class="submitDiv">
             Please submit your completed program.
 
-            @using (Html.BeginForm("Submit", "Program", FormMethod.Post))
+            @using (Html.BeginForm("Edit", "Program", FormMethod.Post))
             {
                 @Html.HiddenFor(m => m.TheIntervention.Id);
                 @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
@@ -349,21 +347,12 @@ else if (Model.TheIntervention.StatusId == 5)
                                                                                                           }
                                                                                                       }
 
-                                                                                                      if (Model.TheIntervention.StatusId == 2)
-                                                                                                      {
-                                                                                                        @Html.DropDownList("selDest", DestinationOpts)
-                                                                                                      }
 
                 }
-                else
-                {
-                    @Html.Hidden("destStatus", 2)
-                }
+                
+                @Html.CheckBoxFor(m => m.TheIntervention.LitReviewDone) <span>Literature Review Done</span><br /><br />
 
-                if (Model.TheIntervention.StatusId < 3 && Model.Documents.Count > 0)
-                {
-                    <input type="submit" value="Submit" />
-                }
+                <input type="submit" value="Save" />
             }
 
         </div>

@@ -183,8 +183,10 @@ namespace NREPPAdminSite.Controllers
             //theIntervention = localService.GetInterventions(InterventionId);
 
             SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InterventionId };
+            SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserName", Value = User.Identity.Name };
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(idParam);
+            parameters.Add(roleParam);
             List<Intervention> interventionList = localService.GetInterventions(parameters);
             theIntervention = interventionList[0];
 
