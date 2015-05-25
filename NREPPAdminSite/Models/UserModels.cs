@@ -483,4 +483,67 @@ namespace NREPPAdminSite.Models
         [StringLength(128)]
         public string WorkEmail { get; set; }
     }
+
+    public class AdminUser
+    {
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [Required]
+        [Display(Name = "Role")]
+        [StringLength(256)]
+        public string Role { get; set; }       
+
+        [Required]
+        [Display(Name = "User Name")]
+        [StringLength(50)]
+        public string UserName { get; set; }
+
+        [Required]
+        [Display(Name = "First Name")]
+        [StringLength(250)]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        [StringLength(250)]
+        public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "Email")]
+        [EmailAddress]
+        [StringLength(128)]
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Phone Number")]
+        [Phone]
+        [StringLength(15)]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Address Line 1")]
+        [StringLength(128)]
+        public string HomeAddressLine1 { get; set; }
+
+        [Required]
+        [Display(Name = "City")]
+        [StringLength(50)]
+        public string HomeCity { get; set; }
+
+        [Required]
+        [Display(Name = "State")]
+        [StringLength(2, ErrorMessage = "Please enter state code")]
+        public string HomeState { get; set; }
+
+        [Required]
+        [Display(Name = "Zip")]
+        [StringLength(11)]
+        public string HomeZip { get; set; }
+    }
+	
+
 }

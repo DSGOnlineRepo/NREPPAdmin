@@ -458,6 +458,80 @@ namespace NREPPAdminSite.Controllers
             var result = new { CapImage = "data:image/png;base64," + Convert.ToBase64String(new CaptchaUtil().VerificationTextGenerator()), CapImageText = Convert.ToString(Session["Captcha"]) };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        [AllowAnonymous]        
+        public JsonResult AddAdmin(AdminUser model)
+        {
+            var response = new NreppServiceResponseBase();
+            ModelState.Remove("Role");
+            model.Role = "System Admin";
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = new ExtendedUser
+                    {
+                        UserName = model.UserName,
+                        Email = model.Email,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        LockoutEnabled = false,
+                        LockoutEndDateUtc = DateTime.UtcNow.AddYears(100),
+                        HomeAddressLine1 = model.HomeAddressLine1,
+                        HomeCity = model.HomeCity,
+                        HomeState = model.HomeState,
+                        HomeZip = model.HomeZip,
+                        PhoneNumber = model.PhoneNumber
+                    };
+
+                    IdentityResult result = _userManager.Create(user, model.Password);
+
+                    if (result.Succeeded)
+                    {
+                        _userManager.AddToRole(user.Id, model.Role);
+                        response.ResponseSet(true, "Admin User added successfully.");
+                    }
+                    else
+                    {
+                        var isDuplicateUser = false;
+                        foreach (string error in result.Errors)
+                        {
+                            if (error.Contains("is already taken."))
+                            {
+                                ModelState.AddModelError("UserName", error);
+                                isDuplicateUser = true;
+                                response.ResponseSet(false, "UserName already exists.");
+                            }
+                        }
+                        if (!isDuplicateUser)
+                        {
+                            var errors = string.Join("<br />", result.Errors);
+                            ModelState.AddModelError("", errors);
+                            response.ResponseSet(false, errors);
+                        }
+                    }
+                }
+                else
+                {
+                    var message = "";
+                    foreach (ModelState modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (ModelError error in modelState.Errors)
+                        {
+                             message = message + error.ErrorMessage + "\n";
+                            response.ResponseSet(false, message);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.ResponseSet(false, ex.Message);
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        } 
     }
 
     public class TempClass
