@@ -455,6 +455,7 @@ namespace NREPPAdminSite
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@ScreeningNotes", SqlDbType = SqlDbType.VarChar, Value = string.IsNullOrEmpty(inData.ScreeningNotes) ? "" : inData.ScreeningNotes });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@MaterialsList", SqlDbType = SqlDbType.VarChar, Value = string.IsNullOrEmpty(inData.MaterialsList) ? "" : inData.MaterialsList });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@HaveMaterials", SqlDbType = SqlDbType.Bit, Value = inData.HaveMaterials });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@LitReviewDone", SqlDbType = SqlDbType.Bit, Value = inData.LitReviewDone });
 
             SqlParameter OutPut = new SqlParameter("@Output", -1);
             OutPut.Direction = ParameterDirection.Output;

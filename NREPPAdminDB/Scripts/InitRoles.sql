@@ -235,6 +235,7 @@ INSERT INTO Permissions (Id, PermissionName) VALUES (2, 'EditBaseSubmission')
 INSERT INTO Permissions (Id, PermissionName) VALUES (3, 'UploadDocs')
 INSERT INTO Permissions (Id, PermissionName) VALUES (4, 'SeeRCDocs')
 INSERT INTO Permissions (Id, PermissionName) VALUES (5, 'UserPreScreen')
+INSERT INTO Permissions (Id, PermissionName) VALUES (6, 'CanLitReview')
 
 INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (1, @ROLEID8, NULL, cast(1 as Bit))
 INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (4, @ROLEID5, NULL, cast(1 as Bit))

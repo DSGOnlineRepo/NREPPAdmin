@@ -349,8 +349,15 @@ else if (Model.TheIntervention.StatusId == 5)
 
 
                 }
-                
-                @Html.CheckBoxFor(m => m.TheIntervention.LitReviewDone) <span>Literature Review Done</span><br /><br />
+
+                if (Model.CanDo("CanLitReview"))
+                { 
+                    @Html.CheckBoxFor(m => m.TheIntervention.LitReviewDone) <span>Literature Review Done</span><br /><br />
+                }
+                else
+                {
+                    @Html.CheckBoxFor(m => m.TheIntervention.LitReviewDone, new { disabled = "disabled" }) <span>Literature Review Done</span><br /><br />
+                }
 
                 <input type="submit" value="Save" />
             }
