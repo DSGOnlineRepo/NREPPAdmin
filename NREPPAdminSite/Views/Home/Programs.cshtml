@@ -91,7 +91,7 @@
             columnDefs: [
                 {
                     render: function (data, type, row) {
-                        if (parseInt(row["StatusId"] != 1)) {
+                        if (row.Status !== "Submitted") {
                             return '<a href="/Program/View?InvId=' + row["Id"] + '">' + data + '</a>';
                         } else {
                             return '<a href="/Program/ReSubmission2?InvId=' + row["Id"] + '">' + data + '</a>';
