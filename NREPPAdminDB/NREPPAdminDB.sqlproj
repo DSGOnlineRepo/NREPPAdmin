@@ -132,6 +132,7 @@
     <Build Include="Functions\FNGetAvailIntervs.sql" />
     <Build Include="Stored Procedures\SPAssignUser.sql" />
     <Build Include="Stored Procedures\SPGetRolesOnInv.sql" />
+    <None Include="Maintanence\Patrick_5_26_2015.ddl.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\InitRoles.sql" />

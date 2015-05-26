@@ -13,6 +13,7 @@
 
 @using(Html.BeginForm("Submit2", "Program"))
 {
+    @Html.HiddenFor(m => m.TheIntervention.Id, new { Id = "Id" });
     @Html.HiddenFor(m => m.TheIntervention.ProgramType, new { Id = "programType" });
     @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" })
 
