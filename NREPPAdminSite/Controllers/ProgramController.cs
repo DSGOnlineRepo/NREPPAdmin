@@ -50,6 +50,7 @@ namespace NREPPAdminSite.Controllers
             List<Answer> documentTypes = localService.GetAnswersByCategory("DocumentType").ToList<Answer>();
             List<MaskValue> programTypes = localService.GetMaskList("ProgramType").ToList<MaskValue>();
             List<MaskValue> preScreen = localService.GetMaskList("PreScreen").ToList<MaskValue>();
+            List<MaskValue> rcpreScreen = localService.GetMaskList("RCPrescreen").ToList<MaskValue>();
             List<InterventionDoc> documentz;
             List<RCDocument> reviewerDocs;
 
@@ -83,7 +84,7 @@ namespace NREPPAdminSite.Controllers
             List<Destination> nDests = localService.GetDestinations(theIntervention.Id).ToList();
 
             pageModel = new IntervPageModel(documentz, reviewerDocs, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
-                documentTypes, nDests, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>(),
+                documentTypes, nDests, MaskValue.SplitMask(rcpreScreen, theIntervention.PreScreenMask).ToList<MaskValue>(),
                 MaskValue.SplitMask(preScreen, theIntervention.UserPreScreenMask).ToList<MaskValue>());
 
             List<string> perms = new List<string>();

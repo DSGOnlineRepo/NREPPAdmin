@@ -15,6 +15,7 @@
 {
     @Html.HiddenFor(m => m.TheIntervention.ProgramType, new { Id = "programType" });
     @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" })
+    @Html.HiddenFor(m => m.TheIntervention.Id)
 
     @Html.LabelFor(m => m.TheIntervention.Title)
     @Html.TextBoxFor(m => m.TheIntervention.Title) <br /><br />

@@ -53,11 +53,20 @@
 <div>
 @using (Html.BeginForm("Upload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    @Html.Hidden("OnPage", "Sub4");
+    
     @Html.HiddenFor(m => m.TheIntervention.Id);
     @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
     @Html.HiddenFor(m => m.TheIntervention.StatusId);
     @Html.HiddenFor(m => m.TheIntervention.ProgramType);
-    @Html.Hidden("OnPage", "Sub4");
+    @Html.HiddenFor(m => m.TheIntervention.Title)
+    @Html.HiddenFor(m => m.TheIntervention.FromLitSearch)
+    @Html.HiddenFor(m => m.TheIntervention.FullDescription)
+    @Html.HiddenFor(m => m.TheIntervention.SubmitterId)
+    @Html.HiddenFor(m => m.TheIntervention.UpdatedDate)
+    @Html.HiddenFor(m => m.TheIntervention.Acronym)
+    @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask)
+    @Html.HiddenFor(m => m.TheIntervention.PreScreenMask)
 
 
     if (Model.TheIntervention.StatusId == 1 && Model.CanDo("UploadDocs"))
@@ -79,6 +88,6 @@
     <input type="submit" value="Attach" />
    }
 }
-    @Html.ActionLink("Edit Program Title and Type", "Submission2", new { InvId = Model.TheIntervention.Id})
+    @Html.ActionLink("Edit Program Title and Type", "ReSubmission2", new { InvId = Model.TheIntervention.Id})
     @Html.ActionLink("Continue With Submission", "Submission6", new { InvId = Model.TheIntervention.Id })
 </div>
