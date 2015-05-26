@@ -73,6 +73,17 @@ AS SET NOCOUNT ON
 			END
 
 			IF @DestStatus = 4 BEGIN
+
+				DECLARE @LitReviewDone BIT
+
+				SELECT @LitReviewDone = LitReviewDone from Interventions
+				WHERE Id = @IntervId
+
+				IF @LitReviewDone <> 1 BEGIN
+					ROLLBACK TRANSACTION
+					RETURN -41
+				END
+
 				INSERT INTO Inter_User_Roles (InterventionId, UserId, WkRoleId) VALUES (@IntervId, @DestUser, (select id from AspNetRoles where NAME = 'Review Coordinator'))
 
 				IF @@ERROR <> 0 BEGIN

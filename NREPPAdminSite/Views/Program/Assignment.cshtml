@@ -22,22 +22,25 @@
     }
 }
 
-<div>
-  @using(Html.BeginForm("SetLitReview", "Program"))
-  {
+    <div>
+     @if (Model.CanDo("AssignLitReview"))
+     { 
+          using(Html.BeginForm("SetLitReview", "Program"))
+          {
       
-    @Html.Hidden("InvId", @Model.InvId);
+            @Html.Hidden("InvId", @Model.InvId);
       
-    @Html.DropDownList("LitReview", LitReviewOpts)
-    <input type="submit" value="Assign Literature Review" />
-  }
+            @Html.DropDownList("LitReview", LitReviewOpts)
+            <input type="submit" value="Assign Literature Review" />
+          }
+     }
 
-    @if (Model.HasReviewer)
-    {
-        <span>Literature Reviewer: </span><span>@Model.LitReviewer</span>
-    }
+        @if (Model.HasReviewer)
+        {
+            <span>Literature Reviewer: </span><span>@Model.LitReviewer</span>
+        }
     
-</div>
+    </div>
 
 <div>
     @using(Html.BeginForm("Assign", "Program"))

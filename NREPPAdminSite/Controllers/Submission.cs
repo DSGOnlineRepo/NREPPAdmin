@@ -244,8 +244,6 @@ namespace NREPPAdminSite.Controllers
             UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
 
             var list =_roleManager.FindByName("Lit Review").Users;
-            //Intervention theInterv = localService.GetInterventions()
-
 
             /*if (!localService.CanDo("Assign", User.Identity.Name, IntervId))
             {
@@ -280,8 +278,13 @@ namespace NREPPAdminSite.Controllers
             }
 
 
-            //ViewBag.InvId = InvId;
             model.InvId = InvId;
+
+            List<string> perms = new List<string>();
+
+            perms.Add("AssignLitReview");
+
+            model.SetPermissions(perms, User.Identity.Name, InvId);
 
             //List
             return View(model);

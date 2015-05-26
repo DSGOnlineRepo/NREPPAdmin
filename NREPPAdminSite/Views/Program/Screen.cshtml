@@ -577,25 +577,17 @@ i++;
         }
     </div>
 
-    @{
-        List<SelectListItem> DestinationOpts = new List<SelectListItem>();
-
-        foreach (NREPPAdminSite.Models.Destination dest in Model.TheDestinations)
-        {
-            DestinationOpts.Add(new SelectListItem() { Text = dest.UserName, Value = dest.UserId.ToString() + "," + dest.StatusId.ToString() });
-        }
+    @if (Model.TheIntervention.LitReviewDone){
+        <div>
+            @Html.ActionLink("Complete Pre-screening", "Assignment", new { InvId = Model.TheIntervention.Id })
+        </div>
     }
-
-    <div style="padding: 10px 10px 10px 10px; border: 1px solid;">
-        @using (Html.BeginForm("ChangeStatus", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.Hidden("IntervId", Model.TheIntervention.Id)
-            <label for="selDest">Destination:</label>
-            @Html.DropDownList("selDest", DestinationOpts)<br />
-            
-            <input type="submit" value="Send" />
-        }
-    </div>
+    else
+    {
+        <div>
+            You cannot forward this until the literature review has been marked complete.
+        </div>
+    }
 </div>
 
 <script type="text/javascript">

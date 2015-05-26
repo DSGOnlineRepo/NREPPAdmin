@@ -453,6 +453,8 @@ namespace NREPPAdminSite.Models
 
     #endregion
 
+    #region AssignmentPageModel
+
     public class AssignmentPageModel : NREPPPermissions
     {
         private List<Destination> theDests = new List<Destination>();
@@ -461,6 +463,7 @@ namespace NREPPAdminSite.Models
         public bool HasReviewer { get; set; }
         public string LitReviewer { get; set; }
         public int InvId { get; set; }
+        public string InterventionStatus { get; set; }
 
         public AssignmentPageModel(List<Destination> Dests, List<Destination> LitReview)
         {
@@ -478,6 +481,8 @@ namespace NREPPAdminSite.Models
             get { return theLitReviews; }
         }
     }
+
+    #endregion
 
     #region Extra Stuff
 
