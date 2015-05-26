@@ -33,7 +33,7 @@ $("#AddOutcome").click(function () {
     $(".AddO-div").removeClass("hidden");
 });
 
-$(".preScreenMask").click(function () {
+/*$(".preScreenMask").click(function () {
     var sum = 0;
     $(".preScreenMask").each(function () {
         if ($(this).prop("checked"))
@@ -41,9 +41,9 @@ $(".preScreenMask").click(function () {
     });
 
     $("#preScreenAns").val(sum);
-});
+});*/
 
-$(".userPreScreenMask").click(function () {
+/*$(".userPreScreenMask").click(function () {
     var sum = 0;
     $(".userPreScreenMask").each(function () {
         if ($(this).prop("checked"))
@@ -57,7 +57,7 @@ $(".userPreScreenMask").click(function () {
         } else {
             $(".prescreenWarnDiv").removeClass("hidden");
         }
-});
+});*/
 
 function setEdit(index) {
     var rcnameId = "txtRCName_" + index.toString();
@@ -99,3 +99,14 @@ function clearEdit(index) {
     $(dirtyId).val("false");
 
 }
+
+
+$(".preScreenMask").click(function () {
+    var sum = 0;
+    $(".preScreenMask").each(function () {
+        if ($(this).prop("checked"))
+            sum += parseInt($(this).val());
+    });
+
+    $("#preScreenAns").val(sum);
+});
