@@ -94,7 +94,7 @@
                         if (parseInt(row["StatusId"] != 1)) {
                             return '<a href="/Program/View?InvId=' + row["Id"] + '">' + data + '</a>';
                         } else {
-                            return '<a href="/Program/Submission2?InvId=' + row["Id"] + '">' + data + '</a>';
+                            return '<a href="/Program/ReSubmission2?InvId=' + row["Id"] + '">' + data + '</a>';
                         }
                     },
                     targets: 0

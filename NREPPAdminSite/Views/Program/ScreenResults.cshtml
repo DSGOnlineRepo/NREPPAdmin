@@ -209,7 +209,7 @@
         <span>Notes: </span>
         @Html.TextAreaFor(m => m.TheIntervention.ScreeningNotes)<br />
         
-        <input type="submit" value="Save Notes" />
+        <input type="submit" value="Save Notes" /> @Html.ActionLink("Mark Complete or Return to Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id });
     }
 </div>
 

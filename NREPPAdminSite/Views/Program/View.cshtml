@@ -223,7 +223,12 @@ else if (Model.TheIntervention.StatusId == 5)
                             <span>Document Title: </span>
                             <input type="text" name="FileDescription" />
 
-                            @Html.DropDownList("docTypeDD", DocTypez); <input type="checkbox" /><span>from Lit Search</span><br /><br />
+                            if (Model.CanDo("CanLitReview"))
+                            { 
+                                <span>from Lit Search</span><br /><br />
+                        }
+
+                            @Html.DropDownList("docTypeDD", DocTypez); <input type="checkbox" />
 
                             <input type="submit" value="Attach" />
                         }
