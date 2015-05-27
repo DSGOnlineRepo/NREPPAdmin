@@ -270,6 +270,7 @@ namespace NREPPAdminSite.Models
         public IEnumerable<RCDocument> TheDocuments
         {
             get { return theDocuments; }
+            set { theDocuments = value.ToList(); }
         }
 
         public IEnumerable<Destination> TheDestinations

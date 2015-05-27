@@ -47,6 +47,8 @@ namespace NREPPAdminSite.Controllers
             ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow); // TODO: fix this call
             sm.AddDests(localService.GetDestinations(theIntervention.Id).ToList());
 
+            sm.TheDocuments = reviewerDocs;
+
             return View(sm);
         }
 
