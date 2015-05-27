@@ -18,11 +18,11 @@
 
 @if (Model.TheIntervention.StatusId == 4)
 {
-    @Html.ActionLink("Screen this Intervention", "Screen", new { InterventionId = Model.TheIntervention.Id });
+    @Html.ActionLink("Screen this Intervention", "Screen", new { InvId = Model.TheIntervention.Id });
 }
 else if (Model.TheIntervention.StatusId == 5)
 {
-    @Html.ActionLink("View Screening Results", "ScreenResults", new { IntervId = Model.TheIntervention.Id });
+    @Html.ActionLink("View Screening Results", "ScreenResults", new { InvId = Model.TheIntervention.Id });
 }
 <div>
     <div>

@@ -277,6 +277,7 @@ namespace NREPPAdminSite.Controllers
                 }
             }
 
+            ViewBag.LitReviews = LitReviews;
 
             model.InvId = InvId;
 

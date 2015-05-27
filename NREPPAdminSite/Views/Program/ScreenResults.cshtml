@@ -206,6 +206,8 @@
         @Html.HiddenFor(m => m.TheIntervention.UpdatedDate)
         @Html.HiddenFor(m => m.TheIntervention.Acronym)
         
+        @Html.Hidden("Redirect", "ScreenResults")
+        
         <span>Notes: </span>
         @Html.TextAreaFor(m => m.TheIntervention.ScreeningNotes)<br />
         
