@@ -140,11 +140,4 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="StartDate" />
   </Operation>
-  <Operation Name="Rename Refactor" Key="24eddf12-a306-4d43-b1f4-0c843577da3b" ChangeDateTime="05/28/2015 14:55:05">
-    <Property Name="ElementName" Value="[dbo].[OutcomeTaxonomy].[Search Categories]" />
-    <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[dbo].[OutcomeTaxonomy]" />
-    <Property Name="ParentElementType" Value="SqlTable" />
-    <Property Name="NewName" Value="SearchCategories" />
-  </Operation>
 </Operations>
