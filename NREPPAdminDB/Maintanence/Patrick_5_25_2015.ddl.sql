@@ -225,8 +225,8 @@ DECLARE @ROLEID1 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Data 
 
 INSERT INTO Permissions (Id, PermissionName) VALUES (7, 'AssignLitReview')
 
-INSERT INTO Role_Permissions (PermissionID, RoleId, StatusId, Allowed) values (7, @ROLEID2, 4, CAST(1 AS BIT))
-INSERT INTO Role_Permissions (PermissionID, RoleId, StatusId, Allowed) values (7, @ROLEID2, 4, CAST(1 AS BIT))
+INSERT INTO Role_Permissions (PermissionID, RoleId, StatusId, Allowed) values (7, @ROLEID2, 3, CAST(1 AS BIT))
+INSERT INTO Role_Permissions (PermissionID, RoleId, StatusId, Allowed) values (7, @ROLEID2, 3, CAST(1 AS BIT))
 
 GO
 
