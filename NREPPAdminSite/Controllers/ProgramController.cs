@@ -173,7 +173,7 @@ namespace NREPPAdminSite.Controllers
             return "Something came out!";
         }
 
-        public ActionResult Screen(int InterventionId)
+        public ActionResult Screen(int InvId)
         {
             List<Study> theStudies = new List<Study>();
             NrepServ localService = new NrepServ(NrepServ.ConnString);
@@ -189,7 +189,7 @@ namespace NREPPAdminSite.Controllers
             List<Answer> TaxOutcomes;
 
 
-            theStudies = localService.GetStudiesByIntervention(InterventionId).ToList<Study>();
+            theStudies = localService.GetStudiesByIntervention(InvId).ToList<Study>();
             StudyDesigns = localService.GetAnswersByCategory("StudyDesign").ToList<Answer>();
             YPYN = localService.GetAnswersByCategory("YPYN").ToList<Answer>();
             Exclusions = localService.GetAnswersByCategory("Exclusions").ToList<Answer>();
@@ -203,7 +203,7 @@ namespace NREPPAdminSite.Controllers
 
             //theIntervention = localService.GetInterventions(InterventionId);
 
-            SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InterventionId };
+            SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
             SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserName", Value = User.Identity.Name };
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(idParam);
@@ -211,7 +211,7 @@ namespace NREPPAdminSite.Controllers
             List<Intervention> interventionList = localService.GetInterventions(parameters);
             theIntervention = interventionList[0];
 
-            OutcomesWrapper ow = localService.GetOutcomesByIntervention(InterventionId);
+            OutcomesWrapper ow = localService.GetOutcomesByIntervention(InvId);
 
             //List<OutcomeMeasure> oms = ow.OutcomesMeasures.Where(om => om.OutcomeId == 1).ToList<OutcomeMeasure>();
             List<OutcomeMeasure> oms = ow.OutcomesMeasures.ToList<OutcomeMeasure>();
@@ -389,7 +389,7 @@ namespace NREPPAdminSite.Controllers
 
             int ActualId = localService.AddStudyRecord(nStudy);
 
-            RCDocument rcDoc = new RCDocument(nStudy.DocumentId, int.Parse(Request.Form["RCDocumentId"]));
+            RCDocument rcDoc = new RCDocument(nStudy.DocumentId, string.IsNullOrEmpty(Request.Form["RCDocumentId"]) ? -1 : int.Parse(Request.Form["RCDocumentId"]));
             rcDoc.RCName = Request.Form["RCDocumentName"];
             rcDoc.Reference = Request.Form["newReference"];
             rcDoc.PubYear = int.Parse(Request.Form["PubYear"]);
@@ -421,7 +421,7 @@ namespace NREPPAdminSite.Controllers
             localService.AddOrUpdateOutcomeMeasure(om, IntervId, col["newOutcome"].Trim());
 
 
-            return RedirectToAction("Screen", new { InterventionId = IntervId }); // TODO: Pass errors on failure
+            return RedirectToAction("Screen", new { InvId = IntervId }); // TODO: Pass errors on failure
 
         }
 

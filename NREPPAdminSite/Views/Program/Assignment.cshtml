@@ -8,7 +8,7 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/assignmentjs.js")"></script>
 }
 
-<h2>Assignment</h2>
+<h2>Workflow</h2>
 
 @{
     // Text = dest.UserName, Value = dest.UserId.ToString() + "," + dest.StatusId.ToString()
@@ -39,6 +39,8 @@
         {
             <span>Literature Reviewer: </span><span>@Model.LitReviewer</span>
         }
+        
+        foreach ()
     
     </div>
 
@@ -49,7 +51,7 @@
     <ul style="list-style-type: none;">
         @foreach(NREPPAdminSite.Models.Destination dest in Model.TheDests)
         {
-            <li><input type="submit" value="@dest.DestDescription" onclick="selectAssignment(this); return true;" /> - @dest.RoleName, @dest.StatusName
+            <li><input type="submit" value="@dest.DestDescription" onclick="selectAssignment(this); return true;" /> - @dest.StatusName
         <input type="hidden" value="@string.Format("{0};{1};{2}", @dest.StatusId, @dest.UserId, @Model.InvId)" /></li>
         }
     </ul>

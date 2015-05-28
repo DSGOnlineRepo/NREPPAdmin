@@ -577,17 +577,31 @@ i++;
         }
     </div>
 
-    @if (Model.TheIntervention.LitReviewDone){
+    <div>
+        @using (Html.BeginForm("SaveNotes", "Program"))
+        {
+            @Html.HiddenFor(m => m.TheIntervention.Id);
+            @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
+            @Html.HiddenFor(m => m.TheIntervention.StatusId);
+            @Html.HiddenFor(m => m.TheIntervention.ProgramType);
+            @Html.HiddenFor(m => m.TheIntervention.Title)
+            @Html.HiddenFor(m => m.TheIntervention.FromLitSearch)
+            @Html.HiddenFor(m => m.TheIntervention.FullDescription)
+            @Html.HiddenFor(m => m.TheIntervention.SubmitterId)
+            @Html.HiddenFor(m => m.TheIntervention.UpdatedDate)
+            @Html.HiddenFor(m => m.TheIntervention.Acronym)
+            
+            @Html.Hidden("Redirect", "Screen")
+
+    <span>Notes: </span>
+    @Html.TextAreaFor(m => m.TheIntervention.ScreeningNotes)<br />
+            <input type="submit" value="Save Notes" />
+        }
+    </div>
+
         <div>
             @Html.ActionLink("Complete Pre-screening", "Assignment", new { InvId = Model.TheIntervention.Id })
         </div>
-    }
-    else
-    {
-        <div>
-            You cannot forward this until the literature review has been marked complete.
-        </div>
-    }
 </div>
 
 <script type="text/javascript">

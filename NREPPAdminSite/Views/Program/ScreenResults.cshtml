@@ -113,6 +113,40 @@
 <div>
     <table>
         <tr>
+            <th>Study ID</th>
+            <th>Reference</th>
+            <th>Year of Publication</th>
+            <th>Found in Lit Search</th>
+            <th>Exclusion 1</th>
+            <th>Exclusion 2</th>
+            <th>Exclusion 3</th>
+            <th>Study Design</th>
+            <th>Reccomend Review</th>
+        </tr>
+
+        @foreach (NREPPAdminSite.Models.Study study in Model.StudyDocuments)
+        {
+            <tr>
+                <td class="withborder">@study.StudyId</td>
+                <td class="withborder">
+                    @Html.ActionLink(getReference(Model.TheDocuments.ToList(), study.DocumentId)
+                    , "GetFile", "Admin", new { FileId = study.DocumentId }, null)
+                </td>
+                <td class="withborder">@getPubYear(Model.TheDocuments.ToList(), study.DocumentId)</td>
+                <td class="withborder"><input type="checkbox" checked="@isChecked(study.inLitSearch)" disabled /> </td>
+                <td class="withborder">@getAnswerText(Model.Exclusions.ToList(), study.Exclusion1)</td>
+                <td class="withborder">@getAnswerText(Model.Exclusions.ToList(), study.Exclusion2)</td>
+                <td class="withborder">@getAnswerText(Model.Exclusions.ToList(), study.Exclusion3)</td>
+                <td class="withborder">@getAnswerText(Model.StudyDesigns.ToList(), study.StudyDesign)</td>
+                <td class="withborder"><input type="checkbox" checked="@isChecked(study.RecommendReview)" disabled /></td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div>
+    <table>
+        <tr>
             <th colspan="5">Outcomes</th>
         </tr>
         <tr>
@@ -158,39 +192,6 @@
     </table>
 </div>
 
-<div>
-    <table>
-        <tr>
-            <th>Study ID</th>
-            <th>Reference</th>
-            <th>Year of Publication</th>
-            <th>Found in Lit Search</th>
-            <th>Exclusion 1</th>
-            <th>Exclusion 2</th>
-            <th>Exclusion 3</th>
-            <th>Study Design</th>
-            <th>Reccomend Review</th>
-        </tr>
-
-        @foreach(NREPPAdminSite.Models.Study study in Model.StudyDocuments)
-        {
-            <tr>
-                <td class="withborder">@study.StudyId</td>
-                <td class="withborder">
-                    @Html.ActionLink(getReference(Model.TheDocuments.ToList(), study.DocumentId)
-                    , "GetFile", "Admin", new { FileId = study.DocumentId }, null)
-                </td>
-                <td class="withborder">@getPubYear(Model.TheDocuments.ToList(), study.DocumentId)</td>
-                <td class="withborder"><input type="checkbox" checked="@isChecked(study.inLitSearch)" disabled /> </td>
-                <td class="withborder">@getAnswerText(Model.Exclusions.ToList(), study.Exclusion1)</td>
-                <td class="withborder">@getAnswerText(Model.Exclusions.ToList(), study.Exclusion2)</td>
-                <td class="withborder">@getAnswerText(Model.Exclusions.ToList(), study.Exclusion3)</td>
-                <td class="withborder">@getAnswerText(Model.StudyDesigns.ToList(), study.StudyDesign)</td>
-                <td class="withborder"><input type="checkbox" checked="@isChecked(study.RecommendReview)" disabled /></td>
-            </tr>
-        }
-    </table>
-</div>
 
 <div>
     @using (Html.BeginForm("SaveNotes"))
@@ -205,6 +206,8 @@
         @Html.HiddenFor(m => m.TheIntervention.SubmitterId)
         @Html.HiddenFor(m => m.TheIntervention.UpdatedDate)
         @Html.HiddenFor(m => m.TheIntervention.Acronym)
+        
+        @Html.Hidden("Redirect", "ScreenResults")
         
         <span>Notes: </span>
         @Html.TextAreaFor(m => m.TheIntervention.ScreeningNotes)<br />
