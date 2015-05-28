@@ -19,16 +19,23 @@ namespace NREPPAdminSite.Controllers
     [Authorize]
     public partial class ProgramController : Controller
     {
+        private readonly MyIdentityDbContext _context;
 
-         private readonly UserManager<ExtendedUser> _userManager;
+        private readonly UserManager<ExtendedUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public ProgramController()
         {
+            _context = new MyIdentityDbContext();
+
             MyIdentityDbContext db = new MyIdentityDbContext();
 
             UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
             _userManager = new UserManager<ExtendedUser>(userStore);
-         }
+
+            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
+            _roleManager = new RoleManager<IdentityRole>(roleStore);
+        }
 
         #region Get Methods
 
@@ -39,7 +46,7 @@ namespace NREPPAdminSite.Controllers
             ViewBag.Id = InvId;
             IntervPageModel pageModel;
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            
+
             // Probably don't need to seed these
 
             //List<Answer> docTypez = new List<Answer>(); 
@@ -98,6 +105,18 @@ namespace NREPPAdminSite.Controllers
             pageModel.SetPermissions(perms, User.Identity.Name, InvId);
             pageModel.TheIntervention = theIntervention;
 
+            var role = _roleManager.FindByName("Assigner");
+            var users = _context.Users.Where(x => x.Roles.Select(r => r.RoleId).Contains(role.Id)).ToList();
+
+            var userList = users.Select(x =>
+                        new SelectListItem
+                            {
+                                Value = x.Id.ToString(),
+                                Text = x.FirstName + " " + x.LastName
+                            });
+
+            ViewBag.Users = new SelectList(userList, "Value", "Text");
+
             return View(pageModel);
         }
 
@@ -122,7 +141,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult DeleteOutcomeMeasure(int MeasureId, int InvId)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            
+
             localService.DeleteOutcomeMeasure(MeasureId);
 
             return RedirectToAction("Screen", new { InterventionId = InvId });
@@ -168,8 +187,8 @@ namespace NREPPAdminSite.Controllers
             List<Answer> SAMHSAPop;
             List<Answer> EffectReports;
             List<Answer> TaxOutcomes;
-            
-            
+
+
             theStudies = localService.GetStudiesByIntervention(InterventionId).ToList<Study>();
             StudyDesigns = localService.GetAnswersByCategory("StudyDesign").ToList<Answer>();
             YPYN = localService.GetAnswersByCategory("YPYN").ToList<Answer>();
@@ -228,7 +247,7 @@ namespace NREPPAdminSite.Controllers
                 string Destination = col["selDest"];
 
                 string[] DestStuff = Destination.Split(',');
-               destUser = DestStuff[0];
+                destUser = DestStuff[0];
                 destLoc = int.Parse(DestStuff[1]);
             }
             else
@@ -242,10 +261,30 @@ namespace NREPPAdminSite.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(IntervPageModel inInterv)
+        public ActionResult Edit(IntervPageModel inInterv, string command, string Users)
+        {
+            if (command.Equals("assign"))
+            {
+                // Call action here...
+            }
+            else
+            {
+                // Call another action here...
+            }
+
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            //inInterv.TheIntervention.SubmitterId = User.Identity.GetUserId();
+            int returnValue = localService.SaveIntervention(inInterv.TheIntervention);
+
+            return RedirectToAction("View", new { InvId = returnValue });
+        }
+
+        [HttpPost]
+        public ActionResult Prescreen(IntervPageModel inInterv)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            
+
             //inInterv.TheIntervention.SubmitterId = User.Identity.GetUserId();
             int returnValue = localService.SaveIntervention(inInterv.TheIntervention);
 
@@ -257,7 +296,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Upload(FormCollection formCollection)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-           
+
             if (Request != null)
             {
                 HttpPostedFileBase file = Request.Files["UploadedFile"];
@@ -275,7 +314,7 @@ namespace NREPPAdminSite.Controllers
 
             if (formCollection["OnPage"] == "Sub4")
                 return RedirectToAction("Submission4", new { InvId = int.Parse(Request.Form["TheIntervention.Id"]) });
-            else 
+            else
                 return RedirectToAction("View", new { InvId = int.Parse(Request.Form["TheIntervention.Id"]) });
         }
 
@@ -364,7 +403,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult AddOutcome(FormCollection col)
         {
             int IntervId = int.Parse(col["IntervId"]);
-            
+
             OutcomeMeasure om = new OutcomeMeasure();
             om.Id = col["OutcomeMeasureId"] == string.Empty || int.Parse(col["OutcomeMeasureId"]) < 1 ? -1 : int.Parse(col["OutcomeMeasureId"]);
             om.DocumentId = int.Parse(col["docDropDown"]);
@@ -400,7 +439,7 @@ namespace NREPPAdminSite.Controllers
 
             int i = 0;
 
-            while(i < col.Count) // break if i gets too big
+            while (i < col.Count) // break if i gets too big
             {
                 if (col[dirtyText + i.ToString()] == "true")
                 {
@@ -410,7 +449,7 @@ namespace NREPPAdminSite.Controllers
                     break;
                 }
                 else i++;
-                
+
             }
 
             return RedirectToAction("View", new { InvId = int.Parse(col["InterventionId"]) });

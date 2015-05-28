@@ -255,7 +255,14 @@ else if (Model.TheIntervention.StatusId == 5)
                     <br/>
                     <br/>
 
-                    <input type="submit" value="Save"/>
+                    <span>Assign to: </span> @Html.DropDownList("Users", ViewBag.Users as SelectList)
+                    <br />
+                    <br/>
+
+                    <div class="options btn-group">
+                        <button class="btn" type="submit" name="command" value="reject">Prescreened – rejected</button>
+                        <button class="btn btn-primary" name="command" type="submit" value="assign">Ready for Assignment</button>
+                    </div>
                 }
             </div>
         }
