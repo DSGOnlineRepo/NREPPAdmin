@@ -16,6 +16,10 @@
 <h4>Submitted by @Model.TheIntervention.Submitter</h4>
 <label>@Model.TheIntervention.Status</label><br />
 
+@if (Model.TheIntervention.StatusId == 3)
+{
+    @Html.ActionLink("Assign Literature Reviewer and Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id})
+}
 @if (Model.TheIntervention.StatusId == 4)
 {
     @Html.ActionLink("Screen this Intervention", "Screen", new { InvId = Model.TheIntervention.Id });
@@ -256,13 +260,17 @@ else if (Model.TheIntervention.StatusId == 5)
                     <br/>
                     <br/>
 
-                    @if (Model.TheIntervention.Status == "Pre-Screening")
+                    if (Model.TheIntervention.Status == "Pre-Screening")
                     { 
                         <span>Assign to: </span> @Html.DropDownList("Users", ViewBag.Users as SelectList)
                         <br />
                         <br/>
 
                         <div class="options btn-group">
+                            @if (Model.CanDo("CanLitReview"))
+                            {
+                                <button class="btn" type="submit" name="command" value="Save">Save</button>
+                            }
                             <button class="btn" type="submit" name="command" value="reject">Prescreened – rejected</button>
                             <button class="btn btn-primary" name="command" type="submit" value="assign">Ready for Assignment</button>
                         </div>

@@ -346,7 +346,7 @@
     <Content Include="Views\Admin\Login.cshtml" />
     <Content Include="Views\Home\Programs.cshtml" />
     <Content Include="Views\Program\View.cshtml" />
-    <Content Include="Views\Program\UploadFile.cshtml" />
+    <Content Include="Views\Program\UploadFiles.cshtml" />
     <Content Include="Views\Admin\Lookups.cshtml" />
     <Content Include="Views\Program\Screen.cshtml" />
     <Content Include="Views\Admin\Reviewers.cshtml" />
