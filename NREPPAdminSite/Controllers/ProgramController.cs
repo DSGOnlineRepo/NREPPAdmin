@@ -263,16 +263,20 @@ namespace NREPPAdminSite.Controllers
         [HttpPost]
         public ActionResult Edit(IntervPageModel inInterv, string command, string Users)
         {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
             if (command.Equals("assign"))
             {
                 // Call action here...
+                localService.ChangeStatus(inInterv.TheIntervention.Id, Users, 3); // Hard coded. We need to fix this
             }
             else
             {
                 // Call another action here...
+                localService.ChangeStatus(inInterv.TheIntervention.Id, Users, 92); // Hard coded. We need to fix this
             }
 
-            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            
 
             //inInterv.TheIntervention.SubmitterId = User.Identity.GetUserId();
             int returnValue = localService.SaveIntervention(inInterv.TheIntervention);

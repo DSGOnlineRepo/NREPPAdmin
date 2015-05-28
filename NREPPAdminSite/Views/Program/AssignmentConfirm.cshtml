@@ -1,0 +1,10 @@
+﻿@model NREPPAdminSite.Models.Intervention
+
+@{
+    ViewBag.Title = "AssignmentConfirm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>The Intervention has Been Assigned</h2>
+
+The intervention is now in status @Model.Status, click here @Html.ActionLink("Home", "Programs").
