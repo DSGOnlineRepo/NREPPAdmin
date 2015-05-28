@@ -282,7 +282,7 @@ namespace NREPPAdminSite.Controllers
 
             //inInterv.TheIntervention.SubmitterId = User.Identity.GetUserId();
 
-            return RedirectToAction("View", new { InvId = returnValue });
+            return RedirectToAction("Programs", "Home");
         }
 
         [HttpPost]
