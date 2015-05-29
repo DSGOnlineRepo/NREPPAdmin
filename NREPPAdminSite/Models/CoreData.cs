@@ -43,6 +43,75 @@ namespace NREPPAdminSite.Models
         public bool HaveMaterials { get; set; }
 
         public int Id {get; set;}
+
+        #region Contact Info
+
+        [Display(Name = "Primary Contact")]
+        public string PrimaryName {get; set;}
+		
+        [Display(Name = "Organization")]
+        public string PrimaryOrg {get; set;}
+
+        [Display(Name = "Title")]
+		public string PrimaryTitle {get; set;}
+		
+        [Display (Name = "Address")]
+        public string PrimaryAddressLine1 {get; set;}
+
+        public string PrimaryAddressLine2 {get; set;}
+		
+        [Display (Name = "City")]
+        public string PrimaryCity {get; set;}
+
+        [Display(Name = "State")]
+		public string PrimaryState {get; set;}
+		
+        [Display(Name = "Zip")]
+        public string PrimaryZip {get; set;}
+
+        [Display (Name = "Phone Number")]
+        public string PrimaryPhoneNumber {get; set;}
+		
+        [Display (Name = "Fax Number")]
+        public string PrimaryFaxNumber {get; set;}
+
+        [Display(Name = "Primary Contact Email")]
+        public string PrimaryEmail { get; set; }
+
+        [Display(Name = "Secondary Contact")]
+        public string SecondaryName { get; set; }
+
+        [Display(Name = "Organization")]
+        public string SecondaryOrg { get; set; }
+
+        [Display(Name = "Title")]
+        public string SecondaryTitle { get; set; }
+
+        [Display(Name = "Address")]
+        public string SecondaryAddressLine1 { get; set; }
+
+        public string SecondaryAddressLine2 { get; set; }
+
+        [Display(Name = "City")]
+        public string SecondaryCity { get; set; }
+
+        [Display(Name = "State")]
+        public string SecondaryState { get; set; }
+
+        [Display(Name = "Zip")]
+        public string SecondaryZip { get; set; }
+
+        [Display(Name = "Phone Number")]
+        public string SecondaryPhoneNumber { get; set; }
+
+        [Display(Name = "Fax Number")]
+        public string SecondaryFaxNumber { get; set; }
+
+        [Display(Name = "Secondary Contact Email")]
+        public string SecondaryEmail { get; set; }
+		
+
+        #endregion
         /*{
             get { return id; }
         }*/
