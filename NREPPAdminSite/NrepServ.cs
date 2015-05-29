@@ -54,6 +54,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter("@User", inUser));
             cmd.Parameters.Add(new SqlParameter("@DestUser", inUser));
             cmd.Parameters.Add(new SqlParameter("@DestStatus", toStatus));
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "RET_VALUE", Direction = ParameterDirection.ReturnValue, SqlDbType = SqlDbType.Int });
 
             try
             {

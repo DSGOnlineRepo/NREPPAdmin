@@ -265,6 +265,8 @@ namespace NREPPAdminSite.Controllers
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
+            int returnValue = localService.SaveIntervention(inInterv.TheIntervention);
+
             if (command.Equals("assign"))
             {
                 // Call action here...
@@ -279,9 +281,8 @@ namespace NREPPAdminSite.Controllers
             
 
             //inInterv.TheIntervention.SubmitterId = User.Identity.GetUserId();
-            int returnValue = localService.SaveIntervention(inInterv.TheIntervention);
 
-            return RedirectToAction("View", new { InvId = returnValue });
+            return RedirectToAction("Programs", "Home");
         }
 
         [HttpPost]
