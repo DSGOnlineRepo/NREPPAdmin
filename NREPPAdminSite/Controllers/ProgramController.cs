@@ -173,7 +173,7 @@ namespace NREPPAdminSite.Controllers
             return "Something came out!";
         }
 
-        public ActionResult Screen(int InvId)
+        public ActionResult Screen(int InvId, bool? ForceScreen)
         {
             List<Study> theStudies = new List<Study>();
             NrepServ localService = new NrepServ(NrepServ.ConnString);
@@ -221,7 +221,17 @@ namespace NREPPAdminSite.Controllers
                 SAMHSAPop, SAMHSAOut, EffectReports, TaxOutcomes);
             sm.AddDests(localService.GetDestinations(theIntervention.Id).ToList());
 
-            return View(sm);
+            bool gotoScreen = false;
+
+            if (!ForceScreen.HasValue)
+                gotoScreen = false;
+            else
+                gotoScreen = (bool)ForceScreen;
+
+            if (theIntervention.Status == "Being Screened" || gotoScreen)
+                return View(sm);
+            else
+                return View("ScreenResults", sm);
         }
 
         #endregion
