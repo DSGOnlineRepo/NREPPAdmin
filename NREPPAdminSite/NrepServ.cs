@@ -65,11 +65,91 @@ namespace NREPPAdminSite
                 MyIdentityDbContext db = new MyIdentityDbContext();
                 UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
                 UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
-                var destUser = _userManager.FindById(inUser);
-                IEmailService _emailService = new EmailService();
-                var mailMessage = new MailMessage("donotreply@dsgonline.com", destUser.Email, "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
-                        "The intervention has been assinged too you. Please login to the to view your interventions");
                 
+                RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
+                RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>(roleStore);
+
+                var destUser = _userManager.FindById(inUser);
+
+                SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = inId };
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(idParam);
+                List<Intervention> interventionList = GetInterventions(parameters);
+                IEmailService _emailService = new EmailService();
+
+                if (toStatus == 2)
+                {
+                    var mailMessage1 = new MailMessage("donotreply@dsgonline.com", destUser.Email,
+                        "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
+                                                       "This is to inform you that " + interventionList[0].Title + "/" + interventionList[0].Acronym + 
+                                                       " has been assigned to you for prescreening.");
+                    _emailService.SendEmail(mailMessage1);
+
+                    var user = _userManager.FindById(interventionList[0].SubmitterId);
+
+                    var mailMessage2 = new MailMessage("donotreply@dsgonline.com", destUser.Email,
+                       "Intervention Status Changed", "Dear " + user.FirstName + ", " +
+                                                      "Thank you for submitting " + interventionList[0].Title + "/" + interventionList[0].Acronym + 
+                                                      " for inclusion in the National Registry of Evidence-based " +
+                                                      "Programs and Practices (NREPP). NREPP staff will screen your submission " +
+                                                      "package to confirm its eligibility for a full review and you will receive " +
+                                                      "an e-mail notification to inform you of the status of your submission.");
+                    _emailService.SendEmail(mailMessage2);
+                }
+                else if (toStatus == 92)
+                {
+                    var user = _userManager.FindById(interventionList[0].SubmitterId);
+
+                    var mailMessage1 = new MailMessage("donotreply@dsgonline.com", destUser.Email,
+                       "Intervention Status Changed", "Dear " + user.FirstName + ", " +
+                                                      "The Substance Abuse and Mental Health Services Administration thanks you for the " +
+                                                      "submission of " + interventionList[0].Title + " to the National Registry of Evidence-based Programs and Practices " +
+                                                      "(NREPP) during the [month year] open submission period. Unfortunately, your submission did not meet the minimum requirements" +
+                                                      " for a full review. The reason(s) are listed below." + "[List of Reasons]" +
+                                                      "If you have another study that meets minimum requirements, please feel free to submit this study during any " +
+                                                      "open submission period. Just as a reminder, the minimum requirements are listed on the NREPP website: http://nrepp.samhsa.gov/.");
+
+                    //TODO Check what reasons to display. Month and year of Open Submission Period
+
+                    _emailService.SendEmail(mailMessage1);
+                }
+                else if (toStatus == 3)
+                {
+                    var mailMessage1 = new MailMessage("donotreply@dsgonline.com", destUser.Email,
+                       "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
+                                                       "This is to inform you that " + interventionList[0].Title + "/" + interventionList[0].Acronym + 
+                                                        " has passed prescreening. It is ready to be assigned to a DSG RC, DSG RFDC, and DSG Lit reviewer, or the MPR PRM.");
+
+                    //TODO Check what reasons to display
+
+                    _emailService.SendEmail(mailMessage1);
+                }
+                else if (toStatus == 4)
+                {
+                    var destUserRole = _roleManager.FindById(destUser.Roles.First().RoleId);
+                    MailMessage mailMessage = new MailMessage();
+                    if (destUserRole.Name == "Mathematica PRM")
+                    {
+                        mailMessage = new MailMessage("donotreply@dsgonline.com", destUser.Email,
+                            "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
+                                                           "This is to inform you that " + interventionList[0].Title +
+                                                           "/" + interventionList[0].Acronym +
+                                                           " has passed prescreening and has been assigned to you for screening.");
+                    }
+                    else if (destUserRole.Name == "Review Coordinator")
+                    {
+                        mailMessage = new MailMessage("donotreply@dsgonline.com", destUser.Email,
+                           "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
+                                                          "This is to inform you that " + interventionList[0].Title +
+                                                          "/" + interventionList[0].Acronym +
+                                                          "has passed prescreening and is ready to be assigned to an RC, an RFDC, and a Lit reviewer.");
+                    }
+
+                    //TODO Check what reasons to display
+
+                        _emailService.SendEmail(mailMessage);
+                }
+
 
             } catch (Exception ex)
             {

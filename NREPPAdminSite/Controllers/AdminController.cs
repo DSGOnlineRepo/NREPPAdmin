@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using NREPPAdminSite.Models;
 using NREPPAdminSite.Security;
+using NREPPAdminSite.Utilities;
+using System.Net.Mail;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -107,6 +109,14 @@ namespace NREPPAdminSite.Controllers
                     if (!isDuplicateUser)
                     {
                         var errors = string.Join("<br />", result.Errors);
+
+                        IEmailService _emailService = new EmailService();
+                        var mailMessage = new MailMessage("donotreply@dsgonline.com", model.Email,
+                            "User Account Created", "Dear " + model.FirstName + ", " +
+                            "Thank you for creating an account with the National Registry of Evidence-based Programs and Practices (NREPP)." +
+                            " Your Username Is: " + model.UserName + ". Questions regarding your submission or account can be submitted to nreppadmin@dsgonline.com.");
+                        _emailService.SendEmail(mailMessage);
+
                         ModelState.AddModelError("", errors);
                     }
                 }
