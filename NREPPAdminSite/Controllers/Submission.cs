@@ -304,7 +304,7 @@ namespace NREPPAdminSite.Controllers
 
             int prescreenMask = model.TheIntervention.UserPreScreenMask;
 
-            if (prescreenMask == 10 || prescreenMask == 18 || prescreenMask == 12 || prescreenMask == 20)
+            if (prescreenMask == 26 || prescreenMask == 28)
                 return RedirectToAction("Submission4", new { InvId = returnValue }); // Do I need to do this action? I don't think so...
             else
                 return RedirectToAction("MinReq", new { InvId = returnValue });

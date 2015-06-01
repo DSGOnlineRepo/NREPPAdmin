@@ -91,7 +91,7 @@ SET NOCOUNT ON
 		 AND (@FullDescription IS NULL OR FullDescription LIKE '%' + @FullDescription + '%')
 		 AND (@UpdatedDate IS NULL OR (Convert(date,UpdateDate) = Convert(date, @UpdatedDate)))
 		 AND ((@Submitter IS NULL OR u.Firstname LIKE '%' + @Submitter + '%') OR (@Submitter IS NULL OR u.Lastname LIKE '%' + @Submitter + '%'))
-		 AND  s.Id in (SELECT statusId from @AvailStatus)
+		 AND  i.Id in (SELECT statusId from @AvailStatus)
 		)
 
 		SELECT InterventionId, Title, FullDescription, Submitter, SubmitterId, StatusName,
@@ -173,6 +173,7 @@ ALTER PROCEDURE [dbo].[SPUpdateIntervention]
 	@ScreeningNotes VARCHAR(MAX) = NULL,
 	@HaveMaterials BIT = 0,
 	@MaterialsList VARCHAR(MAX) = NULL,
+	@LitReviewDone BIT = 0,
 
 	@PrimaryName nvarchar(250) = NULL,
 	@PrimaryOrg varchar(40) = NULL,
@@ -206,7 +207,7 @@ AS SET NOCOUNT ON
 	IF @IntervId = -1 BEGIN
 
 		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, SubmitterId, Status, ProgramType, Acronym, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes,
-		HaveMaterials, MaterialsList,
+		HaveMaterials, MaterialsList, LitReviewDone
 		[PrimaryName],
 		[PrimaryOrg],
 		[PrimaryTitle],
@@ -230,6 +231,7 @@ AS SET NOCOUNT ON
 		[SecondaryFaxNumber],
 		[SecondaryEmail]) VALUES
 			(@title, @fulldescription, @publishDate, @updateDate, @submitterId, @status, @programType, @Acronym, @PreScreenAnswers, @UserPreScreenAnswer, @ScreeningNotes, @HaveMaterials, @MaterialsList,
+			@LitReviewDone,
 			@PrimaryName,
 			@PrimaryOrg,
 			@PrimaryTitle,
@@ -315,7 +317,8 @@ AS SET NOCOUNT ON
 			SecondaryZip = @SecondaryZip,
 			SecondaryPhoneNumber = @SecondaryPhoneNumber,
 			SecondaryFaxNumber = @SecondaryFaxNumber,
-			SecondaryEmail = @SecondaryEmail
+			SecondaryEmail = @SecondaryEmail,
+			LitReviewDone = @LitReviewDone
 		WHERE Id = @IntervId
 
 		SET @Output = @IntervId
