@@ -35,6 +35,18 @@
         <span>Please list the materials below:</span><br />
         @Html.TextAreaFor(m => m.TheIntervention.MaterialsList)
         
+        <div>
+            <pre>
+                                All mailed materials should be sent to:
+                                Development Services Group, Inc.
+                                NREPP Application Submission
+                                7315 Wisconsin Avenue, Suite 800E
+                                Bethesda, MD 20814
+
+            </pre>
+        </div>
+        
+        @Html.ActionLink("Return to Document Uploads", "Submission4", new { InvId = Model.TheIntervention.Id })
         <input type="submit" value="Save" />
         <input type="submit" value="Save and Continue" onclick="$('#Dest').val('continue'); return true;" />
     }

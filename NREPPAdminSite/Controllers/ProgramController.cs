@@ -314,16 +314,23 @@ namespace NREPPAdminSite.Controllers
 
             if (Request != null)
             {
-                HttpPostedFileBase file = Request.Files["UploadedFile"];
-                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                if (Request.Form["docTypeDD"] == "")
                 {
-                    string fileName = file.FileName;
-                    string fileContentType = file.ContentType;
-                    byte[] fileBytes = new byte[file.ContentLength];
-                    file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+                    ModelState.AddModelError("docTypeDD", "You must select a document type!");
+                }
+                else
+                {
+                    HttpPostedFileBase file = Request.Files["UploadedFile"];
+                    if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                    {
+                        string fileName = file.FileName;
+                        string fileContentType = file.ContentType;
+                        byte[] fileBytes = new byte[file.ContentLength];
+                        file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
 
-                    localService.SaveFileToDB(fileBytes, fileName, User.Identity.Name, "NOT IMPLEMENTED!", int.Parse(Request.Form["TheIntervention.Id"]), false,
-                        -1, Request.Form["FileDescription"], int.Parse(Request.Form["docTypeDD"]), Request.Form["FileTitle"]); // TODO: Add UserId to the Cookie. :|
+                        localService.SaveFileToDB(fileBytes, fileName, User.Identity.Name, "NOT IMPLEMENTED!", int.Parse(Request.Form["TheIntervention.Id"]), false,
+                            -1, Request.Form["FileDescription"], int.Parse(Request.Form["docTypeDD"]), Request.Form["FileTitle"]); // TODO: Add UserId to the Cookie. :|
+                    }
                 }
             }
 
