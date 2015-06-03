@@ -79,15 +79,15 @@ namespace NREPPAdminSite
 
                 if (toStatus == 2)
                 {
-                    var mailMessage1 = new MailMessage("donotreply@dsgonline.com", destUser.Email,
-                        "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
-                                                       "This is to inform you that " + interventionList[0].Title + "/" + interventionList[0].Acronym + 
-                                                       " has been assigned to you for prescreening.");
-                    _emailService.SendEmail(mailMessage1);
+                    //var mailMessage1 = new MailMessage("donotreply@dsgonline.com", destUser.Email,
+                    //    "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
+                    //                                   "This is to inform you that " + interventionList[0].Title + "/" + interventionList[0].Acronym + 
+                    //                                   " has been assigned to you for prescreening.");
+                    //_emailService.SendEmail(mailMessage1);
 
                     var user = _userManager.FindById(interventionList[0].SubmitterId);
 
-                    var mailMessage2 = new MailMessage("donotreply@dsgonline.com", destUser.Email,
+                    var mailMessage2 = new MailMessage("donotreply@dsgonline.com", user.Email,
                        "Intervention Status Changed", "Dear " + user.FirstName + ", " +
                                                       "Thank you for submitting " + interventionList[0].Title + "/" + interventionList[0].Acronym + 
                                                       " for inclusion in the National Registry of Evidence-based " +
@@ -100,7 +100,7 @@ namespace NREPPAdminSite
                 {
                     var user = _userManager.FindById(interventionList[0].SubmitterId);
 
-                    var mailMessage1 = new MailMessage("donotreply@dsgonline.com", destUser.Email,
+                    var mailMessage1 = new MailMessage("donotreply@dsgonline.com", user.Email,
                        "Intervention Status Changed", "Dear " + user.FirstName + ", " +
                                                       "The Substance Abuse and Mental Health Services Administration thanks you for the " +
                                                       "submission of " + interventionList[0].Title + " to the National Registry of Evidence-based Programs and Practices " +
