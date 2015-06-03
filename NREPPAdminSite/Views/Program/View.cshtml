@@ -16,18 +16,12 @@
 <h4>Submitted by @Model.TheIntervention.Submitter</h4>
 <label>@Model.TheIntervention.Status</label><br />
 
-@if (Model.TheIntervention.StatusId == 3)
-{
-    @Html.ActionLink("Assign Literature Reviewer and Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id})
-}
-@if (Model.TheIntervention.StatusId == 4)
-{
-    @Html.ActionLink("Screen this Intervention", "Screen", new { InvId = Model.TheIntervention.Id });
-}
-else if (Model.TheIntervention.StatusId == 5)
-{
-    @Html.ActionLink("View Screening Results", "ScreenResults", new { InvId = Model.TheIntervention.Id });
-}
+<div id="menubar">
+    @Html.ActionLink("Assign Literature Reviewer and Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id })
+    @Html.ActionLink("Screen this Intervention", "Screen", new { InvId = Model.TheIntervention.Id })
+    <a href="#">Submission Part B</a>
+</div>
+
 <div>
     <div>
 

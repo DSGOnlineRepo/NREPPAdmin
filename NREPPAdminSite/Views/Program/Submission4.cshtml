@@ -53,6 +53,8 @@
 <div>
 @using (Html.BeginForm("Upload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    @Html.ValidationSummary(false)
+    
     @Html.Hidden("OnPage", "Sub4");
     
     @Html.HiddenFor(m => m.TheIntervention.Id);
@@ -83,11 +85,13 @@
             <span>Document Title: </span><input type="text" name="FileTitle" />
             <span>Description:</span><br />
             <textarea name="FileDescription"></textarea>
-            @Html.DropDownList("docTypeDD", DocTypez);
+            @Html.DropDownList("docTypeDD", DocTypez, "Please select a document type")
+            @Html.ValidationMessage("docTypeDD", "*")
     <br /><br />
     <input type="submit" value="Attach" />
    }
 }
     @Html.ActionLink("Edit Program Title and Type", "ReSubmission2", new { InvId = Model.TheIntervention.Id})
     @Html.ActionLink("Continue With Submission", "Submission6", new { InvId = Model.TheIntervention.Id })
+
 </div>

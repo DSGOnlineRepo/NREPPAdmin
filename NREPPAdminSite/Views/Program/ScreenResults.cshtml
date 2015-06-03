@@ -1,11 +1,12 @@
 ﻿@model NREPPAdminSite.Models.ScreeningModel
 
 @{
-    ViewBag.Title = "ScreenResults";
+    ViewBag.Title = "Screening Results";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ScreenResults</h2>
+<h2>Screening Results</h2>
+@Html.ActionLink("Go To Screening Tool", "Screen", new { InvId = Model.TheIntervention.Id, ForceScreen = true})
 
 @functions{
     string MeasuresList(int OutcomeId)

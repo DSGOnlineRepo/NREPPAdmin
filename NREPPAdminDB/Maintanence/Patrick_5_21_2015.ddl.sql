@@ -41,7 +41,7 @@ SET NOCOUNT ON
 		 AND (@FullDescription IS NULL OR FullDescription LIKE '%' + @FullDescription + '%')
 		 AND (@UpdatedDate IS NULL OR (Convert(date,UpdateDate) = Convert(date, @UpdatedDate)))
 		 AND ((@Submitter IS NULL OR u.Firstname LIKE '%' + @Submitter + '%') OR (@Submitter IS NULL OR u.Lastname LIKE '%' + @Submitter + '%'))
-		 AND  s.Id in (SELECT statusId from @AvailStatus)
+		 AND  i.Id in (SELECT statusId from @AvailStatus)
 		)
 
 		SELECT InterventionId, Title, FullDescription, Submitter, SubmitterId, StatusName,
