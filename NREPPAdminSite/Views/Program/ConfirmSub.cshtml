@@ -3,6 +3,17 @@
 @{
     ViewBag.Title = "Submit your Program";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool haveEval = false;
+    
+    foreach (NREPPAdminSite.Models.InterventionDoc document in Model.Documents)
+    {
+        if (document.DocumentTypeName == "Program Evaluation")
+        {
+            haveEval = true;
+            break;
+        }
+    }
 }
 
 <h2>Submit Your Application</h2>
@@ -11,7 +22,16 @@
     <p>
         Have you completed your application?
     </p>
-     
-    @Html.ActionLink("No, edit the application.", "ReSubmission2", new { InvId = Model.TheIntervention.Id })<br />
-    @Html.ActionLink("Yes, submit.", "DoSubmit", new { InvId = Model.TheIntervention.Id })
+
+    @if (haveEval)
+    {
+        @Html.ActionLink("No, edit the application.", "ReSubmission2", new { InvId = Model.TheIntervention.Id })<br />
+        @Html.ActionLink("Yes, submit.", "DoSubmit", new { InvId = Model.TheIntervention.Id })
+    }
+    else
+    {
+        
+        <span>You have not provided at least one Program Evaluation document.</span><br />
+        @Html.ActionLink("Upload Additional Documents", "Submission4", new { InvId = Model.TheIntervention.Id })<br />
+    }
 </div>
