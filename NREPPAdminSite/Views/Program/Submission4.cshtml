@@ -1,11 +1,11 @@
-﻿@model NREPPAdminSite.Models.IntervPageModel
+﻿@model NREPPAdminSite.Models.DocUploadPage
 
 @{
     ViewBag.Title = "Page 4 of Submission";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Page 4 of Submission @Model.TheIntervention.Title</h2>
+<h2>Page 4 of Submission @Model.InterventionName</h2>
 
 @{
     List<SelectListItem> DocTypez = new List<SelectListItem>();
@@ -15,18 +15,6 @@
         DocTypez.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
     }
 }
-
-<div style="height: 100px;">
-    <span style="float: left; clear: left;">
-        Last Updated On:
-    </span>
-    <span style="float: left; clear: right; margin-left: 5px;">@Model.TheIntervention.UpdatedDate.ToShortDateString()</span>
-
-    <span style="float: left; clear: left;">
-        Published On:
-    </span>
-    <span style="float: left; clear: right; margin-left: 5px;">@(Model.TheIntervention.PublishDate.HasValue ? Model.TheIntervention.PublishDate.GetValueOrDefault().ToShortDateString() : "Not Published")</span>
-</div>
 
 <div>
     <table style="border: 1px solid;">
@@ -43,7 +31,7 @@
                 <td class="withborder">@Html.ActionLink(@doc.Title, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
                 <td class="withborder">@doc.FileDescription</td>
                 <td class="withborder">@doc.DocumentTypeName</td>
-                <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.TheIntervention.Id, DocId = doc.DocId })</td>
+                <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.InterventionId, DocId = doc.DocId })</td>
             </tr>
         }
     </table>
@@ -51,27 +39,15 @@
 </div>
 
 <div>
-@using (Html.BeginForm("Upload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("DocUpload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary(false)
     
     @Html.Hidden("OnPage", "Sub4");
-    
-    @Html.HiddenFor(m => m.TheIntervention.Id);
-    @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
-    @Html.HiddenFor(m => m.TheIntervention.StatusId);
-    @Html.HiddenFor(m => m.TheIntervention.ProgramType);
-    @Html.HiddenFor(m => m.TheIntervention.Title)
-    @Html.HiddenFor(m => m.TheIntervention.FromLitSearch)
-    @Html.HiddenFor(m => m.TheIntervention.FullDescription)
-    @Html.HiddenFor(m => m.TheIntervention.SubmitterId)
-    @Html.HiddenFor(m => m.TheIntervention.UpdatedDate)
-    @Html.HiddenFor(m => m.TheIntervention.Acronym)
-    @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask)
-    @Html.HiddenFor(m => m.TheIntervention.PreScreenMask)
+    @Html.HiddenFor(m => m.InterventionId)
 
 
-    if (Model.TheIntervention.StatusId == 1 && Model.CanDo("UploadDocs"))
+    if (Model.CanDo("UploadDocs")) // This should be status dependent anyway
     {
         <p>
             You may now upload key documents relevant to the review of your program. This includes  program evaluation (journal articles, evaluation reports), , dissemination materials, and other supporting documents.
@@ -82,16 +58,20 @@
         <li><u>Other supporting</u> documents could include a more detailed description of your program, its conceptual framework or logic model, materials related to the reliability and validity of your measures, etc.</li>
         </ul>
             <span style="font-size: large; font-weight: bold;">Upload a File: </span><input type="file" name="UploadedFile" /> <br />
-            <span>Document Title: </span><input type="text" name="FileTitle" />
-            <span>Description:</span><br />
-            <textarea name="FileDescription"></textarea>
-            @Html.DropDownList("docTypeDD", DocTypez, "Please select a document type")
-            @Html.ValidationMessage("docTypeDD", "*")
+            @Html.LabelFor(m => m.UploadDocTitle)
+    @Html.TextBoxFor(m => m.UploadDocTitle)
+    @Html.ValidationMessageFor(m => m.UploadDocTitle)
+    <br />
+            @Html.LabelFor(m => m.UploadDescription)
+            @Html.TextAreaFor(m => m.UploadDescription)<br />
+            
+            @Html.DropDownListFor(m => m.UploadDocType, DocTypez, "Please Select a Document Type")
+            @Html.ValidationMessageFor(m => m.UploadDocType)
     <br /><br />
     <input type="submit" value="Attach" />
    }
 }
-    @Html.ActionLink("Edit Program Title and Type", "ReSubmission2", new { InvId = Model.TheIntervention.Id})
-    @Html.ActionLink("Continue With Submission", "Submission6", new { InvId = Model.TheIntervention.Id })
+    @Html.ActionLink("Edit Program Title and Type", "ReSubmission2", new { InvId = Model.InterventionId})
+    @Html.ActionLink("Continue With Submission", "Submission6", new { InvId = Model.InterventionId })
 
 </div>
