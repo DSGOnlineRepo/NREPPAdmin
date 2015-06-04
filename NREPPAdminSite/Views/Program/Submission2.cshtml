@@ -9,7 +9,7 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/submission2.js")"></script>
 }
 
-<h2>Page 2 of Submission</h2>
+<h2>Step 1. Minimum Criteria for Submission</h2>
 
 @using(Html.BeginForm("Submit2", "Program"))
 {
@@ -33,7 +33,7 @@
     </ul>
     
     <p>
-        You must have at least one evaluation study that meets the <a href="#">NREPP minimum criteria</a>. Please respond to the following questions:
+        4) You must have at least one evaluation study that meets the <a href="#">NREPP minimum criteria</a>. Please respond to the following questions:
     </p>
 
     foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
