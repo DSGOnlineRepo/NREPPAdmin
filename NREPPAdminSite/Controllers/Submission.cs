@@ -107,7 +107,8 @@ namespace NREPPAdminSite.Controllers
 
         public ActionResult Submission4(int InvId)
         {
-            IntervPageModel pageModel;
+            //IntervPageModel pageModel;
+            DocUploadPage pageModel;
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
             List<MaskValue> intervTypez = new List<MaskValue>();
@@ -115,15 +116,7 @@ namespace NREPPAdminSite.Controllers
             Intervention theIntervention;
 
             List<Answer> documentTypes = localService.GetAnswersByCategory("DocumentType").ToList<Answer>();
-            List<MaskValue> programTypes = localService.GetMaskList("ProgramType").ToList<MaskValue>();
-            List<MaskValue> preScreen = localService.GetMaskList("PreScreen").ToList<MaskValue>();
             List<InterventionDoc> documentz;
-            List<RCDocument> reviewerDocs;
-
-            SubmissionPd pd = localService.GetCurrentSubmissionPd();
-            ViewBag.StartDate = pd.StartDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.StartDate.Year.ToString();
-            ViewBag.EndDate = pd.EndDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.EndDate.Year.ToString();
-
 
             var user = _userManager.FindByName(User.Identity.Name);
             var userRoles = _userManager.GetRoles(user.Id);
@@ -136,22 +129,24 @@ namespace NREPPAdminSite.Controllers
             theIntervention = interventionList[0];
 
             documentz = localService.GetDocuments(InvId, null, null).ToList<InterventionDoc>();
-            reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
             //List<Destination> nDests = localService.GetDestinations(theIntervention.Id).ToList();
 
-            pageModel = new IntervPageModel(documentz, reviewerDocs, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
+            /*pageModel = new IntervPageModel(documentz, reviewerDocs, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
                 documentTypes, null, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>(),
-                MaskValue.SplitMask(preScreen, theIntervention.UserPreScreenMask).ToList<MaskValue>());
+                MaskValue.SplitMask(preScreen, theIntervention.UserPreScreenMask).ToList<MaskValue>());*/
 
-            pageModel.TheIntervention = theIntervention;
+            pageModel = new DocUploadPage(documentz, documentTypes);
+
+            pageModel.InterventionId = InvId;
+            pageModel.InterventionName = theIntervention.Title;
 
             List<string> perms = new List<string>();
 
             perms.Add("UploadDocs");
 
             pageModel.SetPermissions(perms, User.Identity.Name, InvId);
-            pageModel.TheIntervention = theIntervention;
+            //pageModel.TheIntervention = theIntervention;
 
 
             return View(pageModel);
@@ -320,6 +315,12 @@ namespace NREPPAdminSite.Controllers
             if (col["Dest"] == "continue")
             {
                 //return RedirectToAction("ConfirmSub", model.TheIntervention.Id);
+                //model.Documents = 
+                List<InterventionDoc> docz = localService.GetDocuments(model.TheIntervention.Id, null, null).ToList();
+                foreach (InterventionDoc doc in docz)
+                {
+                    model.AddDocument(doc);
+                }
                 return View("ConfirmSub", model);
             }
             else return RedirectToAction("Submission6", new { InvId = model.TheIntervention.Id });
@@ -354,6 +355,29 @@ namespace NREPPAdminSite.Controllers
             localService.ChangeStatus(InterventionId, DestUser, DestStatus);
 
             return RedirectToAction("Programs", "Home");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult DocUpload(DocUploadPage model, FormCollection formCollection)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+             HttpPostedFileBase file = Request.Files["UploadedFile"];
+             if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+             {
+                 string fileName = file.FileName;
+                 string fileContentType = file.ContentType;
+                 byte[] fileBytes = new byte[file.ContentLength];
+                 file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+
+                 localService.SaveFileToDB(fileBytes, fileName, User.Identity.Name, "NOT IMPLEMENTED!", model.InterventionId, false,
+                            -1, model.UploadDescription, int.Parse(model.UploadDocType), model.UploadDocTitle);
+
+             }
+            
+            return RedirectToAction("Submission4", new { InvId = model.InterventionId }); // This always goes here.
+            
         }
 
         #endregion

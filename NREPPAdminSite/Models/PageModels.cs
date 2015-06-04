@@ -367,6 +367,67 @@ namespace NREPPAdminSite.Models
         }
     }
 
+    #region Document Upload
+    
+    public class DocUploadPage : NREPPPermissions
+    {
+        private List<InterventionDoc> documents = new List<InterventionDoc>();
+        private List<Answer> documentType = new List<Answer>();
+        private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>();
+
+        #region Accessors
+
+        public string InterventionName { get; set; }
+        public int InterventionId { get; set; }
+
+        [Required(ErrorMessage = "You must choose a document type!")]
+        [Display (Name = "Document Type")]
+        public string UploadDocType { get; set; }
+
+        [Required (ErrorMessage = "You must provide a Title for Your Document!")]
+        [Display (Name = "Document Title")]
+        public string UploadDocTitle { get; set; }
+
+        [Display (Name = "Document Description")]
+        public string UploadDescription { get; set; }
+
+        public List<InterventionDoc> Documents
+        {
+            get { return documents; }
+        }
+
+        public List<Answer> DocumentType
+        {
+            get { return documentType; }
+        }
+
+        public Dictionary<string, bool> PermissionsList
+        {
+            get { return permissionsList; }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        public DocUploadPage()
+        {
+            documents = new List<InterventionDoc>();
+            documentType = new List<Answer>();
+        }
+
+        public DocUploadPage(List<InterventionDoc> inDocs, List<Answer> inDocTypes)
+        {
+            documents = inDocs;
+            documentType = inDocTypes;
+        }
+
+        #endregion
+
+    }
+
+    #endregion
+
     #region Reviewer models
 
     public class ReviewersPageModel : NREPPPermissions
