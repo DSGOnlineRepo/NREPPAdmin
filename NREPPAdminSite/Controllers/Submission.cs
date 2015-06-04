@@ -26,10 +26,14 @@ namespace NREPPAdminSite.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Submission2()
         {
             IntervPageModel pageModel;
             NrepServ localService = new NrepServ(NrepServ.ConnString);
+            MyIdentityDbContext db = new MyIdentityDbContext();
+            UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
+            UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
 
             List<MaskValue> intervTypez = new List<MaskValue>();
 
@@ -45,17 +49,32 @@ namespace NREPPAdminSite.Controllers
             ViewBag.StartDate = pd.StartDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.StartDate.Year.ToString();
             ViewBag.EndDate = pd.EndDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.EndDate.Year.ToString();
 
+            // Fix this so that you don't need the "ReSubmission" page
            
-                theIntervention = new Intervention(-1, "", "", User.Identity.Name, null, DateTime.Now, User.Identity.GetUserId(), "", -1, 0, "", false);
-                pageModel = new IntervPageModel();
-                documentz = new List<InterventionDoc>();
-                reviewerDocs = new List<RCDocument>();
+            theIntervention = new Intervention(-1, "", "", User.Identity.Name, null, DateTime.Now, User.Identity.GetUserId(), "", -1, 0, "", false);
+            ExtendedUser me = _userManager.FindByName(User.Identity.Name);
+
+            theIntervention.PrimaryName = me.FirstName + " " + me.LastName;
+            theIntervention.PrimaryAddressLine1 = me.HomeAddressLine1;
+            theIntervention.PrimaryAddressLine2 = me.HomeAddressLine2;
+            theIntervention.PrimaryCity = me.HomeCity;
+            theIntervention.PrimaryState = me.HomeState;
+            theIntervention.PrimaryZip = me.HomeZip;
+            theIntervention.PrimaryPhoneNumber = me.PhoneNumber;
+            theIntervention.PrimaryFaxNumber = me.FaxNumber;
+            theIntervention.PrimaryEmail = me.Email;
+
+            pageModel = new IntervPageModel();
+            documentz = new List<InterventionDoc>();
+            reviewerDocs = new List<RCDocument>();
 
             //List<Destination> nDests = localService.GetDestinations(theIntervention.Id).ToList();
 
             pageModel = new IntervPageModel(documentz, reviewerDocs, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
                 documentTypes, null, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>(),
                 MaskValue.SplitMask(preScreen, theIntervention.UserPreScreenMask).ToList<MaskValue>());
+
+            pageModel.TheIntervention = theIntervention;
 
 
             return View(pageModel);
