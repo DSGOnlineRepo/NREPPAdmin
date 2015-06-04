@@ -174,7 +174,6 @@ ALTER PROCEDURE [dbo].[SPUpdateIntervention]
 	@HaveMaterials BIT = 0,
 	@MaterialsList VARCHAR(MAX) = NULL,
 	@LitReviewDone BIT = 0,
-
 	@PrimaryName nvarchar(250) = NULL,
 	@PrimaryOrg varchar(40) = NULL,
 	@PrimaryTitle varchar(40) = NULL,
@@ -207,7 +206,7 @@ AS SET NOCOUNT ON
 	IF @IntervId = -1 BEGIN
 
 		INSERT INTO Interventions (Title, FullDescription, PublishDate, UpdateDate, SubmitterId, Status, ProgramType, Acronym, PreScreenAnswers, UserPreScreenAnswer, ScreeningNotes,
-		HaveMaterials, MaterialsList, LitReviewDone
+		HaveMaterials, MaterialsList, LitReviewDone,
 		[PrimaryName],
 		[PrimaryOrg],
 		[PrimaryTitle],

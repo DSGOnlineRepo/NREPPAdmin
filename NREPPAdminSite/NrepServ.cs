@@ -565,6 +565,32 @@ namespace NREPPAdminSite
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@HaveMaterials", SqlDbType = SqlDbType.Bit, Value = inData.HaveMaterials });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@LitReviewDone", SqlDbType = SqlDbType.Bit, Value = inData.LitReviewDone });
 
+            /*
+             * inv.PrimaryName = dr.IsNull("PrimaryName") ? "" : dr["PrimaryName"].ToString();
+                    inv.PrimaryOrg = dr.IsNull("PrimaryOrg") ? "" : dr["PrimaryOrg"].ToString();
+                    inv.PrimaryTitle = dr.IsNull("PrimaryTitle") ? "" : dr["PrimaryTitle"].ToString();
+                    inv.PrimaryAddressLine1 = dr.IsNull("PrimaryAddressLine1") ? "" : dr["PrimaryAddressLine1"].ToString();
+                    inv.PrimaryAddressLine2 = dr.IsNull("PrimaryAddressLine2") ? "" : dr["PrimaryAddressLine2"].ToString();
+                    inv.PrimaryCity = dr.IsNull("PrimaryCity") ? "" : dr["PrimaryCity"].ToString();
+                    inv.PrimaryCity = dr.IsNull("PrimaryState") ? "" : dr["PrimaryState"].ToString();
+                    inv.PrimaryZip = dr.IsNull("PrimaryZip") ? "" : dr["PrimaryZip"].ToString();
+                    inv.PrimaryPhoneNumber = dr.IsNull("PrimaryPhoneNumber") ? "" : dr["PrimaryPhoneNumber"].ToString();
+                    inv.PrimaryFaxNumber = dr.IsNull("PrimaryFaxNumber") ? "" : dr["PrimaryFaxNumber"].ToString();
+                    inv.PrimaryEmail = dr.IsNull("PrimaryEmail") ? "" : dr["PrimaryEmail"].ToString();
+
+                    inv.SecondaryName = dr.IsNull("SecondaryName") ? "" : dr["SecondaryName"].ToString();
+                    inv.SecondaryOrg = dr.IsNull("SecondaryOrg") ? "" : dr["SecondaryOrg"].ToString();
+                    inv.SecondaryTitle = dr.IsNull("SecondaryTitle") ? "" : dr["SecondaryTitle"].ToString();
+                    inv.SecondaryAddressLine1 = dr.IsNull("SecondaryAddressLine1") ? "" : dr["SecondaryAddressLine1"].ToString();
+                    inv.SecondaryAddressLine2 = dr.IsNull("SecondaryAddressLine2") ? "" : dr["SecondaryAddressLine2"].ToString();
+                    inv.SecondaryCity = dr.IsNull("SecondaryCity") ? "" : dr["SecondaryCity"].ToString();
+                    inv.SecondaryCity = dr.IsNull("SecondaryState") ? "" : dr["SecondaryState"].ToString();
+                    inv.SecondaryZip = dr.IsNull("SecondaryZip") ? "" : dr["SecondaryZip"].ToString();
+                    inv.SecondaryPhoneNumber = dr.IsNull("SecondaryPhoneNumber") ? "" : dr["SecondaryPhoneNumber"].ToString();
+                    inv.SecondaryFaxNumber = dr.IsNull("SecondaryFaxNumber") ? "" : dr["SecondaryFaxNumber"].ToString();
+                    inv.SecondaryEmail = dr.IsNull("SecondaryEmail") ? "" : dr["SecondaryEmail"].ToString();
+             */
+
             SqlParameter OutPut = new SqlParameter("@Output", -1);
             OutPut.Direction = ParameterDirection.Output;
             cmdUpdate.Parameters.Add(OutPut);
