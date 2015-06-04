@@ -564,6 +564,30 @@ namespace NREPPAdminSite
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@MaterialsList", SqlDbType = SqlDbType.VarChar, Value = string.IsNullOrEmpty(inData.MaterialsList) ? "" : inData.MaterialsList });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@HaveMaterials", SqlDbType = SqlDbType.Bit, Value = inData.HaveMaterials });
             cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@LitReviewDone", SqlDbType = SqlDbType.Bit, Value = inData.LitReviewDone });
+            
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryName", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryName });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryOrg", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryOrg });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryTitle", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryTitle });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryAddressLine1", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryAddressLine1 });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryAddressLine2", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryAddressLine2 });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryCity", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryCity });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryState", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryState });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryZip", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryZip });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryPhoneNumber", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryPhoneNumber });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryFaxNumber", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryFaxNumber });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@PrimaryEmail", SqlDbType = SqlDbType.VarChar, Value = inData.PrimaryEmail });
+
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryName", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryName });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryOrg", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryOrg });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryTitle", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryTitle });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryAddressLine1", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryAddressLine1 });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryAddressLine2", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryAddressLine2 });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryCity", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryCity });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryState", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryState });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryZip", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryZip });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryPhoneNumber", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryPhoneNumber });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryFaxNumber", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryFaxNumber });
+            cmdUpdate.Parameters.Add(new SqlParameter() { ParameterName = "@SecondaryEmail", SqlDbType = SqlDbType.VarChar, Value = inData.SecondaryEmail });
 
             /*
              * inv.PrimaryName = dr.IsNull("PrimaryName") ? "" : dr["PrimaryName"].ToString();
