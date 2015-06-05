@@ -369,6 +369,7 @@
     <Content Include="Views\Program\PostSubmit.cshtml" />
     <Content Include="Views\Program\Assignment.cshtml" />
     <Content Include="Views\Program\AssignmentConfirm.cshtml" />
+    <Content Include="Views\Program\AssignReviewers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

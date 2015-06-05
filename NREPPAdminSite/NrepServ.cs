@@ -1445,7 +1445,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeState",  Value = model.HomeState });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeZip", SqlDbType = SqlDbType.VarChar, Value = model.HomeZip });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PhoneNumber", SqlDbType = SqlDbType.VarChar, Value = model.PhoneNumber });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FaxNumber", SqlDbType = SqlDbType.VarChar, Value = model.FaxNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FaxNumber", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.FaxNumber) });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Email", SqlDbType = SqlDbType.VarChar, Value = model.Email });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Employer", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.Employer) });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Department", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.Department) });
@@ -1592,7 +1592,34 @@ namespace NREPPAdminSite
             }
 
             return reviewer;
-        }        
+        }
+        
+        public List<ReviewerOnInterv> GetReviewersByIntervention(int InvId)
+        {
+            List<ReviewerOnInterv> outReviewers = new List<ReviewerOnInterv>();
+
+            SqlCommand cmd = new SqlCommand("GetReviewerByInterv", conn);
+            cmd.Parameters.AddWithValue("@InterventionId", InvId);
+
+            try
+            {
+                DataTable users = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(users);
+
+                foreach (DataRow dr in users.Rows)
+                {
+                    outReviewers.Add(new ReviewerOnInterv() { UserId = dr["UserId"].ToString(), WkRoleId = dr["WkRoleId"].ToString(),
+                        WkRoleName = dr["Name"].ToString(), Name = string.Format("{0} {1}", dr["FirstName"].ToString(), dr["LastName"].ToString()) });
+                }
+
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Error! " + ex.Message);
+            }
+
+            return outReviewers;
+        }
 
         #endregion
 
@@ -1620,6 +1647,11 @@ namespace NREPPAdminSite
                 return ConfigurationManager.ConnectionStrings[currentEnv].ConnectionString;
 
             }
+        }
+
+        public static NrepServ GetLocalService()
+        {
+            return new NrepServ(NrepServ.ConnString);
         }
 
         public DateTime? NullDate(object inObj)

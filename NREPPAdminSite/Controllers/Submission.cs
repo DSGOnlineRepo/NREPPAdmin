@@ -305,6 +305,27 @@ namespace NREPPAdminSite.Controllers
             return View(model);
         }
 
+        public ActionResult AssignReviewers(int InvId)
+        {
+            AssignReviewModel model = new AssignReviewModel();
+            NrepServ localService = NrepServ.GetLocalService();
+
+            List<ReviewerOnInterv> assignedReviewers = localService.GetReviewersByIntervention(InvId);
+
+            foreach (ReviewerOnInterv rev in assignedReviewers)
+            {
+                model.AddAssignedReviewer(rev);
+            }
+
+            model.AddAssignedReviewer(new ReviewerOnInterv() { WkRoleId = "GUID GOES HERE", Name = "User One", WkRoleName = "Invited" });
+            model.AddAssignedReviewer(new ReviewerOnInterv() { WkRoleId = "GUID GOES HERE", Name = "User Two", WkRoleName = "Accepted" });
+
+            return View(model);
+        }
+
+
+
+
         #endregion
 
         #region Post Methods

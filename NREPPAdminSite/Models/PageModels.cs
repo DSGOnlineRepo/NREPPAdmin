@@ -546,6 +546,25 @@ namespace NREPPAdminSite.Models
 
     #endregion
 
+    #region Assign Reviewer Page Model
+
+    public class AssignReviewModel : NREPPPermissions
+    {
+        private List<ReviewerOnInterv> assignedReviewers = new List<ReviewerOnInterv>();
+
+        public List<ReviewerOnInterv> AssignedReviewers
+        {
+            get {return assignedReviewers; }
+        }
+
+        public void AddAssignedReviewer(ReviewerOnInterv rev)
+        {
+            assignedReviewers.Add(rev);
+        }
+    }
+
+    #endregion
+
     #region Extra Stuff
 
     public class NREPPPermissions

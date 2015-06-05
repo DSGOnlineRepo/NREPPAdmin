@@ -246,6 +246,8 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Experience Summary")]
         public string ExperienceSummary { get; set; }
 
+        public string WkRoleId { get; set; }
+
     }
 
     public class RegisterViewModel : Reviewer

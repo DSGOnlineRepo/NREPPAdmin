@@ -1,0 +1,18 @@
+﻿@model NREPPAdminSite.Models.AssignReviewModel
+@{
+    ViewBag.Title = "Reviewer Assignment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Assign Reviewers to the Program</h2>
+
+<div>
+    <h3>Assigned Reviewers</h3>
+    <ul>
+        @foreach(NREPPAdminSite.Models.ReviewerOnInterv rev in Model.AssignedReviewers)
+        {
+            <li>@rev.Name - @rev.WkRoleName</li>
+        }
+    </ul>
+</div>
+
