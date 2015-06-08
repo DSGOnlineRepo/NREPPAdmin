@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Page 4 of Submission @Model.InterventionName</h2>
+<h2>Step 2. Upload Your Documents</h2>
 
 @{
     List<SelectListItem> DocTypez = new List<SelectListItem>();
@@ -21,7 +21,7 @@
         <tr>
             <!-- Header -->
             <th class="withborder" style="text-align: center;">Title</th>
-            <th class="withborder" style="text-align: center;">Description</th>
+            <th class="withborder" style="text-align: center;">Brief Description</th>
             <th class="withborder" style="text-align: center;">Type</th>
             <th class="withborder" style="text-align: center;">&nbsp;</th>
         </tr>
@@ -50,7 +50,7 @@
     if (Model.CanDo("UploadDocs")) // This should be status dependent anyway
     {
         <p>
-            You may now upload key documents relevant to the review of your program. This includes  program evaluation (journal articles, evaluation reports), , dissemination materials, and other supporting documents.
+            You may now upload key documents relevant to the review of your program. This includes  program evaluations (journal articles, evaluation reports), , dissemination materials, and other supporting documents.
         </p>
     <ul>
         <li><u>Program evaluation</u> materials include studies using an experimental or quasi-experimental design, with a comparison or control group (treatment as usual or no treatment, but not an alternative treatment) designed to assess the impact of the program on key outcomes.</li>
@@ -71,6 +71,7 @@
     <input type="submit" value="Attach" />
    }
 }
+    <span>Note: You must upload at least one program evaluation meeting the creiteria stated in step 1 to continue.</span><br /><br />
     @Html.ActionLink("Edit Program Title and Type", "ReSubmission2", new { InvId = Model.InterventionId})
     @Html.ActionLink("Continue With Submission", "Submission6", new { InvId = Model.InterventionId })
 
