@@ -136,23 +136,20 @@
         <div class='row'>
             <div class='col-sm-6'>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.UserName, new { @class = "col-sm-3 control-label" })
+                        @Html.LabelFor(m => m.UserName, new { @class = "col-sm-3 control-label" })
                     <div class="col-sm-9">
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User Name" })
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User Name" }).ReadOnlyIf(() => !isNew)
                     </div>
                 </div>
             </div>
-
-            @if (isNew){
-                <div class='col-sm-6'>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Password, new { @class = "col-sm-3 control-label" })
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
-                        </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-9">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
                     </div>
                 </div>
-            }
+            </div>
         </div>
         <div class='row'>
             <div class='col-sm-6'>
@@ -265,7 +262,7 @@
         </div>
         <div class="row">
             <div class="modal-footer col-sm-12">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-primary" />
                 <input type="submit" value="Cancel" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
             </div>
         </div>

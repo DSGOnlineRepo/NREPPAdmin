@@ -1,0 +1,1 @@
+INSERT INTO AspNetRoles VALUES (NEWID(), 'Administrator')

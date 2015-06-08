@@ -25,7 +25,7 @@ INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'PreScreener');
 
 SET IDENTITY_INSERT InterventionStatus ON
 
-INSERT INTO InterventionStatus (Id, StatusName) VALUES (1, 'Submitted')
+INSERT INTO InterventionStatus (Id, StatusName) VALUES (1, 'Pending Submission')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (2, 'Pre-Screening')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (3, 'Awaiting Assignment')
 INSERT INTO InterventionStatus (Id, StatusName) VALUES (13, 'Awaiting Mathematica Screened')

@@ -17,9 +17,9 @@
 <label>@Model.TheIntervention.Status</label><br />
 
 <div id="menubar">
-    @Html.ActionLink("Assign Literature Reviewer and Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id })
-    @Html.ActionLink("Screen this Intervention", "Screen", new { InvId = Model.TheIntervention.Id })
-    <a href="#">Submission Part B</a>
+	<p>@Html.ActionLink("Assign Literature Reviewer and Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id })</p>
+  <p>@Html.ActionLink("Screen this Intervention", "Screen", new { InvId = Model.TheIntervention.Id })</p>
+  <p><a href="#">Submission Part B</a></p>
 </div>
 
 <div>
@@ -186,8 +186,10 @@
         }
     </div>
     <br/><br />
+
+
     <div>
-        <h4>NREPP minimum criteria</h4>
+        <h4>NREPP Minimum Criteria</h4>
         @foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
         {
             bool isChecked = mask.Selected;
@@ -196,15 +198,17 @@
             if (mask.Value > 2)
             {
                 <span class="preQuestion_@mask.Value.ToString()">
-                    <span>@maskString</span>@Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>Yes</span>
-                    @Html.RadioButton(mask.Name, 0, !isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>No.</span><br />
+                    <span>@maskString</span>
+                    <br />@Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>&nbsp;&nbsp;Yes</span>
+                    @Html.RadioButton(mask.Name, 0, !isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>&nbsp;&nbsp;No.</span><br />
                 </span>
             }
             else
             {
                 <span class="preQuestion_@mask.Value.ToString()">
-                    <span>@maskString</span>@Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>Yes</span>
-                    @Html.RadioButton(mask.Name, 0, !isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>No.</span><br />
+                    <span>@maskString</span>
+                    <br />@Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>&nbsp;&nbsp;Yes</span>
+                    @Html.RadioButton(mask.Name, 0, !isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>&nbsp;&nbsp;No.</span><br />
                 </span>
             }
 

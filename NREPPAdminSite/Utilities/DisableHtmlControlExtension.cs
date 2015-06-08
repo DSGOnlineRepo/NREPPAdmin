@@ -28,4 +28,17 @@ public static class DisableHtmlControlExtension
         }
         return htmlString;
     }
+
+    public static MvcHtmlString ReadOnlyIf(this MvcHtmlString htmlString, Func<bool> expression)
+    {
+        if (expression.Invoke())
+        {
+            var html = htmlString.ToString();
+            const string readOnly = "\"true\"";
+            html = html.Insert(html.IndexOf(">",
+                StringComparison.Ordinal), " readonly= " + readOnly);
+            return new MvcHtmlString(html);
+        }
+        return htmlString;
+    }
 }

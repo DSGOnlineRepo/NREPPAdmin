@@ -1,4 +1,5 @@
-﻿<!-- You will need to change the model once the programs become available -->
+﻿@using NREPPAdminSite.Utilities
+<!-- You will need to change the model once the programs become available -->
 @*@model List<NREPPAdminSite.Models.Intervention>*@
 
 @{
@@ -27,27 +28,50 @@
 </div>
 
 <div class="container-fluid">
-    <div class="">        
+    <div class="">
         <div class="row">
             <div class="col-sm-12">
                 <ul class="list-inline">
-                    <li class="col-sm-3">
-                        <input type="text" class="form-control filter-input" placeholder="Title" data-fieldname="Title" data-column="0">
+                    <li class="col-sm-4">
+                        <label for="ftrTitle">Title</label>
+                        <input type="text" id="ftrTitle" class="form-control filter-input" placeholder="Title" data-fieldname="Title" data-column="0">
                     </li>
-                    <li class="col-sm-3">
-                        <input type="text" class="form-control filter-input" placeholder="Full Description" data-fieldname="FullDescription" data-column="1">
+                    <li class="col-sm-4">
+                        <label for="ftrDescription">Full Description</label>
+                        <input type="text" id="ftrDescription" class="form-control filter-input" placeholder="Full Description" data-fieldname="FullDescription" data-column="1">
                     </li>
-                    <li class="col-sm-3" style="padding-bottom: 5px">
-                        <input type="text" class="form-control filter-input" id="updatedDate" placeholder="Updated Date" data-fieldname="UpdatedDate" data-column="3">
+                    <li class="col-sm-4" style="padding-bottom: 5px">
+                        <label for="ftrSubmitter">Submitter</label>
+                        <input type="text" id="ftrSubmitter" class="form-control filter-input" placeholder="Submitter" data-fieldname="Submitter" data-column="4">
                     </li>
-                    <li class="col-sm-3" style="padding-bottom: 5px">
-                        <input type="text" class="form-control filter-input" placeholder="Submitter" data-fieldname="Submitter" data-column="4">
-                    </li>
-                </ul>
+                </ul>@*@if (User.IsInIdentityRole("Principal Investigator"))
+                    {*@
+
+                @*}*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <label class="control-label">
+                    View all programs
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="filter-input-opt" id="optOnlyMyPrograms" value="filter-group-user" checked> submitted / assigned to me
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="filter-input-opt" id="optOnlyMyGroupPrograms" value="filter-group-mathematica"> assigned to Mathematica
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="filter-input-opt" id="optAllSubmitted" value="filter-group-dsg"> submitted
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="filter-input-opt" id="optAllInterventions" value="filter-group-admin"> in the system
+                </label>
             </div>
         </div>
     </div>
 </div>
+
 <div class="row voffset3"></div>
 @*@Html.ActionLink("Create a New Submission", "View", "Program", new { InvId = "-1" }, null)<br />*@
 <div class="container-fluid">
@@ -78,20 +102,30 @@
             scrollX: true,
             scrollCollapse: true,
             serverSide: true,
-            pagingType: "full",
+            paging: true,
             columns: [
                 { "data": "Title", "bSortable": true },
                 { "data": "FullDescription" },
                 { "data": "Status" },
                 { "data": "UpdatedDate" },
                 { "data": "Submitter" },
-                { "data": "Id" }
+                { "data": "Id" },
+                { "data": "DummyColumnForFilter" }
+            ],
+            "searchCols": [
+               null,
+               null,
+               null,
+               null,
+               null,
+               null,
+               { "search": "filter-group-user" }
             ],
             order: [0, 'asc'],
             columnDefs: [
                 {
                     render: function (data, type, row) {
-                        if (row.Status !== "Submitted") {
+                        if (row.Status !== "Pending Submission") {
                             return '<a href="/Program/View?InvId=' + row["Id"] + '">' + data + '</a>';
                         } else {
                             return '<a href="/Program/ReSubmission2?InvId=' + row["Id"] + '">' + data + '</a>';
@@ -106,7 +140,8 @@
                     },
                     targets: 3
                 },
-                { visible: false, targets: [5] }
+                { visible: false, targets: [5] },
+                { visible: false, targets: [6] }
             ],
             tableTools: {
                 sRowSelect: "os",
@@ -114,15 +149,13 @@
             }
         });
 
-        $(".filter-input").on("keyup", function () {
-            if ($(this).attr('data-column') != 3) {
+        $(".filter-input-text").on("keyup", function () {
                 userTable.column($(this).attr('data-column')).search($(this).val()).draw();
-            }
         });
-        $(".filter-input").change(function () {
-            if ($(this).attr('data-column') == 3) {
-                userTable.column($(this).attr('data-column')).search($(this).val()).draw();
-            }
+
+        $('input[type=radio][name=filter-input-opt]').change(function () {
+                userTable.column(6).search($(this).val()).draw();
         });
+
     });
 </script>

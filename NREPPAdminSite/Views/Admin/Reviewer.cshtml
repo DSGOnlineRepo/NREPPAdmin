@@ -1,14 +1,13 @@
 ﻿@model NREPPAdminSite.Models.RegisterViewModel
 @{
     ViewBag.Title = "Add/Edit Reviewer";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewBag.Title</h2>
 
 <div class="container-fluid">
 
-    @using (Html.BeginForm("AddReviewer", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("SaveReviewer", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" , id="frmReviewerEdit"}))
     {
 
     <div class='row'>
@@ -17,6 +16,7 @@
                 @Html.LabelFor(m => m.UserName, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
                     @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autofocus = "autofocus", placeholder = "User Name" })
+                    @Html.HiddenFor(m => m.Id, new { @class = "" })
                 </div>
             </div>
         </div>
@@ -24,57 +24,64 @@
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.Email, new { @class = "col-sm-3 control-label" })
+                @Html.LabelFor(m => m.Email, new {@class = "col-sm-3 control-label"})
                 <div class="col-sm-9">
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+                    @Html.TextBoxFor(m => m.Email, new {@class = "form-control", placeholder = "Email"})
                 </div>
             </div>
         </div>
-        <div class='col-sm-6'>
-            <div class="form-group">
-                @Html.LabelFor(m => m.ConfirmEmail, new { @class = "col-sm-3 control-label" })
-                <div class="col-sm-9">
-                    @Html.TextBoxFor(m => m.ConfirmEmail, new { @class = "form-control", placeholder = "Confirm Email" })
+        @if (Model.Id == null)
+        {
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmEmail, new {@class = "col-sm-3 control-label"})
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(m => m.ConfirmEmail, new {@class = "form-control", placeholder = "Confirm Email"})
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
     <div class='row'>
+    @if(Model.Id == null)
+    {
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.Password, new { @class = "col-sm-3 control-label" })
+                @Html.LabelFor(m => m.Password, new {@class = "col-sm-3 control-label"})
                 <div class="col-sm-9">
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                    @Html.PasswordFor(m => m.Password, new {@class = "form-control", placeholder = "Password"})
                 </div>
             </div>
         </div>
+
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-sm-3 control-label" })
+                @Html.LabelFor(m => m.ConfirmPassword, new {@class = "col-sm-3 control-label"})
                 <div class="col-sm-9">
-                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password" })
+                    @Html.PasswordFor(m => m.ConfirmPassword, new {@class = "form-control", placeholder = "Confirm Password"})
                 </div>
             </div>
         </div>
+    }
     </div>
     <div class='row'>
-        <div class='col-sm-6'>
-            <div class="form-group">
-                @Html.LabelFor(m => m.FirstName, new { @class = "col-sm-3 control-label" })
-                <div class="col-sm-9">
-                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "First Name" })
-                </div>
-            </div>
-        </div>
-        <div class='col-sm-6'>
-            <div class="form-group">
-                @Html.LabelFor(m => m.LastName, new { @class = "col-sm-3 control-label" })
-                <div class="col-sm-9">
-                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Last Name" })
-                </div>
+    <div class='col-sm-6'>
+        <div class="form-group">
+            @Html.LabelFor(m => m.FirstName, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "First Name" })
             </div>
         </div>
     </div>
+    <div class='col-sm-6'>
+        <div class="form-group">
+            @Html.LabelFor(m => m.LastName, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Last Name" })
+            </div>
+        </div>
+    </div>
+</div>
     <div class='row'>
         <div class='col-sm-6'>
             <div class="form-group">
@@ -254,11 +261,24 @@
 
     </div>
     <div class='row'>
+        <div class='col-sm-12'>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ExperienceSummary, new {@class = "col-sm-3 control-label"})
+                <div class="col-sm-9">
+                    @Html.TextAreaFor(model => model.ExperienceSummary, new {@class = "form-control", placeholder = "Experience Summary", cols = 40, @rows = 3})
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-sm-6'>
+            <span style="font-size: large; font-weight: bold;">Upload Contract Agreement: </span><input type="file" name="fileCa" />
+        </div>
         <div class='col-sm-6'>
             <div class="form-group">
-                @Html.LabelFor(m => m.ExperienceSummary, new { @class = "col-sm-3 control-label" })
+                @Html.LabelFor(m => m.ContractEndDate, new { @class = "col-sm-3 control-label" })
                 <div class="col-sm-9">
-                    @Html.TextAreaFor(model => model.ExperienceSummary, new { @class = "form-control", placeholder = "Experience Summary", cols = 40, @rows = 3 })
+                    @Html.EditorFor(model => model.ContractEndDate)
                 </div>
             </div>
         </div>
@@ -267,7 +287,7 @@
 
     <div class="col-sm-offset-3 col-sm-9">
         <input type="submit" value="Save" class="btn btn-primary" />
-        <input type="submit" value="Cancel" class="btn btn-default" />
+        <input type="submit" value="Cancel" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
     </div>
     }
 
