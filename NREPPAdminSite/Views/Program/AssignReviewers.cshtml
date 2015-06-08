@@ -1,0 +1,102 @@
+﻿@model NREPPAdminSite.Models.AssignReviewModel
+@{
+    ViewBag.Title = "Reviewer Assignment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Assign Reviewers to the Program</h2>
+
+<div>
+    <h3>Assigned Reviewers</h3>
+    <ul>
+        @foreach(NREPPAdminSite.Models.ReviewerOnInterv rev in Model.AssignedReviewers)
+        {
+            <li>@rev.Name - @rev.ReviewerStatus</li>
+        }
+    </ul>
+</div>
+
+<div class="row">
+    <h3>Add Reviewer </h3>
+    <div class="col-sm-12">
+        <ul class="list-inline">
+            <li class="col-sm-3">
+                <input type="text" class="form-control filter-input" placeholder="First Name" data-fieldname="FirstName" data-column="0">
+            </li>
+            <li class="col-sm-3" style="padding-bottom: 5px">
+                <input type="text" class="form-control filter-input" placeholder="Last Name" data-fieldname="LastName" data-column="1">
+            </li>
+            <li class="col-sm-3" style="padding-bottom: 5px">
+                <input type="text" class="form-control filter-input" placeholder="Employer" data-fieldname="Employer" data-column="2">
+            </li>
+            <li class="col-sm-3" style="padding-bottom: 5px">
+                <input type="text" class="form-control filter-input" placeholder="Department" data-fieldname="Department" data-column="3">
+            </li>
+            <li class="col-sm-3" style="padding-bottom: 5px">
+                <input type="text" class="form-control filter-input" placeholder="Reviewer Type" data-fieldname="ReviewerType" data-column="4">
+            </li>
+            <li class="col-sm-3" style="padding-bottom: 5px">
+                <input type="text" class="form-control filter-input" placeholder="Degree" data-fieldname="Degree" data-column="5">
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div>
+    @using(Html.BeginForm("AssignReview", "Program"))
+    {
+        @Html.Hidden("ChosenReviewer")
+        @Html.Hidden("InterventionId", Model.InterventionId)
+        
+        <table id="tblReviewers" class="display">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Employer</th>
+                    <th>Department</th>
+                    <th>Reviewer Type</th>
+                    <th>Degree</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    }
+</div>
+
+<script type="text/javascript">
+
+    function setChosenReviewer(inValue) {
+        $("#ChosenReviewer").val(inValue);
+    }
+
+    $(document).ready(function () {
+
+        var reviewerTable = $('#tblReviewers').DataTable({
+            sDom: '<"top"pl>it<"clear">',
+            ajax: "ReviewersList",
+            scrollX: true,
+            scrollCollapse: true,
+            serverSide: true,
+            columns: [
+                { "data": "FirstName" },
+                { "data": "LastName" },
+                { "data": "Employer" },
+                { "data": "Department" },
+                { "data": "ReviewerType" },
+                { "data": "Degree" },
+                {
+                    "data": "Id",
+                    "render": function (data) {
+                        return "<input type='submit' onclick='setChosenReviewer(" + data + "); return true;' value='Assign' /><span>" + data + "</span>";
+                    }
+                }
+            ]
+        });
+
+        $(".filter-input").on("keyup", function () {
+            reviewerTable.column($(this).attr('data-column')).search($(this).val()).draw();
+        });
+    });
+</script>
+

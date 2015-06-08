@@ -21,12 +21,13 @@
     @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" })
     @Html.HiddenFor(m => m.TheIntervention.Id)
 
-    @Html.LabelFor(m => m.TheIntervention.Title)
+    <span>1) </span>@Html.LabelFor(m => m.TheIntervention.Title)
     @Html.TextBoxFor(m => m.TheIntervention.Title) <br /><br />
-    
-    @Html.LabelFor(m => m.TheIntervention.Acronym)
+
+    <span>2) </span>@Html.LabelFor(m => m.TheIntervention.Acronym)
     @Html.TextBoxFor(m => m.TheIntervention.Acronym)<br /><br />
 
+    <span>3) Program Type (Check all that apply)</span>
     <ul style="list-style-type: none;">
         @foreach (NREPPAdminSite.Models.MaskValue mask in Model.ProgramType)
         {
@@ -47,14 +48,14 @@
         if (mask.Value > 2)
         {
             <span class="preQuestion_@mask.Value.ToString()">
-                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
+                <span style="padding-top:5px">@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
                 @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
             </span>
         }
         else
         {
             <span class="preQuestion_@mask.Value.ToString()">
-                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
+                <span style="padding-top:5px">@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
                 @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
             </span>
         }

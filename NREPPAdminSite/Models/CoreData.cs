@@ -408,4 +408,11 @@ namespace NREPPAdminSite.Models
         public DateTime EndDate;
     }
 
+    public struct ReviewerOnInterv
+    {
+        public string UserId;
+        public string Name;
+        public string ReviewerStatus;
+    }
+
 }

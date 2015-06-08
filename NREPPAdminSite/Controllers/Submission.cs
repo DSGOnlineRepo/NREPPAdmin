@@ -13,6 +13,7 @@ using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
 using NREPPAdminSite.Security;
 using System.Globalization;
+using DataTables.Mvc;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -303,9 +304,35 @@ namespace NREPPAdminSite.Controllers
             return View(model);
         }
 
+        public ActionResult AssignReviewers(int InvId)
+        {
+            AssignReviewModel model = new AssignReviewModel();
+            NrepServ localService = NrepServ.GetLocalService();
+
+            List<ReviewerOnInterv> assignedReviewers = localService.GetReviewersByIntervention(InvId);
+
+            foreach (ReviewerOnInterv rev in assignedReviewers)
+            {
+                model.AddAssignedReviewer(rev);
+            }
+
+            model.InterventionId = InvId;
+
+            return View(model);
+        }
+
+
         #endregion
 
         #region Post Methods
+
+        [Authorize]
+        public JsonResult ReviewersList([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            ReviewerSearchResult reviewerSearchResult = localService.GetReviewers(requestModel);
+            return Json(new DataTablesResponse(requestModel.Draw, reviewerSearchResult.Reviewers, reviewerSearchResult.TotalSearchCount, reviewerSearchResult.TotalSearchCount), JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult Submit2(IntervPageModel model, FormCollection col)
         {
@@ -395,6 +422,19 @@ namespace NREPPAdminSite.Controllers
             
             return RedirectToAction("Submission4", new { InvId = model.InterventionId }); // This always goes here.
             
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult AssignReview(FormCollection col)
+        {
+            int InterventionID = int.Parse(col["InterventionId"]);
+            string UserName = User.Identity.Name;
+
+            NrepServ localService = NrepServ.GetLocalService();
+            localService.AssignReviewer(InterventionID, UserName, "Invited Reviewer");
+
+            return RedirectToAction("AssignReviewers", InterventionID);
         }
 
         #endregion

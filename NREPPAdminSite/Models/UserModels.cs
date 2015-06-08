@@ -248,13 +248,15 @@ namespace NREPPAdminSite.Models
 
         [Display(Name = "Experience Summary")]
         public string ExperienceSummary { get; set; }
-
+        
         [Display(Name = "Contract End Date")]
         public DateTime? ContractEndDate { get; set; }
 
         public string DocId { get; set; }
 
         public HttpPostedFileBase Document { get; set; }
+
+        public string WkRoleId { get; set; }
 
     }
 

@@ -1288,6 +1288,27 @@ namespace NREPPAdminSite
             return;
         }
 
+        public void AssignReviewer(int InterventionId, string UserId, string ReviewerStatus)
+        {
+            SqlCommand cmd = new SqlCommand("SPAssignReviewer", conn);
+
+            cmd.Parameters.AddWithValue("@InterventionId", InterventionId);
+            cmd.Parameters.AddWithValue("@UserId", UserId);
+            cmd.Parameters.AddWithValue("@ReviewerStatus", ReviewerStatus);
+
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return;
+        }
+
         #endregion
 
         #region Other User Functionality
@@ -1712,7 +1733,34 @@ namespace NREPPAdminSite
             }
 
             return reviewer;
-        }        
+        }
+        
+        public List<ReviewerOnInterv> GetReviewersByIntervention(int InvId)
+        {
+            List<ReviewerOnInterv> outReviewers = new List<ReviewerOnInterv>();
+
+            SqlCommand cmd = new SqlCommand("GetReviewerByInterv", conn);
+            cmd.Parameters.AddWithValue("@InterventionId", InvId);
+
+            try
+            {
+                DataTable users = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(users);
+
+                foreach (DataRow dr in users.Rows)
+                {
+                    outReviewers.Add(new ReviewerOnInterv() { UserId = dr["UserId"].ToString(),
+                        ReviewerStatus = dr["ReviewerStatus"].ToString(), Name = string.Format("{0} {1}", dr["FirstName"].ToString(), dr["LastName"].ToString()) });
+                }
+
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Error! " + ex.Message);
+            }
+
+            return outReviewers;
+        }
 
         #endregion
 
@@ -1740,6 +1788,11 @@ namespace NREPPAdminSite
                 return ConfigurationManager.ConnectionStrings[currentEnv].ConnectionString;
 
             }
+        }
+
+        public static NrepServ GetLocalService()
+        {
+            return new NrepServ(NrepServ.ConnString);
         }
 
         public DateTime? NullDate(object inObj)
