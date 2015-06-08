@@ -47,17 +47,19 @@
 
         if (mask.Value > 2)
         {
-            <span class="preQuestion_@mask.Value.ToString()">
-                <span style="padding-top:5px">@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
-                @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
+            <span style="padding-left: 20px" class="preQuestion_@mask.Value.ToString()" >
+                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new {@class = "userPreScreenMask"})<span>Yes</span>
+                @Html.RadioButton(mask.Name, 0, !isChecked, new {@class = "userPreScreenMask"})<span>No.</span><br />
             </span>
+            <br />
         }
         else
         {
-            <span class="preQuestion_@mask.Value.ToString()">
-                <span style="padding-top:5px">@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
-                @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
+            <span style="padding-left: 20px"class="preQuestion_@mask.Value.ToString()">
+                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new {@class = "userPreScreenMask"})<span>Yes</span>
+                @Html.RadioButton(mask.Name, 0, !isChecked, new {@class = "userPreScreenMask"})<span>No.</span><br />
             </span>
+            <br />
         }
 
     }
