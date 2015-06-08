@@ -36,8 +36,8 @@ namespace NREPPAdminSite.Controllers
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(idParam);
             parameters.Add(roleParam);
-            List<Intervention> interventionList = localService.GetInterventions(parameters);
-            theIntervention = interventionList[0];
+            var interventionList = localService.GetInterventions(parameters);
+            theIntervention = interventionList.Interventions.FirstOrDefault();
 
             OutcomesWrapper ow = localService.GetOutcomesByIntervention(InvId);
 

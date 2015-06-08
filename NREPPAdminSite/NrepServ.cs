@@ -74,7 +74,7 @@ namespace NREPPAdminSite
                 SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = inId };
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(idParam);
-                List<Intervention> interventionList = GetInterventions(parameters);
+                var intervention = GetInterventions(parameters).Interventions[0];
                 IEmailService _emailService = new EmailService();
 
                 if (toStatus == 2)
@@ -85,11 +85,11 @@ namespace NREPPAdminSite
                     //                                   " has been assigned to you for prescreening.");
                     //_emailService.SendEmail(mailMessage1);
 
-                    var user = _userManager.FindById(interventionList[0].SubmitterId);
+                    var user = _userManager.FindById(intervention.SubmitterId);
 
                     var mailMessage2 = new MailMessage("donotreply@dsgonline.com", user.Email,
                        "Intervention Status Changed", "Dear " + user.FirstName + ", " +
-                                                      "Thank you for submitting " + interventionList[0].Title + "/" + interventionList[0].Acronym + 
+                                                      "Thank you for submitting " + intervention.Title + "/" + intervention.Acronym + 
                                                       " for inclusion in the National Registry of Evidence-based " +
                                                       "Programs and Practices (NREPP). NREPP staff will screen your submission " +
                                                       "package to confirm its eligibility for a full review and you will receive " +
@@ -98,12 +98,12 @@ namespace NREPPAdminSite
                 }
                 else if (toStatus == 92)
                 {
-                    var user = _userManager.FindById(interventionList[0].SubmitterId);
+                    var user = _userManager.FindById(intervention.SubmitterId);
 
                     var mailMessage1 = new MailMessage("donotreply@dsgonline.com", user.Email,
                        "Intervention Status Changed", "Dear " + user.FirstName + ", " +
                                                       "The Substance Abuse and Mental Health Services Administration thanks you for the " +
-                                                      "submission of " + interventionList[0].Title + " to the National Registry of Evidence-based Programs and Practices " +
+                                                      "submission of " + intervention.Title + " to the National Registry of Evidence-based Programs and Practices " +
                                                       "(NREPP) during the [month year] open submission period. Unfortunately, your submission did not meet the minimum requirements" +
                                                       " for a full review. The reason(s) are listed below." + "[List of Reasons]" +
                                                       "If you have another study that meets minimum requirements, please feel free to submit this study during any " +
@@ -117,7 +117,7 @@ namespace NREPPAdminSite
                 {
                     var mailMessage1 = new MailMessage("donotreply@dsgonline.com", destUser.Email,
                        "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
-                                                       "This is to inform you that " + interventionList[0].Title + "/" + interventionList[0].Acronym + 
+                                                       "This is to inform you that " + intervention.Title + "/" + intervention.Acronym + 
                                                         " has passed prescreening. It is ready to be assigned to a DSG RC, DSG RFDC, and DSG Lit reviewer, or the MPR PRM.");
 
                     //TODO Check what reasons to display
@@ -132,16 +132,16 @@ namespace NREPPAdminSite
                     {
                         mailMessage = new MailMessage("donotreply@dsgonline.com", destUser.Email,
                             "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
-                                                           "This is to inform you that " + interventionList[0].Title +
-                                                           "/" + interventionList[0].Acronym +
+                                                           "This is to inform you that " + intervention.Title +
+                                                           "/" + intervention.Acronym +
                                                            " has passed prescreening and has been assigned to you for screening.");
                     }
                     else if (destUserRole.Name == "Review Coordinator")
                     {
                         mailMessage = new MailMessage("donotreply@dsgonline.com", destUser.Email,
                            "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
-                                                          "This is to inform you that " + interventionList[0].Title +
-                                                          "/" + interventionList[0].Acronym +
+                                                          "This is to inform you that " + intervention.Title +
+                                                          "/" + intervention.Acronym +
                                                           "has passed prescreening and is ready to be assigned to an RC, an RFDC, and a Lit reviewer.");
                     }
 
@@ -363,10 +363,10 @@ namespace NREPPAdminSite
         {
             List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
             nullParams.Add(new SqlParameter() { ParameterName = "@UserName", SqlDbType = SqlDbType.NVarChar, Value = UserName });
-            return GetInterventions(nullParams);
+            return GetInterventions(nullParams).Interventions;
         }
 
-        public List<Intervention> GetInterventions([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel, string UserName)
+        public InterventionSearchResult GetInterventions([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel, string userName)
         {
             List<Intervention> interventions = new List<Intervention>();
 
@@ -374,6 +374,7 @@ namespace NREPPAdminSite
             string fullDescription = null;
             string submitter = null;
             string updatedDate = null;
+            string filtergroup = null;
 
             var reviewerSearchResult = new ReviewerSearchResult();
             var reviewerList = new List<Reviewer>();
@@ -397,17 +398,21 @@ namespace NREPPAdminSite
                     case "UpdatedDate":
                         updatedDate = filter.Search.Value;
                         break;
-                                    
+                    case "DummyColumnForFilter":
+                        filtergroup = filter.Search.Value.Split('-')[2];
+                        break;
                 }
             }
+
             List<SqlParameter> paramsList = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
-            paramsList.Add(new SqlParameter() { ParameterName = "@UserName", SqlDbType = SqlDbType.NVarChar, Value = UserName });
-            paramsList.Add(new SqlParameter() { ParameterName = "@Title", SqlDbType = SqlDbType.NVarChar, Value = title });
-            paramsList.Add(new SqlParameter() { ParameterName = "@FullDescription", SqlDbType = SqlDbType.NVarChar, Value = fullDescription });
-            paramsList.Add(new SqlParameter() { ParameterName = "@UpdatedDate", Value = updatedDate });
+            paramsList.Add(new SqlParameter("@UserName", userName));
+            paramsList.Add(new SqlParameter("@Title", title));
+            paramsList.Add(new SqlParameter("@FullDescription", fullDescription));
+            paramsList.Add(new SqlParameter("@UpdatedDate", updatedDate));
             paramsList.Add(new SqlParameter("@Submitter", submitter));
-            paramsList.Add(new SqlParameter("@Page", requestModel.Start + 1));
+            paramsList.Add(new SqlParameter("@Page", (requestModel.Start / requestModel.Length) + 1));
             paramsList.Add(new SqlParameter("@PageLength", requestModel.Length));
+            paramsList.Add(new SqlParameter("@filterGroup", filtergroup));
             return GetInterventions(paramsList);
         }
 
@@ -418,8 +423,9 @@ namespace NREPPAdminSite
         /// </summary>
         /// <param name="parameters">A List of parameters to govern which records you want</param>
         /// <returns>A List if intervention objects</returns>
-        public List<Intervention> GetInterventions(List<SqlParameter> parameters)
+        public InterventionSearchResult GetInterventions(List<SqlParameter> parameters)
         {
+            InterventionSearchResult searchResult =  new InterventionSearchResult();
             List<Intervention> interventions = new List<Intervention>();
             SqlCommand cmdGetInterventions = new SqlCommand("SPGetInterventionList", conn);
             cmdGetInterventions.CommandType = CommandType.StoredProcedure;
@@ -473,21 +479,23 @@ namespace NREPPAdminSite
                     inv.SecondaryPhoneNumber = dr.IsNull("SecondaryPhoneNumber") ? "" : dr["SecondaryPhoneNumber"].ToString();
                     inv.SecondaryFaxNumber = dr.IsNull("SecondaryFaxNumber") ? "" : dr["SecondaryFaxNumber"].ToString();
                     inv.SecondaryEmail = dr.IsNull("SecondaryEmail") ? "" : dr["SecondaryEmail"].ToString();
-
-
+                    searchResult.TotalSearchCount = Convert.ToInt16(dr["searchTotal"].ToString());
                     interventions.Add(inv);
+                }
 
-                    
+                if (interventions.Count > 0)
+                {
+                    searchResult.Interventions = interventions;
                 }
 
             }
             catch (Exception ex)
             {
                 //TODO: Why are we adding dummy intervention in case of a error
-                //interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, User, "Submitted", 1, 0, "", false));
+                //interventions.Add(new Intervention(-1, "Error!", ex.Message, "", DateTime.Now, DateTime.Now, User, "Pending Submission", 1, 0, "", false));
             }
 
-            return interventions;
+            return searchResult;
         }
 
         /// <summary>
@@ -671,7 +679,7 @@ namespace NREPPAdminSite
             return results;
         }
 
-        public int SaveFileToDB(byte[] inData, string fileName, string uploaderName, string MIMEType, int IntervId, bool isDelete, int ItemId, string DisplayName,
+        public int SaveFileToDB(byte[] inData, string fileName, string uploaderName, string MIMEType, int? IntervId, bool isDelete, int ItemId, string DisplayName,
             int documentType, string Title)
         {
 
@@ -679,7 +687,7 @@ namespace NREPPAdminSite
             int retValue = -1;
             cmdSaveFile.CommandType = CommandType.StoredProcedure;
 
-            cmdSaveFile.Parameters.Add(new SqlParameter("@IntervId", IntervId));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@IntervId", DBFunctions.ToDbNull(IntervId)));
             cmdSaveFile.Parameters.Add(new SqlParameter("@Description", DisplayName));
             cmdSaveFile.Parameters.Add(new SqlParameter("@MIMEType", MIMEType));
             cmdSaveFile.Parameters.Add(new SqlParameter("@IsDelete", isDelete));
@@ -1400,7 +1408,7 @@ namespace NREPPAdminSite
             cmdGetReviewerList.Parameters.Add(new SqlParameter("@Department", DBFunctions.ToDbNull(department)));
             cmdGetReviewerList.Parameters.Add(new SqlParameter("@ReviewerType", DBFunctions.ToDbNull(reviewerType)));
             cmdGetReviewerList.Parameters.Add(new SqlParameter("@Degree", DBFunctions.ToDbNull(degree)));
-            cmdGetReviewerList.Parameters.Add(new SqlParameter("@Page", requestModel.Start + 1));
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@Page", (requestModel.Start / requestModel.Length) + 1));
             cmdGetReviewerList.Parameters.Add(new SqlParameter("@PageLength", requestModel.Length));
             try
             {
@@ -1412,10 +1420,12 @@ namespace NREPPAdminSite
                 reviewerList.AddRange(from DataRow dr in reviewers.Rows
                     select new Reviewer
                     {
-                        Id = dr["Id"].ToString(), UserId = dr["UserId"].ToString(), FirstName = dr["FirstName"].ToString(), 
+                        Id = dr["Id"].ToString(), UserName = dr["UserName"].ToString(), FirstName = dr["FirstName"].ToString(), 
                         LastName = dr["LastName"].ToString(), Employer = dr["Employer"].ToString(), 
-                        Department = dr["Department"].ToString(), ReviewerType = dr["ReviewerType"].ToString(), 
-                        Degree = dr["Degree"].ToString()
+                        Department = dr["Department"].ToString(), ReviewerType = dr["ReviewerType"].ToString(),
+                        Degree = dr["Degree"].ToString(),
+                        DocId = dr["DocId"].ToString(),
+                        ContractEndDate = (dr["ContractEndDate"] != DBNull.Value ? Convert.ToDateTime(dr["ContractEndDate"]) : (DateTime?)null)
                     });
                 if (reviewers.Rows.Count > 0)
                 {
@@ -1431,13 +1441,66 @@ namespace NREPPAdminSite
             return reviewerSearchResult;
         }
 
+        public RegisterViewModel GetReviewer(string id)
+        {
+            if (string.IsNullOrEmpty(id)) { return new RegisterViewModel();}
+            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewers", conn);
+            cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@Id", id));
+            RegisterViewModel reviewer = new RegisterViewModel();
+            try
+            {
+                CheckConn();
+                DataTable reviewers = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmdGetReviewerList);
+                da.Fill(reviewers);
+
+                if (reviewers.Rows.Count > 0)
+                {
+                    reviewer.Id = reviewers.Rows[0]["Id"].ToString();
+                    reviewer.UserId = reviewers.Rows[0]["UserId"].ToString();
+                    reviewer.FirstName = reviewers.Rows[0]["FirstName"].ToString();
+                    reviewer.LastName = reviewers.Rows[0]["LastName"].ToString();
+                    reviewer.UserName = reviewers.Rows[0]["UserName"].ToString();
+                    reviewer.Degree = reviewers.Rows[0]["Degree"].ToString();
+                    reviewer.HomeAddressLine1 = reviewers.Rows[0]["HomeAddressLine1"].ToString();
+                    reviewer.HomeAddressLine2 = reviewers.Rows[0]["HomeAddressLine2"].ToString();
+                    reviewer.HomeCity = reviewers.Rows[0]["HomeCity"].ToString();
+                    reviewer.HomeState = reviewers.Rows[0]["HomeState"].ToString();
+                    reviewer.HomeZip = reviewers.Rows[0]["HomeZip"].ToString();
+                    reviewer.PhoneNumber = reviewers.Rows[0]["PhoneNumber"].ToString();
+                    reviewer.FaxNumber = reviewers.Rows[0]["FaxNumber"].ToString();
+                    reviewer.Email = reviewers.Rows[0]["Email"].ToString();
+                    reviewer.Employer = reviewers.Rows[0]["Employer"].ToString();
+                    reviewer.Department = reviewers.Rows[0]["Department"].ToString();
+                    reviewer.WorkAddressLine1 = reviewers.Rows[0]["WorkAddressLine1"].ToString();
+                    reviewer.WorkAddressLine2 = reviewers.Rows[0]["WorkAddressLine2"].ToString();
+                    reviewer.WorkCity = reviewers.Rows[0]["WorkCity"].ToString();
+                    reviewer.WorkState = reviewers.Rows[0]["WorkState"].ToString();
+                    reviewer.WorkZip = reviewers.Rows[0]["WorkZip"].ToString();
+                    reviewer.WorkPhoneNumber = reviewers.Rows[0]["WorkPhoneNumber"].ToString();
+                    reviewer.WorkFaxNumber = reviewers.Rows[0]["WorkFaxNumber"].ToString();
+                    reviewer.ExperienceSummary = reviewers.Rows[0]["ExperienceSummary"].ToString();
+                    reviewer.WorkEmail = reviewers.Rows[0]["WorkEmail"].ToString();
+                    reviewer.IsLocked = reviewers.Rows[0]["Active"].ToString() == "1" ? true : false;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return reviewer;
+        }
+
         public bool AddReviewer(RegisterViewModel model)
         {
             SqlCommand cmd = new SqlCommand("SPAddReviewer", conn) {CommandType = CommandType.StoredProcedure};
             cmd.Parameters.Add(new SqlParameter() {ParameterName = "@UserId", SqlDbType = SqlDbType.NVarChar, Value = model.UserId});
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FirstName", SqlDbType = SqlDbType.NVarChar, Value = model.FirstName });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@LastName", SqlDbType = SqlDbType.NVarChar, Value = model.LastName });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Degree", SqlDbType = SqlDbType.VarChar, Value = model.Degree });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Degree", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.Degree) });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ReviewerType", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.ReviewerType) });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeAddressLine1", SqlDbType = SqlDbType.VarChar, Value = model.HomeAddressLine1 });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeAddressLine2", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.HomeAddressLine2) });
@@ -1445,7 +1508,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeState",  Value = model.HomeState });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeZip", SqlDbType = SqlDbType.VarChar, Value = model.HomeZip });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PhoneNumber", SqlDbType = SqlDbType.VarChar, Value = model.PhoneNumber });
-            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FaxNumber", SqlDbType = SqlDbType.VarChar, Value = model.FaxNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FaxNumber", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.FaxNumber) });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Email", SqlDbType = SqlDbType.VarChar, Value = model.Email });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Employer", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.Employer) });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Department", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.Department) });
@@ -1463,8 +1526,59 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.NVarChar, Value = model.ModifiedBy });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@CreatedOn", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ModifiedOn", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ContractEndDate", SqlDbType = SqlDbType.DateTime, Value = DBFunctions.ToDbNull(model.ContractEndDate) });
 
            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return true;
+        }
+
+        public bool UpdateReviewer(RegisterViewModel model)
+        {
+            SqlCommand cmd = new SqlCommand("SPUpdateReviewer", conn) { CommandType = CommandType.StoredProcedure };
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.NVarChar, Value = model.Id });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FirstName", SqlDbType = SqlDbType.NVarChar, Value = model.FirstName });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@LastName", SqlDbType = SqlDbType.NVarChar, Value = model.LastName });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Degree", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.Degree) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ReviewerType", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.ReviewerType) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeAddressLine1", SqlDbType = SqlDbType.VarChar, Value = model.HomeAddressLine1 });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeAddressLine2", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.HomeAddressLine2) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeCity", SqlDbType = SqlDbType.VarChar, Value = model.HomeCity });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeState", Value = model.HomeState });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@HomeZip", SqlDbType = SqlDbType.VarChar, Value = model.HomeZip });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PhoneNumber", SqlDbType = SqlDbType.VarChar, Value = model.PhoneNumber });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FaxNumber", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.FaxNumber) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Email", SqlDbType = SqlDbType.VarChar, Value = model.Email });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Employer", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.Employer) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Department", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.Department) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkAddressLine1", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.WorkAddressLine1) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkAddressLine2", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.WorkAddressLine2) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkCity", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.WorkCity) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkState", Value = DBFunctions.ToDbNull(model.WorkState) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkZip", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.WorkZip) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkPhoneNumber", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.WorkPhoneNumber) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkFaxNumber", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.WorkFaxNumber) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@WorkEmail", Value = DBFunctions.ToDbNull(model.WorkEmail) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ExperienceSummary", SqlDbType = SqlDbType.VarChar, Value = DBFunctions.ToDbNull(model.ExperienceSummary) });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Active", SqlDbType = SqlDbType.Bit, Value = true });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ModifiedBy", SqlDbType = SqlDbType.NVarChar, Value = model.ModifiedBy });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ModifiedOn", SqlDbType = SqlDbType.DateTime, Value = DateTime.Now });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@ContractEndDate", SqlDbType = SqlDbType.DateTime, Value = DBFunctions.ToDbNull(model.ContractEndDate) });
+
+            try
             {
                 CheckConn();
 
@@ -1488,6 +1602,7 @@ namespace NREPPAdminSite
             string firstName = null;
             string lastName = null;
             string email = null;
+            string roleName = null;
             bool lockoutEnabled = false;
             bool isStatus=false;
             var usersSearchResult = new UsersSearchResult();
@@ -1511,14 +1626,18 @@ namespace NREPPAdminSite
                         break;
                     case "Email":
                         email = filter.Search.Value;
-                        break;        
+                        break;
+                    case "RoleName":
+                        roleName = filter.Search.Value;
+                        break;  
                 }
             }
             cmdGetUserList.Parameters.Add(new SqlParameter("@UserName", DBFunctions.ToDbNull(userName)));
             cmdGetUserList.Parameters.Add(new SqlParameter("@FirstName", DBFunctions.ToDbNull(firstName)));
             cmdGetUserList.Parameters.Add(new SqlParameter("@LastName", DBFunctions.ToDbNull(lastName)));
             cmdGetUserList.Parameters.Add(new SqlParameter("@Email", DBFunctions.ToDbNull(email)));
-            cmdGetUserList.Parameters.Add(new SqlParameter("@Page", requestModel.Start + 1));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@RoleName", DBFunctions.ToDbNull(roleName)));
+            cmdGetUserList.Parameters.Add(new SqlParameter("@Page", (requestModel.Start / requestModel.Length) + 1));
             cmdGetUserList.Parameters.Add(new SqlParameter("@PageLength", requestModel.Length));
             CheckConn();
             DataTable users = new DataTable();
@@ -1551,7 +1670,8 @@ namespace NREPPAdminSite
                     WorkPhoneNumber = dr["WorkPhoneNumber"].ToString(),
                     WorkFaxNumber = dr["WorkFaxNumber"].ToString(),
                     WorkEmail = dr["WorkEmail"].ToString(),
-                    IsLocked = dr["IsUserLocked"].ToString() == "1" ? true : false
+                    IsLocked = dr["IsUserLocked"].ToString() == "1" ? true : false,
+                    RoleName = dr["RoleName"].ToString()
                 });
             }
             if (users.Rows.Count > 0)

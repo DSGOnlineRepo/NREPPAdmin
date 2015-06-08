@@ -107,8 +107,8 @@ namespace NREPPAdminSite.Controllers
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(idParam);
             parameters.Add(roleParam);
-            List<Intervention> interventionList = localService.GetInterventions(parameters);
-            theIntervention = interventionList[0];
+            
+            theIntervention = localService.GetInterventions(parameters).Interventions[0];
 
             documentz = localService.GetDocuments(InvId, null, null).ToList<InterventionDoc>();
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
@@ -144,8 +144,7 @@ namespace NREPPAdminSite.Controllers
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(idParam);
             parameters.Add(roleParam);
-            List<Intervention> interventionList = localService.GetInterventions(parameters);
-            theIntervention = interventionList[0];
+            theIntervention = localService.GetInterventions(parameters).Interventions[0];
 
             documentz = localService.GetDocuments(InvId, null, null).ToList<InterventionDoc>();
 
@@ -198,8 +197,7 @@ namespace NREPPAdminSite.Controllers
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(idParam);
             parameters.Add(roleParam);
-            List<Intervention> interventionList = localService.GetInterventions(parameters);
-            theIntervention = interventionList[0];
+            theIntervention = localService.GetInterventions(parameters).Interventions[0];
 
             documentz = localService.GetDocuments(InvId, null, null).ToList<InterventionDoc>();
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);

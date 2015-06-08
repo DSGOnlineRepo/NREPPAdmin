@@ -9,7 +9,10 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/submission2.js")"></script>
 }
 
-<h2>Step 1. Minimum Criteria for Submission</h2>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+			<h2>Step 1. Minimum Criteria for Submission</h2>
 
 @using(Html.BeginForm("Submit2", "Program"))
 {
@@ -31,72 +34,6 @@
             <li>@Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "programMask" }) @mask.Name</li>
         }
     </ul>
-    
-    <div>
-        @Html.LabelFor(m => m.TheIntervention.PrimaryName)
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryName)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.PrimaryOrg)
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryOrg)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.PrimaryTitle)
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryTitle)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.PrimaryAddressLine1)
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryAddressLine1)<br />
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryAddressLine2)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.PrimaryCity)
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryCity)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.PrimaryState)
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryState)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.PrimaryZip)
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryZip)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.PrimaryPhoneNumber)
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryPhoneNumber)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.PrimaryFaxNumber)
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryFaxNumber)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.PrimaryEmail)
-        @Html.TextBoxFor(m => m.TheIntervention.PrimaryEmail)<br /> <br />
-    </div>
-    
-    <div>
-        @Html.LabelFor(m => m.TheIntervention.SecondaryName)
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryName)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.SecondaryOrg)
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryOrg)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.SecondaryTitle)
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryTitle)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.SecondaryAddressLine1)
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryAddressLine1)<br />
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryAddressLine2)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.SecondaryCity)
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryCity)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.SecondaryState)
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryState)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.SecondaryZip)
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryZip)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.SecondaryPhoneNumber)
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryPhoneNumber)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.SecondaryFaxNumber)
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryFaxNumber)<br /> <br />
-
-        @Html.LabelFor(m => m.TheIntervention.SecondaryEmail)
-        @Html.TextBoxFor(m => m.TheIntervention.SecondaryEmail)<br /> <br />
-    </div>
     
     <p>
         4) You must have at least one evaluation study that meets the <a href="#">NREPP minimum criteria</a>. Please respond to the following questions:
@@ -129,3 +66,6 @@
     </div>
 }
 
+</div>
+</div>
+</div>

@@ -15,18 +15,6 @@
             <li class="col-sm-3" style="padding-bottom: 5px">
                 <input type="text" class="form-control filter-input" placeholder="Last Name" data-fieldname="LastName" data-column="1">
             </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" placeholder="Employer" data-fieldname="Employer" data-column="2">
-            </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" placeholder="Department" data-fieldname="Department" data-column="3">
-            </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" placeholder="Reviewer Type" data-fieldname="ReviewerType" data-column="4">
-            </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" placeholder="Degree" data-fieldname="Degree" data-column="5">
-            </li>
         </ul>
     </div>
 </div>
@@ -37,10 +25,10 @@
             <tr>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Employer</th>
-                <th>Department</th>
-                <th>Reviewer Type</th>
-                <th>Degree</th>
+                <th>User Name</th>
+                <th>ContractEndDate</th>
+                <th>Contract Link</th>
+                <th>Action</th>
             </tr>
         </thead>
     </table>
@@ -49,36 +37,116 @@
     <table id="Reviewertable" class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th>@Html.ActionLink("Add New Reviewer", "Reviewer", "Admin")</th>
+                <th><a href="#" onclick="openModel('');" />Add Reviewer</th>
             </tr>
         </thead>
     </table>
 </div>
 
-<script type="text/javascript">
+    <div id='dialogDiv' class='modal fade' role="dialog" style="border: 1px solid #000000;">
+        <div class="modal-dialog" style="width: 93%">
+            <div class="modal-content">
+                <div id='dialogContent' class="modal-body" style="width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
 
     $(document).ready(function () {
 
         var reviewerTable = $('#tblReviewers').DataTable({
             sDom: '<"top"pl>it<"clear">',
-            ajax: "ReviewersList",
+            ajax: {
+                "url": "ReviewersList",
+                "type": "POST"
+            },
             scrollX: true,
             scrollCollapse: true,
             serverSide: true,
             columns: [
                 { "data": "FirstName" },
                 { "data": "LastName" },
-                { "data": "Employer" },
-                { "data": "Department" },
-                { "data": "ReviewerType" },
-                { "data": "Degree" }
-            ]
-        });
+                { "data": "UserName" },
+                { "data": "ContractEndDate" },
+                { "data": "docId" },
+                { "data": "Action" },
+                { "data": "Id" }
+            ],
+            order: [1, 'asc'],
+            columnDefs: [
+                { "searchable": false, "targets": 2 },
+                { "searchable": false, "targets": 3 },
+                {
+                    render: function (data, type, row) {
+                        return '<a href="/GetFile?FileId="+ row["DocId"]>CA</a>';
+                    },
+                    "searchable": false,
+                    targets: 4
+                },
+                {
+                    render: function (data, type, row) {
+                        return '<a href="#" onclick="openModel(' + "'" + row["Id"] + "'" + ');">Edit</a>';
+                    },
+                    "searchable": false,
+                    targets: 5
+                },
+                
+                { visible: false, targets: [6] }
+            ],
+            tableTools: {
+                sRowSelect: "os",
+                sRowSelector: 'td:first-child'
+            }
+        });      
+       
 
         $(".filter-input").on("keyup", function () {
             reviewerTable.column($(this).attr('data-column')).search($(this).val()).draw();
         });
     });
+
+    function bindForm(dialog) {
+        $.validator.unobtrusive.parse('form');
+        $('form', dialog).submit(function () {
+            if ($(this).valid()) {
+                var data = $(this).serialize();
+                console.log(data);
+                var files = $(this).get(0).files;
+                data.append("fileCa", files[0]);
+                $.ajax({
+                    url: this.action,
+                    type: this.method,
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        if (result.Status === "Success") {
+                            $('#dialogDiv').modal('hide');
+                            var table = $('#tblReviewers').dataTable();
+                            table.fnDraw();
+                        }
+                        else {
+                            $('#dialogContent').html(result.Errors);
+                            bindForm();
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+        return false;
+    }
+
+    function openModel(id) {
+        $.ajaxSetup({ cache: false });
+        $('#dialogContent').load("\GetReviewer?id=" + id, function () {
+            $('#dialogDiv').modal({
+                // backdrop: 'static',
+                keyboard: true
+            }, 'show');
+            bindForm(this);
+        });
+        return false;
+    }
 </script>
 
 

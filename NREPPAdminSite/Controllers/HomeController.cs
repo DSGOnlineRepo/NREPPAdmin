@@ -4,10 +4,12 @@ using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net.Mail;
+using System.Web;
 using System.Web.Mvc;
 using DataTables.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
 using NREPPAdminSite.Models;
 using NREPPAdminSite.Security;
 using NREPPAdminSite.Utilities;
@@ -81,8 +83,8 @@ namespace NREPPAdminSite.Controllers
             NrepServ localService = new NrepServ(NrepServ.ConnString);
             var user = _userManager.FindByName(User.Identity.Name);
             var userRoles = _userManager.GetRoles(user.Id);
-            List<Intervention> programsList = localService.GetInterventions(requestModel, User.Identity.Name);
-            return Json(new DataTablesResponse(requestModel.Draw, programsList, programsList.Count, programsList.Count), JsonRequestBehavior.AllowGet);
+            var searchResult = localService.GetInterventions(requestModel, User.Identity.Name);
+            return Json(new DataTablesResponse(requestModel.Draw, searchResult.Interventions, searchResult.TotalSearchCount, searchResult.TotalSearchCount), JsonRequestBehavior.AllowGet);
         }
 
         [Authorize]
@@ -126,7 +128,7 @@ namespace NREPPAdminSite.Controllers
                 if (!string.IsNullOrEmpty(request.User.Id))
                 {
                     isNew = false;
-                    ModelState.Remove("Password");//for Update user
+                    ModelState.Remove("Password");
                 }
                 if (ModelState.IsValid)
                 {
@@ -162,7 +164,13 @@ namespace NREPPAdminSite.Controllers
                         user.WorkFaxNumber = request.User.WorkFaxNumber;
                         user.WorkEmail = request.User.WorkEmail;
                         user.TwoFactorEnabled = request.User.TwoFactorEnabled;
-                        
+
+                        if (!string.IsNullOrEmpty(request.Password))
+                        {
+                            _userManager.RemovePassword(user.Id);
+                            IdentityResult passwordChangeResult = _userManager.AddPassword(user.Id, request.Password);
+                        }
+
                         result = _userManager.Update(user);
                     }
                 }

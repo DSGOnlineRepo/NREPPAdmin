@@ -225,8 +225,11 @@ namespace NREPPAdminSite.Models
 
         public bool IsLocked { get; set; }
 
+        [Required(ErrorMessage = "You most provide a user name.")]
+        [Display(Name = "User Name")]
+        [StringLength(50)]
         public string UserName { get; set; }
-       
+        public string RoleName { get; set; }
     }
 
     public class Reviewer : GenericUser
@@ -246,16 +249,17 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Experience Summary")]
         public string ExperienceSummary { get; set; }
 
+        [Display(Name = "Contract End Date")]
+        public DateTime? ContractEndDate { get; set; }
+
+        public string DocId { get; set; }
+
+        public HttpPostedFileBase Document { get; set; }
+
     }
 
     public class RegisterViewModel : Reviewer
     {
-
-        [Required(ErrorMessage = "You most provide a user name.")]
-        [Display(Name = "User Name")]
-        [StringLength(50)]
-        public string UserName { get; set; }
-
         [Required]
         [Display(Name = "Confirm Email")]
         [Compare("Email", ErrorMessage = "The email and confirmation email do not match.")]

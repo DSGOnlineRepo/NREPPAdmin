@@ -42,14 +42,15 @@
     
     </div>
 
-<div>
+<div class="workflow">
+<br />
     @using(Html.BeginForm("Assign", "Program"))
     {
         @Html.Hidden("ValueString") 
     <ul style="list-style-type: none;">
         @foreach(NREPPAdminSite.Models.Destination dest in Model.TheDests)
         {
-            <li><input type="submit" value="@dest.DestDescription" onclick="selectAssignment(this); return true;" /> - @dest.StatusName to user @dest.UserName
+            <li><input class="btn-primary" type="submit" value="@dest.DestDescription" onclick="selectAssignment(this); return true;" /> @dest.StatusName to user @dest.UserName
         <input type="hidden" value="@string.Format("{0};{1};{2}", @dest.StatusId, @dest.UserId, @Model.InvId)" /></li>
         }
     </ul>

@@ -109,7 +109,8 @@ namespace NREPPAdminSite.Models
 
         [Display(Name = "Secondary Contact Email")]
         public string SecondaryEmail { get; set; }
-		
+
+        public string DummyColumnForFilter { get; set; }
 
         #endregion
         /*{
@@ -132,7 +133,7 @@ namespace NREPPAdminSite.Models
             SubmitterId = "";
             PublishDate = DateTime.Now;
             UpdatedDate = DateTime.Now;
-            Status = "Submitted";
+            Status = "Pending Submission";
             StatusId = 1;
             ProgramType = 0;
             Acronym = "";

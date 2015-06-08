@@ -15,98 +15,88 @@
     @*@Scripts.Render("~/bundles/modernizr")*@
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a href="http://www.nrepp.samhsa.gov/Index.aspx" target="_blank"><img src="~/Content/images/logo_nrepp.png" height="33" class="navbar-brand" border="0" alt="" /></a>
-                <a href="http://www.samhsa.gov" target="_blank"><img src="~/Content/images/logo_samhsa.png" height="33" class="navbar-brand" border="0" alt="" /></a>
-		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainnav" aria-expanded="false">
-        	<span class="sr-only">Toggle navigation</span>
-        	<span class="icon-bar"></span>
-        	<span class="icon-bar"></span>
-        	<span class="icon-bar"></span>
-      		</button>            
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="http://www.nrepp.samhsa.gov/Index.aspx" target="_blank"><img src="~/Content/images/logo_nrepp.png" height="33" class="navbar-brand" border="0" alt="" /></a>
+            <a href="http://www.samhsa.gov" target="_blank"><img src="~/Content/images/logo_samhsa.png" height="33" class="navbar-brand" border="0" alt="" /></a>
+<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainnav" aria-expanded="false">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      </button>            
 </div>
-            <div class="collapse navbar-collapse" id="mainnav">
-                <ul class="nav navbar-nav navbar-right">
-                    @if (Request.IsAuthenticated)
-                    {
-                        <li>@Html.ActionLink("Dashboard", "Programs", "home")</li>
-                    }
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    @if (Request.IsAuthenticated)
-                    {
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Manage <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Reviewers", "Reviewers", "Admin")</li>
-                                <li>@Html.ActionLink("Users", "Users", "Home")</li>
-                            </ul>
-                        </li>
-                    }
-                    @if (Request.IsAuthenticated)
-                    {
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hi @User.Identity.Name<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("View Profile", "Profile", "Admin")</li>
-                                <li>
-                                    @using (Html.BeginForm("Logout", "Admin", FormMethod.Post, new { id = "logoutForm" }))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        <a href="javascript:document.getElementById('logoutForm').submit()">Log Out</a>
-                                    }
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="profileImage"><a href="#"><i class="fa fa-user"></i></a></li>
-                    }
-                </ul>
-            </div>
+        <div class="collapse navbar-collapse" id="mainnav">
+            <ul class="nav navbar-nav navbar-right">
+                @if (Request.IsAuthenticated)
+                {
+                    <li>@Html.ActionLink("Dashboard", "Programs", "home")</li>
+                }
+                <li>@Html.ActionLink("About", "About", "Home")</li>
+                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                @if (Request.IsAuthenticated)
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Manage <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>@Html.ActionLink("Reviewers", "Reviewers", "Admin")</li>
+                            <li>@Html.ActionLink("Users", "Users", "Home")</li>
+                        </ul>
+                    </li>
+                }
+                @if (Request.IsAuthenticated)
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hi @User.Identity.Name<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>@Html.ActionLink("View Profile", "Profile", "Admin")</li>
+                            <li>
+                                @using (Html.BeginForm("Logout", "Admin", FormMethod.Post, new { id = "logoutForm" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">Log Out</a>
+                                }
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="profileImage"><a href="#"><i class="fa fa-user"></i></a></li>
+                }
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
     <!--Render Scripts Earlier than body or else the scripts in the partial views would break -->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/datatables")
 <br/><br/><br/><br/>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+
     @RenderBody()
     @Html.AntiForgeryToken()
     @RenderSection("scripts", required: false) <!-- Put the page scripts in here -->
 
-    <div class="col-sm-12 footer">
-	<div class="col-sm-2">
-	<a href="http://www.nrepp.samhsa.gov/Index.aspx" target="_blank"><img src="~/Content/images/logo_usa.png" width="90" height="30" class="footer_logo_image" border="0" alt="" /></a>&nbsp;&nbsp;<a href="http://www.nrepp.samhsa.gov/Index.aspx" target="_blank"><img src="~/Content/images/logo_hhs.png" width="44" height="40" class="footer_logo_image" border="0" alt="" /></a>
+		</div>
 	</div>
-        <div class="col-sm-10">
-            <h5 class="footer-links pull-right">
-                <ul>
-                    <li><a href="#" target="_blank">Home</a></li>
-                    <li><a href="#" target="_blank">About</a></li>
-                    <li><a href="#" target="_blank">Site Map</a></li>
-                    <li><a href="#" target="_blank">Privacy</a></li>
-                    <li><a href="#" target="_blank">Accessibility</a></li>
-                    <li><a href="#" target="_blank">FOIA Policy</a></li>
-                    <li><a href="#" target="_blank">Find an Intervention</a></li>
-                    <li><a href="#" target="_blank">Reviews &amp; Submissions</a></li>
-                    <li><a href="#" target="_blank">Learning Center</a></li>
-                    <br />
-                    <li class="adobe">Adobe&trade; PDF and MS Office™ formatted files require software viewer programs to properly read them. Click here to download these FREE programs now.</li>
+</div>
 
-			<br />
-			<li><a href="#" target="_blank">U.S. Department of Health and Human Services</a></li>
-			<li><a href="#" target="_blank">Substance Abuse and Mental Health Services Administration</a></li>
-			<li><a href="#" target="_blank">www.samhsa.gov</a></li>
-			<br />
-			<div class="social"><a href="#" target="_blank"><i class="fa fa-facebook"></i></a> <a href="#" target="_blank"><i class="fa fa-twitter"></i></a> <a href="#" target="_blank"><i class="fa fa-linkedin"></i></a> <a href="#" target="_blank"><i class="fa fa-flickr"></i></a></div>
+<div class="col-sm-12 footer-height-push"></div>
 
-                </ul>
-            </h5>
-        </div>
-    </div>
-
+<div class="col-sm-12 footer">
+  <h5 class="footer-links pull-right">
+  <ul>
+    <li><a href="#" target="_blank">Link 1</a></li>
+    <li><a href="#" target="_blank">Link 2</a></li>
+    <li><a href="#" target="_blank">Link 3</a></li>
+    <li><a href="#" target="_blank">Link 4</a></li>
+    <li><a href="#" target="_blank">Link 5</a></li>
+  </ul>
+  </h5>
+</div>
 </body>
 
 

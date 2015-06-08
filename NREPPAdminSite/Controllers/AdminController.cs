@@ -354,16 +354,14 @@ namespace NREPPAdminSite.Controllers
         }
 
         [Authorize]
-        public ActionResult Reviewer(int? id)
+        public ActionResult GetReviewer(string id)
         {
-            ViewBag.Roles = _roleManager.Roles.ToList().Select(u => new SelectListItem
-            {
-                Text = u.Name,
-                Value = u.Name
-            });
-            return View();
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            RegisterViewModel reviewer = localService.GetReviewer(id);
+            return PartialView("Reviewer", reviewer);
         }
 
+        [HttpPost]
         [Authorize]
         public JsonResult ReviewersList([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestModel)
         {
@@ -374,12 +372,24 @@ namespace NREPPAdminSite.Controllers
 
         [Authorize]
         [HttpPost]
-        public JsonResult AddReviewer(RegisterViewModel model)
+        public JsonResult SaveReviewer(RegisterViewModel model)
         {
             ModelState.Remove("Role");
             ModelState.Remove("CaptchaCodeText");
+
+            HttpPostedFileBase file = Request.Files[0];
+
+            if (string.IsNullOrEmpty(model.Id))
+            {
+                ModelState.Remove("ConfirmEmail");
+                ModelState.Remove("Password");
+                ModelState.Remove("ConfirmPassword");
+            }
+
             model.Role = "Reviewer";
-            if (ModelState.IsValid)
+
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            if (ModelState.IsValid && string.IsNullOrEmpty(model.Id))
             {
                 var user = new ExtendedUser
                 {
@@ -407,33 +417,74 @@ namespace NREPPAdminSite.Controllers
                     WorkFaxNumber = model.WorkFaxNumber,
                     WorkEmail = model.WorkEmail
                 };
-
-                IdentityResult result = _userManager.Create(user, model.Password);
-
-                if (result.Succeeded)
+                if (model.UserId == null)
                 {
-                    _userManager.AddToRole(user.Id, model.Role);
+                    IdentityResult result = _userManager.Create(user, model.Password);
+
+                    if (result.Succeeded)
+                    {
+                        _userManager.AddToRole(user.Id, model.Role);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("UserName", "Error while creating the user!");
+                        return Json(new {Status = "Success", Message = "Error while creating the user!"});
+                    }
+
+                    model.UserId = user.Id;
+                    model.CreatedBy = User.Identity.Name;
+                }
+
+                model.ModifiedBy = User.Identity.Name;
+
+                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                {
+                    string fileName = file.FileName;
+                    string fileContentType = file.ContentType;
+                    byte[] fileBytes = new byte[file.ContentLength];
+                    file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+
+                    localService.SaveFileToDB(fileBytes, fileName, User.Identity.Name, "NOT IMPLEMENTED!", null, false,
+                        -1, "Contract Agreement", 0, "Contract Agreement");
                 }
                 else
                 {
-                    ModelState.AddModelError("UserName", "Error while creating the user!");
-                    return Json(new { Status = "Success", Message = "Error while creating the user!" });
+                    model.ContractEndDate = null;
                 }
-                model.UserId = user.Id;
-                model.CreatedBy = User.Identity.Name;
-                model.ModifiedBy = User.Identity.Name;
-                NrepServ localService = new NrepServ(NrepServ.ConnString);
+
                 if (localService.AddReviewer(model))
                 {
-                    return Json(new { Status = "Success", Message = "User created successfully" });
+                    return Json(new { Status = "Success", Message = "Reviewer created successfully" });
                 }
                 else
                 {
                     DeleteUserById(user.Id);
-                    return Json(new { Status = "Success", Message = "Error while creating the user!" });
+                    return Json(new { Status = "Success", Message = "Error while creating the reviewer!" });
                 }
+
+                
             }
-            return Json(new { Status = "Success", Message = "Error while creating the user!" });
+            else
+            {
+                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                {
+                    string fileName = file.FileName;
+                    string fileContentType = file.ContentType;
+                    byte[] fileBytes = new byte[file.ContentLength];
+                    file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+
+                    localService.SaveFileToDB(fileBytes, fileName, User.Identity.Name, "NOT IMPLEMENTED!", null, false,
+                        -1, "Contract Agreement", 0, "Contract Agreement");
+                }
+                else
+                {
+                    model.ContractEndDate = null;
+                }
+
+                localService.UpdateReviewer(model);
+                return Json(new { Status = "Success", Message = "Reviewer updated successfully" });
+            }
+            return Json(new { Status = "Error", Message = "Error while creating the reviewer!" });
         }
 
 
