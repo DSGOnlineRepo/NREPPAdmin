@@ -159,7 +159,7 @@ namespace NREPPAdminSite.Controllers
 
             localService.DeleteStudyRecord(RecId);
 
-            return RedirectToAction("Screen", new { InterventionId = InvId });
+            return RedirectToAction("Screen", new { InvId = InvId });
         }
 
         public ActionResult UploadFile()
@@ -418,7 +418,7 @@ namespace NREPPAdminSite.Controllers
 
             localService.UpdateRCDocInfo(rcDoc.RCDocId, rcDoc.DocId, rcDoc.Reference, rcDoc.RCName, rcDoc.PubYear);
 
-            return RedirectToAction("Screen", new { InterventionId = int.Parse(Request.Form["InterventionId"]) });
+            return RedirectToAction("Screen", new { InvId = int.Parse(Request.Form["InterventionId"]) });
         }
 
         [HttpPost]

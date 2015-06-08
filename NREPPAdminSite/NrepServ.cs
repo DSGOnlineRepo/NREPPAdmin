@@ -1280,6 +1280,27 @@ namespace NREPPAdminSite
             return;
         }
 
+        public void AssignReviewer(int InterventionId, string UserId, string ReviewerStatus)
+        {
+            SqlCommand cmd = new SqlCommand("SPAssignReviewer", conn);
+
+            cmd.Parameters.AddWithValue("@InterventionId", InterventionId);
+            cmd.Parameters.AddWithValue("@UserId", UserId);
+            cmd.Parameters.AddWithValue("@ReviewerStatus", ReviewerStatus);
+
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return;
+        }
+
         #endregion
 
         #region Other User Functionality
@@ -1609,8 +1630,8 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in users.Rows)
                 {
-                    outReviewers.Add(new ReviewerOnInterv() { UserId = dr["UserId"].ToString(), WkRoleId = dr["WkRoleId"].ToString(),
-                        WkRoleName = dr["Name"].ToString(), Name = string.Format("{0} {1}", dr["FirstName"].ToString(), dr["LastName"].ToString()) });
+                    outReviewers.Add(new ReviewerOnInterv() { UserId = dr["UserId"].ToString(),
+                        ReviewerStatus = dr["ReviewerStatus"].ToString(), Name = string.Format("{0} {1}", dr["FirstName"].ToString(), dr["LastName"].ToString()) });
                 }
 
             } catch (Exception ex)

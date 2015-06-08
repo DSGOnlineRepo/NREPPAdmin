@@ -410,9 +410,8 @@ namespace NREPPAdminSite.Models
     public struct ReviewerOnInterv
     {
         public string UserId;
-        public string WkRoleId;
         public string Name;
-        public string WkRoleName;
+        public string ReviewerStatus;
     }
 
 }

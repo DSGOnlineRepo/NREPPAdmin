@@ -552,6 +552,8 @@ namespace NREPPAdminSite.Models
     {
         private List<ReviewerOnInterv> assignedReviewers = new List<ReviewerOnInterv>();
 
+        public int InterventionId { get; set; }
+
         public List<ReviewerOnInterv> AssignedReviewers
         {
             get {return assignedReviewers; }
