@@ -481,6 +481,8 @@ namespace NREPPAdminSite.Controllers
                     model.ContractEndDate = null;
                 }
 
+                model.ModifiedBy = HttpContext.User.Identity.GetUserId();
+                model.ModifiedOn = DateTime.Now;
                 localService.UpdateReviewer(model);
                 return Json(new { Status = "Success", Message = "Reviewer updated successfully" });
             }

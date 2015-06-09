@@ -1,4 +1,4 @@
-﻿@model NREPPAdminSite.Models.IntervPageModel
+@model NREPPAdminSite.Models.IntervPageModel
 
 @{
     ViewBag.Title = "Submission2";
@@ -9,10 +9,7 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/submission2.js")"></script>
 }
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-12">
-			<h2>Step 1. Minimum Criteria for Submission</h2>
+<h2>Step 1. Minimum Criteria for Submission</h2>
 
 @using(Html.BeginForm("Submit2", "Program"))
 {
@@ -21,13 +18,12 @@
     @Html.HiddenFor(m => m.TheIntervention.UserPreScreenMask, new { Id = "userPreScreenAns" })
     @Html.HiddenFor(m => m.TheIntervention.Id)
 
-    <span>1) </span>@Html.LabelFor(m => m.TheIntervention.Title)
+    @Html.LabelFor(m => m.TheIntervention.Title)
     @Html.TextBoxFor(m => m.TheIntervention.Title) <br /><br />
-
-    <span>2) </span>@Html.LabelFor(m => m.TheIntervention.Acronym)
+    
+    @Html.LabelFor(m => m.TheIntervention.Acronym)
     @Html.TextBoxFor(m => m.TheIntervention.Acronym)<br /><br />
 
-    <span>3) Program Type (Check all that apply)</span>
     <ul style="list-style-type: none;">
         @foreach (NREPPAdminSite.Models.MaskValue mask in Model.ProgramType)
         {
@@ -35,6 +31,72 @@
             <li>@Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "programMask" }) @mask.Name</li>
         }
     </ul>
+    
+    <div>
+        @Html.LabelFor(m => m.TheIntervention.PrimaryName)
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryName)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.PrimaryOrg)
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryOrg)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.PrimaryTitle)
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryTitle)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.PrimaryAddressLine1)
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryAddressLine1)<br />
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryAddressLine2)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.PrimaryCity)
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryCity)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.PrimaryState)
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryState)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.PrimaryZip)
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryZip)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.PrimaryPhoneNumber)
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryPhoneNumber)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.PrimaryFaxNumber)
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryFaxNumber)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.PrimaryEmail)
+        @Html.TextBoxFor(m => m.TheIntervention.PrimaryEmail)<br /> <br />
+    </div>
+    
+    <div>
+        @Html.LabelFor(m => m.TheIntervention.SecondaryName)
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryName)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.SecondaryOrg)
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryOrg)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.SecondaryTitle)
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryTitle)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.SecondaryAddressLine1)
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryAddressLine1)<br />
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryAddressLine2)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.SecondaryCity)
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryCity)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.SecondaryState)
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryState)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.SecondaryZip)
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryZip)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.SecondaryPhoneNumber)
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryPhoneNumber)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.SecondaryFaxNumber)
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryFaxNumber)<br /> <br />
+
+        @Html.LabelFor(m => m.TheIntervention.SecondaryEmail)
+        @Html.TextBoxFor(m => m.TheIntervention.SecondaryEmail)<br /> <br />
+    </div>
     
     <p>
         4) You must have at least one evaluation study that meets the <a href="#">NREPP minimum criteria</a>. Please respond to the following questions:
@@ -47,19 +109,17 @@
 
         if (mask.Value > 2)
         {
-            <span style="padding-left: 20px" class="preQuestion_@mask.Value.ToString()" >
-                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new {@class = "userPreScreenMask"})<span>Yes</span>
-                @Html.RadioButton(mask.Name, 0, !isChecked, new {@class = "userPreScreenMask"})<span>No.</span><br />
+            <span class="preQuestion_@mask.Value.ToString()">
+                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
+                @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
             </span>
-            <br />
         }
         else
         {
-            <span style="padding-left: 20px"class="preQuestion_@mask.Value.ToString()">
-                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new {@class = "userPreScreenMask"})<span>Yes</span>
-                @Html.RadioButton(mask.Name, 0, !isChecked, new {@class = "userPreScreenMask"})<span>No.</span><br />
+            <span class="preQuestion_@mask.Value.ToString()">
+                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
+                @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
             </span>
-            <br />
         }
 
     }
@@ -68,7 +128,3 @@
         <input type="submit" value="Continue" />
     </div>
 }
-
-</div>
-</div>
-</div>

@@ -25,15 +25,18 @@ namespace NREPPAdminSite
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
-                "~/Scripts/datatables/jquery.datatables.js"));
+                "~/Scripts/datatables/jquery.datatables.js",
+                 "~/Scripts/datatables/dataTables.bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      //"~/Content/site.css",
-                      //"~/Content/chosen.min.css",
-                      "~/Content/Datatables/css/jquery.datatables.css",
-                      "~/Content/bootstrap-datepicker3.css",
-                      "~/Content/styles.css"));
+                "~/Content/bootstrap.css",
+                //"~/Content/site.css",
+                //"~/Content/chosen.min.css",
+                "~/Content/Datatables/css/jquery.datatables.css",
+                //"~/Content/Datatables/css/dataTables.bootstrap.css",
+                "~/Content/Custom/css/tables/custom-table.css",
+                "~/Content/bootstrap-datepicker3.css"));
+                      //"~/Content/styles.css"));
             bundles.Add(new StyleBundle("~/Fonts/css").Include("~/fonts/font-awesome/css/font-awesome.css"));
         }
     }

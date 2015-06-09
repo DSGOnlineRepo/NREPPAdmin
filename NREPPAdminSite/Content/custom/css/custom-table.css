@@ -1,0 +1,85 @@
+﻿table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-bottom:15px;
+}
+
+.table>thead>tr>td,.table>thead>tr>th {
+ border-bottom-width: 1px!important; // overrides default 2px width set by bootstrap
+}
+
+tbody {
+ tr:nth-of-type(odd) {
+   border-top: 1px #eee solid;
+   border-bottom: 1px #eee solid;
+ }
+ tr:first-of-type {
+   border-top:none;
+ }
+ tr:last-of-type {
+   border-bottom:none;
+ }
+}
+
+
+th {
+ background: white;
+ color: black;
+ font-weight: bold;
+}
+
+td, th {
+ padding: 6px;
+ border: none;
+ text-align: left;
+}
+
+th.select, td.select { text-align: center; }
+
+@media
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr { border: none}
+
+    td {
+        /* Behave  like a "row" */
+        border: none;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+    }
+
+ td.select { text-align: left; }
+
+ tr:nth-of-type(odd) {
+   background:#eee;
+ }
+
+ td.firstname:before { content: "First Name"; }
+ td.lastname:before { content: "Last Name"; }
+ td.fullname:before { content: "Name"; }
+ td.position:before { content: "Position"; }
+ td.email:before { content: "Email"; }

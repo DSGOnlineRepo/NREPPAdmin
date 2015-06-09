@@ -250,6 +250,8 @@ namespace NREPPAdminSite.Models
         public string ExperienceSummary { get; set; }
         
         [Display(Name = "Contract End Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? ContractEndDate { get; set; }
 
         public string DocId { get; set; }
