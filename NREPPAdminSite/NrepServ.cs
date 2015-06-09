@@ -1291,8 +1291,9 @@ namespace NREPPAdminSite
         public void AssignReviewer(int InterventionId, string UserId, string ReviewerStatus)
         {
             SqlCommand cmd = new SqlCommand("SPAssignReviewer", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@InterventionId", InterventionId);
+            cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
             cmd.Parameters.AddWithValue("@UserId", UserId);
             cmd.Parameters.AddWithValue("@ReviewerStatus", ReviewerStatus);
 
@@ -1740,6 +1741,8 @@ namespace NREPPAdminSite
             List<ReviewerOnInterv> outReviewers = new List<ReviewerOnInterv>();
 
             SqlCommand cmd = new SqlCommand("GetReviewerByInterv", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
             cmd.Parameters.AddWithValue("@InterventionId", InvId);
 
             try

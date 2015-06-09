@@ -435,7 +435,7 @@ namespace NREPPAdminSite.Controllers
             om.StudyId = int.Parse(col["studySelector"]);
             om.OutcomeMeasureName = col["measure"];
             om.OutcomeId = int.Parse(col["MacroOutcome"]);
-            om.RecommendReview = col["reviewOutcome"].ToString() == "on";
+            om.RecommendReview = col["reviewOutcome"] != null && col["reviewOutcome"].ToString() == "on";
             om.TaxOutcome = int.Parse(col["TaxOutcome"]);
 
             NrepServ localService = new NrepServ(NrepServ.ConnString);

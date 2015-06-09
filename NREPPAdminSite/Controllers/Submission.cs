@@ -429,12 +429,13 @@ namespace NREPPAdminSite.Controllers
         public ActionResult AssignReview(FormCollection col)
         {
             int InterventionID = int.Parse(col["InterventionId"]);
-            string UserName = User.Identity.Name;
+            //string UserName = User.Identity.Name;
+            string UserID = col["ChosenReviewer"];
 
             NrepServ localService = NrepServ.GetLocalService();
-            localService.AssignReviewer(InterventionID, UserName, "Invited Reviewer");
+            localService.AssignReviewer(InterventionID, UserID, "Invited Reviewer");
 
-            return RedirectToAction("AssignReviewers", InterventionID);
+            return RedirectToAction("AssignReviewers", new { InvId = InterventionID });
         }
 
         #endregion
