@@ -1304,7 +1304,7 @@ namespace NREPPAdminSite
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
-            cmd.Parameters.AddWithValue("@UserId", UserId);
+            cmd.Parameters.AddWithValue("@ReviewerId", UserId);
             cmd.Parameters.AddWithValue("@ReviewerStatus", ReviewerStatus);
 
             try

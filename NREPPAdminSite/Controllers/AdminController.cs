@@ -319,34 +319,66 @@ namespace NREPPAdminSite.Controllers
             string nonURLVersion = HttpUtility.UrlDecode(ID).Replace(' ', '+');
             string decryptedString = PasswordHash.AESDecrypt(nonURLVersion);
             string[] idBits = decryptedString.Split(';');
+            int InterventionID = int.Parse(idBits[0]);
+
+
             TempClass aClass = new TempClass();
             NrepServ localService = NrepServ.GetLocalService();
             ExtendedUser exu = _userManager.FindById(idBits[1]);
+            List<ReviewerOnInterv> AlreadyAssigned = localService.GetReviewersByIntervention(InterventionID);
 
             JoinProgramModel jpm = new JoinProgramModel();
 
+            foreach (ReviewerOnInterv rev in AlreadyAssigned)
+            {
+                if (rev.UserId == exu.Id && rev.ReviewerStatus != "Invited Reviewer")
+                {
+                    jpm.CanAccess = 1;
+                    return View(jpm);
+                }
+            }
+
 
             // Check the date of the token
+            // TODO: There should be some logic to prevent people from declining multiple times (this is easy)
+
             DateTime TokenDate = DateTime.Parse(idBits[2]);
             TimeSpan difference = DateTime.Now - TokenDate;
             if (difference.Days >  5) // This should be made into some kind of app setting/constant
             {
-                aClass.CanView = false;
+                jpm.CanAccess = 1;
             }
             else
             {
-                aClass.CanView = true;
-                aClass.InterventionId = int.Parse(idBits[0]);
-                Intervention interv = localService.GetIntervention(aClass.InterventionId, exu.UserName);
-                List<RCDocument> docs = localService.GetRCDocuments(null, aClass.InterventionId);
+                
+                Intervention interv = localService.GetIntervention(InterventionID, exu.UserName);
+                List<RCDocument> docs = localService.GetRCDocuments(null, InterventionID);
                 jpm = new JoinProgramModel(docs, interv);
+                jpm.UserId = exu.Id;
+
                 if (User.Identity.IsAuthenticated && _userManager.FindByName(User.Identity.Name).Id == idBits[1]) // Check to see if you're logged in as the correct person
-                    jpm.CanAccess = true;
-                else
-                    jpm.CanAccess = false;
+                    jpm.CanAccess = 0; // You are signed in as the reviewer on this program.
+                else if (User.Identity.IsAuthenticated)
+                    jpm.CanAccess = 1; // You are signed in, but not the reviewer
+                else jpm.CanAccess = 2; // You are not signed in and not the reviewer
+                    
             }
 
             return View(jpm);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult SimpleDecline(FormCollection col)
+        {
+            string ReviewerId = col["ReviewerId"];
+            string declineReason = col["reason"];
+            int InterventionId = int.Parse(col["InterventionId"]);
+            NrepServ localService = NrepServ.GetLocalService();
+
+            localService.AssignReviewer(InterventionId, ReviewerId, "Declined Review");
+
+            return View();
         }
 
         public ActionResult GenReviewLink(string Id, string ReviewerId)

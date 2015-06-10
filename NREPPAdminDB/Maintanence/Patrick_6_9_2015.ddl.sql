@@ -68,15 +68,23 @@ GO
 
 ALTER PROCEDURE [dbo].[SPAssignReviewer]
 	@InterventionID INT,
-	@UserId VARCHAR(128),
+	@ReviewerId VARCHAR(128),
 	@ReviewerStatus VARCHAR(75)
 
 AS SET NOCOUNT ON
 
 	BEGIN TRANSACTION
 
+	DECLARE @UserId VARCHAR(128)
+
 	SELECT @UserId = UserId from Reviewers
-	WHERE Id = @UserId
+	WHERE Id = @ReviewerId
+
+
+	-- Stored procedure accepts either a User or a Reviewer Guid
+	IF @UserID IS NULL BEGIN
+		SET @UserId = @ReviewerId
+	END
 
 	IF EXISTS(SELECT TOP 1 Id from Interv_Users_ReviewStatus where @InterventionID = InterventionID AND UserID = @UserId)
 	BEGIN
@@ -98,16 +106,22 @@ AS SET NOCOUNT ON
 		END
 	END
 
+	DECLARE @RoleId VARCHAR(128)
+
+	SELECT @RoleID = Id from AspNetRoles WHERE Name = 'Reviewer'
+
 	IF NOT EXISTS(SELECT TOP 1 UserId from Inter_User_Roles where @InterventionID = InterventionID AND UserID = @UserId)
 	BEGIN
-		
-		DECLARE @RoleId VARCHAR(128)
-
-		SELECT @RoleID = Id from AspNetRoles WHERE Name = 'Reviewer'
 
 		INSERT INTO Inter_User_Roles (UserId, WkRoleId, InterventionId) VALUES (@UserId, @RoleId, @InterventionID)
+	END
+	ELSE IF @ReviewerStatus = 'Declined Review' BEGIN
+		DELETE FROM Inter_User_Roles 
+		WHERE UserId = @UserId AND @RoleId = @RoleId
 	END
 
 	COMMIT TRANSACTION
 
 RETURN 0
+
+GO

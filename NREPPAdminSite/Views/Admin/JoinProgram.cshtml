@@ -7,13 +7,13 @@
 
 <h2>Join @Model.TheIntervention.Title</h2>
 
-@if (Model.CanAccess)
+@if (Model.CanAccess == 0)
 { 
     <div class="Program-Description">
         COI Goes here when ready.
     </div>
 }
-else
+else if (Model.CanAccess == 2)
 {
     <div class="CantAccess">
         <span>You cannot view the conflict of interest form or accept this invitation until you log in.</span>
@@ -27,8 +27,12 @@ else
         </ul>
 
         <div>
-            @using(Html.BeginForm("DeclineInterv", "Admin"))
+            @using(Html.BeginForm("SimpleDecline", "Admin"))
             {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("ReviewerId", Model.UserId)
+                @Html.Hidden("InterventionId", Model.TheIntervention.Id)
+                
                 <span>Reason For Declining: </span>
                 @Html.TextArea("reason")
                 
@@ -38,6 +42,12 @@ else
         </div>
 
         <!-- TODO: Put Login Link here -->
+    </div>
+}
+else
+{
+    <div>
+        You are not the indended audience of this page.
     </div>
 }
 

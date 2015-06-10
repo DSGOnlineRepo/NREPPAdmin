@@ -432,9 +432,6 @@ namespace NREPPAdminSite.Controllers
             MyIdentityDbContext db = new MyIdentityDbContext();
             //string UserName = User.Identity.Name;
             string UserID = col["ChosenReviewer"];
-            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
-            RoleManager<IdentityRole> _roleManage = new RoleManager<IdentityRole>(roleStore);
-            IdentityRole reviewerRole = _roleManage.FindByName("Reviewer");
 
             NrepServ localService = NrepServ.GetLocalService();
             localService.AssignReviewer(InterventionID, UserID, "Invited Reviewer");

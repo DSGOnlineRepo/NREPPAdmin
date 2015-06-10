@@ -354,7 +354,9 @@ namespace NREPPAdminSite.Models
             get { return documents; }
         }
 
-        public bool CanAccess { get; set; }
+        public int CanAccess { get; set; }
+
+        public string UserId { get; set; }
 
         public JoinProgramModel(List<RCDocument> Docs, Intervention inInterv)
         {
