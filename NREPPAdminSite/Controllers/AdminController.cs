@@ -320,6 +320,11 @@ namespace NREPPAdminSite.Controllers
             string decryptedString = PasswordHash.AESDecrypt(nonURLVersion);
             string[] idBits = decryptedString.Split(';');
             TempClass aClass = new TempClass();
+            NrepServ localService = NrepServ.GetLocalService();
+            ExtendedUser exu = _userManager.FindById(idBits[1]);
+
+            JoinProgramModel jpm = new JoinProgramModel();
+
 
             // Check the date of the token
             DateTime TokenDate = DateTime.Parse(idBits[2]);
@@ -332,12 +337,19 @@ namespace NREPPAdminSite.Controllers
             {
                 aClass.CanView = true;
                 aClass.InterventionId = int.Parse(idBits[0]);
+                Intervention interv = localService.GetIntervention(aClass.InterventionId, exu.UserName);
+                List<RCDocument> docs = localService.GetRCDocuments(null, aClass.InterventionId);
+                jpm = new JoinProgramModel(docs, interv);
+                if (User.Identity.IsAuthenticated && _userManager.FindById(User.Identity.Name).Id == idBits[1]) // Check to see if you're logged in as the correct person
+                    jpm.CanAccess = true;
+                else
+                    jpm.CanAccess = false;
             }
 
-            return View(aClass);
+            return View(jpm);
         }
 
-        public ActionResult GenReviewLink(int Id, int ReviewerId)
+        public ActionResult GenReviewLink(string Id, string ReviewerId)
         {
             ViewBag.SomeString = "somestring";
 

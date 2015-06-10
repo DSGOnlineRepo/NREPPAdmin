@@ -337,38 +337,41 @@ namespace NREPPAdminSite.Models
 
     #endregion
 
+    #region Join Program Model
+
     public class JoinProgramModel
     {
-        private Reviewer rev;
         private Intervention theIntervention;
-
-        public Reviewer Reviewer
-        {
-            get { return rev; }
-        }
+        private List<RCDocument> documents;
 
         public Intervention TheIntervention
         {
             get { return theIntervention; }
         }
 
+        public List<RCDocument> Documents
+        {
+            get { return documents; }
+        }
+
         public bool CanAccess { get; set; }
 
-        public JoinProgramModel(Reviewer inReviewer, Intervention inInterv)
+        public JoinProgramModel(List<RCDocument> Docs, Intervention inInterv)
         {
-            rev = inReviewer;
+            documents = Docs;
             theIntervention = inInterv;
         }
 
         public JoinProgramModel()
         {
-            rev = null;
             theIntervention = null;
         }
     }
 
+    #endregion
+
     #region Document Upload
-    
+
     public class DocUploadPage : NREPPPermissions
     {
         private List<InterventionDoc> documents = new List<InterventionDoc>();

@@ -498,6 +498,16 @@ namespace NREPPAdminSite
             return searchResult;
         }
 
+        public Intervention GetIntervention(int InterventionId, string UserName)
+        {
+            SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InterventionId };
+            SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserName", Value = UserName };
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(idParam);
+            parameters.Add(roleParam);
+            return GetInterventions(parameters).Interventions[0];
+        }
+
         /// <summary>
         /// Gets documents associated with either an intervention or a Reviewer
         /// </summary>
