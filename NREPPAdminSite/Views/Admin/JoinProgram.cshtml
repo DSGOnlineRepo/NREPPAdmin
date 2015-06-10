@@ -1,18 +1,45 @@
 ﻿@model NREPPAdminSite.Models.JoinProgramModel
 
 @{
-    ViewBag.Title = "JoinProgram";
+    ViewBag.Title = "Accept Review";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Join </h2>
+<h2>Join @Model.TheIntervention.Title</h2>
 
-<div class="Program-Description">
-    @Model.TheIntervention.FullDescription
-</div>
+@if (Model.CanAccess)
+{ 
+    <div class="Program-Description">
+        COI Goes here when ready.
+    </div>
+}
+else
+{
+    <div class="CantAccess">
+        <span>You cannot view the conflict of interest form or accept this invitation until you log in.</span>
+
+        <h3>Documents Associated with the Program</h3>
+        <ul>
+            @foreach(NREPPAdminSite.Models.RCDocument doc in Model.Documents)
+            {
+                <li>@doc.Reference</li>
+            }
+        </ul>
+
+        <div>
+            @using(Html.BeginForm("DeclineInterv", "Admin"))
+            {
+                <span>Reason For Declining: </span>
+                @Html.TextArea("reason")
+                
+                <input type="submit" value="Decline" />
+                @Html.ActionLink("Login", "Login", new { returnUrl = Request.Url.PathAndQuery })
+            }
+        </div>
+
+        <!-- TODO: Put Login Link here -->
+    </div>
+}
 
 <!-- Use the "registered" information to show whether we're viewing this -->
-<div>
-    @Html.ActionLink("Accept", "AddReviewer")
-</div>
 
