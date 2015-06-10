@@ -65,3 +65,49 @@ BEGIN
 END
 
 GO
+
+ALTER PROCEDURE [dbo].[SPAssignReviewer]
+	@InterventionID INT,
+	@UserId VARCHAR(128),
+	@ReviewerStatus VARCHAR(75)
+
+AS SET NOCOUNT ON
+
+	BEGIN TRANSACTION
+
+	SELECT @UserId = UserId from Reviewers
+	WHERE Id = @UserId
+
+	IF EXISTS(SELECT TOP 1 Id from Interv_Users_ReviewStatus where @InterventionID = InterventionID AND UserID = @UserId)
+	BEGIN
+		UPDATE Interv_Users_ReviewStatus
+		SET ReviewerStatus = @ReviewerStatus
+		WHERE InterventionID = @InterventionID AND UserId = @UserId
+
+		IF @@ERROR <> 0 BEGIN
+			ROLLBACK TRANSACTION
+			RETURN -1
+		END
+	END
+	ELSE BEGIN
+		INSERT INTO Interv_Users_ReviewStatus (InterventionID, UserID, ReviewerStatus) VALUES (@InterventionID, @UserId, @ReviewerStatus)
+
+		IF @@ERROR <> 0 BEGIN
+			ROLLBACK TRANSACTION
+			RETURN -2
+		END
+	END
+
+	IF NOT EXISTS(SELECT TOP 1 UserId from Inter_User_Roles where @InterventionID = InterventionID AND UserID = @UserId)
+	BEGIN
+		
+		DECLARE @RoleId VARCHAR(128)
+
+		SELECT @RoleID = Id from AspNetRoles WHERE Name = 'Reviewer'
+
+		INSERT INTO Inter_User_Roles (UserId, WkRoleId, InterventionId) VALUES (@UserId, @RoleId, @InterventionID)
+	END
+
+	COMMIT TRANSACTION
+
+RETURN 0

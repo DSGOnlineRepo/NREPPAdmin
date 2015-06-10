@@ -340,7 +340,7 @@ namespace NREPPAdminSite.Controllers
                 Intervention interv = localService.GetIntervention(aClass.InterventionId, exu.UserName);
                 List<RCDocument> docs = localService.GetRCDocuments(null, aClass.InterventionId);
                 jpm = new JoinProgramModel(docs, interv);
-                if (User.Identity.IsAuthenticated && _userManager.FindById(User.Identity.Name).Id == idBits[1]) // Check to see if you're logged in as the correct person
+                if (User.Identity.IsAuthenticated && _userManager.FindByName(User.Identity.Name).Id == idBits[1]) // Check to see if you're logged in as the correct person
                     jpm.CanAccess = true;
                 else
                     jpm.CanAccess = false;
