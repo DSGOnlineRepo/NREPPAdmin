@@ -1,0 +1,9 @@
+﻿/*@charset "UTF-8";*/
+
+footer.footer-bottom {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+background: black;
+}
