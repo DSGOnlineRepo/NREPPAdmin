@@ -8,7 +8,7 @@
 
 GO
 
-CREATE PROCEDURE GetReviewerByInterv
+CREATE PROCEDURE SPGetReviewerByInterv
 	@InterventionId INT
 
 AS SET NOCOUNT ON
@@ -28,14 +28,14 @@ AS SET NOCOUNT ON
 
 	BEGIN TRANSACTION
 
-	/*SELECT @UserId = Id from AspNetUsers
-	WHERE UserName = @UserName*/
+	SELECT @UserId = UserId from Reviewers
+	WHERE Id = @UserId
 
 	IF EXISTS(SELECT TOP 1 Id from Interv_Users_ReviewStatus where @InterventionID = InterventionID AND UserID = @UserId)
 	BEGIN
 		UPDATE Interv_Users_ReviewStatus
 		SET ReviewerStatus = @ReviewerStatus
-		WHERE InterventionID = @InterventionID AND @UserId = @UserId
+		WHERE InterventionID = @InterventionID AND UserId = @UserId
 
 		IF @@ERROR <> 0 BEGIN
 			ROLLBACK TRANSACTION

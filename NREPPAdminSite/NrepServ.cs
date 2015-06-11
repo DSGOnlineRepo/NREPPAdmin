@@ -498,6 +498,16 @@ namespace NREPPAdminSite
             return searchResult;
         }
 
+        public Intervention GetIntervention(int InterventionId, string UserName)
+        {
+            SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InterventionId };
+            SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserName", Value = UserName };
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(idParam);
+            parameters.Add(roleParam);
+            return GetInterventions(parameters).Interventions[0];
+        }
+
         /// <summary>
         /// Gets documents associated with either an intervention or a Reviewer
         /// </summary>
@@ -1291,9 +1301,10 @@ namespace NREPPAdminSite
         public void AssignReviewer(int InterventionId, string UserId, string ReviewerStatus)
         {
             SqlCommand cmd = new SqlCommand("SPAssignReviewer", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.AddWithValue("@InterventionId", InterventionId);
-            cmd.Parameters.AddWithValue("@UserId", UserId);
+            cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
+            cmd.Parameters.AddWithValue("@ReviewerId", UserId);
             cmd.Parameters.AddWithValue("@ReviewerStatus", ReviewerStatus);
 
             try
@@ -1740,6 +1751,8 @@ namespace NREPPAdminSite
             List<ReviewerOnInterv> outReviewers = new List<ReviewerOnInterv>();
 
             SqlCommand cmd = new SqlCommand("GetReviewerByInterv", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
             cmd.Parameters.AddWithValue("@InterventionId", InvId);
 
             try
