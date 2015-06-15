@@ -16,31 +16,42 @@
     </ul>
 </div>
 
-<div class="row">
-    <h3>Add Reviewer </h3>
-    <div class="col-sm-12">
-        <ul class="list-inline">
-            <li class="col-sm-3">
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-9">
+      <div class="col-sm-9 filter-list">
+        <div class="col-sm-9">
+        <span class="h3">Filters <a href="/Program/Submission1" class="pull-right"></a></span>
+          <br />
+        </div>
+        <div class="col-sm-9">
+          <ul class="list" style="padding-left:0">
+            <li class="col-sm-6">
                 <input type="text" class="form-control filter-input" placeholder="First Name" data-fieldname="FirstName" data-column="0">
             </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
+            <li class="col-sm-6" style="padding-bottom: 5px">
                 <input type="text" class="form-control filter-input" placeholder="Last Name" data-fieldname="LastName" data-column="1">
             </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
+            <br /><li class="col-sm-6" style="padding-bottom: 5px">
                 <input type="text" class="form-control filter-input" placeholder="Employer" data-fieldname="Employer" data-column="2">
             </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
+            <li class="col-sm-6" style="padding-bottom: 5px">
                 <input type="text" class="form-control filter-input" placeholder="Department" data-fieldname="Department" data-column="3">
             </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
+            <br /><li class="col-sm-6" style="padding-bottom: 5px">
                 <input type="text" class="form-control filter-input" placeholder="Reviewer Type" data-fieldname="ReviewerType" data-column="4">
             </li>
-            <li class="col-sm-3" style="padding-bottom: 5px">
+            <li class="col-sm-6" style="padding-bottom: 5px">
                 <input type="text" class="form-control filter-input" placeholder="Degree" data-fieldname="Degree" data-column="5">
             </li>
-        </ul>
+          </div>
+        </div>
     </div>
+  </div>
 </div>
+
+
 
 <div>
     @using(Html.BeginForm("AssignReview", "Program"))

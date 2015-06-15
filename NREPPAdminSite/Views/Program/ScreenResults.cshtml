@@ -6,8 +6,9 @@
 }
 
 <h2>Screening Results</h2>
-<br />
+<br /><div class="screening-results">
 @Html.ActionLink("Go To Screening Tool", "Screen", new { InvId = Model.TheIntervention.Id, ForceScreen = true})
+</div>
 
 @functions{
     string MeasuresList(int OutcomeId)
@@ -111,7 +112,7 @@
         else return "";
     }
 }
-
+<br /><br />
 <div id="screening">
     <table>
         <tr>
@@ -146,6 +147,7 @@
     </table>
 </div>
 
+<br /><br />
 <div id="screening">
     <table>
         <tr>
@@ -169,6 +171,7 @@
     </table>
 </div>
 
+<br /><br />
 <div id="screening">
     <table>
         <tr>
@@ -195,7 +198,7 @@
 </div>
 
 
-<div>
+<div class="screening-form">
     @using (Html.BeginForm("SaveNotes"))
     {
         @Html.HiddenFor(m => m.TheIntervention.Id);
@@ -211,10 +214,12 @@
         
         @Html.Hidden("Redirect", "ScreenResults")
         
-        <span>Notes: </span>
+        <br /><span><strong>Notes:</strong> </span><br />
         @Html.TextAreaFor(m => m.TheIntervention.ScreeningNotes)<br />
         
-        <input type="submit" value="Save Notes" /> @Html.ActionLink("Mark Complete or Return to Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id });
+        <br /><input type="submit" value="Save Notes" class="btn btn-primary" />
+        <br />
+        <br /> @Html.ActionLink("Mark Complete or Return to Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id });
     }
 </div>
 

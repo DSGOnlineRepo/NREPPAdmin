@@ -8,69 +8,71 @@
 }
 
 <h2>@ViewBag.Title</h2>
-<div class="dashboard-page-nav">
-    <nav class="navbar navbar_top">
-        <ul class="nav navbar-nav nav_top pull-right">
-            <li role="presentation"><a href="/Program/Submission1"><i class="fa fa-plus-circle fa-lg add"></i></a></li>
 
 
-        </ul>
-    </nav>
-</div>
 
-    <div class="container-fluid">
-      <div class="">
-        <div class="row">
-            <div class="col-sm-8">
-          		<div class="col-sm-9">
-                <ul class="list" style="padding-left:0">
-                    <li class="col-xs-12">
-                        <label for="ftrTitle">Title</label>
-                        <input type="text" id="ftrTitle" class="form-control filter-input" placeholder="Title" data-fieldname="Title" data-column="0">
-                    </li>
-                    <li class="col-xs-12">
-                        <label for="ftrDescription">Full Description</label>
-                        <input type="text" id="ftrDescription" class="form-control filter-input" placeholder="Full Description" data-fieldname="FullDescription" data-column="1">
-                    </li>
-                    <li class="col-xs-12" style="padding-bottom: 5px">
-                        <label for="ftrSubmitter">Submitter</label>
-                        <input type="text" id="ftrSubmitter" class="form-control filter-input" placeholder="Submitter" data-fieldname="Submitter" data-column="4">
-                    </li>
-                </ul>@*@if (User.IsInIdentityRole("Principal Investigator"))
-                    {*@
-          		</div>
-                @*}*@
+
+
+<div class="container-fluid">
+	<div class="">
+    <div class="row">
+      <div class="col-sm-12">
+      	<div class="col-sm-12  filter-list">
+	        <div class="col-sm-12">
+          <span class="h3">Filters <a href="/Program/Submission1" class="pull-right"><span class="small">Add Program</span> <i class="small fa fa-plus-circle fa-lg add"></i></a></span>
+            </br>
+          </div>
+          <div class="col-sm-6">
+            <ul class="list" style="padding-left:0">
+                <li class="col-xs-12">
+                    <label for="ftrTitle">Title</label>
+                    <input type="text" id="ftrTitle" class="form-control filter-input" placeholder="Title" data-fieldname="Title" data-column="0">
+                </li>
+                <li class="col-xs-12">
+                    <label for="ftrDescription">Full Description</label>
+                    <input type="text" id="ftrDescription" class="form-control filter-input" placeholder="Full Description" data-fieldname="FullDescription" data-column="1">
+                </li>
+                <li class="col-xs-12" style="padding-bottom: 5px">
+                    <label for="ftrSubmitter">Submitter</label>
+                    <input type="text" id="ftrSubmitter" class="form-control filter-input" placeholder="Submitter" data-fieldname="Submitter" data-column="4">
+                </li>
+            </ul>@*@if (User.IsInIdentityRole("Principal Investigator"))
+              {*@
+          </div>
+          @*}*@
               <div class="col-sm-3">
                 <label class="control-label">
                     View all programs
                 </label></br>
                 <div class="btn-group" data-toggle="buttons">
-  <label class="btn btn-warning active btn-block">
-    <input type="radio" name="filter-input-opt" id="optOnlyMyPrograms" value="filter-group-user" checked> submitted / assigned to me
+  <label class="btn btn-primary active btn-block">
+    <input type="radio" name="filter-input-opt" id="optOnlyMyPrograms" value="filter-group-user" checked>Submitted / Assigned to me
   </label>
-  <label class="btn btn-warning btn-block">
-    <input type="radio" name="filter-input-opt" id="optOnlyMyGroupPrograms" value="filter-group-mathematica"> assigned to Mathematica
+  <label class="btn btn-primary btn-block">
+    <input type="radio" name="filter-input-opt" id="optOnlyMyGroupPrograms" value="filter-group-mathematica">Assigned to Mathematica
   </label>
-  <label class="btn btn-warning btn-block">
-    <input type="radio" name="filter-input-opt" id="optAllSubmitted" value="filter-group-dsg"> submitted
+  <label class="btn btn-primary btn-block">
+    <input type="radio" name="filter-input-opt" id="optAllSubmitted" value="filter-group-dsg">Submitted
   </label>
-<label class="btn btn-warning btn-block">	
-    <input type="radio" name="filter-input-opt" id="optAllInterventions" value="filter-group-admin"> in the system
+<label class="btn btn-primary btn-block">	
+    <input type="radio" name="filter-input-opt" id="optAllInterventions" value="filter-group-admin">In the system
   </label>
 </div>
                 
               </div>
+</br>
             </div>
-          </div>
-        </div>
-      </div>
+			</div>
+    </div>
+  </div>
+</div>
 
 <div class="row voffset3"></div>
 @*@Html.ActionLink("Create a New Submission", "View", "Program", new { InvId = "-1" }, null)<br />*@
 <div class="container-fluid">
     <div class="container_module">
         <div>
-            <table id="tblPrograms" class="display" cellspacing="0" width="100%">
+            <div class="table-responsive"><table id="tblPrograms" class="display table" cellspacing="0" width="100%">
                 <thead class="bg-info">
                     <tr>
                         <th>Title</th>
@@ -80,7 +82,7 @@
                         <th>Submitter</th>
                     </tr>
                 </thead>
-            </table>
+            </table></div>
         </div>
     </div>
 </div>
