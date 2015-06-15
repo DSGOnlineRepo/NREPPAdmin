@@ -125,10 +125,18 @@
                                     @doc.PubYear
                                     @Html.TextBox("txtPubYear_" + i.ToString(), @doc.PubYear, new {@class = "hidden"})
                                 </td>
+                                <td>
+
+                                </td>
                                 <td class="withborder">
-                                    <button name="btnEdit" onclick=" setEdit(@i); return false; ">Edit</button>
-                                    <button name="cancel_@i" class="hidden" onclick=" clearEdit(@i); return false; ">Cancel</button>
+                                    <button name="btnEdit" onclick=" setEdit(@i); return false;">Edit</button>
+                                    <button name="cancel_@i" class="hidden" onclick="clearEdit(@i); return false;">Cancel</button>
                                     <input type="submit" value="Save" class="hidden"/>
+                                    <ul style="list-style-type: none;">
+                                        <li>@Html.RadioButton("rdoSeeThis_" + i.ToString(), 0)</li>
+                                        <li>@Html.RadioButton("rdoSeeThis_" + i.ToString(), 1) Review This</li>
+                                        <li>@Html.RadioButton("rdoSeeThis_" + i.ToString(), 2) Ignore This</li>
+                                    </ul>
                                 </td>
                             </tr>
                             i++;
