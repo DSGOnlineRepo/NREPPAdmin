@@ -18,7 +18,7 @@
 <label>@Model.TheIntervention.Status</label><br />
 
 <div id="menubar">
-	<p>@Html.ActionLink("Assign Literature Reviewer and Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id })</p>
+	<p>@Html.ActionLink("Assign Literature Reviewer & Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id })</p>
   <p>@Html.ActionLink("Screen this Intervention", "Screen", new { InvId = Model.TheIntervention.Id })</p>
     <p>@Html.ActionLink("Assign Reviewers", "AssignReviewers", new { InvId = Model.TheIntervention.Id })</p>
   <p><a href="#">Submission Part B</a></p>
@@ -58,7 +58,7 @@
 
                     @Html.LabelFor(m => m.TheIntervention.Acronym, new { style = "margin-right: 5px;" });
                     @Html.TextBoxFor(m => m.TheIntervention.Acronym).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)
-                    <br /><br />
+                    <br />
 
                     @Html.LabelFor(m => m.TheIntervention.FullDescription);
                     <br />
@@ -69,11 +69,11 @@
                         bool isChecked = mask.Selected;
                         @Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "programMask" }).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)  @mask.Name <br />
                     }
-                    <br /><br />
+                    <br />
 
                     if (Model.CanDo("EditBaseSubmission"))
                     {
-                        <input type="submit" value="Update" />
+                        <input type="submit" value="Update" class="btn btn-primary" /><br /><br />
                     }
                 }
             </div>
@@ -198,7 +198,7 @@
     <br/><br />
 
 
-    <div>
+    <div class="col-sm-6">
         <h4>NREPP Minimum Criteria</h4>
         @foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
         {

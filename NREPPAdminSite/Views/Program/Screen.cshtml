@@ -117,8 +117,8 @@
 
     <table style="border: 1px solid;">
         <tr>
-            <th class="withborder" style="text-align: center;">Reference</th>
-            <th class="withborder" style="text-align: center;">Year of Publication</th>
+            <th class="withborder">Reference</th>
+            <th class="withborder">Year of Publication</th>
             <th class="withborder">Found In Literature Search</th>
             <th class="withborder">Reason for Exclusion</th>
             <th class="withborder">Overall Attrition Data Available</th>
@@ -205,10 +205,11 @@
 
 
                             <textarea name="newReference">@getReference(Model.TheDocuments.ToList(), study.DocumentId)</textarea><br />
-                            <label>Year of Publication: </label><input type="text" name="PubYear"
-                                                                       value="@getPubYear(Model.TheDocuments.ToList(), study.DocumentId)" /><br /><br />
+                            <label>Year of Publication: </label>
+                            <br /><input type="text" name="PubYear" value="@getPubYear(Model.TheDocuments.ToList(), study.DocumentId)" /><br /><br />
 
-                            <input type="checkbox" name="IsLitSearch" /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <br />
+                            <label style="margin-left: 2px;">Was this part of a Literature Search?</label> <input type="checkbox" name="IsLitSearch" />
+                            <br />
 
                             <div>
                                 <span style="float: left; clear: left;">Reason for Exclusion: </span>@Html.DropDownList("Exclusion1", thisExclusion)<br />
@@ -237,7 +238,7 @@
                             <textarea name="Notes"></textarea><br />
 
                             <br /><br />
-                            <input type="submit" value="Submit" /> <button onclick="return false;">Clear</button>
+                            <input type="submit" value="Submit" class="btn btn-primary" /> <button onclick="return false;" class="btn btn-secondary">Clear</button>
                         }
                     </div>
                     <button id="show_@i" onclick="toggleEdit('show_@i'); return false;">Edit</button>
@@ -250,7 +251,7 @@
 </div>
 
 <div class="AddStudy">
-    <button id="AddStudy">Add Study</button>
+	<br /><button id="AddStudy" class="btn btn-primary">Add Study</button><br /><br />
 </div>
 
 <div class="Add-div hidden" style="padding-top: 10px; padding-bottom: 10px;">
@@ -261,50 +262,58 @@
     @Html.Hidden("RCDocumentId")
     @Html.Hidden("RCDocumentName");
 
-    <textarea name="newReference"></textarea><br />
-    <label>Year of Publication: </label><input type="text" name="PubYear"
-                                               /><br /><br />
+    <label>New Reference: </label>
+    <br /><textarea name="newReference"></textarea>
+    
+    <br /><br /><label>Year of Publication: </label>
+    <br /><input type="text" name="PubYear" />
+    
+    <br /><label for="docDropdown">Article:</label>
+    <br />@Html.DropDownList("docDropdown", Docs, new { onchange = "GetDocumentInfo($(this).val(), this);", @class="mainDropDown" });
 
-    <label for="docDropdown">Article:</label>
-
-    @Html.DropDownList("docDropdown", Docs, new { onchange = "GetDocumentInfo($(this).val(), this);", @class="mainDropDown" });
-    <br />
-
-    <input type="checkbox" name="IsLitSearch" /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <br />
+    <br /><br /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <input type="checkbox" name="IsLitSearch" />
+    
+    <br /><br />
 
     <div>
-        <span style="float: left; clear: left;">Reason for Exclusion: </span>@Html.DropDownList("Exclusion1", Exclusions)<br />
-        <br />
-        <span style="float: left; clear: left;">Overall Attrition Data Available: </span>@Html.DropDownList("OverallAttrition", AttritionAnswers)<br />
-        <br />
-
-        <span style="float: left; clear: left;">Differential Attrition Data Available: </span>@Html.DropDownList("DiffAttrition", AttritionAnswers)<br />
-        <br />
+        Reason for Exclusion:
+        <br />@Html.DropDownList("Exclusion1", Exclusions)
+        
+        <br /><br />Overall Attrition Data Available:
+        <br />@Html.DropDownList("OverallAttrition", AttritionAnswers)
+        
+        <br /><br />Differential Attrition Data Available:
+        <br />@Html.DropDownList("DiffAttrition", AttritionAnswers)
+        
+        <br /><br />
     </div>
 
     <label>What was the Study Design?</label>
-    @Html.DropDownList("StudyDesign", StudyDesigns)<br /><br />
+    <br />@Html.DropDownList("StudyDesign", StudyDesigns)
 
-    <label>Total Sample Size:</label>
-    <input type="text" name="TotalSampleSize" /><br />
+    <br /><br /><label>Total Sample Size:</label>
+    <br /><input type="text" name="TotalSampleSize" />
+    
 
-    <label>Longest Followup:</label><br />
-    <input type="text" name="LongestFollowup" /><br />
+    <br /><label>Longest Followup:</label>
+    <br /><input type="text" name="LongestFollowup" />
 
-    <input type="checkbox" name="recommendReview" /><label style="margin-left: 2px;">Recommend for Review</label> <br />
+    <br /><label>Recommend for Review</label> <input type="checkbox" name="recommendReview" />
+    
+    <br /><br /><label for="studyIdBox">Study #</label>
+    <br /><input type="text" name="StudyId" />
+    
+    <br /><br /><label for="articleIdBox">Article #</label>
+    <br /><input type="text" name="articleIdBox" />
 
-    <label for="studyIdBox">Study #</label><input type="text" name="StudyId" /><br />
-    <label for="articleIdBox">Article #</label><input type="text" name="articleIdBox" /><br /><br />
+    <br /><br /><label>Notes:</label>
+    <br /><textarea name="Notes"></textarea>
 
-    <label>Notes:</label><br />
-    <textarea name="Notes"></textarea><br />
-
-    <br /><br />
-    <input type="submit" value="Submit" /> <button onclick="return false;">Clear</button>
+    <br /><br /><input type="submit" value="Submit" class="btn btn-primary" /> <button onclick="return false;" class="btn btn-secondary">Clear</button>
    }
 </div>
 
-<div>
+<div id="screening-table">
    
 
     @{
@@ -361,8 +370,8 @@
 
     <table>
         <tr>
-            <th class="withborder" style="text-align: center;">Measure Resported in Study</th>
-            <th class="withborder" style="text-align: center;">Outcome Named in Article</th>
+            <th class="withborder">Measure Resported in Study</th>
+            <th class="withborder">Outcome Named in Article</th>
             <th class="withborder">Study Id</th>
             <th class="withborder">Reference</th>
             <th class="withborder">SAMHSA-Related Population</th>
@@ -517,7 +526,7 @@
                                 }
                             </select>
 
-                            <input type="submit" value="Submit" />
+                            <input type="submit" value="Submit" class="btn btn-primary" /><br /><br />
                      }
                 </div>
                 <button id="showOutcome_@i" onclick="toggleEdit('showOutcome_@i'); return false;">Edit</button>
@@ -527,45 +536,50 @@
 i++;
         }
     </table>
-    <br />
     <div class="AddOutcome">
-        <button id="AddOutcome">Add Outcome</button>
+    	<br /><button id="AddOutcome" class="btn btn-primary">Add Outcome</button>
     </div>
     <br />
-    <br />
 
 
-    <div class="AddO-div hidden" style="padding: 10px 10px 10px 10px; border: 1px solid;">
+    <div class="AddO-div hidden">
         @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.Hidden("IntervId", Model.TheIntervention.Id)
             @Html.Hidden("OutcomeMeasureId")
             <label>Choose An Outcome from the Article: </label>
-            @Html.DropDownList("MacroOutcome", OutcomeList)
+            <br />@Html.DropDownList("MacroOutcome", OutcomeList)
         
-            <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
-            <label>Outcome from Taxonomy:</label>@Html.DropDownList("TaxOutcome", TaxOutcomes)<br />
-            <label for="measure">Measure Reported in the Study</label>
-            <input type="text" id="measure" name="measure" /><br /><br />
+            <br /><br /><label>Write in: </label>
+            <br /><input type="text" name="newOutcome" />
+            
+            <br /><label>Outcome from Taxonomy:</label>
+            <br />@Html.DropDownList("TaxOutcome", TaxOutcomes)
+            
+            
+            <br /><br /><label for="measure">Measure Reported in the Study</label>
+            <br /><input type="text" id="measure" name="measure" />
         
-            <label>Document: </label>@Html.DropDownList("docDropdown", Docs)<br /><br />
+            <br /><label>Document: </label>
+            <br />@Html.DropDownList("docDropdown", Docs)
 
-            <label>SAMHSA-Related Population:</label>
-            @Html.DropDownList("popDropDown", SAMHSAPops)<br />
+            <br /><br /><label>SAMHSA-Related Population:</label>
+            <br />@Html.DropDownList("popDropDown", SAMHSAPops)
             
-            <label for="popDescription">Describe Evaluated Population:</label><br />
-            <textarea name="popDescription" id="popDescription"></textarea><br /><br />
+            <br /><br /><label for="popDescription">Describe Evaluated Population:</label>
+            <br /><textarea name="popDescription" id="popDescription"></textarea>
             
-            <label>SAMHSA-Related Outcome:</label>
-            @Html.DropDownList("samOutDropDown", SAMHSAOutcomes)<br />
+            <br /><br /><label>SAMHSA-Related Outcome:</label>
+            <br />@Html.DropDownList("samOutDropDown", SAMHSAOutcomes)
 
-            <label>What Treatment vs. Comparison Effect Size:</label>
-            @Html.DropDownList("treatmentDropDown", EffectReports)<br />
+            <br /><br /><label>What Treatment vs. Comparison Effect Size:</label>
+            <br />@Html.DropDownList("treatmentDropDown", EffectReports)
             
-            <input type="checkbox" name="reviewOutcome" /><label>Recommend for Review</label><br />
+            <br /><br /><label>Recommend for Review</label> <input type="checkbox" name="reviewOutcome" />
 
 
-            <label for="studySelector">Select Applicable Studies</label><br />
+            <br /><br /><label for="studySelector">Select Applicable Studies</label>
+            <br />
             <select id="studySelector" name="studySelector" style="width: 350px;">
                 @foreach (int studyId in studyz)
                 {
@@ -573,7 +587,7 @@ i++;
                 }
             </select>
         
-            <input type="submit" value="Submit" />
+            <br /><br /><input type="submit" value="Submit" class="btn btn-primary" />
         }
     </div>
 
@@ -593,14 +607,14 @@ i++;
             
             @Html.Hidden("Redirect", "Screen")
 
-    <span>Notes: </span>
+    <span><strong>Notes:</strong> </span><br />
     @Html.TextAreaFor(m => m.TheIntervention.ScreeningNotes)<br />
-            <input type="submit" value="Save Notes" />
+            <br /><input type="submit" value="Save Notes" class="btn btn-primary" />
         }
     </div>
 
         <div>
-            @Html.ActionLink("Complete Screening", "Assignment", new { InvId = Model.TheIntervention.Id })
+            @Html.ActionLink("Complete Pre-screening", "Assignment", new { InvId = Model.TheIntervention.Id })
         </div>
 </div>
 
