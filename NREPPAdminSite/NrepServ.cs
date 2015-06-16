@@ -1021,7 +1021,7 @@ namespace NREPPAdminSite
         /// <param name="Reference">Reference Text</param>
         /// <param name="RCDocName">Review Coordinator Name for the Document</param>
         /// <returns></returns>
-        public int UpdateRCDocInfo(int RCDocId, int DocId, string Reference, string RCDocName, int? pubYear)
+        public int UpdateRCDocInfo(int RCDocId, int DocId, string Reference, string RCDocName, int? pubYear, bool AddToReview)
         {
             int retValue = 0;
             SqlCommand cmd = new SqlCommand("SPAddOrUpdateDocTags", conn);
@@ -1032,6 +1032,7 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@Reference", DbType = DbType.String, Value = Reference });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@RCName", DbType = DbType.String, Value = RCDocName });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@PubYear", Value = pubYear });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@AddToReview", Value = AddToReview });
 
             try
             {

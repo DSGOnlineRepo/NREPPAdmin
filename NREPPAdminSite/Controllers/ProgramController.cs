@@ -364,7 +364,7 @@ namespace NREPPAdminSite.Controllers
             // See Above
 
             string RCNameText = "txtRCName_", ReferenceText = "txtRef_", hiddenText = "hid_", dirtyText = "isdirty_";
-            string PubYearText = "txtPubYear_";
+            string PubYearText = "txtPubYear_", AddToReview = "chkAddToReview_";
 
             int i = 0;
 
@@ -374,7 +374,7 @@ namespace NREPPAdminSite.Controllers
                 {
                     // TODO: Check to see if an RCDocinfo Exists
                     localService.UpdateRCDocInfo(-1, int.Parse(col[hiddenText + i.ToString()]), col[ReferenceText + i.ToString()],
-                        col[RCNameText + i.ToString()], col[PubYearText + i.ToString()] == string.Empty ? null : (int?)int.Parse(col[PubYearText + i.ToString()]));
+                        col[RCNameText + i.ToString()], col[PubYearText + i.ToString()] == string.Empty ? null : (int?)int.Parse(col[PubYearText + i.ToString()]), col[AddToReview + i.ToString()] == "on");
                     break;
                 }
                 else i++;
@@ -414,8 +414,9 @@ namespace NREPPAdminSite.Controllers
             rcDoc.RCName = Request.Form["RCDocumentName"];
             rcDoc.Reference = Request.Form["newReference"];
             rcDoc.PubYear = int.Parse(Request.Form["PubYear"]);
+            rcDoc.AddToReview = Request.Form["recommendReview"] == "on"; // kludge, but let's leave it alone
 
-            localService.UpdateRCDocInfo(rcDoc.RCDocId, rcDoc.DocId, rcDoc.Reference, rcDoc.RCName, rcDoc.PubYear);
+            localService.UpdateRCDocInfo(rcDoc.RCDocId, rcDoc.DocId, rcDoc.Reference, rcDoc.RCName, rcDoc.PubYear, rcDoc.AddToReview);
 
             return RedirectToAction("Screen", new { InvId = int.Parse(Request.Form["InterventionId"]) });
         }
@@ -455,7 +456,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult UpdateRCDocs(FormCollection col)
         {
             string RCNameText = "txtRCName_", ReferenceText = "txtRef_", hiddenText = "hid_", dirtyText = "isdirty_";
-            string PubYearText = "txtPubYear_";
+            string PubYearText = "txtPubYear_", AddToReview = "chkAddToReview_";
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
             int i = 0;
@@ -466,7 +467,8 @@ namespace NREPPAdminSite.Controllers
                 {
                     // TODO: Check to see if an RCDocinfo Exists
                     localService.UpdateRCDocInfo(-1, int.Parse(col[hiddenText + i.ToString()]), col[ReferenceText + i.ToString()],
-                        col[RCNameText + i.ToString()], col[PubYearText + i.ToString()] == string.Empty ? null : (int?)int.Parse(col[PubYearText + i.ToString()]));
+                        col[RCNameText + i.ToString()], col[PubYearText + i.ToString()] == string.Empty ? null : (int?)int.Parse(col[PubYearText + i.ToString()]),
+                        col[AddToReview + i.ToString()].Contains("true"));
                     break;
                 }
                 else i++;
@@ -497,7 +499,7 @@ namespace NREPPAdminSite.Controllers
 
         protected void UpdateRCDocument(RCDocument doc, NrepServ localService)
         {
-            localService.UpdateRCDocInfo(doc.RCDocId, doc.DocId, doc.Reference, doc.RCName, doc.PubYear);
+            localService.UpdateRCDocInfo(doc.RCDocId, doc.DocId, doc.Reference, doc.RCName, doc.PubYear, doc.AddToReview);
         }
 
         #endregion
