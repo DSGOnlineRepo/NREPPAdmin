@@ -17,6 +17,9 @@
     int i = 0;
 }
 
+@if(Model.CanDo("DoScreen"))
+{ 
+
 <div id="screening">
     @{
         i = 0;
@@ -617,6 +620,11 @@ i++;
             @Html.ActionLink("Complete Pre-screening", "Assignment", new { InvId = Model.TheIntervention.Id })
         </div>
 </div>
+}
+else
+{
+    <div id="denial">You do not have permission to view the screening tool. Please return to the @Html.ActionLink("Program View Page", "View", new { InvId = Model.TheIntervention.Id })</div>
+}
 
 <script type="text/javascript">
     var thisIsAThing = 5;
