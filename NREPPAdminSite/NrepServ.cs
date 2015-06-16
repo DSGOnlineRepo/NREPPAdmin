@@ -1076,6 +1076,7 @@ namespace NREPPAdminSite
                     doc.FileDescription = dr["Description"].ToString();
                     doc.PubYear = dr.IsNull("PubYear") ? null : (int?)dr["PubYear"];
                     doc.DocumentTypeName = dr["DocTypeName"].ToString();
+                    doc.AddToReview = dr.IsNull("AddToReview") ? false : (bool)dr["AddToReview"];
                     outList.Add(doc);
                 }
 

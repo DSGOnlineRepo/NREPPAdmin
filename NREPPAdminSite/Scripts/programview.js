@@ -65,12 +65,15 @@ function setEdit(index) {
     var pubyear = "txtPubYear_" + index.toString();
     var cancelName = "cancel_" + index.toString();
     var dirtyId = "#" + "isdirty_" + index.toString();
+    var chkId = "chkAddToReview_" + index.toString();
 
     $("#" + rcnameId).removeClass("hidden");
     $("#" + referenceId).removeClass("hidden");
     $("#" + pubyear).removeClass("hidden");
     $("button[name*=" + cancelName + "]").removeClass("hidden");
     $("button[name*=" + cancelName + "]").siblings("input[type=submit]").removeClass("hidden");
+    $("button[name*=btnEdit").addClass("hidden");
+    $("#" + chkId).prop('disabled', false);
 
     $("button[name*=btnEdit]").each(function () {
         $(this).prop("disabled", true);
@@ -85,12 +88,16 @@ function clearEdit(index) {
     var pubyear = "txtPubYear_" + index.toString();
     var cancelName = "cancel_" + index.toString();
     var dirtyId = "#" + "isdirty_" + index.toString();
+    var chkId = "chkAddToReview_" + index.toString();
 
     $("#" + rcnameId).addClass("hidden");
     $("#" + referenceId).addClass("hidden");
     $("#" + pubyear).addClass("hidden");
     $("button[name*=" + cancelName + "]").addClass("hidden");
     $("button[name*=" + cancelName + "]").siblings("input[type=submit]").addClass("hidden");
+    $("button[name*=btnEdit").removeClass("hidden");
+    $("#" + chkId).prop('disabled', true);
+    
 
     $("button[name*=btnEdit]").each(function () {
         $(this).prop("disabled", false);
