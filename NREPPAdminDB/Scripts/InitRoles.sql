@@ -183,7 +183,7 @@ INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (4, 'Substa
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (1, 'Do you have an evaluation study that assess mental health or substance abuse outcomes?', 'PreScreen')
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (2, 'Do you have an evaluation study that assesses other behavioral health-related outcomes on populations with mental health issues or substance abuse problems?', 'PreScreen')
 INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (3, 'Has the effectiveness of the intervention been assessed with at least one experiment or quasi-experimental design, with a comparison group? (Studies with single-group, pretest-posttest designs do not meet this requirement.)', 'PreScreen')
-INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (4, 'Have the results of tehse studies been published in a peer reviewed journal, other professional publication, or documentmented in a comprehensive evaluation report dated 1990 or later?', 'PreScreen')
+INSERT INTO MaskList (MaskPower, MaskValueName, MaskCategory) VALUES (4, 'Have the results of these studies been published in a peer reviewed journal, other professional publication, or documented in a comprehensive evaluation report dated 1990 or later?', 'PreScreen')
 
 -- Taxonomic Outcome Stuff
 

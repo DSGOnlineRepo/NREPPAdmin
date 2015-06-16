@@ -251,8 +251,8 @@
                             //@Html.CheckBox(Model.PreScreen[i].Name, isChecked, new { Value = Math.Pow(2, Model.PreScreen[i].Value), @class = "preScreenMask" }) @Model.PreScreen[i].Name
                             <span class="preQuestion_@Model.PreScreen[i].Value.ToString()">
 
-                                <span>@(i+1). @Model.PreScreen[i].Name</span> @Html.RadioButton("prescreen_" + @i.ToString(), Math.Pow(2, Model.PreScreen[i].Value), isChecked, new {@class = "preScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == true) <span>Yes</span>
-                                @Html.RadioButton("prescreen_" + @i.ToString(), 0, !isChecked, new {@class = "preScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == true)<span>No.</span><br />
+                                <span>@(i+1). @Model.PreScreen[i].Name</span> @Html.RadioButton("prescreen_" + @i.ToString(), Math.Pow(2, Model.PreScreen[i].Value), isChecked, new {@class = "preScreenMask"}).DisableIf(() => !Model.CanDo("AnswerPrescreen") == true) <span>Yes</span>
+                                @Html.RadioButton("prescreen_" + @i.ToString(), 0, !isChecked, new {@class = "preScreenMask"}).DisableIf(() => !Model.CanDo("AnswerPrescreen") == true)<span>No.</span><br />
                             </span>
                         }
                     }
