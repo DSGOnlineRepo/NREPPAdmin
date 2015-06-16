@@ -199,7 +199,7 @@
 
 
 <div class="screening-form">
-    @using (Html.BeginForm("SaveNotes"))
+    @using (Html.BeginForm("SaveNotes", "Program"))
     {
         @Html.HiddenFor(m => m.TheIntervention.Id);
         @Html.HiddenFor(m => m.TheIntervention.SubmitterId);
