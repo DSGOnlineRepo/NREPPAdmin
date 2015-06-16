@@ -180,7 +180,8 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Document Type")]
         public string DocumentTypeName
         {
-            get { return documentTypeName; }
+            get;
+            set;
         }
 
         public int DocumentType

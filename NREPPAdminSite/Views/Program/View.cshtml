@@ -88,6 +88,7 @@
                 <table>
                     <tr>
                         <th class="withborder">Description</th>
+                        <th class="withborder">Document Type</th>
                         <th class="withborder">RC File Name</th>
                         <th class="withborder">Reference</th>
                         <th class="withborder">Publication Year</th>
@@ -104,6 +105,9 @@
                                     @Html.Hidden("hid_" + i.ToString(), @doc.DocId)
                                     @Html.Hidden("isdirty_" + i.ToString(), "false")
                                     @doc.FileDescription
+                                </td>
+                                <td class="withborder">
+                                    @doc.DocumentTypeName
                                 </td>
                                 <td class="withborder">
                                     @doc.RCName
@@ -125,18 +129,10 @@
                                     @doc.PubYear
                                     @Html.TextBox("txtPubYear_" + i.ToString(), @doc.PubYear, new {@class = "hidden"})
                                 </td>
-                                <td>
-
-                                </td>
                                 <td class="withborder">
                                     <button name="btnEdit" onclick=" setEdit(@i); return false;">Edit</button>
                                     <button name="cancel_@i" class="hidden" onclick="clearEdit(@i); return false;">Cancel</button>
                                     <input type="submit" value="Save" class="hidden"/>
-                                    <ul style="list-style-type: none;">
-                                        <li>@Html.RadioButton("rdoSeeThis_" + i.ToString(), 0)</li>
-                                        <li>@Html.RadioButton("rdoSeeThis_" + i.ToString(), 1) Review This</li>
-                                        <li>@Html.RadioButton("rdoSeeThis_" + i.ToString(), 2) Ignore This</li>
-                                    </ul>
                                 </td>
                             </tr>
                             i++;
