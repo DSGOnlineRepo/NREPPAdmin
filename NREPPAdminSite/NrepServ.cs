@@ -87,13 +87,24 @@ namespace NREPPAdminSite
 
                     var user = _userManager.FindById(intervention.SubmitterId);
 
-                    var mailMessage2 = new MailMessage("donotreply@dsgonline.com", user.Email,
+                    var mailMessage2 = new MailMessage("donotreply@dsgonline.com", string.IsNullOrEmpty(intervention.PrimaryEmail)?user.Email:intervention.PrimaryEmail,
                        "Intervention Status Changed", "Dear " + user.FirstName + ", " +
                                                       "Thank you for submitting " + intervention.Title + "/" + intervention.Acronym + 
                                                       " for inclusion in the National Registry of Evidence-based " +
                                                       "Programs and Practices (NREPP). NREPP staff will screen your submission " +
                                                       "package to confirm its eligibility for a full review and you will receive " +
-                                                      "an e-mail notification to inform you of the status of your submission.");
+                                                      "an e-mail notification to inform you of the status of your submission. " +
+                                                      "If your submission package is accepted for a full review, you will be asked " +
+                                                      "to provide additional information.");
+                    if (string.IsNullOrEmpty(intervention.SecondaryEmail))
+                    {
+                        mailMessage2.CC.Add(intervention.SecondaryEmail);
+                    }
+                    if (!string.IsNullOrEmpty(intervention.PrimaryEmail) && user.Email != intervention.PrimaryEmail))
+                    {
+                        mailMessage2.CC.Add(user.Email);
+                    }
+
                     _emailService.SendEmail(mailMessage2);
                 }
                 else if (toStatus == 92)
