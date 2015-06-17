@@ -25,7 +25,7 @@
     @Html.LabelFor(m => m.TheIntervention.Acronym)
     @Html.TextBoxFor(m => m.TheIntervention.Acronym)<br />
 
-    <p>Please select (all that apply)</p>
+    <p>Program type (check all that apply)</p>
     <ul style="list-style-type: none;" class="submission-li-scope">
 
         @foreach (NREPPAdminSite.Models.MaskValue mask in Model.ProgramType)
