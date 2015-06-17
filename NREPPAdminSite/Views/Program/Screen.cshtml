@@ -17,7 +17,7 @@
     int i = 0;
 }
 
-@if(Model.CanDo("DoScreen"))
+@if(Model.CanDo("ScreenInterv"))
 { 
 
 <div id="screening">
@@ -51,7 +51,11 @@
 
         foreach (NREPPAdminSite.Models.RCDocument doc in Model.TheDocuments)
         {
-            Docs.Add(new SelectListItem() { Text = doc.FileDescription, Value = doc.DocId.ToString() });
+            if (doc.DocumentTypeName == "Program Evaluation")
+            {
+                Docs.Add(new SelectListItem() { Text = string.IsNullOrEmpty(doc.RCName.Trim()) ?
+                    doc.FileDescription : doc.RCName, Value = doc.DocId.ToString() });
+            }
         }
       }
 

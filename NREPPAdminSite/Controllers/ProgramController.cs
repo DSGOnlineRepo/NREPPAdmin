@@ -220,6 +220,12 @@ namespace NREPPAdminSite.Controllers
                 SAMHSAPop, SAMHSAOut, EffectReports, TaxOutcomes);
             sm.AddDests(localService.GetDestinations(theIntervention.Id).ToList());
 
+            List<string> perms = new List<string>();
+
+            perms.Add("ScreenInterv");
+
+            sm.SetPermissions(perms, User.Identity.Name, InvId);
+
             bool gotoScreen = false;
 
             if (!ForceScreen.HasValue)
