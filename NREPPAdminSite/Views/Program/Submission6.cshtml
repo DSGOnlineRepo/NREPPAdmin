@@ -1,7 +1,7 @@
 ﻿@model NREPPAdminSite.Models.IntervPageModel
 
 @{
-    ViewBag.Title = "Page 6 of Submission";
+    ViewBag.Title = "Step 3 of Submission";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -47,7 +47,6 @@
         </div>
         
         @Html.ActionLink("Return to Document Uploads", "Submission4", new { InvId = Model.TheIntervention.Id })
-        <input type="submit" value="Save" />
         <input type="submit" value="Save and Continue" onclick="$('#Dest').val('continue'); return true;" />
     }
 </div>
