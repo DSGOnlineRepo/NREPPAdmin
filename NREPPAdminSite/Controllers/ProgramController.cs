@@ -212,7 +212,6 @@ namespace NREPPAdminSite.Controllers
 
             OutcomesWrapper ow = localService.GetOutcomesByIntervention(InvId);
 
-            //List<OutcomeMeasure> oms = ow.OutcomesMeasures.Where(om => om.OutcomeId == 1).ToList<OutcomeMeasure>();
             List<OutcomeMeasure> oms = ow.OutcomesMeasures.ToList<OutcomeMeasure>();
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 

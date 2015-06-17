@@ -100,7 +100,7 @@ namespace NREPPAdminSite
                     {
                         mailMessage2.CC.Add(intervention.SecondaryEmail);
                     }
-                    if (!string.IsNullOrEmpty(intervention.PrimaryEmail) && user.Email != intervention.PrimaryEmail))
+                    if (!string.IsNullOrEmpty(intervention.PrimaryEmail) && user.Email != intervention.PrimaryEmail);
                     {
                         mailMessage2.CC.Add(user.Email);
                     }

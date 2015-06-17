@@ -178,10 +178,11 @@ namespace NREPPAdminSite.Models
         protected int docId;
 
         [Display(Name = "Document Type")]
-        public string DocumentTypeName
-        {
-            get;
-            set;
+        public string DocumentTypeName {
+
+            get { return documentTypeName; }
+            
+            set {documentTypeName = value;}
         }
 
         public int DocumentType
