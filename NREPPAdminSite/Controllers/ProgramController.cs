@@ -126,7 +126,7 @@ namespace NREPPAdminSite.Controllers
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
-            localService.DeleteDocument(DocId, 1); // TODO: Get User from Cookie
+            localService.DeleteDocument(DocId, "testreview"); // TODO: Get User from Cookie
 
             return RedirectToAction("View", new { InvId = InvId });
         }
