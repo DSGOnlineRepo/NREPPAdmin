@@ -100,7 +100,7 @@ namespace NREPPAdminSite
                     {
                         mailMessage2.CC.Add(intervention.SecondaryEmail);
                     }
-                    if (!string.IsNullOrEmpty(intervention.PrimaryEmail) && user.Email != intervention.PrimaryEmail);
+                    if (!string.IsNullOrEmpty(intervention.PrimaryEmail) && user.Email != intervention.PrimaryEmail)
                     {
                         mailMessage2.CC.Add(user.Email);
                     }
@@ -795,7 +795,7 @@ namespace NREPPAdminSite
 
         }
 
-        public int DeleteDocument(int DocId, string theUser)
+        public int DeleteDocument(int DocId, int theUser)
         {
             SqlCommand cmdSaveFile = new SqlCommand("SPAddOrRemoveDoc", conn);
             int retValue = -1;
@@ -806,7 +806,7 @@ namespace NREPPAdminSite
             cmdSaveFile.Parameters.Add(new SqlParameter("@MIMEType", ""));
             cmdSaveFile.Parameters.Add(new SqlParameter("@IsDelete", true));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ItemId", DocId));
-            cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderName", theUser));
+            cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderId", theUser));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ReviewerId", null));
             
 
