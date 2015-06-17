@@ -122,13 +122,16 @@ namespace NREPPAdminSite.Controllers
 
         // TODO: Make sure you have a cookie and rights to delete this document (pretty easy, but you DO need to implement it)
 
-        public ActionResult DeleteDocument(int DocId, int InvId)
+        public ActionResult DeleteDocument(int DocId, int InvId, string Destination)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
             localService.DeleteDocument(DocId, "testreview"); // TODO: Get User from Cookie
 
-            return RedirectToAction("View", new { InvId = InvId });
+            if (Destination != null)
+                return RedirectToAction(Destination.ToString(), new { InvId = InvId });
+            else
+                return RedirectToAction("View", new { InvId = InvId });
         }
 
         /// <summary>
