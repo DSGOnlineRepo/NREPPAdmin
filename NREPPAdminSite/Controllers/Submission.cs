@@ -258,11 +258,6 @@ namespace NREPPAdminSite.Controllers
 
             var list =_roleManager.FindByName("Lit Review").Users;
 
-            /*if (!localService.CanDo("Assign", User.Identity.Name, IntervId))
-            {
-                return RedirectToAction("Programs", "Home");
-            }*/
-
             List<Destination> LitReviews = new List<Destination>();
             List<Tuple<string, string>> UserRoles = localService.GetUsersRoles(InvId).ToList();
 
