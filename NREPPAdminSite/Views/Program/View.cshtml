@@ -11,17 +11,17 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/programview.js")"></script>
 }
 
-<div class="page-wrapper">
+<div class="page-wrapper col-sm-offset-3 col-sm-6 submission-scope">
 
 <h2>Viewing @Model.TheIntervention.Title</h2>
 <h4>Submitted by @Model.TheIntervention.Submitter</h4>
 <label>@Model.TheIntervention.Status</label><br />
 
-<div id="menubar">
-	<p>@Html.ActionLink("Assign Literature Reviewer & Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id })</p>
-    <p>@Html.ActionLink("Screen this Intervention", "Screen", new { InvId = Model.TheIntervention.Id })</p>
-    <p>@Html.ActionLink("Assign Reviewers", "AssignReviewers", new { InvId = Model.TheIntervention.Id })</p>
-  <p><a href="#">Submission Part B</a></p>
+<div>
+	<p>@Html.ActionLink("Assign Literature Reviewer & Review Coordinator", "Assignment", new { InvId = Model.TheIntervention.Id }, new { @class = "btn btn-primary btn-block" })</p>
+  <p>@Html.ActionLink("Screen this Intervention", "Screen", new { InvId = Model.TheIntervention.Id }, new { @class = "btn btn-primary btn-block" })</p>
+    <p>@Html.ActionLink("Assign Reviewers", "AssignReviewers", new { InvId = Model.TheIntervention.Id }, new { @class = "btn btn-primary btn-block" })</p>
+  <p><a href="#" class="btn btn-primary btn-block">Submission Part B</a></p>
 </div>
 
 <div>
@@ -44,7 +44,7 @@
 
     <div class="formContent">
 
-            <div class="mainForm">
+            <div>
                 @using (Html.BeginForm("Edit", "Program"))
                 {
                     @Html.HiddenFor(m => m.TheIntervention.Id);
@@ -83,9 +83,9 @@
     <div class="upload-div">
         @if (Model.CanDo("SeeRCDocs"))
         {
-            <div>
+            <div class="table-responsive">
 
-                <table>
+                <table class="table">
                     <tr>
                         <th class="withborder">Description</th>
                         <th class="withborder">Document Type</th>
@@ -198,7 +198,7 @@
     <br/><br />
 
 
-    <div class="col-sm-6">
+    <div class="col-sm-12">
         <h4>NREPP Minimum Criteria</h4>
         @foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
         {
@@ -207,7 +207,7 @@
 
             if (mask.Value > 2)
             {
-                <span class="preQuestion_@mask.Value.ToString()">
+                <span class="preQuestion_@mask.Value.ToString() submission-radio-scope">
                     <span>@maskString</span>
                     <br />@Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>&nbsp;&nbsp;Yes</span>
                     @Html.RadioButton(mask.Name, 0, !isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>&nbsp;&nbsp;No.</span><br />
@@ -215,7 +215,7 @@
             }
             else
             {
-                <span class="preQuestion_@mask.Value.ToString()">
+                <span class="preQuestion_@mask.Value.ToString() submission-radio-scope">
                     <span>@maskString</span>
                     <br />@Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>&nbsp;&nbsp;Yes</span>
                     @Html.RadioButton(mask.Name, 0, !isChecked, new {@class = "userPreScreenMask"}).DisableIf(() => Model.CanDo("EditBaseSubmission") == false)<span>&nbsp;&nbsp;No.</span><br />

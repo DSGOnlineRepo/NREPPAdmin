@@ -16,7 +16,9 @@
     }
 }
 
-<h2>Step 4. Submit Your Application</h2>
+<div class="col-sm-6 col-sm-offset-3 submission-scope">
+<h2>Step 4. Submit Your Application</h2><br />
+<h3>Have you completed your application?</h3><br />
 
 <div>
     <p>
@@ -30,7 +32,8 @@
     }
     else
     {
-        <span>You have not provided at least one Program Evaluation document.</span><br />
-        @Html.ActionLink("Upload Additional Documents", "Submission4", new { InvId = Model.TheIntervention.Id })<br />
+        
+        <span>You have not provided at least one Program Evaluation document.</span><br /><br />
+        <span class="submission-button1">@Html.ActionLink("Upload Additional Documents", "Submission4", new { InvId = Model.TheIntervention.Id })</span><br />
     }
 </div>

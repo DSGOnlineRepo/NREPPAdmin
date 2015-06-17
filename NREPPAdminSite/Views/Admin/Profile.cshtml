@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="col-sm-6 col-sm-offset-3">
 <h2>@ViewBag.Title</h2>
 
 <div>
@@ -15,41 +16,42 @@
         @Html.HiddenFor(m => m.UserName)
 
         <div class="form-group">
-            @Html.LabelFor(m => m.UserName, new { @class = "col-sm-3 control-label" })
-            <div class="col-sm-9">
+            @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label p-t-10" })
+            <div class="col-md-9 p-t-15">
                 @Html.DisplayFor(m => m.UserName, new { @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(m => m.FirstName, new { @class = "col-sm-3 control-label" })
-            <div class="col-sm-9">
+            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-3 control-label" })
+            <div class="col-md-9">
                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(m => m.LastName, new { @class = "col-sm-3 control-label" })
-            <div class="col-sm-9">
+            @Html.LabelFor(m => m.LastName, new { @class = "col-md-3 control-label" })
+            <div class="col-md-9">
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(m => m.Email, new { @class = "col-sm-3 control-label" })
-            <div class="col-sm-9">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
+            <div class="col-md-9">
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
             </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-sm-3 control-label" })
-            <div class="col-sm-9">
+        <div class="form-group m-b-20">
+            @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-3 control-label" })
+            <div class="col-md-9">
                 @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
             </div>
         </div>
-        <div class="col-sm-offset-3 col-sm-9">
-            <input type="submit" value="Update Profile" class="btn btn-default" />
-            @Html.ActionLink("Change Password", "ChangePassword", "Admin")
+        <div class="col-xs-12 text-center m-t-20">
+            <input type="submit" value="Update Profile" class="btn btn-primary" />
+            @Html.ActionLink("Change Password", "ChangePassword", "Admin", new { @class = "btn btn-default"})
         </div>
     }
     @Html.ValidationSummary()
     @ViewBag.Message
 </div>
 
+</div>

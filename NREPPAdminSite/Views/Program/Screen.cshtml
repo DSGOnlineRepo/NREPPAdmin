@@ -11,6 +11,7 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/programview.js")"></script>
 }
 
+
 <h2>Screening tool for @Model.TheIntervention.Title</h2>
 
 @{
@@ -20,7 +21,7 @@
 @if(Model.CanDo("ScreenInterv"))
 { 
 
-<div id="screening">
+<div id="screening" class="table-responsive">
     @{
         i = 0;
         List<SelectListItem> StudyDesigns = new List<SelectListItem>();

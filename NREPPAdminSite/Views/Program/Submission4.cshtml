@@ -5,7 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Step 2. Upload Your Documents</h2>
+
+<div class="col-sm-6 col-sm-offset-3 submission-scope">
+<h2>Step 2. Upload Your Documents</h2><br />
 
 @{
     List<SelectListItem> DocTypez = new List<SelectListItem>();
@@ -16,8 +18,8 @@
     }
 }
 
-<div>
-    <table style="border: 1px solid;">
+<div class="submission-table">
+    <table>
         <tr>
             <!-- Header -->
             <th class="withborder" style="text-align: center;">Title</th>
@@ -57,22 +59,29 @@
         <li><u>Dissemination materials</u>, though no longer required, are encouraged. These include manuals, curricula, quality assurance materials, training materials, activity props, and such. You may upload documents electronically. Note: You will have the option to list materials that cannot be submitted electronically.</li>
         <li><u>Other supporting</u> documents could include a more detailed description of your program, its conceptual framework or logic model, materials related to the reliability and validity of your measures, etc.</li>
         </ul>
-            <span style="font-size: large; font-weight: bold;">Upload a File: </span><input type="file" name="UploadedFile" /> <br />
+            <br /><label>Upload a File: </label>
+            <input type="file" name="UploadedFile" /> <br />
             @Html.LabelFor(m => m.UploadDocTitle)
     @Html.TextBoxFor(m => m.UploadDocTitle)
     @Html.ValidationMessageFor(m => m.UploadDocTitle)
     <br />
-            @Html.LabelFor(m => m.UploadDescription)
-            @Html.TextAreaFor(m => m.UploadDescription)<br />
+            @Html.LabelFor(m => m.UploadDescription)<br />
+            @Html.TextAreaFor(m => m.UploadDescription)<br /><br />
             
-            @Html.DropDownListFor(m => m.UploadDocType, DocTypez, "Please Select a Document Type")
+            <label>Please Select a Document Type: </label><br />
+            @Html.DropDownListFor(m => m.UploadDocType, DocTypez, "Document Types")
             @Html.ValidationMessageFor(m => m.UploadDocType)
     <br /><br />
-    <input type="submit" value="Attach" />
+    <input type="submit" value="Attach" class="btn btn-primary" />
    }
 }
     <span>Note: You must upload at least one program evaluation meeting the creiteria stated in step 1 to continue.</span><br /><br />
+    <span class="submission-button1">
     @Html.ActionLink("Edit Program Title and Type", "ReSubmission2", new { InvId = Model.InterventionId})
+    </span>
+    <span class="submission-button2">
     @Html.ActionLink("Continue With Submission", "Submission6", new { InvId = Model.InterventionId })
+    </span>
 
+</div>
 </div>

@@ -5,7 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Page 6 of Submission</h2>
+
+<div class="col-sm-6 col-sm-offset-3 submission-scope">
+<h2>Page 6 of Submission</h2><br />
 
 <h3>Dissemination Information</h3>
 
@@ -27,27 +29,26 @@
         @Html.Hidden("Dest");
         
         <span>Do you plan to mail any dissemination materials that are not available electronically?</span>
-        <ul style="list-style-type: none">
+        <ul style="list-style-type: none" class="submission6-radio">
             <li>@Html.RadioButton("HaveMaterials", 1, Model.TheIntervention.HaveMaterials) Yes</li>
             <li>@Html.RadioButton("HaveMaterials", 0, !Model.TheIntervention.HaveMaterials) No</li>
         </ul>
         
-        <span>Please list the materials below:</span><br />
+        <label>Please list the materials below:</label>
+        <br />
         @Html.TextAreaFor(m => m.TheIntervention.MaterialsList)
         
-        <div>
-            <pre>
-                                All mailed materials should be sent to:
-                                Development Services Group, Inc.
-                                NREPP Application Submission
-                                7315 Wisconsin Avenue, Suite 800E
-                                Bethesda, MD 20814
-
-            </pre>
+        <div><strong><br /><br />All mailed materials should be sent to:</strong>
+        <br />Development Services Group, Inc.
+        <br />NREPP Application Submission
+        <br />7315 Wisconsin Avenue, Suite 800E
+        <br />Bethesda, MD 20814
         </div>
         
-        @Html.ActionLink("Return to Document Uploads", "Submission4", new { InvId = Model.TheIntervention.Id })
-        <input type="submit" value="Save and Continue" onclick="$('#Dest').val('continue'); return true;" />
+        <br />
+        <span class="submission-button6">@Html.ActionLink("Return to Document Uploads", "Submission4", new { InvId = Model.TheIntervention.Id })</span> <input type="submit" value="Save" class="btn btn-primary" />
+        <input type="submit" value="Save and Continue" class="btn btn-secondary" onclick="$('#Dest').val('continue'); return true;" />
     }
+</div>
 </div>
 

@@ -9,7 +9,8 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/submission2.js")"></script>
 }
 
-<h2>Step 1. Minimum Criteria for Submission</h2>
+<div class="col-sm-6 col-sm-offset-3 submission-scope">
+<h2>Step 1. Minimum Criteria for Submission</h2><br />
 
 @using(Html.BeginForm("Submit2", "Program"))
 {
@@ -19,17 +20,20 @@
     @Html.HiddenFor(m => m.TheIntervention.Id)
 
     @Html.LabelFor(m => m.TheIntervention.Title)
-    @Html.TextBoxFor(m => m.TheIntervention.Title) <br /><br />
+    @Html.TextBoxFor(m => m.TheIntervention.Title) <br />
     
     @Html.LabelFor(m => m.TheIntervention.Acronym)
-    @Html.TextBoxFor(m => m.TheIntervention.Acronym)<br /><br />
+    @Html.TextBoxFor(m => m.TheIntervention.Acronym)<br />
 
-    <ul style="list-style-type: none;">
+    <p>Please select (all that apply)</p>
+    <ul style="list-style-type: none;" class="submission-li-scope">
+
         @foreach (NREPPAdminSite.Models.MaskValue mask in Model.ProgramType)
         {
             bool isChecked = mask.Selected;
             <li>@Html.CheckBox(mask.Name, isChecked, new { Value = Math.Pow(2, mask.Value), @class = "programMask" }) @mask.Name</li>
         }
+
     </ul>
     
     <div>
@@ -99,7 +103,7 @@
     </div>
     
     <p>
-        4) You must have at least one evaluation study that meets the <a href="#">NREPP minimum criteria</a>. Please respond to the following questions:
+       You must have at least one evaluation study that meets the <a href="#">NREPP minimum criteria</a>. Please respond to the following questions:
     </p>
 
     foreach (NREPPAdminSite.Models.MaskValue mask in Model.UserPreScreen)
@@ -109,15 +113,15 @@
 
         if (mask.Value > 2)
         {
-            <span class="preQuestion_@mask.Value.ToString()">
-                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
+            <span class="preQuestion_@mask.Value.ToString() submission-radio-scope">
+                <span>@maskString</span><br /> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
                 @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
             </span>
         }
         else
         {
-            <span class="preQuestion_@mask.Value.ToString()">
-                <span>@maskString</span> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
+            <span class="preQuestion_@mask.Value.ToString() submission-radio-scope">
+                <span>@maskString</span><br /> @Html.RadioButton(mask.Name, Math.Pow(2, mask.Value), isChecked, new { @class = "userPreScreenMask" })<span>Yes</span>
                 @Html.RadioButton(mask.Name, 0, !isChecked, new { @class = "userPreScreenMask" })<span>No.</span><br />
             </span>
         }
@@ -125,6 +129,7 @@
     }
     
     <div>
-        <input type="submit" value="Continue" />
+        <input type="submit" value="Continue" class="btn btn-primary" />
     </div>
 }
+</div>

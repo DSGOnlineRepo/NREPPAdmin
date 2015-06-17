@@ -7,23 +7,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@ViewBag.Title</h2>
-
-
-
-
-
 <div class="container-fluid">
-	<div class="">
+	<h2 class="header-container">@ViewBag.Title</h2>
     <div class="row">
-      <div class="col-sm-12">
-      	<div class="col-sm-12  filter-list">
-	        <div class="col-sm-12">
-          <span class="h3">Filters <a href="/Program/Submission1" class="pull-right"><span class="small">Add Program</span> <i class="small fa fa-plus-circle fa-lg add"></i></a></span>
-            </br>
+      <div class="col-sm-6 col-sm-offset-3">
+      	<div class="col-sm-12 filter-list">
+          <div class="col-sm-12">
+            <h3>Filters <a href="/Program/Submission1" class="pull-right small">Add Program <i class="fa fa-plus-circle fa-lg add"></i></a></h3><br />
           </div>
-          <div class="col-sm-6">
-            <ul class="list" style="padding-left:0">
+
+          <div class="col-md-6">
+            <ul class="list">
                 <li class="col-xs-12">
                     <label for="ftrTitle">Title</label>
                     <input type="text" id="ftrTitle" class="form-control filter-input" placeholder="Title" data-fieldname="Title" data-column="0">
@@ -40,32 +34,29 @@
               {*@
           </div>
           @*}*@
-              <div class="col-sm-3">
-                <label class="control-label">
-                    View all programs
-                </label></br>
-                <div class="btn-group" data-toggle="buttons">
-  <label class="btn btn-primary active btn-block">
-    <input type="radio" name="filter-input-opt" id="optOnlyMyPrograms" value="filter-group-user" checked>Submitted / Assigned to me
-  </label>
-  <label class="btn btn-primary btn-block">
-    <input type="radio" name="filter-input-opt" id="optOnlyMyGroupPrograms" value="filter-group-mathematica">Assigned to Mathematica
-  </label>
-  <label class="btn btn-primary btn-block">
-    <input type="radio" name="filter-input-opt" id="optAllSubmitted" value="filter-group-dsg">Submitted
-  </label>
-<label class="btn btn-primary btn-block">	
-    <input type="radio" name="filter-input-opt" id="optAllInterventions" value="filter-group-admin">In the system
-  </label>
-</div>
-                
-              </div>
-</br>
-            </div>
-			</div>
+          <div class="col-md-6">
+            <label class="control-label">View all programs</label>
+            <br />
+            <div data-toggle="buttons">
+            <label class="btn btn-primary active btn-block">
+              <input type="radio" name="filter-input-opt" id="optOnlyMyPrograms" value="filter-group-user" checked>Submitted / Assigned to me
+            </label>
+            <label class="btn btn-primary btn-block">
+              <input type="radio" name="filter-input-opt" id="optOnlyMyGroupPrograms" value="filter-group-mathematica">Assigned to Mathematica
+            </label>
+            <label class="btn btn-primary btn-block">
+              <input type="radio" name="filter-input-opt" id="optAllSubmitted" value="filter-group-dsg">Submitted
+            </label>
+            <label class="btn btn-primary btn-block">	
+              <input type="radio" name="filter-input-opt" id="optAllInterventions" value="filter-group-admin">In the system
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
 
 <div class="row voffset3"></div>
 @*@Html.ActionLink("Create a New Submission", "View", "Program", new { InvId = "-1" }, null)<br />*@

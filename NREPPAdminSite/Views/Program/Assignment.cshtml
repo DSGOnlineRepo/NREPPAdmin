@@ -8,6 +8,7 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/assignmentjs.js")"></script>
 }
 
+<div class="col-sm-6 col-sm-offset-3">
 <h2>Workflow</h2>
 
 @{
@@ -47,13 +48,17 @@
     @using(Html.BeginForm("Assign", "Program"))
     {
         @Html.Hidden("ValueString") 
-    <ul style="list-style-type: none;">
+    <ul style="list-style-type: none;" class="p-0">
         @foreach(NREPPAdminSite.Models.Destination dest in Model.TheDests)
         {
-            <li><input class="btn-primary" type="submit" value="@dest.DestDescription" onclick="selectAssignment(this); return true;" /> @dest.StatusName to user @dest.UserName
-        <input type="hidden" value="@string.Format("{0};{1};{2}", @dest.StatusId, @dest.UserId, @Model.InvId)" /></li>
+            <li class="m-b-20"> @dest.StatusName to user @dest.UserName
+<input class="btn-primary btn-block" type="submit" value="@dest.DestDescription" onclick="selectAssignment(this); return true;" />
+
+<input type="hidden" value="@string.Format("{0};{1};{2}", @dest.StatusId, @dest.UserId, @Model.InvId)" />        
+</li>
         }
     </ul>
     }
+</div>
 </div>
 
