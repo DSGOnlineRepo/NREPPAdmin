@@ -393,6 +393,8 @@ namespace NREPPAdminSite
             cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
 
             var filteredColumns = requestModel.Columns.GetFilteredColumns();
+            var sortedColumns = requestModel.Columns.GetSortedColumns();
+
             foreach (var filter in filteredColumns)
             {
                 switch (filter.Data)
