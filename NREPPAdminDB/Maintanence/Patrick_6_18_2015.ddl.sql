@@ -5,3 +5,8 @@ ADD GroupName VARCHAR(250) NULL,
 NotInclude VARCHAR(MAX) NULL
 
 GO
+
+ALTER TABLE OutcomeTaxonomy
+ALTER COLUMN OutcomeName VARCHAR(350)
+
+GO
