@@ -396,14 +396,21 @@
 
     <table>
         <tr>
-            <th class="withborder">Measure Resported in Study</th>
-            <th class="withborder">Outcome Named in Article</th>
-            <th class="withborder">Study Id</th>
-            <th class="withborder">Reference</th>
-            <th class="withborder">SAMHSA-Related Population</th>
-            <th class="withborder">Describe Evaluated Population</th>
-            <th class="withborder">SAMHSA-Related Outcome</th>
-            <th class="withborder">Treatment Vs. Comparison Size</th>
+            <th class="withborder">Reported Effect</th>
+            <th class="withborder">List Source of Reported Effect</th>
+            <th class="withborder">General Description</th>
+            <th class="withborder">Instrument/Source</th>
+            <th class="withborder">Taxonomy Outcome</th>
+            <th class="withborder">Study #</th>
+            <th class="withborder">Article Reference</th>
+            <th class="withborder">Assessment period to be rated</th>
+            <th>Longest follow-up</th>
+            <th>Full sample or subgroup</th>
+            <th>SAMHSA-Related Population</th>
+            <th>Describe Evaluated Population</th>
+            <th>SAMHSA-Related Outcome</th>
+            <th>Effect Size Reported</th>
+            <th>Recommend For Review</th>
             <th> </th>
         </tr>
         @foreach (NREPPAdminSite.Models.OutcomeMeasure measure in Model.Outcomes.OutcomesMeasures)
@@ -544,13 +551,20 @@
             
             <tr class="@theClass">
                 <td class="withborder">@measure.OutcomeMeasureName</td>
-                <td class="withborder">@getOutcomeByNumber(@measure.OutcomeId, OutcomeList)</td>
-                <td class="withborder">Study @measure.StudyId</td>
-                <td class="withborder">Reference Goes Here</td>
+                <td class="withborder">@measure.EffectSource</td>
+                <td class="withborder">@measure.GeneralDescription</td>
+                <td class="withborder">@measure.InstrumentSource</td>
+                <td class="withborder">@getAnswerText(Model.TaxonomyOutcomes.ToList(), @measure.TaxOutcome)</td>
+                <td class="withborder">Study #@measure.StudyId</td>
+                <td class="withborder">@getReference(Model.TheDocuments.ToList(), @measure.DocumentId)</td>
+                <td class="withborder">@getAnswerText(Model.AssessmentPd.ToList(), @measure.AssessmentPd)</td>
+                <td class="withborder">@getAnswerText(Model.LongestFollowup.ToList(), @measure.LongestFollowup)</td>
+                <td class="withborder">@getAnswerText(Model.FullSample.ToList(), @measure.FullSample)</td>
                 <td class="withborder">@getAnswerText(Model.SAMHSAPops.ToList(), @measure.SAMHSAPop)</td>
                 <td class="withborder">@measure.PopDescription</td>
                 <td class="withborder">@getAnswerText(Model.SAMHSAOutcomes.ToList(), @measure.SAMHSAOutcome)</td>
                 <td class="withborder">@getAnswerText(Model.EffectReports.ToList(), @measure.EffectReport)</td>
+                <td class="withborder">@Html.CheckBox("chk" + @measure.Id, @measure.RecommendReview, new { disabled = "disabled" })</td>
                 <td class="withborder">@Html.ActionLink("Delete", "DeleteOutcomeMeasure", new { MeasureId = measure.Id, InvId = Model.TheIntervention.Id })</td>
             </tr>
         <tr id="outFormrow_@i" class="@theClass">
