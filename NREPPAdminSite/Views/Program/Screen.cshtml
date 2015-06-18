@@ -497,11 +497,11 @@
             {
                 if (item7.Value == measure.AssessmentPd.ToString())
                 {
-                    thisEffectReports.Add(new SelectListItem() { Value = item7.Value, Text = item7.Text, Selected = true });
+                    thisAssessmentPd.Add(new SelectListItem() { Value = item7.Value, Text = item7.Text, Selected = true });
                 }
                 else
                 {
-                    thisEffectReports.Add(new SelectListItem() { Value = item7.Value, Text = item7.Text, Selected = false });
+                    thisAssessmentPd.Add(new SelectListItem() { Value = item7.Value, Text = item7.Text, Selected = false });
                 }
             }
 
@@ -509,11 +509,11 @@
             {
                 if (item8.Value == measure.LongestFollowup.ToString())
                 {
-                    thisEffectReports.Add(new SelectListItem() { Value = item8.Value, Text = item8.Text, Selected = true });
+                    thisLongestFollowup.Add(new SelectListItem() { Value = item8.Value, Text = item8.Text, Selected = true });
                 }
                 else
                 {
-                    thisEffectReports.Add(new SelectListItem() { Value = item8.Value, Text = item8.Text, Selected = false });
+                    thisLongestFollowup.Add(new SelectListItem() { Value = item8.Value, Text = item8.Text, Selected = false });
                 }
             }
 
@@ -521,11 +521,11 @@
             {
                 if (item9.Value == measure.FullSample.ToString())
                 {
-                    thisEffectReports.Add(new SelectListItem() { Value = item9.Value, Text = item9.Text, Selected = true });
+                    thisFullSample.Add(new SelectListItem() { Value = item9.Value, Text = item9.Text, Selected = true });
                 }
                 else
                 {
-                    thisEffectReports.Add(new SelectListItem() { Value = item9.Value, Text = item9.Text, Selected = false });
+                    thisFullSample.Add(new SelectListItem() { Value = item9.Value, Text = item9.Text, Selected = false });
                 }
             }
 
@@ -556,7 +556,9 @@
         <tr id="outFormrow_@i" class="@theClass">
             <td colspan="9" class="withborder">
                 <div class="outcomeForm hidden">
-                     @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" })) { @Html.Hidden("IntervId", Model.TheIntervention.Id)   @Html.Hidden("OutcomeMeasureId", @measure.Id)
+                     @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" })) { @Html.Hidden("IntervId", Model.TheIntervention.Id)
+                         
+                         @Html.Hidden("OutcomeMeasureId", @measure.Id)
 
     <label for="measure">Reported Effect: </label>
     <input type="text" id="measure" name="measure" value="@measure.OutcomeMeasureName" /><br /><br />
@@ -627,6 +629,7 @@ i++;
         @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.Hidden("IntervId", Model.TheIntervention.Id)
+            @Html.Hidden("OutcomeMeasureId")
             
             <br /><label>Outcome from Taxonomy:</label>
             <br />@Html.DropDownList("TaxOutcome", TaxOutcomes)

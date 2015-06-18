@@ -201,10 +201,6 @@ namespace NREPPAdminSite.Controllers
             EffectReports = localService.GetAnswersByCategory("TreatCompare").ToList<Answer>();
             TaxOutcomes = localService.GetTaxonomicOutcomes(null).ToList<Answer>();
 
-            //List<Object> something = theStudies.GroupBy(s => s.StudyId).Select(group => new { StudyId = group.Key });
-
-            //theIntervention = localService.GetInterventions(InterventionId);
-
             SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
             SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserName", Value = User.Identity.Name };
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -447,12 +443,18 @@ namespace NREPPAdminSite.Controllers
             om.PopDescription = col["popDescription"];
             om.StudyId = int.Parse(col["studySelector"]);
             om.OutcomeMeasureName = col["measure"];
-            om.OutcomeId = int.Parse(col["MacroOutcome"]);
+            om.OutcomeId = 0;
             om.RecommendReview = col["reviewOutcome"] != null && col["reviewOutcome"].ToString() == "on";
             om.TaxOutcome = int.Parse(col["TaxOutcome"]);
+            om.GeneralDescription = col["GeneralDescription"];
+            om.InstrumentSource = col["InstrumentSource"];
+            om.EffectSource = col["EffectSource"];
+            om.FullSample = int.Parse(col["FullSample"]);
+            om.AssessmentPd = int.Parse(col["AssessmentPd"]);
+            om.LongestFollowup = int.Parse(col["LongestFollowup"]);
 
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            localService.AddOrUpdateOutcomeMeasure(om, IntervId, col["newOutcome"].Trim());
+            localService.AddOrUpdateOutcomeMeasure(om, IntervId, "");
 
 
             return RedirectToAction("Screen", new { InvId = IntervId }); // TODO: Pass errors on failure
