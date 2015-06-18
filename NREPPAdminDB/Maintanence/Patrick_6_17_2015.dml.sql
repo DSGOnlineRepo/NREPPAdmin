@@ -23,17 +23,17 @@ GO
 
 SET IDENTITY_INSERT Answer ON
 
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (39, 'Posttest', 'Post-Test')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (40, 'LastFollowup', 'Last Follow-up')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (41, '>2', '4  = >2 years')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (42, '1-2', '3 = 1-2 years')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (43, '<1', '2 = < 1 year')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (44, 'posttest', '1 = Posttest')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (45, 'FullSample', 'Full Sample')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (46, 'SubMale', 'Sub - Male')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (47, 'SubFemale', 'Sub - Female')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (48, 'SubJuvenile', 'Sub - Juveniles')
-INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (49, 'SubAdults', 'Sub - Adults')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (39, 'Posttest', 'Post-Test')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (40, 'LastFollowup', 'Last Follow-up')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (41, '>2', '4  = >2 years')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (42, '1-2', '3 = 1-2 years')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (43, '<1', '2 = < 1 year')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (44, 'posttest', '1 = Posttest')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (45, 'FullSample', 'Full Sample')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (46, 'SubMale', 'Sub - Male')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (47, 'SubFemale', 'Sub - Female')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (48, 'SubJuvenile', 'Sub - Juveniles')
+INSERT INTO Answer (Id, ShortAnswer, LongAnswer) VALUES (49, 'SubAdults', 'Sub - Adults')
 
 SET IDENTITY_INSERT Answer OFF
 

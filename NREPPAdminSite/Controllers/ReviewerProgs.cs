@@ -61,7 +61,7 @@ namespace NREPPAdminSite.Controllers
 
 
             // TODO: Fix this redirect
-            return RedirectToAction(destination, new { InvId = sm.TheIntervention.Id });
+            return RedirectToAction("Screen", new { InvId = sm.TheIntervention.Id });
         }
     }
 }
