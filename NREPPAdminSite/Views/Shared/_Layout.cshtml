@@ -1,4 +1,5 @@
-﻿@HttpContext.Current.User.Identity.Name
+﻿@using NREPPAdminSite.Utilities
+@HttpContext.Current.User.Identity.Name
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,7 +40,7 @@
                 }
                 <li>@Html.ActionLink("About", "About", "Home")</li>
                 <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                @if (Request.IsAuthenticated)
+                @if (Request.IsAuthenticated && !User.IsInIdentityRole("Principal Investigator"))
                 {
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Manage <span class="caret"></span></a>

@@ -17,39 +17,38 @@
           </div>
 
           <div class="col-md-6">
-            <ul class="list">
-                <li class="col-xs-12">
-                    <label for="ftrTitle">Title</label>
-                    <input type="text" id="ftrTitle" class="form-control filter-input" placeholder="Title" data-fieldname="Title" data-column="0">
-                </li>
-                <li class="col-xs-12">
-                    <label for="ftrDescription">Full Description</label>
-                    <input type="text" id="ftrDescription" class="form-control filter-input" placeholder="Full Description" data-fieldname="FullDescription" data-column="1">
-                </li>
-                <li class="col-xs-12" style="padding-bottom: 5px">
-                    <label for="ftrSubmitter">Submitter</label>
-                    <input type="text" id="ftrSubmitter" class="form-control filter-input" placeholder="Submitter" data-fieldname="Submitter" data-column="4">
-                </li>
-            </ul>@*@if (User.IsInIdentityRole("Principal Investigator"))
-              {*@
+              <ul class="list">
+                  <li class="col-xs-12">
+                      <label for="ftrTitle">Title</label>
+                      <input type="text" id="ftrTitle" class="form-control filter-input" placeholder="Title" data-fieldname="Title" data-column="0">
+                  </li>
+                  <li class="col-xs-12">
+                      <label for="ftrDescription">Full Description</label>
+                      <input type="text" id="ftrDescription" class="form-control filter-input" placeholder="Full Description" data-fieldname="FullDescription" data-column="1">
+                  </li>
+                  <li class="col-xs-12" style="padding-bottom: 5px">
+                      <label for="ftrSubmitter">Submitter</label>
+                      <input type="text" id="ftrSubmitter" class="form-control filter-input" placeholder="Submitter" data-fieldname="Submitter" data-column="4">
+                  </li>
+              </ul>
           </div>
-          @*}*@
+         
           <div class="col-md-6">
             <label class="control-label">View all programs</label>
             <br />
             <div data-toggle="buttons">
-            <label class="btn btn-primary active btn-block">
-              <input type="radio" name="filter-input-opt" id="optOnlyMyPrograms" value="filter-group-user" checked>Submitted / Assigned to me
-            </label>
-            <label class="btn btn-primary btn-block">
-              <input type="radio" name="filter-input-opt" id="optOnlyMyGroupPrograms" value="filter-group-mathematica">Assigned to Mathematica
-            </label>
-            <label class="btn btn-primary btn-block">
-              <input type="radio" name="filter-input-opt" id="optAllSubmitted" value="filter-group-dsg">Submitted
-            </label>
-            <label class="btn btn-primary btn-block">	
-              <input type="radio" name="filter-input-opt" id="optAllInterventions" value="filter-group-admin">In the system
-            </label>
+                <label class="btn btn-primary active btn-block">
+                    <input type="radio" name="filter-input-opt" id="optOnlyMyPrograms" value="filter-group-user" checked>Submitted / Assigned to me
+                </label>
+                @if (!User.IsInIdentityRole("Principal Investigator"))
+                {
+                    <label class="btn btn-primary btn-block">
+                        <input type="radio" name="filter-input-opt" id="optAllSubmitted" value="filter-group-dsg">Submitted
+                    </label>
+                    <label class="btn btn-primary btn-block">
+                        <input type="radio" name="filter-input-opt" id="optAllInterventions" value="filter-group-admin">In the system
+                    </label>
+                }
           </div>
         </div>
       </div>
