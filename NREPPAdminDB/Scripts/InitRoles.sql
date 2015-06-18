@@ -91,29 +91,6 @@ INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (37, 'Rphi', 'Rphi')
 INSERT INTO Answers (Id, ShortAnswer, LongAnswer) VALUES (38, 'Rel Risk', 'Relative Risk')
 
 
-
-
-/*
-•	Co-occurring Disorders
-•	Homelessness
-•	Mental Health Promotion
-•	Mental Health Treatment – Adults
-•	Mental Health Treatment – Children
-•	Older Adults
-•	Suicide Prevention	•	Adult/Workplace
-•	Childhood/School
-•	Community Prevention
-•	Environmental/Systems/Policy
-•	Family
-•	Older Adult
-•	Violence Prevention
-•	Youth/Adolescent/School	•	Adolescents
-•	Adult, General Population
-•	Co-occurring Disorders
-•	Smoking Cessation
-
-*/
-
 SET IDENTITY_INSERT Answers OFF
 
 -- Categories

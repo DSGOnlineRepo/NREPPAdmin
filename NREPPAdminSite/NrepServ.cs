@@ -797,7 +797,7 @@ namespace NREPPAdminSite
 
         }
 
-        public int DeleteDocument(int DocId, int theUser)
+        public int DeleteDocument(int DocId, string theUser)
         {
             SqlCommand cmdSaveFile = new SqlCommand("SPAddOrRemoveDoc", conn);
             int retValue = -1;
@@ -808,7 +808,7 @@ namespace NREPPAdminSite
             cmdSaveFile.Parameters.Add(new SqlParameter("@MIMEType", ""));
             cmdSaveFile.Parameters.Add(new SqlParameter("@IsDelete", true));
             cmdSaveFile.Parameters.Add(new SqlParameter("@ItemId", DocId));
-            cmdSaveFile.Parameters.Add(new SqlParameter("@UploaderId", theUser));
+            
             cmdSaveFile.Parameters.Add(new SqlParameter("@ReviewerId", null));
             
 
@@ -1004,7 +1004,10 @@ namespace NREPPAdminSite
                     outcomeList.Add(new OutcomeMeasure() { Id = (int)dr["OutcomeMeasureId"], OutcomeMeasureName = dr["OutcomeMeasure"].ToString(),
                     SAMHSAOutcome = dr.IsNull("SAMHSAOutcome") ? 0 : (int)dr["SAMHSAOutcome"], GroupFavored = (bool)dr["GroupFavored"], PopDescription = dr["PopDescription"].ToString(),
                     SAMHSAPop = (int)dr["SAMHSAPop"], TaxOutcome = (int)dr["TaxonomyOutcome"], EffectReport = dr.IsNull("EffectReport") ? 0 : (int)dr["EffectReport"],
-                    StudyId = (int)dr["StudyId"], DocumentId = (int)dr["DocumentId"], OutcomeId = (int)dr["OutcomeId"], RecommendReview = (bool)dr["RecommendReview"]});
+                    StudyId = (int)dr["StudyId"], DocumentId = (int)dr["DocumentId"], OutcomeId = (int)dr["OutcomeId"], RecommendReview = (bool)dr["RecommendReview"],
+                    EffectSource = dr["EffectSource"].ToString(), InstrumentSource = dr["InstrumentSource"].ToString(), GeneralDescription = dr["GeneralDescription"].ToString(),
+                    LongestFollowup = dr.IsNull("LongestFollowup") ? 0 : (int)dr["LongestFollowup"], AssessmentPd = dr.IsNull("AssessmentPd") ? 0 : (int)dr["AssessmentPd"],
+                    FullSample = dr.IsNull("FullSample") ? 0 : (int)dr["FullSample"] });
                 }
 
                 // TODO: Document Association
@@ -1128,6 +1131,12 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@RecommendReview", Value = om.RecommendReview });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@DocId", Value = om.DocumentId });
             cmd.Parameters.Add(new SqlParameter() { ParameterName = "@TaxonomyOutcome", Value = om.TaxOutcome });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@EffectSource", Value = om.EffectSource });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@InstrumentSource", Value = om.InstrumentSource });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@GeneralDescription", Value = om.GeneralDescription });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@AssessmentPd", Value = om.AssessmentPd });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@LongestFollowup", Value = om.LongestFollowup });
+            cmd.Parameters.Add(new SqlParameter() { ParameterName = "@FullSample", Value = om.FullSample });
 
             try
             {

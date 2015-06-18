@@ -311,6 +311,10 @@ namespace NREPPAdminSite.Models
             }
         }
 
+        public IEnumerable<Answer> AssessmentPd { get; set; }
+        public IEnumerable<Answer> LongestFollowup { get; set; }
+        public IEnumerable<Answer> FullSample { get; set; }
+
         /// <summary>
         /// Add a Study Document
         /// </summary>

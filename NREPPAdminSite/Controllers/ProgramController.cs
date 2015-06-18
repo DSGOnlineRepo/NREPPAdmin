@@ -122,13 +122,16 @@ namespace NREPPAdminSite.Controllers
 
         // TODO: Make sure you have a cookie and rights to delete this document (pretty easy, but you DO need to implement it)
 
-        public ActionResult DeleteDocument(int DocId, int InvId)
+        public ActionResult DeleteDocument(int DocId, int InvId, string Destination)
         {
             NrepServ localService = new NrepServ(NrepServ.ConnString);
 
-            localService.DeleteDocument(DocId, 1); // TODO: Get User from Cookie
+            localService.DeleteDocument(DocId, "testreview"); // TODO: Get User from Cookie
 
-            return RedirectToAction("View", new { InvId = InvId });
+            if (Destination != null)
+                return RedirectToAction(Destination.ToString(), new { InvId = InvId });
+            else
+                return RedirectToAction("View", new { InvId = InvId });
         }
 
         /// <summary>
@@ -198,10 +201,6 @@ namespace NREPPAdminSite.Controllers
             EffectReports = localService.GetAnswersByCategory("TreatCompare").ToList<Answer>();
             TaxOutcomes = localService.GetTaxonomicOutcomes(null).ToList<Answer>();
 
-            //List<Object> something = theStudies.GroupBy(s => s.StudyId).Select(group => new { StudyId = group.Key });
-
-            //theIntervention = localService.GetInterventions(InterventionId);
-
             SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
             SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserName", Value = User.Identity.Name };
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -212,13 +211,16 @@ namespace NREPPAdminSite.Controllers
 
             OutcomesWrapper ow = localService.GetOutcomesByIntervention(InvId);
 
-            //List<OutcomeMeasure> oms = ow.OutcomesMeasures.Where(om => om.OutcomeId == 1).ToList<OutcomeMeasure>();
             List<OutcomeMeasure> oms = ow.OutcomesMeasures.ToList<OutcomeMeasure>();
             reviewerDocs = localService.GetRCDocuments(null, theIntervention.Id);
 
             ScreeningModel sm = new ScreeningModel(theStudies, theIntervention, StudyDesigns, YPYN, Exclusions, ow, reviewerDocs, AttritionAnswers,
                 SAMHSAPop, SAMHSAOut, EffectReports, TaxOutcomes);
             sm.AddDests(localService.GetDestinations(theIntervention.Id).ToList());
+
+            sm.AssessmentPd = localService.GetAnswersByCategory("AssessmentPd");
+            sm.LongestFollowup = localService.GetAnswersByCategory("LongestFollowup");
+            sm.FullSample = localService.GetAnswersByCategory("FullSample");
 
             List<string> perms = new List<string>();
 
@@ -441,12 +443,18 @@ namespace NREPPAdminSite.Controllers
             om.PopDescription = col["popDescription"];
             om.StudyId = int.Parse(col["studySelector"]);
             om.OutcomeMeasureName = col["measure"];
-            om.OutcomeId = int.Parse(col["MacroOutcome"]);
+            om.OutcomeId = 0;
             om.RecommendReview = col["reviewOutcome"] != null && col["reviewOutcome"].ToString() == "on";
             om.TaxOutcome = int.Parse(col["TaxOutcome"]);
+            om.GeneralDescription = col["GeneralDescription"];
+            om.InstrumentSource = col["InstrumentSource"];
+            om.EffectSource = col["EffectSource"];
+            om.FullSample = int.Parse(col["FullSample"]);
+            om.AssessmentPd = int.Parse(col["AssessmentPd"]);
+            om.LongestFollowup = int.Parse(col["LongestFollowup"]);
 
             NrepServ localService = new NrepServ(NrepServ.ConnString);
-            localService.AddOrUpdateOutcomeMeasure(om, IntervId, col["newOutcome"].Trim());
+            localService.AddOrUpdateOutcomeMeasure(om, IntervId, "");
 
 
             return RedirectToAction("Screen", new { InvId = IntervId }); // TODO: Pass errors on failure

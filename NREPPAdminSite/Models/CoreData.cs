@@ -178,10 +178,11 @@ namespace NREPPAdminSite.Models
         protected int docId;
 
         [Display(Name = "Document Type")]
-        public string DocumentTypeName
-        {
-            get;
-            set;
+        public string DocumentTypeName {
+
+            get { return documentTypeName; }
+            
+            set {documentTypeName = value;}
         }
 
         public int DocumentType
@@ -271,6 +272,13 @@ namespace NREPPAdminSite.Models
         public int StudyId { get; set; }
         public int TaxOutcome { get; set; }
         public bool RecommendReview { get; set; }
+        public string InstrumentSource { get; set; }
+        public string EffectSource { get; set; }
+        public string GeneralDescription { get; set; }
+
+        public int AssessmentPd { get; set; }
+        public int LongestFollowup { get; set; }
+        public int FullSample { get; set; }
     }
 
     public class OutcomesWrapper

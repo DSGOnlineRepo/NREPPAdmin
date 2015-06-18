@@ -152,48 +152,46 @@
             <th colspan="5">Outcomes</th>
         </tr>
         <tr>
-            <th>Outcome</th>
-            <th>Measures</th>
-            <th>Population Description</th>
-            <th>Studies</th>
+            <th class="withborder">Reported Effect</th>
+            <th class="withborder">List Source of Reported Effect</th>
+            <th class="withborder">General Description</th>
+            <th class="withborder">Instrument/Source</th>
+            <th class="withborder">Taxonomy Outcome</th>
+            <th class="withborder">Study #</th>
+            <th class="withborder">Article Reference</th>
+            <th class="withborder">Assessment period to be rated</th>
+            <th>Longest follow-up</th>
+            <th>Full sample or subgroup</th>
+            <th>SAMHSA-Related Population</th>
+            <th>Describe Evaluated Population</th>
+            <th>SAMHSA-Related Outcome</th>
+            <th>Effect Size Reported</th>
+            <th>Recommend For Review</th>
         </tr>
-        @foreach(NREPPAdminSite.Models.Outcome anOutcome in Model.Outcomes.MacroOutcomes)
+        @foreach (NREPPAdminSite.Models.OutcomeMeasure measure in Model.Outcomes.OutcomesMeasures)
         {
             <tr>
-                <td class="withborder">@anOutcome.OutcomeName</td>
-                <td class="withborder">@MeasuresList(anOutcome.Id)</td>
-                <td class="withborder">@PopList(anOutcome.Id)</td>
-                <td class="withborder">@StudyList(anOutcome.Id)</td>
+                <td class="withborder">@measure.OutcomeMeasureName</td>
+                <td class="withborder">@measure.EffectSource</td>
+                <td class="withborder">@measure.GeneralDescription</td>
+                <td class="withborder">@measure.InstrumentSource</td>
+                <td class="withborder">@getAnswerText(Model.TaxonomyOutcomes.ToList(), @measure.TaxOutcome)</td>
+                <td class="withborder">Study #@measure.StudyId</td>
+                <td class="withborder">@getReference(Model.TheDocuments.ToList(), @measure.DocumentId)</td>
+                <td class="withborder">@getAnswerText(Model.AssessmentPd.ToList(), @measure.AssessmentPd)</td>
+                <td class="withborder">@getAnswerText(Model.LongestFollowup.ToList(), @measure.LongestFollowup)</td>
+                <td class="withborder">@getAnswerText(Model.FullSample.ToList(), @measure.FullSample)</td>
+                <td class="withborder">@getAnswerText(Model.SAMHSAPops.ToList(), @measure.SAMHSAPop)</td>
+                <td class="withborder">@measure.PopDescription</td>
+                <td class="withborder">@getAnswerText(Model.SAMHSAOutcomes.ToList(), @measure.SAMHSAOutcome)</td>
+                <td class="withborder">@getAnswerText(Model.EffectReports.ToList(), @measure.EffectReport)</td>
+                <td class="withborder">@Html.CheckBox("chk" + @measure.Id, @measure.RecommendReview, new { disabled = "disabled" })</td>
             </tr>
         }
     </table>
 </div>
 
 <br /><br />
-<div id="screening" class="table-responsive">
-    <table class="table">
-        <tr>
-            <th class="withborder">Outcome Name</th>
-            <th class="withborder">Outcome Measure</th>
-            <th class="withborder">Population Description</th>
-            <th class="withborder">Reference</th>
-            
-        </tr>
-        @foreach(NREPPAdminSite.Models.Outcome anOutcome in Model.Outcomes.MacroOutcomes)
-        {
-            foreach (NREPPAdminSite.Models.OutcomeMeasure om in Model.Outcomes.OutcomesMeasures.Where(o => o.Id == anOutcome.Id))
-            {
-                NREPPAdminSite.Models.Study study = getStudy(om.StudyId);
-                <tr>
-                    <td class="withborder">@anOutcome.OutcomeName</td>
-                    <td class="withborder">@om.OutcomeMeasureName</td>
-                    <td class="withborder">@om.PopDescription</td>
-                    <td class="withborder">@getReference(Model.TheDocuments.ToList(), om.DocumentId)</td>
-                </tr>
-            }
-        }
-    </table>
-</div>
 
 
 <div class="screening-form">
