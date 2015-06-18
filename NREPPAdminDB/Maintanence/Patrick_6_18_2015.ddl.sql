@@ -1,0 +1,7 @@
+﻿GO
+
+ALTER TABLE OutcomeTaxonomy
+ADD GroupName VARCHAR(250) NULL,
+NotInclude VARCHAR(MAX) NULL
+
+GO

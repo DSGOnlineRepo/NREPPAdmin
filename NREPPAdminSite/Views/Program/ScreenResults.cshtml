@@ -101,6 +101,17 @@
                 
         return "";
     }
+
+    string getShortAnswerText(List<NREPPAdminSite.Models.Answer> AnswerList, int inId)
+    {
+        foreach (NREPPAdminSite.Models.Answer anAnswer in AnswerList)
+        {
+            if (anAnswer.AnswerId == inId)
+                return anAnswer.ShortAnswer;
+        }
+
+        return "";
+    }
     
     
     string isChecked(bool trueValue)
@@ -175,7 +186,7 @@
                 <td class="withborder">@measure.EffectSource</td>
                 <td class="withborder">@measure.GeneralDescription</td>
                 <td class="withborder">@measure.InstrumentSource</td>
-                <td class="withborder">@getAnswerText(Model.TaxonomyOutcomes.ToList(), @measure.TaxOutcome)</td>
+                <td class="withborder">@getShortAnswerText(Model.TaxonomyOutcomes.ToList(), @measure.TaxOutcome)</td>
                 <td class="withborder">Study #@measure.StudyId</td>
                 <td class="withborder">@getReference(Model.TheDocuments.ToList(), @measure.DocumentId)</td>
                 <td class="withborder">@getAnswerText(Model.AssessmentPd.ToList(), @measure.AssessmentPd)</td>
