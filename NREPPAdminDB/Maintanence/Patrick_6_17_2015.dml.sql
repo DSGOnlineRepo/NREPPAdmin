@@ -8,12 +8,13 @@ DECLARE @ROLEID1 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Data 
 		@ROLEID6 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'DSG PRM'), 
 		@ROLEID7 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Mathematica Assigner'), 
 		@ROLEID8 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Reviewer'),
-		@ROLEID9 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Pre-Screener')
+		@ROLEID9 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'PreScreener')
 
 INSERT INTO Permissions (Id, PermissionName) VALUES (9, 'ScreenInterv')
 
 
 INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (9, @ROLEID5, 4, cast(1 as Bit))
+INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (8, @ROLEID9, 2, cast(1 as Bit))
 
 GO
 
