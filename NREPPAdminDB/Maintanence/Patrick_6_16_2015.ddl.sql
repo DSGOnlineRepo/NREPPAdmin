@@ -5,8 +5,6 @@ ADD ShowReviewer BIT NOT NULL DEFAULT 0
 
 GO
 
-GO
-
 ALTER PROCEDURE [dbo].[SPGetDocsWithTagsById]
 	@DocId int = NULL,
 	@InterventionId int = NULL
@@ -145,3 +143,6 @@ AS
 
 	COMMIT TRANSACTION
 RETURN 0
+
+GO
+

@@ -222,6 +222,10 @@ namespace NREPPAdminSite.Controllers
                 SAMHSAPop, SAMHSAOut, EffectReports, TaxOutcomes);
             sm.AddDests(localService.GetDestinations(theIntervention.Id).ToList());
 
+            sm.AssessmentPd = localService.GetAnswersByCategory("AssessmentPd");
+            sm.LongestFollowup = localService.GetAnswersByCategory("LongestFollowup");
+            sm.FullSample = localService.GetAnswersByCategory("FullSample");
+
             List<string> perms = new List<string>();
 
             perms.Add("ScreenInterv");

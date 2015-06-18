@@ -89,6 +89,7 @@
     <None Include="Maintanence\Patrick_6_16_2015.ddl.sql" />
     <None Include="Maintanence\Patrick_6_16_2015.dml.sql" />
     <None Include="Maintanence\Patrick_6_17_2015.dml.sql" />
+    <None Include="Maintanence\Patrick_6_17_2015.ddl.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Stored Procedures\SPGetLogonCreds.sql" />

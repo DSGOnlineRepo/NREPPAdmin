@@ -330,6 +330,9 @@
         List<SelectListItem> SAMHSAOutcomes = new List<SelectListItem>();
         List<SelectListItem> EffectReports = new List<SelectListItem>();
         List<SelectListItem> TaxOutcomes = new List<SelectListItem>();
+        List<SelectListItem> AssessmentPd = new List<SelectListItem>();
+        List<SelectListItem> LongestFollowup = new List<SelectListItem>();
+        List<SelectListItem> FullSample = new List<SelectListItem>();
         
         foreach (NREPPAdminSite.Models.Outcome outcome in Model.Outcomes.MacroOutcomes)
         {
@@ -354,6 +357,21 @@
         foreach (NREPPAdminSite.Models.Answer ans in Model.TaxonomyOutcomes)
         {
             TaxOutcomes.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.AssessmentPd)
+        {
+            AssessmentPd.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.LongestFollowup)
+        {
+            LongestFollowup.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
+        }
+
+        foreach (NREPPAdminSite.Models.Answer ans in Model.FullSample)
+        {
+            FullSample.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
         }
 
         OutcomeList.Add(new SelectListItem() { Text = "New Outcome", Value = "-1" });
@@ -399,6 +417,9 @@
             List<SelectListItem> thisSAMHSAOutcomes = new List<SelectListItem>();
             List<SelectListItem> thisEffectReports = new List<SelectListItem>();
             List<SelectListItem> thisStudys = new List<SelectListItem>();
+            List<SelectListItem> thisAssessmentPd = new List<SelectListItem>();
+            List<SelectListItem> thisLongestFollowup = new List<SelectListItem>();
+            List<SelectListItem> thisFullSample = new List<SelectListItem>();
 
             foreach (SelectListItem item in SAMHSAPops)
             {
@@ -460,7 +481,7 @@
                 }
             }
 
-            foreach (SelectListItem item6 in TaxOutcomes)
+            foreach (SelectListItem item6 in EffectReports)
             {
                 if (item6.Value == measure.EffectReport.ToString())
                 {
@@ -469,6 +490,42 @@
                 else
                 {
                     thisEffectReports.Add(new SelectListItem() { Value = item6.Value, Text = item6.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item7 in AssessmentPd)
+            {
+                if (item7.Value == measure.AssessmentPd.ToString())
+                {
+                    thisEffectReports.Add(new SelectListItem() { Value = item7.Value, Text = item7.Text, Selected = true });
+                }
+                else
+                {
+                    thisEffectReports.Add(new SelectListItem() { Value = item7.Value, Text = item7.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item8 in LongestFollowup)
+            {
+                if (item8.Value == measure.LongestFollowup.ToString())
+                {
+                    thisEffectReports.Add(new SelectListItem() { Value = item8.Value, Text = item8.Text, Selected = true });
+                }
+                else
+                {
+                    thisEffectReports.Add(new SelectListItem() { Value = item8.Value, Text = item8.Text, Selected = false });
+                }
+            }
+
+            foreach (SelectListItem item9 in FullSample)
+            {
+                if (item9.Value == measure.FullSample.ToString())
+                {
+                    thisEffectReports.Add(new SelectListItem() { Value = item9.Value, Text = item9.Text, Selected = true });
+                }
+                else
+                {
+                    thisEffectReports.Add(new SelectListItem() { Value = item9.Value, Text = item9.Text, Selected = false });
                 }
             }
 
@@ -500,16 +557,32 @@
             <td colspan="9" class="withborder">
                 <div class="outcomeForm hidden">
                      @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" })) { @Html.Hidden("IntervId", Model.TheIntervention.Id)   @Html.Hidden("OutcomeMeasureId", @measure.Id)
-                     
-                         <label>Choose An Outcome from the Article: </label>
-                            @Html.DropDownList("MacroOutcome", thisOutcomeList)
 
-                            <label>Write in: </label><input type="text" name="newOutcome" /><br /><br />
+    <label for="measure">Reported Effect: </label>
+    <input type="text" id="measure" name="measure" value="@measure.OutcomeMeasureName" /><br /><br />
+    
+    <br /><label>List Source of Reported Effect:</label>
+    <br />@Html.TextArea("EffectSource", measure.EffectSource)
+
                             <label>Outcome from Taxonomy:</label>@Html.DropDownList("TaxOutcome", thisTaxOutcomes)<br />
-                            <label for="measure">Measure Reported in the Study</label>
-                            <input type="text" id="measure" name="measure" value="@measure.OutcomeMeasureName" /><br /><br />
+
 
                             <label>Document: </label>@Html.DropDownList("docDropdown", thisDocList)<br /><br />
+
+    <br /><label>General Description:</label>
+    <br />@Html.TextArea("GeneralDescription", measure.GeneralDescription)
+
+    <br /><label>Instrument/Source:</label>
+    <br />@Html.TextArea("InstrumentSource", measure.InstrumentSource)
+
+    <br /><label>Assessment Period to Be Rated:</label>
+    <br />@Html.DropDownList("AssessmentPd", thisAssessmentPd)
+
+    <br /><label>Longest Followup:</label>
+    <br />@Html.DropDownList("LongestFollowup", thisLongestFollowup)
+
+    <br /><label>Full Sample or Subgroup:</label>
+    <br />@Html.DropDownList("FullSample", thisFullSample)
 
                             <label>SAMHSA-Related Population:</label>
                             @Html.DropDownList("popDropDown", thisPopDrop)<br />
@@ -554,22 +627,33 @@ i++;
         @using (Html.BeginForm("AddOutcome", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.Hidden("IntervId", Model.TheIntervention.Id)
-            @Html.Hidden("OutcomeMeasureId")
-            <label>Choose An Outcome from the Article: </label>
-            <br />@Html.DropDownList("MacroOutcome", OutcomeList)
-        
-            <br /><br /><label>Write in: </label>
-            <br /><input type="text" name="newOutcome" />
             
             <br /><label>Outcome from Taxonomy:</label>
             <br />@Html.DropDownList("TaxOutcome", TaxOutcomes)
-            
-            
-            <br /><br /><label for="measure">Measure Reported in the Study</label>
+
+            <br /><label>List Source of Reported Effect:</label>
+            <br />@Html.TextArea("EffectSource")
+
+            <br /><br /><label for="measure">Reported Effect</label>
             <br /><input type="text" id="measure" name="measure" />
         
             <br /><label>Document: </label>
             <br />@Html.DropDownList("docDropdown", Docs)
+            
+            <br /><label>General Description:</label>
+            <br />@Html.TextArea("GeneralDescription")
+
+            <br /><label>Instrument/Source:</label>
+            <br />@Html.TextArea("InstrumentSource")
+
+            <br /><label>Assessment Period to Be Rated:</label>
+            <br />@Html.DropDownList("AssessmentPd", AssessmentPd)
+
+            <br /><label>Longest Followup:</label>
+            <br />@Html.DropDownList("LongestFollowup", LongestFollowup)
+
+            <br /><label>Full Sample or Subgroup:</label>
+            <br />@Html.DropDownList("FullSample", FullSample)
 
             <br /><br /><label>SAMHSA-Related Population:</label>
             <br />@Html.DropDownList("popDropDown", SAMHSAPops)
