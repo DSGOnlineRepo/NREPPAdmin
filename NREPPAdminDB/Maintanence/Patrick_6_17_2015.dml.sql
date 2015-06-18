@@ -15,6 +15,8 @@ INSERT INTO Permissions (Id, PermissionName) VALUES (9, 'ScreenInterv')
 
 INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (9, @ROLEID5, 4, cast(1 as Bit))
 INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (8, @ROLEID9, 2, cast(1 as Bit))
+INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (7, @ROLEID5, 3, cast(1 as Bit))
+INSERT INTO Role_Permissions (PermissionID, RoleID, StatusID, Allowed) values (7, @ROLEID5, 4, cast(1 as Bit))
 
 GO
 
