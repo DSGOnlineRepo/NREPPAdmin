@@ -199,7 +199,7 @@ namespace NREPPAdminSite.Controllers
             SAMHSAOut = localService.GetAnswersByCategory("SAMHSAOutcome").ToList<Answer>();
             SAMHSAPop = localService.GetAnswersByCategory("SAMHSAPop").ToList<Answer>();
             EffectReports = localService.GetAnswersByCategory("TreatCompare").ToList<Answer>();
-            TaxOutcomes = localService.GetTaxonomicOutcomes(null).ToList<Answer>();
+            TaxOutcomes = localService.GetTaxonomicOutcomesAsAnswers(null).ToList<Answer>();
 
             SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
             SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserName", Value = User.Identity.Name };

@@ -425,4 +425,17 @@ namespace NREPPAdminSite.Models
         public string ReviewerStatus;
     }
 
+    
+    /// <summary>
+    /// Wrapper structure for Taxonomic outcomes
+    /// </summary>
+    public struct TaxOutcome
+    {
+        public int Id;
+        public string OutcomeName;
+        public string Guidelines;
+        public string GroupName;
+        public string NotInclude;
+    }
+
 }

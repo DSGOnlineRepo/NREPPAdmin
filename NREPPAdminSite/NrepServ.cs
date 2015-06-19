@@ -168,42 +168,7 @@ namespace NREPPAdminSite
             }
         }
 
-        //public void notifyUsersOnStatusChange(int inId, string inUser, int toStatus)
-        //{
-            
-
-        //    _emailService.SendEmail(mailMessage);
-
-        //    SqlCommand getAnswersByCategory = new SqlCommand("SPGetNotifySettingsForInterventionStatusChange", conn);
-
-        //    getAnswersByCategory.CommandType = CommandType.StoredProcedure;
-        //    getAnswersByCategory.Parameters.Add(new SqlParameter("@IntervId", inId));
-        //    getAnswersByCategory.Parameters.Add(new SqlParameter("@DestUser", inUser));
-        //    getAnswersByCategory.Parameters.Add(new SqlParameter("@DestStatus", toStatus));
-
-        //    SqlDataAdapter da = new SqlDataAdapter(getAnswersByCategory);
-
-        //    CheckConn();
-
-        //    DataTable dt = new DataTable();
-
-
-        //    da.Fill(dt);
-
-        //    foreach (DataRow dr in dt.Rows)
-        //    {
-        //        theOutcomes.Add(new Answer((int)dr["Id"], dr["Guidelines"].ToString(), dr["OutcomeName"].ToString()));
-        //    }
-
-
-
-        //    var mailMessage = new MailMessage("donotreply@dsgonline.com", destUser.Email, "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
-        //            "The intervention has been assinged too you. Please login to the to view your interventions");
-
-        //    _emailService.SendEmail(mailMessage);
-        //}
-
-        public IEnumerable<Answer> GetTaxonomicOutcomes(int? inId)
+        public IEnumerable<Answer> GetTaxonomicOutcomesAsAnswers(int? inId)
         {
             List<Answer> theOutcomes = new List<Answer>();
 
@@ -238,6 +203,54 @@ namespace NREPPAdminSite
                 nAnswer.LongAnswer = ex.Message;
                 nAnswer.AnswerId = -1;
                 theOutcomes.Add(nAnswer);
+            }
+
+            return theOutcomes;
+        }
+
+        public IEnumerable<TaxOutcome> GetTaxOutcomes(int? inId)
+        {
+            List<TaxOutcome> theOutcomes = new List<TaxOutcome>();
+
+            // SQL Stuff
+            SqlCommand getTaxonomy = new SqlCommand("SPGetTaxOutcomes", conn);
+
+            getTaxonomy.CommandType = CommandType.StoredProcedure;
+            getTaxonomy.Parameters.Add(new SqlParameter("@TaxId", inId));
+
+            SqlDataAdapter da = new SqlDataAdapter(getTaxonomy);
+
+
+            try
+            {
+                CheckConn();
+
+                DataTable dt = new DataTable();
+
+
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    
+                    theOutcomes.Add(new TaxOutcome()
+                    {
+                        Id = (int)dr["Id"],
+                        OutcomeName = dr["OutcomeName"].ToString(),
+                        Guidelines = dr["Guidelines"].ToString(),
+                        NotInclude = dr["NotInclude"].ToString()
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TaxOutcome nOutcome = new TaxOutcome();
+                nOutcome.Id = -1;
+                nOutcome.OutcomeName = "Error!";
+                nOutcome.Guidelines = ex.Message;
+
+                theOutcomes.Add(nOutcome);
             }
 
             return theOutcomes;

@@ -175,6 +175,17 @@ namespace NREPPAdminSite.Controllers
 
         #endregion
 
+        [Authorize]
+        public ActionResult TaxOutcomes()
+        {
+            NrepServ localService = NrepServ.GetLocalService();
+            List<TaxOutcome> Outcomes;
+
+            Outcomes = localService.GetTaxOutcomes(null).ToList();
+
+            return View(Outcomes);
+        }
+
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
