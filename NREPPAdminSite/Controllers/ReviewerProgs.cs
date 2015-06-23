@@ -63,5 +63,46 @@ namespace NREPPAdminSite.Controllers
             // TODO: Fix this redirect
             return RedirectToAction("Screen", new { InvId = sm.TheIntervention.Id });
         }
+
+        public ActionResult ReviewRigor(int InvId)
+        {
+            NrepServ localService = NrepServ.GetLocalService();
+
+            // Get all the information to build the rest of the page
+
+            List<RCDocument> AllDocs = localService.GetRCDocuments(null, InvId);
+
+            OutcomesWrapper ow = localService.GetOutcomesByIntervention(InvId);
+            List<Study> theStudies = localService.GetStudiesByIntervention(InvId).ToList<Study>();
+
+            List<int> docIds = theStudies.Where(s => s.RecommendReview == true).Select(s => s.DocumentId).ToList();
+
+            //docIds.Concat(theStudies.Where(s => s.RecommendReview == true).Select(s => s.DocumentId));
+            docIds = docIds.Concat(ow.OutcomesMeasures.Where(o => o.RecommendReview == true).Select(o => o.DocumentId)).ToList();
+
+
+            List<RCDocument> ReviewDocs = AllDocs.Where(d => docIds.Contains(d.DocId)).Distinct().ToList();
+            List<RCDocument> Supplementals = AllDocs.Where(d => d.AddToReview == true && d.DocumentTypeName != "Program Evaluation").ToList();
+
+            ReviewerDocsWrapper theDocs = new ReviewerDocsWrapper(ReviewDocs, Supplementals);
+
+            /*foreach (Study s in theStudies)
+            {
+                if (s.RecommendReview)
+                    docIds.Add(s.DocumentId);
+            }
+
+            foreach(OutcomeMeasure om in ow.OutcomesMeasures)
+            {
+                if (om.RecommendReview)
+                {
+                    docIds.Add()
+                }
+            }*/
+
+            
+
+            return View(theDocs);
+        }
     }
 }

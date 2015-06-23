@@ -578,6 +578,28 @@ namespace NREPPAdminSite.Models
 
     #region Extra Stuff
 
+    public class ReviewerDocsWrapper
+    {
+        private List<RCDocument> qoRDocs = new List<RCDocument>();
+        private List<RCDocument> supplements = new List<RCDocument>();
+
+        public IEnumerable<RCDocument> QoRDocs
+        {
+            get { return qoRDocs; }
+        }
+
+        public IEnumerable<RCDocument> Supplements
+        {
+            get { return supplements; }
+        }
+
+        public ReviewerDocsWrapper(List<RCDocument> inQoR, List<RCDocument> inSupp)
+        {
+            qoRDocs = inQoR;
+            supplements = inSupp;
+        }
+    }
+
     public class NREPPPermissions
     {
         //private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>();

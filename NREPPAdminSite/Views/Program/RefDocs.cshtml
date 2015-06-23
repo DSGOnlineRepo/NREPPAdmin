@@ -1,0 +1,33 @@
+﻿@model NREPPAdminSite.Models.ReviewerDocsWrapper
+
+<div>
+    <h3>QoR Documents Relevant to the Studies Under Review</h3>
+    <ul>
+        @foreach(NREPPAdminSite.Models.RCDocument doc in Model.QoRDocs)
+        {
+                <li>
+                @if (string.IsNullOrEmpty(doc.Reference))
+                {
+                    <span>@doc.Title</span>
+                }
+                else
+                {
+                    <span>@doc.Reference</span>
+                }
+                    <span>@doc.FileDescription</span>
+                    <span>@doc.PubYear</span>
+                </li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h3>Supplemental Documents Of Note</h3>
+    <ul>
+        @foreach (NREPPAdminSite.Models.RCDocument doc in Model.Supplements)
+        {
+            <li>@doc.Title</li>
+            <li>@doc.FileDescription</li>
+        }
+    </ul>
+</div>
