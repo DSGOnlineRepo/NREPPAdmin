@@ -64,15 +64,8 @@
                 </td>
             }
             else { 
-                <td>@na.Answer.qId - @na.Answer.chosenAnswer</td>
+                <td>@Html.TextBox(na.Answer.outcomeMeasureId + ", " + na.Answer.qId, na.Answer.chosenAnswer)</td>
             }
         }
     </tr>
 </table>
-
-<ul>
-    @foreach(NREPPAdminSite.Models.RigorQuestion nq in nQuestions)
-    {
-        <li>@nq.QuestionGroup - @nq.QuestionId - @nq.QuestionString</li>
-    }
-</ul>
