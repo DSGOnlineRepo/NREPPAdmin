@@ -555,7 +555,7 @@ namespace NREPPAdminSite.Models
 
     #endregion
 
-    #region Assign Reviewer Page Model
+    #region Assign Reviewer Page Models
 
     public class AssignReviewModel : NREPPPermissions
     {
@@ -572,6 +572,255 @@ namespace NREPPAdminSite.Models
         {
             assignedReviewers.Add(rev);
         }
+    }
+
+    #region Reviewer Rigor Page
+
+    public class ReviewerRigorPage : ReviewInstrumentPage
+    {
+        #region Private Members
+        
+        private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>(); // Permissions from NreppPermissions model
+        private OutcomesWrapper ow = new OutcomesWrapper();
+        private List<RigorQuestion> questions = new List<RigorQuestion>();
+        private Dictionary<int, RigorAnswer> answers = new Dictionary<int, RigorAnswer>();
+
+
+        #endregion
+
+        #region Accessors
+
+        public IEnumerable<RigorQuestion> Questions
+        {
+            get { return questions; }
+        }
+
+        public Dictionary<int, RigorAnswer> Answers
+        {
+            get { return answers; }
+        }
+
+        public OutcomesWrapper Outcomes
+        {
+            get { return ow; }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        public ReviewerRigorPage() { }
+
+        public ReviewerRigorPage(ReviewerDocsWrapper w) : base(w) { }
+
+        public ReviewerRigorPage(ReviewerDocsWrapper w, OutcomesWrapper inOw) : base(w)
+        {
+            ow = inOw;
+        }
+
+        /// <summary>
+        /// Adds a Question
+        /// </summary>
+        /// <param name="questionText">Question Text</param>
+        /// <param name="Id">Question Id</param>
+        public void AddQuestion(string questionText, int Id)
+        {
+            questions.Add(new RigorQuestion(questionText, Id));
+        }
+
+        /// <summary>
+        /// Adds an Answer to the dictionary
+        /// </summary>
+        /// <param name="MeasureId">Outcome Measure Id</param>
+        /// <param name="ans">RigorAnswer object containing the information</param>
+        public void AddAnswer(int MeasureId, RigorAnswer ans)
+        {
+            answers.Add(MeasureId, ans);
+        }
+
+        /// <summary>
+        /// Adds an Answer to the dictionary
+        /// </summary>
+        /// <param name="ans">RigorAnswer Object containing the information</param>
+        public void AddAnswer(RigorAnswer ans)
+        {
+            AddAnswer(ans.outcomeMeasureId, ans);
+        }
+
+        /// <summary>
+        /// Adds an Answer to the Dictionary
+        /// </summary>
+        /// <param name="MeasureId">Outcome Measure Id</param>
+        /// <param name="questionId">QuestionId</param>
+        /// <param name="chosen">Chosen Answer</param>
+        public void AddAnswer(int MeasureId, int questionId, string chosen)
+        {
+            AddAnswer(new RigorAnswer() { qId = questionId, outcomeMeasureId = MeasureId, chosenAnswer = chosen });
+        }
+
+        public void SetOutcomesWrapper(OutcomesWrapper inWrapper)
+        {
+            ow = inWrapper;
+        }
+
+        public void SetupEmptyGrid()
+        {
+            // Various error handling 
+            if (!GridErrorHandling())
+                return;
+
+            foreach(OutcomeMeasure om in ow.OutcomesMeasures)
+            {
+                foreach(RigorQuestion q in questions)
+                {
+                    AddAnswer(om.OutcomeMeasureId, q.QuestionId, "");
+                }
+            }
+        }
+
+        public void SetupFullGrid(List<RigorAnswer> inAnswers)
+        {
+            if (!GridErrorHandling())
+                return;
+
+            foreach (RigorAnswer a in inAnswers)
+                AddAnswer(a);
+        }
+
+        /// <summary>
+        /// Performs error handling for grid setup
+        /// </summary>
+        /// <returns></returns>
+        private bool GridErrorHandling()
+        {
+            if (answers.Keys.Count > 0)
+            {
+                Console.WriteLine("Redundant setup! Aborting without error.");
+                return false;
+            }
+            else if (questions.Count == 0)
+            {
+                throw new Exception("Attempting to set up a grid without questions!");
+            }
+            else if (ow.OutcomesMeasures.Count == 0)
+            {
+                throw new Exception("Attempt to set up a grid without any outcome measures to be evaluated!");
+            }
+
+            return true;
+        }
+
+        #endregion
+    }
+
+    #endregion
+
+
+    #region Reviewer Instrument Page Parent Class
+
+    public class ReviewInstrumentPage : NREPPPermissions
+    {
+        private ReviewerDocsWrapper reviewerDocs;
+
+        #region Accessors
+
+        public ReviewerDocsWrapper ReviewerDocs
+        {
+            get { return reviewerDocs; }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        public ReviewInstrumentPage()
+        {
+            reviewerDocs = new ReviewerDocsWrapper();
+        }
+
+        public ReviewInstrumentPage(ReviewerDocsWrapper w)
+        {
+            reviewerDocs = w;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Sets up the reviewer docs
+        /// </summary>
+        /// <param name="inWrapper">Reviewer Document Wrapper</param>
+        public void SetReviewerDocs(ReviewerDocsWrapper inWrapper)
+        {
+            reviewerDocs = inWrapper;
+        }
+
+        #endregion
+    }
+
+    #endregion
+
+    public class RigorQuestion
+    {
+        private int questionId;
+        private string questionString;
+        private List<string> answerCodes = new List<string>() { "3", "2", "1", "99", "98-do not rate" }; // These can go in the databse later
+        private string questionVar;
+
+        public string QuestionGroup { get; set; }
+
+        public IEnumerable<string> AnswerCodes
+        {
+            get { return answerCodes; }
+        }
+
+        public string QuestionString
+        {
+            get { return questionString; }
+        }
+
+        public int QuestionId
+        {
+            get { return questionId; }
+        }
+
+        public string QuestionVar
+        {
+            get { return questionVar; }
+        }
+
+        public RigorQuestion(string inQuestion, int qId)
+        {
+            questionString = inQuestion;
+            questionId = qId;
+        }
+
+        /// <summary>
+        /// Works
+        /// </summary>
+        /// <param name="inQuestion"></param>
+        /// <param name="qId">Question Id</param>
+        /// <param name="inCodes">Answer Codes</param>
+        public RigorQuestion(string inQuestion, int qId, List<string> inCodes)
+        {
+            questionString = inQuestion;
+            questionId = qId;
+            answerCodes = inCodes;
+        }
+
+        public RigorQuestion(string inQuestion, int qId, List<string> inCodes, string qVar) : this(inQuestion, qId, inCodes)
+        {
+            questionVar = qVar;
+        }
+    }
+
+    // TODO: Convert me to a class with an XML serializer
+    public struct RigorAnswer
+    {
+        public int qId; // could use the unique string here instead I suppose
+        public int outcomeMeasureId;
+        public string chosenAnswer;
     }
 
     #endregion
@@ -592,6 +841,8 @@ namespace NREPPAdminSite.Models
         {
             get { return supplements; }
         }
+
+        public ReviewerDocsWrapper() { }
 
         public ReviewerDocsWrapper(List<RCDocument> inQoR, List<RCDocument> inSupp)
         {

@@ -1,11 +1,78 @@
 ﻿@model NREPPAdminSite.Models.ReviewerDocsWrapper
 
+@using NREPPAdminSite
+
 @{
     ViewBag.Title = "ReviewRigor";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<string> Q5Answers = new List<string>();
+    Q5Answers.Add("one");
+    Q5Answers.Add("two");
+    Q5Answers.Add("three");
+    NREPPAdminSite.Models.RigorQuestion q = new NREPPAdminSite.Models.RigorQuestion("Test Question", 5, Q5Answers);
+
+    List<NREPPAdminSite.Models.RigorQuestion> questions = new List<NREPPAdminSite.Models.RigorQuestion>();
+    questions.Add(new NREPPAdminSite.Models.RigorQuestion("Test Question 3", 7) { QuestionGroup = "Group 2" });
+    questions.Add(new NREPPAdminSite.Models.RigorQuestion("Test Question 2", 6, new List<string>()) { QuestionGroup = "Group 1" });
+    questions.Add(new NREPPAdminSite.Models.RigorQuestion("Test Question 4", 8, new List<string>()) { QuestionGroup = "Group 1" });
+    
+    q.QuestionGroup = "Group 1";
+    questions.Add(q);
+
+    List<NREPPAdminSite.Models.RigorAnswer> answers = new List<NREPPAdminSite.Models.RigorAnswer>();
+    
+    answers.Add(new NREPPAdminSite.Models.RigorAnswer() { qId = 6, chosenAnswer = "Text Answer" });
+    
+    NREPPAdminSite.Models.RigorAnswer a = new NREPPAdminSite.Models.RigorAnswer();
+    a.qId = 5;
+    a.chosenAnswer = "two";
+
+    answers.Add(a);
+    
+    // Re-sort the answers:
+    List<NREPPAdminSite.Models.RigorQuestion> nQuestions = questions.OrderBy(x => x.QuestionId).GroupBy(qg => qg.QuestionGroup).SelectMany(g => g).ToList();
+
+    List<SelectListItem> itemz = new List<SelectListItem>();
+    
 }
 
 <h2>Part A. Rigor</h2>
 
 @Html.Partial("RefDocs", Model)
 
+<table width="75%" align="center">
+    <tr style="border: 1px solid;">@NREPPHtml.GroupHeader(questions, "Group 1")</tr>
+    <tr style="border: 1px solid;">
+        @foreach (NREPPAdminSite.Models.RigorQuestion ques in questions.Where(x => x.QuestionGroup == "Group 1").OrderBy(x => x.QuestionId))
+        {
+            @NREPPHtml.QoRColHeader(ques)
+        }
+    </tr>
+    <tr>
+        @foreach(var na in answers.Join(nQuestions, ans => ans.qId, ques => ques.QuestionId, (ans, ques) => new {Answer = ans, Question = ques}).OrderBy(x => x.Question.QuestionId).Select(x => x)) {
+            if (na.Question.AnswerCodes.Count() > 0)
+            {
+                itemz = new List<SelectListItem>();
+                foreach (string str in na.Question.AnswerCodes)
+                {
+                    itemz.Add(new SelectListItem() { Text = str, Value = str, Selected = na.Answer.chosenAnswer == str });
+                }
+                
+                <td>
+                    @Html.DropDownList(na.Answer.outcomeMeasureId + ", " + na.Answer.qId, itemz)
+                </td>
+            }
+            else { 
+                <td>@na.Answer.qId - @na.Answer.chosenAnswer</td>
+            }
+        }
+    </tr>
+</table>
+
+<ul>
+    @foreach(NREPPAdminSite.Models.RigorQuestion nq in nQuestions)
+    {
+        <li>@nq.QuestionGroup - @nq.QuestionId - @nq.QuestionString</li>
+    }
+</ul>
