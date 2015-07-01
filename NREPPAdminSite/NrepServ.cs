@@ -1360,6 +1360,46 @@ namespace NREPPAdminSite
 
         #endregion
 
+        #region Review Functionality
+
+        public IEnumerable<RigorQuestion> GetQoRQuestions(string QuestionSet) // Currently a dummy function
+        {
+            List<RigorQuestion> returnList = new List<RigorQuestion>();
+            List<string> answerChoices1 = new List<string>();
+            answerChoices1.Add("3");
+            answerChoices1.Add("2");
+            answerChoices1.Add("1");
+            answerChoices1.Add("99");
+            answerChoices1.Add("98-Do not Rate");
+
+            List<string> answerChoices2 = new List<string>();
+            answerChoices2.Add("3");
+            answerChoices2.Add("1");
+            answerChoices2.Add("99");
+
+            returnList.Add(new RigorQuestion("Design/Assignment (D/A)", 1, answerChoices1) { QuestionGroup = "Rigor1" });
+            returnList.Add(new RigorQuestion("Statistical Analysis: Intent-to-Treat (ITT)", 2, answerChoices2) { QuestionGroup = "Rigor1" });
+
+            returnList.Add(new RigorQuestion("Unit of Analysis (e.g., student, classroom, patient, clinic)", 3, new List<string>()) { QuestionGroup = "Rigor2" });
+
+            return returnList;
+        }
+
+        public IEnumerable<RigorAnswer> GetQoRAnswers(string QuestionSet)
+        {
+            List<RigorAnswer> returnAnswers = new List<RigorAnswer>();
+            returnAnswers.Add(new RigorAnswer() { qId = 1, chosenAnswer = "3", outcomeMeasureId = 1 });
+            returnAnswers.Add(new RigorAnswer() { qId = 2, chosenAnswer = "2", outcomeMeasureId = 1 });
+            returnAnswers.Add(new RigorAnswer() { qId = 3, chosenAnswer = "Write-In Text", outcomeMeasureId = 1 });
+
+            returnAnswers.Add(new RigorAnswer() { qId = 1, chosenAnswer = "3", outcomeMeasureId = 2 });
+            returnAnswers.Add(new RigorAnswer() { qId = 2, chosenAnswer = "2", outcomeMeasureId = 2 });
+            returnAnswers.Add(new RigorAnswer() { qId = 3, chosenAnswer = "Write-In Text", outcomeMeasureId = 2 });
+            return returnAnswers;
+        }
+
+        #endregion
+
         #region Other User Functionality
 
         public ReviewersWrapper GetOutComesReviewers(int? id)

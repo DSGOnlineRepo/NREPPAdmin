@@ -583,7 +583,7 @@ namespace NREPPAdminSite.Models
         private Dictionary<string, bool> permissionsList = new Dictionary<string, bool>(); // Permissions from NreppPermissions model
         private OutcomesWrapper ow = new OutcomesWrapper();
         private List<RigorQuestion> questions = new List<RigorQuestion>();
-        private Dictionary<int, RigorAnswer> answers = new Dictionary<int, RigorAnswer>();
+        private List<RigorAnswer> answers = new List<RigorAnswer>();
 
 
         #endregion
@@ -595,7 +595,7 @@ namespace NREPPAdminSite.Models
             get { return questions; }
         }
 
-        public Dictionary<int, RigorAnswer> Answers
+        public List<RigorAnswer> Answers
         {
             get { return answers; }
         }
@@ -618,6 +618,14 @@ namespace NREPPAdminSite.Models
             ow = inOw;
         }
 
+        public ReviewerRigorPage(ReviewerDocsWrapper w, OutcomesWrapper inOw, List<RigorAnswer> inAns, List<RigorQuestion> inQues)
+            : this(w, inOw)
+        {
+            questions = inQues;
+            answers = inAns;
+ 
+        }
+
         /// <summary>
         /// Adds a Question
         /// </summary>
@@ -628,21 +636,12 @@ namespace NREPPAdminSite.Models
             questions.Add(new RigorQuestion(questionText, Id));
         }
 
-        /// <summary>
-        /// Adds an Answer to the dictionary
-        /// </summary>
-        /// <param name="MeasureId">Outcome Measure Id</param>
-        /// <param name="ans">RigorAnswer object containing the information</param>
-        public void AddAnswer(int MeasureId, RigorAnswer ans)
-        {
-            answers.Add(MeasureId, ans);
-        }
 
         /// <summary>
         /// Adds an Answer to the dictionary
         /// </summary>
         /// <param name="ans">RigorAnswer Object containing the information</param>
-        public void AddAnswer(RigorAnswer ans)
+        /*public void AddAnswer(RigorAnswer ans)
         {
             AddAnswer(ans.outcomeMeasureId, ans);
         }
@@ -656,60 +655,14 @@ namespace NREPPAdminSite.Models
         public void AddAnswer(int MeasureId, int questionId, string chosen)
         {
             AddAnswer(new RigorAnswer() { qId = questionId, outcomeMeasureId = MeasureId, chosenAnswer = chosen });
-        }
+        }*/
 
         public void SetOutcomesWrapper(OutcomesWrapper inWrapper)
         {
             ow = inWrapper;
         }
 
-        public void SetupEmptyGrid()
-        {
-            // Various error handling 
-            if (!GridErrorHandling())
-                return;
-
-            foreach(OutcomeMeasure om in ow.OutcomesMeasures)
-            {
-                foreach(RigorQuestion q in questions)
-                {
-                    AddAnswer(om.OutcomeMeasureId, q.QuestionId, "");
-                }
-            }
-        }
-
-        public void SetupFullGrid(List<RigorAnswer> inAnswers)
-        {
-            if (!GridErrorHandling())
-                return;
-
-            foreach (RigorAnswer a in inAnswers)
-                AddAnswer(a);
-        }
-
-        /// <summary>
-        /// Performs error handling for grid setup
-        /// </summary>
-        /// <returns></returns>
-        private bool GridErrorHandling()
-        {
-            if (answers.Keys.Count > 0)
-            {
-                Console.WriteLine("Redundant setup! Aborting without error.");
-                return false;
-            }
-            else if (questions.Count == 0)
-            {
-                throw new Exception("Attempting to set up a grid without questions!");
-            }
-            else if (ow.OutcomesMeasures.Count == 0)
-            {
-                throw new Exception("Attempt to set up a grid without any outcome measures to be evaluated!");
-            }
-
-            return true;
-        }
-
+        
         #endregion
     }
 
