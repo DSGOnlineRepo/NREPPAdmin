@@ -39,6 +39,30 @@ namespace NREPPAdminSite {
 
             return MvcHtmlString.Create(thTag.ToString());
         }
+
+        public static MvcHtmlString CompareBlock(QoRAnswer rev1, QoRAnswer rev2)
+        {
+            var theTag = new TagBuilder("td");
+            MvcHtmlString answer1 = AnswerBlock(rev1);
+            MvcHtmlString answer2 = AnswerBlock(rev2);
+
+            if (rev1.FixedAnswer != rev2.FixedAnswer)
+                theTag.MergeAttribute("style", "color: red; font-weight: bold;");
+
+            theTag.InnerHtml += answer1.ToHtmlString() + "<br />" + answer2.ToHtmlString();
+            
+            return MvcHtmlString.Create(theTag.ToString());
+        }
+
+        public static MvcHtmlString AnswerBlock(QoRAnswer answer)
+        {
+            var theTag = new TagBuilder("span");
+            theTag.InnerHtml = answer.FixedAnswer;
+            if (answer.CalcAnswer != answer.FixedAnswer)
+                theTag.InnerHtml += string.Format(" ({0})", answer.CalcAnswer);
+
+            return MvcHtmlString.Create(theTag.ToString());
+        }
     }
 
 }

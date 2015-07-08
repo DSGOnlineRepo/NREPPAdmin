@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Consensus";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    NREPPAdminSite.Models.QoRAnswer ans1 = new NREPPAdminSite.Models.QoRAnswer();
+    NREPPAdminSite.Models.QoRAnswer ans2 = new NREPPAdminSite.Models.QoRAnswer();
+
+    ans1.OutcomeId = ans2.OutcomeId = 1;
+    ans1.AnswerTypeId = ans2.AnswerTypeId = 1234;
+    ans1.StudyId = ans2.StudyId = 1;
+    ans1.FixedAnswer = ans1.CalcAnswer = "2.35";
+    ans2.FixedAnswer = ans2.CalcAnswer = "2.34";
+    
+    
+}
+
+@using NREPPAdminSite
+
+<h2>Consensus</h2>
+
+<div>
+    <table>
+        <tr>
+            <th>Outcome</th>
+            <th>Study #</th>
+            <th>@ans1.AnswerTypeId</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            @NREPPHtml.CompareBlock(ans1, ans2)
+        </tr>
+    </table>
+</div>
+

@@ -438,4 +438,16 @@ namespace NREPPAdminSite.Models
         public string NotInclude;
     }
 
+    public class QoRAnswer
+    {
+
+        public int OutcomeId { get; set; }
+        public int StudyId { get; set; } // have to extrapolate this?
+        public int AnswerTypeId { get; set; } // Enumeration lives in the database
+        public string FixedAnswer { get; set; }
+        public string CalcAnswer { get; set; }
+        //public Reviewer Reviewer { get; set; }
+        public string ReviewerName { get; set; }
+    }
+
 }

@@ -104,5 +104,12 @@ namespace NREPPAdminSite.Controllers
 
             return View(theDocs);
         }
+
+        public ActionResult Consensus()
+        {
+            List<QoRAnswer> answers = new List<QoRAnswer>();
+            //return View(answers);
+            return View();
+        }
     }
 }
