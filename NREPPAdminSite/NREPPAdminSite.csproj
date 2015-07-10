@@ -378,6 +378,7 @@
     <Content Include="Views\Program\ReviewRigor.cshtml" />
     <Content Include="Views\Program\RefDocs.cshtml" />
     <Content Include="Views\Program\Consensus.cshtml" />
+    <Content Include="Views\Program\AnswerPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

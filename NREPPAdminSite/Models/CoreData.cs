@@ -442,8 +442,10 @@ namespace NREPPAdminSite.Models
     {
 
         public int OutcomeId { get; set; }
+        public string TaxOutcomeName { get; set; }
         public int StudyId { get; set; } // have to extrapolate this?
         public int AnswerTypeId { get; set; } // Enumeration lives in the database
+        public string AnswerTypeName { get; set; }
         public string FixedAnswer { get; set; }
         public string CalcAnswer { get; set; }
         //public Reviewer Reviewer { get; set; }

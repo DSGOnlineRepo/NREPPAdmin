@@ -43,20 +43,28 @@ namespace NREPPAdminSite {
         public static MvcHtmlString CompareBlock(QoRAnswer rev1, QoRAnswer rev2)
         {
             var theTag = new TagBuilder("td");
-            MvcHtmlString answer1 = AnswerBlock(rev1);
-            MvcHtmlString answer2 = AnswerBlock(rev2);
+            MvcHtmlString answer1 = AnswerBlock(rev1, rev1.FixedAnswer != rev2.FixedAnswer);
+            MvcHtmlString answer2 = AnswerBlock(rev2, rev1.FixedAnswer != rev2.FixedAnswer);
 
-            if (rev1.FixedAnswer != rev2.FixedAnswer)
-                theTag.MergeAttribute("style", "color: red; font-weight: bold;");
+           /* if (rev1.FixedAnswer != rev2.FixedAnswer)
+                theTag.MergeAttribute("style", "color: red; font-weight: bold; text-align: right; border: 1px solid black;");
+            else
+                theTag.MergeAttribute("style", "text-align: right; border: 1px solid;");
 
-            theTag.InnerHtml += answer1.ToHtmlString() + "<br />" + answer2.ToHtmlString();
+            theTag.InnerHtml += answer1.ToHtmlString() + "&nbsp;" + answer2.ToHtmlString();*/
             
-            return MvcHtmlString.Create(theTag.ToString());
+            return MvcHtmlString.Create(answer1.ToHtmlString() + answer2.ToHtmlString());
         }
 
-        public static MvcHtmlString AnswerBlock(QoRAnswer answer)
+        public static MvcHtmlString AnswerBlock(QoRAnswer answer, bool inDispute)
         {
-            var theTag = new TagBuilder("span");
+            var theTag = new TagBuilder("td");
+
+            if (inDispute)
+                theTag.MergeAttribute("style", "color: red; font-weight: bold; text-align: right; border: 1px solid black;");
+            else
+                theTag.MergeAttribute("style", "text-align: right; border: 1px solid;");
+
             theTag.InnerHtml = answer.FixedAnswer;
             if (answer.CalcAnswer != answer.FixedAnswer)
                 theTag.InnerHtml += string.Format(" ({0})", answer.CalcAnswer);
