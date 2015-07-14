@@ -1,4 +1,11 @@
 ﻿
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("/Scripts/chosen.jquery.min.js")"></script>
+}
+
+
+
+
 @{
     ViewBag.Title = "Consensus";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -184,7 +191,49 @@
             @NREPPHtml.CompareBlock(ans19, ans20)
             @NREPPHtml.CompareBlock(ans21, ans22)
             @NREPPHtml.CompareBlock(ans23, ans24)
+            <td><input type="checkbox" name="selectme" /></td>
         </tr>
     </table>
 </div>
+
+<div>
+    <button onclick="GenEmail(); return false;">Generate Email</button>
+    <table id="resultsTable"></table>
+</div>
+
+<div>
+    @using (Html.BeginForm("SaveConsensusNotes"))
+    {
+        <span>Something goes here when I am ready</span>
+    }
+</div>
+
+<script type="text/javascript">
+    var TableList = new Array();
+    function GetRow(inCrtl) {
+        var td = $(inCrtl).parent();
+        var innerHTML = $(td).parent("tr").html();
+        var ignoreme = /\<td\>\<input type="checkbox"\s/;
+        var location = innerHTML.search(ignoreme);
+        
+        return "<tr>" + innerHTML.substring(0, location) + "</tr>";
+    }
+
+    function testFunc()
+    {
+        alert(GetRow("#thisButton"));
+    }
+
+    function GenEmail() {
+        $("#resultsTable").html(TableList.join(""));
+    }
+
+    $("#thisButton").click(function () {
+        alert(GetRow(this));
+    });
+
+    $("input[name*='selectme']").click(function () {
+        TableList.push(GetRow(this));
+    });
+</script>
 
