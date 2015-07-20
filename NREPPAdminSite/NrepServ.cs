@@ -506,6 +506,7 @@ namespace NREPPAdminSite
                     inv.SecondaryFaxNumber = dr.IsNull("SecondaryFaxNumber") ? "" : dr["SecondaryFaxNumber"].ToString();
                     inv.SecondaryEmail = dr.IsNull("SecondaryEmail") ? "" : dr["SecondaryEmail"].ToString();
                     searchResult.TotalSearchCount = Convert.ToInt16(dr["searchTotal"].ToString());
+                    inv.IsLive = (bool)dr["IsLive"];
                     interventions.Add(inv);
                 }
 
@@ -1356,6 +1357,22 @@ namespace NREPPAdminSite
             }
 
             return;
+        }
+
+        public bool SetSitePosting(bool postMe, int InvId)
+        {
+            string commandText = "UPDATE Interventions SET IsLive = @PostMe WHERE Id = @InvId";
+            SqlCommand cmd = new SqlCommand(commandText, conn);
+            cmd.CommandType = CommandType.Text;
+
+            cmd.Parameters.AddWithValue("@PostMe", postMe ? 1 : 0);
+            cmd.Parameters.AddWithValue("@InvId", InvId);
+
+            CheckConn();
+
+            cmd.ExecuteNonQuery();
+
+            return true;
         }
 
         #endregion

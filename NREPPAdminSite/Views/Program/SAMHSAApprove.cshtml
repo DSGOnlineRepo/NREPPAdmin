@@ -1,0 +1,75 @@
+﻿@section scripts {
+    <script type="text/javascript" src="@Url.Content("/Scripts/chosen.jquery.min.js")"></script>
+    }
+
+@{
+    ViewBag.Title = "Approve";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    #postLabel {
+        margin-left: 10px;
+        border: 1px solid black;
+        background-color: lightgray;
+    }
+</style>
+
+<h2>Approve @ViewBag.ProgramName</h2>
+
+<div>
+
+<input type="checkbox" checked="checked" disabled="disabled" /> Editing Complete <button>Preview</button><br />
+<input type="checkbox" id="postChk" disabled="disabled" onclick="confirmPosting()" /> <span>Reviewed + Approved by SAMHSA (You must view the preview before posting)</span><label id="postLabel" class="hidden">Posted to Live Site</label><br />
+
+    <button id="emailButton">Email RC</button>
+
+         
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var isLive = "@ViewBag.IsLive";
+        if (isLive == "True") {
+            $("#postLabel").removeClass("hidden");
+        }
+    });
+
+    function confirmPosting()
+    {
+        var confirmChk = $("#postChk");
+        var confirmText = "";
+        var isList = false;
+
+        if (confirmChk.prop("checked")) {
+            confirmText = "You are posting to the site.";
+            isList = true;
+        } else {
+            confirmText = "You are delisting from the site";
+            isList = false;
+        }
+
+        if (confirm(confirmText)) {
+            doAThing(isList);
+        } else {
+            return;
+        }
+    }
+
+    function doAThing(inValue) {
+        $.ajax({
+            url: '@Url.Action("PostToSite", "Program")',
+            type: "Get",
+            dataType: 'json',
+            data: { SiteVal: inValue, InvId: @ViewBag.InvId },
+            success: function (object) {
+                if (inValue) {
+                    $("#postLabel").removeClass("hidden");
+                } else {
+                    $("#postLabel").addClass("hidden");
+                }
+            }
+        })
+    }
+
+</script>

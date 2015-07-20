@@ -379,6 +379,7 @@
     <Content Include="Views\Program\RefDocs.cshtml" />
     <Content Include="Views\Program\Consensus.cshtml" />
     <Content Include="Views\Program\AnswerPartial.cshtml" />
+    <Content Include="Views\Program\SAMHSAApprove.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

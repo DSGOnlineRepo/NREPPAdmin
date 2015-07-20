@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Mvc;
 using NREPPAdminSite.Models;
+using System.Data.Entity;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -110,6 +111,30 @@ namespace NREPPAdminSite.Controllers
             List<QoRAnswer> answers = new List<QoRAnswer>();
             //return View(answers);
             return View();
+        }
+
+        public ActionResult SAMHSAApprove(int InvId)
+        {
+            NrepServ localService = NrepServ.GetLocalService();
+
+            Intervention inv = localService.GetIntervention(InvId, User.Identity.Name);
+
+            @ViewBag.InvId = InvId;
+            @ViewBag.ProgramName = inv.Title;
+            @ViewBag.IsLive = inv.IsLive;
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult PostToSite(bool SiteVal, int InvId)
+        {
+            NrepServ localService = NrepServ.GetLocalService();
+
+            localService.SetSitePosting(SiteVal, InvId);
+
+            if (SiteVal)
+                return Json("You posted!", JsonRequestBehavior.AllowGet);
+            else return Json("You delisted", JsonRequestBehavior.AllowGet);
         }
     }
 }

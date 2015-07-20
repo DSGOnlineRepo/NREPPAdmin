@@ -42,6 +42,8 @@ namespace NREPPAdminSite.Models
 
         public bool HaveMaterials { get; set; }
 
+        public bool IsLive { get; set; }
+
         public int Id {get; set;}
 
         #region Contact Info
