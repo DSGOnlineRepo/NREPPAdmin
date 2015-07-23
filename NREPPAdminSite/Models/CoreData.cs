@@ -452,6 +452,22 @@ namespace NREPPAdminSite.Models
         public string CalcAnswer { get; set; }
         //public Reviewer Reviewer { get; set; }
         public string ReviewerName { get; set; }
+
+        public string IdString() 
+        {
+            string returnString = "";
+
+            returnString = string.Format("{0}_{1}_{2}", OutcomeId, StudyId, AnswerTypeId);
+
+            return returnString;
+        }
+    }
+
+    public class QoRAnswerType
+    {
+        public int Id { get; set; }
+        public string TypeName { get; set; }
+        public string Comparison { get; set; }
     }
 
 }

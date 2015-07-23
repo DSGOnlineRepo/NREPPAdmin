@@ -1,4 +1,5 @@
-﻿
+﻿@model NREPPAdminSite.Models.ConsensusModel
+
 @section scripts {
     <script type="text/javascript" src="@Url.Content("/Scripts/chosen.jquery.min.js")"></script>
 }
@@ -197,9 +198,44 @@
 </div>
 
 <div>
+    <!-- Delete me when done -->
+    <span id="someResult"></span>
+    <table>
+        <tr>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Outcome Id</th>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Study Id</th>
+            @foreach (NREPPAdminSite.Models.QoRAnswerType aType in Model.AnswerTypes)
+            {
+                <th colspan="2" style="border: 1px solid; padding-left: 2px; padding-right: 2px;">
+                    @aType.TypeName
+                </th>
+            }
+        </tr>
+        @foreach (var OutcomeGroup in Model.AnswerList.GroupBy(x => x.OutcomeId))
+        {
+            foreach (var StudyGroup in OutcomeGroup.Where(s => s.OutcomeId == OutcomeGroup.Key).GroupBy(x => x.StudyId))
+            { 
+                <tr>
+                    <td>@OutcomeGroup.Key</td>
+                    <td>@StudyGroup.Key</td>
+                    @foreach (var AnswerGroup in StudyGroup.Where(x => x.StudyId == StudyGroup.Key).GroupBy(s => s.AnswerTypeId))
+                    {
+                        NREPPAdminSite.Models.QoRAnswer one = AnswerGroup.ToList()[0];
+                        NREPPAdminSite.Models.QoRAnswer two = AnswerGroup.ToList()[1];
+                        @NREPPHtml.CompareBlock2(one, two, Model.AnswerTypes.Where(x => x.Id == one.AnswerTypeId).Select(y => y.Comparison).First())
+                    }
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+<div>
     <button onclick="GenEmail(); return false;">Generate Email</button>
     <table id="resultsTable"></table>
 </div>
+
+<div id="dumpingGround"></div>
 
 <div>
     @using (Html.BeginForm("SaveConsensusNotes"))
@@ -215,12 +251,11 @@
         var innerHTML = $(td).parent("tr").html();
         var ignoreme = /\<td\>\<input type="checkbox"\s/;
         var location = innerHTML.search(ignoreme);
-        
+
         return "<tr>" + innerHTML.substring(0, location) + "</tr>";
     }
 
-    function testFunc()
-    {
+    function testFunc() {
         alert(GetRow("#thisButton"));
     }
 
@@ -234,6 +269,45 @@
 
     $("input[name*='selectme']").click(function () {
         TableList.push(GetRow(this));
+    });
+
+    function DoCompare(val1, val2, compareString) {
+        return eval(compareString);
+    }
+
+    $(document).ready(function () {
+        var ListOfItems = Array();
+        var dumpText = "";
+        var val1temp = 0.0;
+        var val2temp = 0.0;
+        var uFormula = "";
+        var InDispute = false;
+
+        @foreach (var ans in Model.AnswerList.GroupBy(x => x.IdString()).Distinct())
+        {
+        <text>
+        dumpText += $("td[name*=@ans.Key]")[0].innerText + " " + $("td[name*=@ans.Key]")[1].innerText + " | ";
+
+        val1temp = parseFloat($("td[name*=@ans.Key]")[0].innerText);
+        val2temp = parseFloat($("td[name*=@ans.Key]")[1].innerText);
+        uFormula = $("td[name*=@ans.Key]").attr("data-formula");
+
+        InDispute = DoCompare(val1temp, val2temp, uFormula);
+
+        $("td[name*=@ans.Key]").each(function () {
+            if (InDispute == true)
+                $(this).attr("style", "color: red;");
+        });
+
+        </text>
+        }
+
+        /*var someText = "";
+        $("td[name*='1']").each(function () {
+            someText += $(this).attr("data-formula");
+        });*/
+
+
     });
 </script>
 

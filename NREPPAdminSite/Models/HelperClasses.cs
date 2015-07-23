@@ -71,6 +71,37 @@ namespace NREPPAdminSite {
 
             return MvcHtmlString.Create(theTag.ToString());
         }
+
+        public static MvcHtmlString CompareBlock2(QoRAnswer rev1, QoRAnswer rev2, string formula)
+        {
+            var theTag = new TagBuilder("td");
+            MvcHtmlString answer1 = AnswerBlock2(rev1, formula);
+            MvcHtmlString answer2 = AnswerBlock2(rev2, formula);
+
+            /* if (rev1.FixedAnswer != rev2.FixedAnswer)
+                 theTag.MergeAttribute("style", "color: red; font-weight: bold; text-align: right; border: 1px solid black;");
+             else
+                 theTag.MergeAttribute("style", "text-align: right; border: 1px solid;");
+
+             theTag.InnerHtml += answer1.ToHtmlString() + "&nbsp;" + answer2.ToHtmlString();*/
+
+            return MvcHtmlString.Create(answer1.ToHtmlString() + answer2.ToHtmlString());
+        }
+
+        public static MvcHtmlString AnswerBlock2(QoRAnswer answer, string formula)
+        {
+            var theTag = new TagBuilder("td");
+
+            theTag.MergeAttribute("style", "text-align: right; border: 1px solid;");
+            theTag.MergeAttribute("name", answer.IdString());
+            theTag.MergeAttribute("data-formula", formula);
+
+            theTag.InnerHtml = answer.FixedAnswer;
+            if (answer.CalcAnswer != answer.FixedAnswer)
+                theTag.InnerHtml += string.Format(" ({0})", answer.CalcAnswer);
+
+            return MvcHtmlString.Create(theTag.ToString());
+        }
     }
 
 }

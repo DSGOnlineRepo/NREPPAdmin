@@ -668,6 +668,28 @@ namespace NREPPAdminSite.Models
 
     #endregion
 
+    public class ConsensusModel
+    {
+        private List<QoRAnswerType> answerTypes;
+        private List<QoRAnswer> answerList;
+
+        public ConsensusModel(List<QoRAnswer> inAnswers, List<QoRAnswerType> inAnswerType)
+        {
+            answerTypes = inAnswerType;
+            answerList = inAnswers;
+        }
+
+        public IEnumerable<QoRAnswerType> AnswerTypes
+        {
+            get { return answerTypes; }
+        }
+
+        public IEnumerable<QoRAnswer> AnswerList
+        {
+            get { return answerList; }
+        }
+    }
+
 
     #region Reviewer Instrument Page Parent Class
 

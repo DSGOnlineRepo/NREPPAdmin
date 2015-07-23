@@ -109,8 +109,20 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Consensus()
         {
             List<QoRAnswer> answers = new List<QoRAnswer>();
-            //return View(answers);
-            return View();
+            List<QoRAnswerType> questions = new List<QoRAnswerType>();
+            questions.Add(new QoRAnswerType() { Id = 1, TypeName = "Rigor (Test)", Comparison = "Math.abs(val1 - val2) < 0.2" });
+            questions.Add(new QoRAnswerType() { Id = 1, TypeName = "Effect Size (Test)", Comparison = "val1 == val2" });
+            questions.Add(new QoRAnswerType() { Id = 1, TypeName = "Fidelity (Test)", Comparison = "Math.abs(val1 - val2) < 0.5 && val1 < 2 && val2 < 2" });
+
+            answers.Add(new QoRAnswer() { AnswerTypeId = 1, AnswerTypeName = "Rigor (Test)", FixedAnswer = "1.2", CalcAnswer = "1.2", OutcomeId = 1, ReviewerName = "Patches", StudyId = 1 });
+            answers.Add(new QoRAnswer() { AnswerTypeId = 1, AnswerTypeName = "Rigor (Test)", FixedAnswer = "1.5",  CalcAnswer = "1.5", OutcomeId = 1, ReviewerName = "Kevin", StudyId = 1 });
+
+            answers.Add(new QoRAnswer() { AnswerTypeId = 1, AnswerTypeName = "Rigor (Test)", FixedAnswer = "1.2", CalcAnswer = "1.2", OutcomeId = 2, ReviewerName = "Patches", StudyId = 1 });
+            answers.Add(new QoRAnswer() { AnswerTypeId = 1, AnswerTypeName = "Rigor (Test)", FixedAnswer = "1.3", CalcAnswer = "1.3", OutcomeId = 2, ReviewerName = "Kevin", StudyId = 1 });
+
+            ConsensusModel model = new ConsensusModel(answers, questions);
+
+            return View(model);
         }
 
         public ActionResult SAMHSAApprove(int InvId)
