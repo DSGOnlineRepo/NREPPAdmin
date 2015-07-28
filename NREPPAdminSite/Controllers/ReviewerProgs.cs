@@ -5,6 +5,9 @@ using System.Linq;
 using System.Web.Mvc;
 using NREPPAdminSite.Models;
 using System.Data.Entity;
+using NREPPAdminSite.Security;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -87,40 +90,42 @@ namespace NREPPAdminSite.Controllers
 
             ReviewerDocsWrapper theDocs = new ReviewerDocsWrapper(ReviewDocs, Supplementals);
 
-            /*foreach (Study s in theStudies)
-            {
-                if (s.RecommendReview)
-                    docIds.Add(s.DocumentId);
-            }
-
-            foreach(OutcomeMeasure om in ow.OutcomesMeasures)
-            {
-                if (om.RecommendReview)
-                {
-                    docIds.Add()
-                }
-            }*/
-
-            
-
             return View(theDocs);
         }
 
-        public ActionResult Consensus()
+        public ActionResult Consensus(int InvId)
         {
-            List<QoRAnswer> answers = new List<QoRAnswer>();
+
+            /*
+             *  MyIdentityDbContext db = new MyIdentityDbContext();
+            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
+            RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>(roleStore);
+            UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
+            UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
+             */
+            MyIdentityDbContext db = new MyIdentityDbContext();
+            UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
+            UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
+
+            ConsensusModel model;
+            NrepServ localService = NrepServ.GetLocalService();
+
             List<QoRAnswerType> questions = new List<QoRAnswerType>();
-            questions.Add(new QoRAnswerType() { Id = 1, TypeName = "Rigor (Test)", Comparison = "Math.abs(val1 - val2) < 0.2" });
-            questions.Add(new QoRAnswerType() { Id = 1, TypeName = "Effect Size (Test)", Comparison = "val1 == val2" });
-            questions.Add(new QoRAnswerType() { Id = 1, TypeName = "Fidelity (Test)", Comparison = "Math.abs(val1 - val2) < 0.5 && val1 < 2 && val2 < 2" });
+            questions = localService.GetQoRAnswerTypes().ToList();
+            List<QoRAnswer> FinalAnswers = localService.GetFinalAnswers(InvId).ToList();
 
-            answers.Add(new QoRAnswer() { AnswerTypeId = 1, AnswerTypeName = "Rigor (Test)", FixedAnswer = "1.2", CalcAnswer = "1.2", OutcomeId = 1, ReviewerName = "Patches", StudyId = 1 });
-            answers.Add(new QoRAnswer() { AnswerTypeId = 1, AnswerTypeName = "Rigor (Test)", FixedAnswer = "1.5",  CalcAnswer = "1.5", OutcomeId = 1, ReviewerName = "Kevin", StudyId = 1 });
+            List<string> ReviewerIds = FinalAnswers.Select(x => x.ReviewerId).Distinct().ToList(); // Should only be two but this ensures that
+            Dictionary<string, string> ReviewerNames = new Dictionary<string, string>();
 
-            answers.Add(new QoRAnswer() { AnswerTypeId = 1, AnswerTypeName = "Rigor (Test)", FixedAnswer = "1.2", CalcAnswer = "1.2", OutcomeId = 2, ReviewerName = "Patches", StudyId = 1 });
-            answers.Add(new QoRAnswer() { AnswerTypeId = 1, AnswerTypeName = "Rigor (Test)", FixedAnswer = "1.3", CalcAnswer = "1.3", OutcomeId = 2, ReviewerName = "Kevin", StudyId = 1 });
+            // Since there are only two reviewers no need for a foreach
+            ReviewerNames.Add(ReviewerIds[0], _userManager.FindById(ReviewerIds[0]).FirstName);
+            ReviewerNames.Add(ReviewerIds[1], _userManager.FindById(ReviewerIds[1]).FirstName);
 
-            ConsensusModel model = new ConsensusModel(answers, questions);
+            foreach (QoRAnswer ans in FinalAnswers)
+                ans.ReviewerName = ReviewerNames[ans.ReviewerId];
+            
+
+            model = new ConsensusModel(FinalAnswers, questions);
 
             return View(model);
         }

@@ -92,7 +92,7 @@ namespace NREPPAdminSite {
         {
             var theTag = new TagBuilder("td");
 
-            theTag.MergeAttribute("style", "text-align: right; border: 1px solid;");
+            theTag.MergeAttribute("style", "text-align: right; border: 1px solid black;");
             theTag.MergeAttribute("name", answer.IdString());
             theTag.MergeAttribute("data-formula", formula);
 

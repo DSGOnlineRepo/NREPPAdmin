@@ -369,15 +369,32 @@ namespace NREPPAdminSite
 
         #region Intervention Functionality
 
-        /// <summary>
-        /// Generically gets the interventions list
-        /// </summary>
-        /// <returns></returns>
-        /*public List<Intervention> GetInterventions() // This needs to take some parameters, so there should be a bunch of functions for it
+        public IEnumerable<QoRAnswerType> GetQoRAnswerTypes()
         {
-            List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
-            return GetInterventions(nullParams);
-        }*/
+            List<QoRAnswerType> AnswerTypes = new List<QoRAnswerType>();
+
+            string commandText = "SELECT Id, TypeName, Comparison FROM QoRAnswerType";
+            SqlCommand cmd = new SqlCommand(commandText, conn);
+            cmd.CommandType = CommandType.Text;
+
+            CheckConn();
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    AnswerTypes.Add(new QoRAnswerType() { Id = reader.GetInt32(0), TypeName = reader.GetString(1), Comparison = reader.GetString(2) });
+                }
+            }
+            else
+            {
+                AnswerTypes.Add(new QoRAnswerType() { Id = -1, TypeName = "Error", Comparison = "No Rows" });
+            }
+
+            return AnswerTypes;
+        }
 
         /// <summary>
         /// Gets the interventions list based on role
@@ -991,21 +1008,6 @@ namespace NREPPAdminSite
 
             cmd.Parameters.Add(new SqlParameter("@InterventionId", IntervId));
 
-            /*
-             * [Id] INT IDENTITY NOT NULL PRIMARY KEY,
-	[OutcomeId] INT NOT NULL,
-	[StudyId] INT NOT NULL,
-	[OutcomeMeasure] VARCHAR(50) NULL, 
-    [GroupFavored] BIT NULL DEFAULT 0, 
-    [PopDescription] VARCHAR(50) NULL, 
-    [SAMHSAPop] INT NULL,
-	[SAMHSAOutcome] INT NULL,
-	[EffectReport] INT NULL,
-    [DocId] INT NULL, 
-    [RecommendReview] BIT NULL DEFAULT 0, 
-    [TaxonomyOutcome] INT NULL, 
-             */
-
             try
             {
                 CheckConn();
@@ -1413,6 +1415,50 @@ namespace NREPPAdminSite
             returnAnswers.Add(new RigorAnswer() { qId = 2, chosenAnswer = "2", outcomeMeasureId = 2 });
             returnAnswers.Add(new RigorAnswer() { qId = 3, chosenAnswer = "Write-In Text", outcomeMeasureId = 2 });
             return returnAnswers;
+        }
+
+        public IEnumerable<QoRAnswer> GetFinalAnswers(int InvId)
+        {
+            List<QoRAnswer> outAnswers = new List<QoRAnswer>();
+
+            SqlCommand cmd = new SqlCommand("SPGetQoRFinalAnswers", conn);
+            cmd.Parameters.AddWithValue("@InvId", InvId);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+
+            conn.Close();
+
+            try
+            {
+                CheckConn();
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    outAnswers.Add(new QoRAnswer()
+                    {
+                        AnswerTypeId = (int)dr["AnswerTypeId"],
+                        OutcomeId = (int)dr["OutcomeId"],
+                        OutcomeName = dr["OutcomeName"].ToString(),
+                        StudyId = (int)dr["StudyId"],
+                        ReviewerId = dr["ReviewerId"].ToString(),
+                        FixedAnswer = dr["FixedAnswer"].ToString(),
+                        CalcAnswer = dr["CalcAnswer"].ToString(),
+                        TaxOutcomeId = (int)dr["TaxOutcomeId"],
+                        TaxOutcomeName = dr["TaxOutcomeName"].ToString()
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                outAnswers.Add(new QoRAnswer() { OutcomeId = -1, ReviewerName = "Error!", TaxOutcomeName = ex.Message });
+            }
+
+
+            return outAnswers;
         }
 
         #endregion

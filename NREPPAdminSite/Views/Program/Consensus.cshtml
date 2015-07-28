@@ -4,6 +4,13 @@
     <script type="text/javascript" src="@Url.Content("/Scripts/chosen.jquery.min.js")"></script>
 }
 
+<style>
+    td.InDispute {
+        color: red;
+        text-align: right;
+        font-weight: bold;
+    }
+</style>
 
 
 
@@ -146,64 +153,13 @@
 
 <h2>Consensus</h2>
 
+<button id="toggleButton" data-state="Hide">Show In Dispute Only</button>
 <div>
     <table>
         <tr>
-            <th style="border: 1px solid; text-align: center;">Outcome</th>
-            <th style="border: 1px solid; text-align: center;">Study #</th>
-            <th colspan="2" style="border: 1px solid; text-align: center;">@ans1.AnswerTypeName</th>
-            <th colspan="2" style="border: 1px solid; text-align: center;">@ans5.AnswerTypeName</th>
-            <th colspan="2" style="border: 1px solid; text-align: center;">@ans9.AnswerTypeName</th>
-        </tr>
-        <tr>
-            <th style="border: 1px solid; text-align: center;">Outcome</th>
-            <th style="border: 1px solid; text-align: center;">Study #</th>
-            <th style="border: 1px solid; text-align: center;">@ans1.ReviewerName</th>
-            <th style="border: 1px solid; text-align: center;">@ans2.ReviewerName</th>
-            <th style="border: 1px solid; text-align: center;">@ans1.ReviewerName</th>
-            <th style="border: 1px solid; text-align: center;">@ans2.ReviewerName</th>
-            <th style="border: 1px solid; text-align: center;">@ans1.ReviewerName</th>
-            <th style="border: 1px solid; text-align: center;">@ans2.ReviewerName</th>
-        </tr>
-        <tr>
-            <td style="text-align: right; border: 1px solid;">@ans1.TaxOutcomeName</td>
-            <td style="text-align: right; border: 1px solid;">@ans1.StudyId</td>
-            @NREPPHtml.CompareBlock(ans1, ans2)
-            @NREPPHtml.CompareBlock(ans5, ans6)
-            @NREPPHtml.CompareBlock(ans9, ans10)
-        </tr>
-        <tr>
-            <td style="text-align: right; border: 1px solid;">@ans3.TaxOutcomeName</td>
-            <td style="text-align: right; border: 1px solid;">@ans3.StudyId</td>
-            @NREPPHtml.CompareBlock(ans3, ans4)
-            @NREPPHtml.CompareBlock(ans7, ans8)
-            @NREPPHtml.CompareBlock(ans11, ans12)
-        </tr>
-        <tr>
-            <td style="text-align: right; border: 1px solid;">@ans13.TaxOutcomeName</td>
-            <td style="text-align: right; border: 1px solid;">@ans13.StudyId</td>
-            @NREPPHtml.CompareBlock(ans13, ans14)
-            @NREPPHtml.CompareBlock(ans15, ans16)
-            @NREPPHtml.CompareBlock(ans17, ans18)
-        </tr>
-        <tr>
-            <td style="text-align: right; border: 1px solid;">@ans19.TaxOutcomeName</td>
-            <td style="text-align: right; border: 1px solid;">@ans19.StudyId</td>
-            @NREPPHtml.CompareBlock(ans19, ans20)
-            @NREPPHtml.CompareBlock(ans21, ans22)
-            @NREPPHtml.CompareBlock(ans23, ans24)
-            <td><input type="checkbox" name="selectme" /></td>
-        </tr>
-    </table>
-</div>
-
-<div>
-    <!-- Delete me when done -->
-    <span id="someResult"></span>
-    <table>
-        <tr>
-            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Outcome Id</th>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Reported Effect</th>
             <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Study Id</th>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Taxonomy Outcome</th>
             @foreach (NREPPAdminSite.Models.QoRAnswerType aType in Model.AnswerTypes)
             {
                 <th colspan="2" style="border: 1px solid; padding-left: 2px; padding-right: 2px;">
@@ -211,37 +167,45 @@
                 </th>
             }
         </tr>
-        @foreach (var OutcomeGroup in Model.AnswerList.GroupBy(x => x.OutcomeId))
+        <tr>
+            <th> </th>
+            <th> </th>
+            <th> </th>
+            @foreach (NREPPAdminSite.Models.QoRAnswerType aType in Model.AnswerTypes)
+            {
+                <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">@Model.AnswerList.ElementAt(0).ReviewerName</th>
+                <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">@Model.AnswerList.ElementAt(1).ReviewerName</th>
+            }
+        </tr>
+        @foreach (var OutcomeGroup in Model.AnswerList.GroupBy(x => x.OutcomeName))
         {
-            foreach (var StudyGroup in OutcomeGroup.Where(s => s.OutcomeId == OutcomeGroup.Key).GroupBy(x => x.StudyId))
+            foreach (var StudyGroup in OutcomeGroup.Where(s => s.OutcomeName == OutcomeGroup.Key).GroupBy(x => x.StudyId))
             { 
                 <tr>
-                    <td>@OutcomeGroup.Key</td>
-                    <td>@StudyGroup.Key</td>
+                    <td style="border: 1px solid; padding-left: 2px; padding-right: 2px;">@OutcomeGroup.Key</td>
+                    <td style="border: 1px solid; padding-left: 2px; padding-right: 2px;">@StudyGroup.Key</td>
+                    <td style="border: 1px solid; padding-left: 2px; padding-right: 2px;">@OutcomeGroup.ToList()[0].TaxOutcomeName</td>
                     @foreach (var AnswerGroup in StudyGroup.Where(x => x.StudyId == StudyGroup.Key).GroupBy(s => s.AnswerTypeId))
                     {
                         NREPPAdminSite.Models.QoRAnswer one = AnswerGroup.ToList()[0];
                         NREPPAdminSite.Models.QoRAnswer two = AnswerGroup.ToList()[1];
                         @NREPPHtml.CompareBlock2(one, two, Model.AnswerTypes.Where(x => x.Id == one.AnswerTypeId).Select(y => y.Comparison).First())
                     }
+                    <td><input type="checkbox" name="selectme" /></td>
                 </tr>
             }
         }
     </table>
+    <br /><br />
 </div>
 
 <div>
     <button onclick="GenEmail(); return false;">Generate Email</button>
-    <table id="resultsTable"></table>
+    <button>Mark Consensus As Complete</button>
 </div>
 
-<div id="dumpingGround"></div>
-
-<div>
-    @using (Html.BeginForm("SaveConsensusNotes"))
-    {
-        <span>Something goes here when I am ready</span>
-    }
+<div id="dumpingGround">
+    <table id="resultsTable"></table>
 </div>
 
 <script type="text/javascript">
@@ -255,24 +219,42 @@
         return "<tr>" + innerHTML.substring(0, location) + "</tr>";
     }
 
+    $.fn.exists = function() {
+        return this.length !== 0;
+    }
+
     function testFunc() {
         alert(GetRow("#thisButton"));
     }
 
     function GenEmail() {
+        $("input[name*='selectme']").each(function () {
+            if (this.checked)
+                TableList.push(GetRow(this));
+        });
+
         $("#resultsTable").html(TableList.join(""));
+        TableList = [];
     }
 
     $("#thisButton").click(function () {
         alert(GetRow(this));
     });
 
-    $("input[name*='selectme']").click(function () {
+    /*$("input[name*='selectme']").click(function () {
         TableList.push(GetRow(this));
-    });
+    });*/
 
     function DoCompare(val1, val2, compareString) {
         return eval(compareString);
+    }
+
+    function ToggleAgreed() {
+        //$("td[data-formula]").parent().children(".InDispute").parent()
+        $("td[data-formula]").parent().each(function () {
+            if ($(this).children(".InDispute").exists() == false)
+                $(this).toggle();
+        })
     }
 
     $(document).ready(function () {
@@ -282,6 +264,20 @@
         var val2temp = 0.0;
         var uFormula = "";
         var InDispute = false;
+
+        $("#toggleButton").click(function () {
+            ToggleAgreed();
+
+            if ($(this).attr("data-state") == "Hide") {
+                $(this).text("Show All");
+                $(this).attr("data-state", "Show");
+            } else {
+                $(this).text("Show In Dispute Only");
+                $(this).attr("data-state", "Hide");
+            }
+
+            return false;
+        });
 
         @foreach (var ans in Model.AnswerList.GroupBy(x => x.IdString()).Distinct())
         {
@@ -295,8 +291,8 @@
         InDispute = DoCompare(val1temp, val2temp, uFormula);
 
         $("td[name*=@ans.Key]").each(function () {
-            if (InDispute == true)
-                $(this).attr("style", "color: red;");
+            if (InDispute == false)
+                $(this).addClass("InDispute");
         });
 
         </text>
@@ -306,8 +302,6 @@
         $("td[name*='1']").each(function () {
             someText += $(this).attr("data-formula");
         });*/
-
-
     });
 </script>
 

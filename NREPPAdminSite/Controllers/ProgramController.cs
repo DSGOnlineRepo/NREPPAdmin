@@ -146,7 +146,7 @@ namespace NREPPAdminSite.Controllers
 
             localService.DeleteOutcomeMeasure(MeasureId);
 
-            return RedirectToAction("Screen", new { InterventionId = InvId });
+            return RedirectToAction("Screen", new { InvId = InvId });
         }
 
         /// <summary>
@@ -432,6 +432,9 @@ namespace NREPPAdminSite.Controllers
         [HttpPost]
         public ActionResult AddOutcome(FormCollection col)
         {
+
+            // TODO: Fix the fact that this keeps making new outcomes! (should be pretty easy)
+
             int IntervId = int.Parse(col["IntervId"]);
 
             OutcomeMeasure om = new OutcomeMeasure();
