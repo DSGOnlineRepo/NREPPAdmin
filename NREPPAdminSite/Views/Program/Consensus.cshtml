@@ -155,7 +155,7 @@
 
 <button id="toggleButton" data-state="Hide">Show In Dispute Only</button>
 <div>
-    <table>
+    <table id="consensusTable">
         <tr>
             <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Reported Effect</th>
             <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Study Id</th>
@@ -166,6 +166,7 @@
                     @aType.TypeName
                 </th>
             }
+            <th><input type="checkbox" name="selectAll" /></th>
         </tr>
         <tr>
             <th> </th>
@@ -228,22 +229,24 @@
     }
 
     function GenEmail() {
+        //TableList.push("<tr>" + $($("#consensusTable tr")[0]).html() + "</tr>");
+
+        var firstRowHtml = $($("#consensusTable tr")[0]).html();
+        var ignoreme = /\<th\>\<input type="checkbox"\s/;
+        var ignoreLocation = firstRowHtml.search(ignoreme);
+        TableList.push("<tr>" + firstRowHtml.substring(0, ignoreLocation) + "</tr>");
+
+        TableList.push("<tr>" + $($("#consensusTable tr")[1]).html() + "</tr>");
+
         $("input[name*='selectme']").each(function () {
             if (this.checked)
                 TableList.push(GetRow(this));
         });
 
-        $("#resultsTable").html(TableList.join(""));
+        if (TableList.length > 2)
+            $("#resultsTable").html(TableList.join(""));
         TableList = [];
     }
-
-    $("#thisButton").click(function () {
-        alert(GetRow(this));
-    });
-
-    /*$("input[name*='selectme']").click(function () {
-        TableList.push(GetRow(this));
-    });*/
 
     function DoCompare(val1, val2, compareString) {
         return eval(compareString);
@@ -277,6 +280,19 @@
             }
 
             return false;
+        });
+
+        $("input[name*='selectAll']").click(function () {
+            if (this.checked)
+            {
+                $("input[name*='selectme']").each(function () {
+                    $(this).prop("checked", true);
+                });
+            } else {
+                $("input[name*='selectme']").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
         });
 
         @foreach (var ans in Model.AnswerList.GroupBy(x => x.IdString()).Distinct())
