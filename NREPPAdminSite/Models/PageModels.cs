@@ -672,11 +672,18 @@ namespace NREPPAdminSite.Models
     {
         private List<QoRAnswerType> answerTypes;
         private List<QoRAnswer> answerList;
+        private OutcomesWrapper ow;
 
         public ConsensusModel(List<QoRAnswer> inAnswers, List<QoRAnswerType> inAnswerType)
         {
             answerTypes = inAnswerType;
             answerList = inAnswers;
+        }
+
+        public ConsensusModel(List<QoRAnswer> inAnswers, List<QoRAnswerType> inAnswerType, OutcomesWrapper inOW)
+            : this(inAnswers, inAnswerType)
+        {
+            ow = inOW;
         }
 
         public IEnumerable<QoRAnswerType> AnswerTypes
@@ -688,6 +695,14 @@ namespace NREPPAdminSite.Models
         {
             get { return answerList; }
         }
+
+        public OutcomesWrapper OW
+        {
+            get { return ow; }
+        }
+
+        public IEnumerable<Answer> AssessmentPd { get; set; }
+        public IEnumerable<Answer> SampleSize { get; set; }
     }
 
 

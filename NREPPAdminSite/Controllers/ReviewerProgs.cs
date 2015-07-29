@@ -96,13 +96,7 @@ namespace NREPPAdminSite.Controllers
         public ActionResult Consensus(int InvId)
         {
 
-            /*
-             *  MyIdentityDbContext db = new MyIdentityDbContext();
-            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
-            RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>(roleStore);
-            UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
-            UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
-             */
+           
             MyIdentityDbContext db = new MyIdentityDbContext();
             UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
             UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
@@ -110,9 +104,9 @@ namespace NREPPAdminSite.Controllers
             ConsensusModel model;
             NrepServ localService = NrepServ.GetLocalService();
 
-            List<QoRAnswerType> questions = new List<QoRAnswerType>();
-            questions = localService.GetQoRAnswerTypes().ToList();
+            List<QoRAnswerType> questions = localService.GetQoRAnswerTypes().ToList();
             List<QoRAnswer> FinalAnswers = localService.GetFinalAnswers(InvId).ToList();
+            OutcomesWrapper ow = localService.GetOutcomesByIntervention(InvId);
 
             List<string> ReviewerIds = FinalAnswers.Select(x => x.ReviewerId).Distinct().ToList(); // Should only be two but this ensures that
             Dictionary<string, string> ReviewerNames = new Dictionary<string, string>();
@@ -125,7 +119,9 @@ namespace NREPPAdminSite.Controllers
                 ans.ReviewerName = ReviewerNames[ans.ReviewerId];
             
 
-            model = new ConsensusModel(FinalAnswers, questions);
+            model = new ConsensusModel(FinalAnswers, questions, ow);
+            model.AssessmentPd = localService.GetAnswersByCategory("AssessmentPd");
+            model.SampleSize = localService.GetAnswersByCategory("FullSample");
 
             return View(model);
         }
