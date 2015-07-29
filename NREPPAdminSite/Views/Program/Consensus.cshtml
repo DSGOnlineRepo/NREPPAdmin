@@ -9,6 +9,40 @@
         color: red;
         text-align: right;
         font-weight: bold;
+        cursor: pointer;
+    }
+
+    div.tempModal {
+        border: 1px solid black;
+        width: 25%;
+        margin-top: 50px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 350px;
+        position: relative;
+    }
+
+    .tempModal input {
+        float: left;
+        clear: right;
+    }
+
+    .tempModal span {
+        float: left;
+        clear: left;
+        padding-right: 5px;
+    }
+
+    .tempModal textarea {
+        float: left;
+        clear: both;
+        width: 75%;
+    }
+
+    .tempModal button {
+        float: left;
+        margin-right: 2px;
+        margin-top: 10px;
     }
 </style>
 
@@ -18,135 +52,6 @@
     ViewBag.Title = "Consensus";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    NREPPAdminSite.Models.QoRAnswer ans1 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans2 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans1.TaxOutcomeName = ans2.TaxOutcomeName = "Co-occurring/ dual disorders";
-    ans1.AnswerTypeName = ans2.AnswerTypeName = "Rigor Score";
-    ans1.StudyId = ans2.StudyId = 1;
-    ans1.FixedAnswer = ans1.CalcAnswer = "2.35";
-    ans2.FixedAnswer = ans2.CalcAnswer = "2.34";
-    ans1.ReviewerName = "Patrick";
-    ans2.ReviewerName = "Prentice";
-
-    NREPPAdminSite.Models.QoRAnswer ans3 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans4 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans3.TaxOutcomeName = ans4.TaxOutcomeName = "Co-occurring/ dual disorders";
-    ans3.AnswerTypeName = ans4.AnswerTypeName = "Rigor Score";
-    ans3.StudyId = ans4.StudyId = 2;
-    ans3.FixedAnswer = ans3.CalcAnswer = "2.35";
-    ans4.FixedAnswer = ans4.CalcAnswer = "2.35";
-    ans3.ReviewerName = "Patrick";
-    ans4.ReviewerName = "Prentice";
-
-    NREPPAdminSite.Models.QoRAnswer ans5 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans6 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans5.TaxOutcomeName = ans6.TaxOutcomeName = "Co-occurring/ dual disorders";
-    ans5.AnswerTypeName = ans6.AnswerTypeName = "Effect";
-    ans5.StudyId = ans6.StudyId = 1;
-    ans5.FixedAnswer = ans5.CalcAnswer = "Positive";
-    ans6.FixedAnswer = ans6.CalcAnswer = "Negative";
-    ans5.ReviewerName = "Patrick";
-    ans6.ReviewerName = "Prentice";
-
-    NREPPAdminSite.Models.QoRAnswer ans7 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans8 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans7.TaxOutcomeName = ans8.TaxOutcomeName = "Co-occurring/ dual disorders";
-    ans7.AnswerTypeName = ans8.AnswerTypeName = "Effect";
-    ans7.StudyId = ans8.StudyId = 2;
-    ans7.FixedAnswer = ans7.CalcAnswer = "Positive";
-    ans8.FixedAnswer = "Positive";
-    ans8.CalcAnswer = "Negative";
-    ans7.ReviewerName = "Patrick";
-    ans8.ReviewerName = "Prentice";
-
-    NREPPAdminSite.Models.QoRAnswer ans9 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans10 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans9.AnswerTypeName = ans10.AnswerTypeName = "Fidelity";
-    ans9.StudyId = ans10.StudyId = 1;
-    ans9.FixedAnswer = ans9.CalcAnswer = "1";
-    ans10.FixedAnswer = ans10.CalcAnswer = "1";
-    ans9.ReviewerName = "Patrick";
-    ans10.ReviewerName = "Prentice";
-
-    NREPPAdminSite.Models.QoRAnswer ans11 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans12 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans11.AnswerTypeName = ans12.AnswerTypeName = "Fidelity";
-    ans11.StudyId = ans12.StudyId = 1;
-    ans11.FixedAnswer = ans11.CalcAnswer = "1";
-    ans12.FixedAnswer = ans12.CalcAnswer = "0";
-    ans11.ReviewerName = "Patrick";
-    ans12.ReviewerName = "Prentice";
-
-    NREPPAdminSite.Models.QoRAnswer ans13 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans14 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans13.AnswerTypeName = ans14.AnswerTypeName = "Rigor Score";
-    ans13.TaxOutcomeName = ans14.TaxOutcomeName = "Obsessive-compulsive disorders/ symptoms";
-    ans13.StudyId = ans14.StudyId = 1;
-    ans13.FixedAnswer = ans13.CalcAnswer = "1.26";
-    ans14.FixedAnswer = ans14.CalcAnswer = "1.26";
-    ans13.ReviewerName = "Patrick";
-    ans14.ReviewerName = "Prentice";
-
-    NREPPAdminSite.Models.QoRAnswer ans15 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans16 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans15.TaxOutcomeName = ans16.TaxOutcomeName = "Obsessive-compulsive disorders/ symptoms";
-    ans15.AnswerTypeName = ans16.AnswerTypeName = "Effect";
-    ans15.StudyId = ans16.StudyId = 1;
-    ans15.FixedAnswer = ans15.CalcAnswer = "Positive";
-    ans16.FixedAnswer = ans16.CalcAnswer = "Positive";
-    ans15.ReviewerName = "Patrick";
-    ans16.ReviewerName = "Prentice";
-
-    NREPPAdminSite.Models.QoRAnswer ans17 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans18 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans17.AnswerTypeName = ans18.AnswerTypeName = "Fidelity";
-    ans17.StudyId = ans18.StudyId = 1;
-    ans17.FixedAnswer = ans17.CalcAnswer = "1";
-    ans18.FixedAnswer = ans18.CalcAnswer = "1";
-    ans17.ReviewerName = "Patrick";
-    ans18.ReviewerName = "Prentice";
-
-
-    NREPPAdminSite.Models.QoRAnswer ans19 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans20 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans19.AnswerTypeName = ans20.AnswerTypeName = "Rigor Score";
-    ans19.TaxOutcomeName = ans20.TaxOutcomeName = "Obsessive-compulsive disorders/ symptoms";
-    ans19.StudyId = ans20.StudyId = 2;
-    ans19.FixedAnswer = ans19.CalcAnswer = "1.26";
-    ans20.FixedAnswer = ans20.CalcAnswer = "1.26";
-    ans19.ReviewerName = "Patrick";
-    ans20.ReviewerName = "Prentice";
-
-    NREPPAdminSite.Models.QoRAnswer ans21 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans22 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans21.TaxOutcomeName = ans22.TaxOutcomeName = "Obsessive-compulsive disorders/ symptoms";
-    ans21.AnswerTypeName = ans22.AnswerTypeName = "Effect";
-    ans21.StudyId = ans22.StudyId = 2;
-    ans21.FixedAnswer = ans21.CalcAnswer = "Positive";
-    ans22.FixedAnswer = ans22.CalcAnswer = "Positive";
-    ans21.ReviewerName = "Patrick";
-    ans22.ReviewerName = "Prentice";
-
-    NREPPAdminSite.Models.QoRAnswer ans23 = new NREPPAdminSite.Models.QoRAnswer();
-    NREPPAdminSite.Models.QoRAnswer ans24 = new NREPPAdminSite.Models.QoRAnswer();
-
-    ans23.AnswerTypeName = ans24.AnswerTypeName = "Fidelity";
-    ans23.StudyId = ans24.StudyId = 2;
-    ans23.FixedAnswer = ans23.CalcAnswer = "1";
-    ans24.FixedAnswer = ans24.CalcAnswer = "0";
-    ans23.ReviewerName = "Patrick";
-    ans24.ReviewerName = "Prentice";
 }
 
 @using NREPPAdminSite
@@ -157,9 +62,9 @@
 <div>
     <table id="consensusTable">
         <tr>
-            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Reported Effect</th>
-            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Study Id</th>
-            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">Taxonomy Outcome</th>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px; background-color: lightblue;">Reported Effect</th>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;  background-color: lightblue;">Study Id</th>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;  background-color: lightblue;">Taxonomy Outcome</th>
             @foreach (NREPPAdminSite.Models.QoRAnswerType aType in Model.AnswerTypes)
             {
                 <th colspan="2" style="border: 1px solid; padding-left: 2px; padding-right: 2px;">
@@ -205,8 +110,21 @@
     <button>Mark Consensus As Complete</button>
 </div>
 
-<div id="dumpingGround">
+<div id="dumpingGround" style="margin-top: 50px; border: 1px solid; width: 50%; padding-bottom: 10px;">
+    <p>Dear [Reviewer],</p>
+    <p>There are some issues with consensus in regard to your QoR Tool...</p>
     <table id="resultsTable"></table>
+</div>
+
+<div id="TempModal" class="tempModal hidden">
+    <span style="padding-top: 3px; padding-bottom: 5px; font-weight: bold; font-size: 1.2em; margin-left: 30%">Update Record</span>
+    <span>Current Value:</span> <input type="text" id="currentVal" />
+    <span>Calculated Value:</span> <input type="text" id="calcVal" disabled="disabled" />
+
+    <span>Notes:</span>
+    <textarea id="notesText"></textarea>
+
+    <button id="btnUpdate" style="clear: left;" onclick="ClearView(); return false;">Update</button><button id="btnCancel" onclick="ClearView(); return false;">Cancel</button>
 </div>
 
 <script type="text/javascript">
@@ -226,6 +144,25 @@
 
     function testFunc() {
         alert(GetRow("#thisButton"));
+    }
+
+    function ShowUpdate(inString) {
+        var matchText = /\(.+\)/;
+        var matching = matchText.exec(inString);
+        if (matching !== null) {
+            $("#calcVal").val(matching[0].substring(1, matching[0].length - 1));
+            $("#currentVal").val(inString.substring(0, matching.index));
+        }
+        else {
+            $("#currentVal").val(inString);
+            $("#calcVal").val(inString);
+        }
+
+        $(".tempModal").removeClass("hidden");
+    }
+
+    function ClearView() {
+        $(".tempModal").addClass("hidden");
     }
 
     function GenEmail() {
@@ -309,6 +246,10 @@
         $("td[name*=@ans.Key]").each(function () {
             if (InDispute == false)
                 $(this).addClass("InDispute");
+
+            $(this).click(function () {
+                ShowUpdate($(this).text());
+            })
         });
 
         </text>
