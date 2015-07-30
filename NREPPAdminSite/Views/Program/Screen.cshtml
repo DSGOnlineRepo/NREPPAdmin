@@ -1,4 +1,4 @@
-﻿@model NREPPAdminSite.Models.ScreeningModel
+@model NREPPAdminSite.Models.ScreeningModel
 
 @{
     ViewBag.Title = "Screen";
@@ -18,9 +18,9 @@
     int i = 0;
 }
 
+
 @if (Model.CanDo("Screen"))
 { 
-
 <div id="screening" class="table-responsive">
     @{
         i = 0;

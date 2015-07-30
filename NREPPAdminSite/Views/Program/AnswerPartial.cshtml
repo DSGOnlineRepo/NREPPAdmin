@@ -1,0 +1,22 @@
+﻿@model List<NREPPAdminSite.Models.QoRAnswer>
+
+@{
+    
+    NREPPAdminSite.Models.QoRAnswer answer1 = Model[0];
+    NREPPAdminSite.Models.QoRAnswer answer2 = Model[1];
+}
+
+<div>
+    <div>
+        <div>
+            @Html.Label(answer1.ReviewerName): @Html.TextBox("rev1answer", answer1.FixedAnswer)
+        </div>
+        <div>
+            @Html.Label(answer2.ReviewerName): @Html.TextBox("rev2answer", answer2.FixedAnswer)
+        </div>
+
+        <div>
+            <button>Save</button> <button>Cancel</button>
+        </div>
+    </div>
+</div>

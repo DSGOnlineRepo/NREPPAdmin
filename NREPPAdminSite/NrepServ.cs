@@ -170,42 +170,7 @@ namespace NREPPAdminSite
             }
         }
 
-        //public void notifyUsersOnStatusChange(int inId, string inUser, int toStatus)
-        //{
-            
-
-        //    _emailService.SendEmail(mailMessage);
-
-        //    SqlCommand getAnswersByCategory = new SqlCommand("SPGetNotifySettingsForInterventionStatusChange", conn);
-
-        //    getAnswersByCategory.CommandType = CommandType.StoredProcedure;
-        //    getAnswersByCategory.Parameters.Add(new SqlParameter("@IntervId", inId));
-        //    getAnswersByCategory.Parameters.Add(new SqlParameter("@DestUser", inUser));
-        //    getAnswersByCategory.Parameters.Add(new SqlParameter("@DestStatus", toStatus));
-
-        //    SqlDataAdapter da = new SqlDataAdapter(getAnswersByCategory);
-
-        //    CheckConn();
-
-        //    DataTable dt = new DataTable();
-
-
-        //    da.Fill(dt);
-
-        //    foreach (DataRow dr in dt.Rows)
-        //    {
-        //        theOutcomes.Add(new Answer((int)dr["Id"], dr["Guidelines"].ToString(), dr["OutcomeName"].ToString()));
-        //    }
-
-
-
-        //    var mailMessage = new MailMessage("donotreply@dsgonline.com", destUser.Email, "Intervention Status Changed", "Dear " + destUser.FirstName + ", " +
-        //            "The intervention has been assinged too you. Please login to the to view your interventions");
-
-        //    _emailService.SendEmail(mailMessage);
-        //}
-
-        public IEnumerable<Answer> GetTaxonomicOutcomes(int? inId)
+        public IEnumerable<Answer> GetTaxonomicOutcomesAsAnswers(int? inId)
         {
             List<Answer> theOutcomes = new List<Answer>();
 
@@ -240,6 +205,54 @@ namespace NREPPAdminSite
                 nAnswer.LongAnswer = ex.Message;
                 nAnswer.AnswerId = -1;
                 theOutcomes.Add(nAnswer);
+            }
+
+            return theOutcomes;
+        }
+
+        public IEnumerable<TaxOutcome> GetTaxOutcomes(int? inId)
+        {
+            List<TaxOutcome> theOutcomes = new List<TaxOutcome>();
+
+            // SQL Stuff
+            SqlCommand getTaxonomy = new SqlCommand("SPGetTaxOutcomes", conn);
+
+            getTaxonomy.CommandType = CommandType.StoredProcedure;
+            getTaxonomy.Parameters.Add(new SqlParameter("@TaxId", inId));
+
+            SqlDataAdapter da = new SqlDataAdapter(getTaxonomy);
+
+
+            try
+            {
+                CheckConn();
+
+                DataTable dt = new DataTable();
+
+
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    
+                    theOutcomes.Add(new TaxOutcome()
+                    {
+                        Id = (int)dr["Id"],
+                        OutcomeName = dr["OutcomeName"].ToString(),
+                        Guidelines = dr["Guidelines"].ToString(),
+                        NotInclude = dr["NotInclude"].ToString()
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                TaxOutcome nOutcome = new TaxOutcome();
+                nOutcome.Id = -1;
+                nOutcome.OutcomeName = "Error!";
+                nOutcome.Guidelines = ex.Message;
+
+                theOutcomes.Add(nOutcome);
             }
 
             return theOutcomes;
@@ -358,15 +371,32 @@ namespace NREPPAdminSite
 
         #region Intervention Functionality
 
-        /// <summary>
-        /// Generically gets the interventions list
-        /// </summary>
-        /// <returns></returns>
-        /*public List<Intervention> GetInterventions() // This needs to take some parameters, so there should be a bunch of functions for it
+        public IEnumerable<QoRAnswerType> GetQoRAnswerTypes()
         {
-            List<SqlParameter> nullParams = new List<SqlParameter> { new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = null } };
-            return GetInterventions(nullParams);
-        }*/
+            List<QoRAnswerType> AnswerTypes = new List<QoRAnswerType>();
+
+            string commandText = "SELECT Id, TypeName, Comparison FROM QoRAnswerType";
+            SqlCommand cmd = new SqlCommand(commandText, conn);
+            cmd.CommandType = CommandType.Text;
+
+            CheckConn();
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    AnswerTypes.Add(new QoRAnswerType() { Id = reader.GetInt32(0), TypeName = reader.GetString(1), Comparison = reader.GetString(2) });
+                }
+            }
+            else
+            {
+                AnswerTypes.Add(new QoRAnswerType() { Id = -1, TypeName = "Error", Comparison = "No Rows" });
+            }
+
+            return AnswerTypes;
+        }
 
         /// <summary>
         /// Gets the interventions list based on role
@@ -518,6 +548,7 @@ namespace NREPPAdminSite
                     inv.SecondaryFaxNumber = dr.IsNull("SecondaryFaxNumber") ? "" : dr["SecondaryFaxNumber"].ToString();
                     inv.SecondaryEmail = dr.IsNull("SecondaryEmail") ? "" : dr["SecondaryEmail"].ToString();
                     searchResult.TotalSearchCount = Convert.ToInt16(dr["searchTotal"].ToString());
+                    inv.IsLive = (bool)dr["IsLive"];
                     interventions.Add(inv);
                 }
 
@@ -1002,21 +1033,6 @@ namespace NREPPAdminSite
 
             cmd.Parameters.Add(new SqlParameter("@InterventionId", IntervId));
 
-            /*
-             * [Id] INT IDENTITY NOT NULL PRIMARY KEY,
-	[OutcomeId] INT NOT NULL,
-	[StudyId] INT NOT NULL,
-	[OutcomeMeasure] VARCHAR(50) NULL, 
-    [GroupFavored] BIT NULL DEFAULT 0, 
-    [PopDescription] VARCHAR(50) NULL, 
-    [SAMHSAPop] INT NULL,
-	[SAMHSAOutcome] INT NULL,
-	[EffectReport] INT NULL,
-    [DocId] INT NULL, 
-    [RecommendReview] BIT NULL DEFAULT 0, 
-    [TaxonomyOutcome] INT NULL, 
-             */
-
             try
             {
                 CheckConn();
@@ -1443,18 +1459,111 @@ namespace NREPPAdminSite
             cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
             cmd.Parameters.AddWithValue("@UserId", UserId);
 
+            CheckConn();
+
+            cmd.ExecuteNonQuery();
+
+            return true;
+        }
+
+        public bool SetSitePosting(bool postMe, int InvId)
+        {
+            string commandText = "UPDATE Interventions SET IsLive = @PostMe WHERE Id = @InvId";
+            SqlCommand cmd = new SqlCommand(commandText, conn);
+            cmd.CommandType = CommandType.Text;
+
+            cmd.Parameters.AddWithValue("@PostMe", postMe ? 1 : 0);
+            cmd.Parameters.AddWithValue("@InvId", InvId);
+
+            CheckConn();
+
+            cmd.ExecuteNonQuery();
+
+            return true;
+        }
+
+        #endregion
+
+        #region Review Functionality
+
+        public IEnumerable<RigorQuestion> GetQoRQuestions(string QuestionSet) // Currently a dummy function
+        {
+            List<RigorQuestion> returnList = new List<RigorQuestion>();
+            List<string> answerChoices1 = new List<string>();
+            answerChoices1.Add("3");
+            answerChoices1.Add("2");
+            answerChoices1.Add("1");
+            answerChoices1.Add("99");
+            answerChoices1.Add("98-Do not Rate");
+
+            List<string> answerChoices2 = new List<string>();
+            answerChoices2.Add("3");
+            answerChoices2.Add("1");
+            answerChoices2.Add("99");
+
+            returnList.Add(new RigorQuestion("Design/Assignment (D/A)", 1, answerChoices1) { QuestionGroup = "Rigor1" });
+            returnList.Add(new RigorQuestion("Statistical Analysis: Intent-to-Treat (ITT)", 2, answerChoices2) { QuestionGroup = "Rigor1" });
+
+            returnList.Add(new RigorQuestion("Unit of Analysis (e.g., student, classroom, patient, clinic)", 3, new List<string>()) { QuestionGroup = "Rigor2" });
+
+            return returnList;
+        }
+
+        public IEnumerable<RigorAnswer> GetQoRAnswers(string QuestionSet)
+        {
+            List<RigorAnswer> returnAnswers = new List<RigorAnswer>();
+            returnAnswers.Add(new RigorAnswer() { qId = 1, chosenAnswer = "3", outcomeMeasureId = 1 });
+            returnAnswers.Add(new RigorAnswer() { qId = 2, chosenAnswer = "2", outcomeMeasureId = 1 });
+            returnAnswers.Add(new RigorAnswer() { qId = 3, chosenAnswer = "Write-In Text", outcomeMeasureId = 1 });
+
+            returnAnswers.Add(new RigorAnswer() { qId = 1, chosenAnswer = "3", outcomeMeasureId = 2 });
+            returnAnswers.Add(new RigorAnswer() { qId = 2, chosenAnswer = "2", outcomeMeasureId = 2 });
+            returnAnswers.Add(new RigorAnswer() { qId = 3, chosenAnswer = "Write-In Text", outcomeMeasureId = 2 });
+            return returnAnswers;
+        }
+
+        public IEnumerable<QoRAnswer> GetFinalAnswers(int InvId)
+        {
+            List<QoRAnswer> outAnswers = new List<QoRAnswer>();
+
+            SqlCommand cmd = new SqlCommand("SPGetQoRFinalAnswers", conn);
+            cmd.Parameters.AddWithValue("@InvId", InvId);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+
+            conn.Close();
+
             try
             {
                 CheckConn();
+                da.Fill(dt);
 
-                cmd.ExecuteNonQuery();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    outAnswers.Add(new QoRAnswer()
+                    {
+                        AnswerTypeId = (int)dr["AnswerTypeId"],
+                        OutcomeId = (int)dr["OutcomeId"],
+                        OutcomeName = dr["OutcomeName"].ToString(),
+                        StudyId = (int)dr["StudyId"],
+                        ReviewerId = dr["ReviewerId"].ToString(),
+                        FixedAnswer = dr["FixedAnswer"].ToString(),
+                        CalcAnswer = dr["CalcAnswer"].ToString(),
+                        TaxOutcomeId = (int)dr["TaxOutcomeId"],
+                        TaxOutcomeName = dr["TaxOutcomeName"].ToString()
+                    });
+                }
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                outAnswers.Add(new QoRAnswer() { OutcomeId = -1, ReviewerName = "Error!", TaxOutcomeName = ex.Message });
             }
 
-            return;
+
+            return outAnswers;
         }
 
         #endregion

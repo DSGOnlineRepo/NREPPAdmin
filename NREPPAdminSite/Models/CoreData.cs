@@ -44,6 +44,8 @@ namespace NREPPAdminSite.Models
 
         public bool HaveMaterials { get; set; }
 
+        public bool IsLive { get; set; }
+
         public int Id {get; set;}
 
         #region Contact Info
@@ -429,6 +431,51 @@ namespace NREPPAdminSite.Models
         public string Id;
         public string Name;
         public string ReviewerStatus;
+    }
+
+    
+    /// <summary>
+    /// Wrapper structure for Taxonomic outcomes
+    /// </summary>
+    public struct TaxOutcome
+    {
+        public int Id;
+        public string OutcomeName;
+        public string Guidelines;
+        public string GroupName;
+        public string NotInclude;
+    }
+
+    public class QoRAnswer
+    {
+
+        public int OutcomeId { get; set; }
+        public int TaxOutcomeId { get; set; }
+        public string TaxOutcomeName { get; set; }
+        public string OutcomeName { get; set; }
+        public int StudyId { get; set; } // have to extrapolate this?
+        public int AnswerTypeId { get; set; } // Enumeration lives in the database
+        public string AnswerTypeName { get; set; }
+        public string FixedAnswer { get; set; }
+        public string CalcAnswer { get; set; }
+        public string ReviewerName { get; set; }
+        public string ReviewerId { get; set; }
+
+        public string IdString() 
+        {
+            string returnString = "";
+
+            returnString = string.Format("{0}_{1}_{2}", OutcomeId, StudyId, AnswerTypeId);
+
+            return returnString;
+        }
+    }
+
+    public class QoRAnswerType
+    {
+        public int Id { get; set; }
+        public string TypeName { get; set; }
+        public string Comparison { get; set; }
     }
 
 }

@@ -152,7 +152,7 @@ namespace NREPPAdminSite.Controllers
 
             localService.DeleteOutcomeMeasure(MeasureId);
 
-            return RedirectToAction("Screen", new { InterventionId = InvId });
+            return RedirectToAction("Screen", new { InvId = InvId });
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace NREPPAdminSite.Controllers
             SAMHSAOut = localService.GetAnswersByCategory("SAMHSAOutcome").ToList<Answer>();
             SAMHSAPop = localService.GetAnswersByCategory("SAMHSAPop").ToList<Answer>();
             EffectReports = localService.GetAnswersByCategory("TreatCompare").ToList<Answer>();
-            TaxOutcomes = localService.GetTaxonomicOutcomes(null).ToList<Answer>();
+            TaxOutcomes = localService.GetTaxonomicOutcomesAsAnswers(null).ToList<Answer>();
 
             SqlParameter idParam = new SqlParameter() { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = InvId };
             SqlParameter roleParam = new SqlParameter() { ParameterName = "@UserName", Value = User.Identity.Name };
@@ -436,6 +436,9 @@ namespace NREPPAdminSite.Controllers
         [HttpPost]
         public ActionResult AddOutcome(FormCollection col)
         {
+
+            // TODO: Fix the fact that this keeps making new outcomes! (should be pretty easy)
+
             int IntervId = int.Parse(col["IntervId"]);
 
             OutcomeMeasure om = new OutcomeMeasure();

@@ -1,0 +1,29 @@
+﻿@model List<NREPPAdminSite.Models.TaxOutcome>
+
+@{
+    ViewBag.Title = "TaxOutcomes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Taxonomic Outcome Reference</h2>
+
+
+
+<table>
+    <tr>
+        <th> </th>
+        <th>Outcome</th>
+        <th>Measure Concepts</th>
+        <th>DO NOT INCLUDE</th>
+    </tr>
+
+    @foreach(NREPPAdminSite.Models.TaxOutcome outcome in Model)
+    {
+        <tr>
+            <td>@outcome.GroupName</td>
+            <td>@outcome.OutcomeName</td>
+            <td>@outcome.Guidelines</td>
+            <td>@outcome.NotInclude</td>
+        </tr>
+    }
+</table>

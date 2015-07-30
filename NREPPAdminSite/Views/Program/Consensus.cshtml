@@ -1,0 +1,285 @@
+﻿@model NREPPAdminSite.Models.ConsensusModel
+
+@section scripts {
+    <script type="text/javascript" src="@Url.Content("/Scripts/chosen.jquery.min.js")"></script>
+}
+
+<style>
+    td.InDispute {
+        color: red;
+        text-align: right;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    div.tempModal {
+        border: 1px solid black;
+        width: 25%;
+        margin-top: 50px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 350px;
+        position: relative;
+    }
+
+    .tempModal input {
+        float: left;
+        clear: right;
+    }
+
+    .tempModal span {
+        float: left;
+        clear: left;
+        padding-right: 5px;
+    }
+
+    .tempModal textarea {
+        float: left;
+        clear: both;
+        width: 75%;
+    }
+
+    .tempModal button {
+        float: left;
+        margin-right: 2px;
+        margin-top: 10px;
+    }
+</style>
+
+
+
+@{
+    ViewBag.Title = "Consensus";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@functions {
+
+    string getAnswerText(List<NREPPAdminSite.Models.Answer> AnswerList, int inId)
+    {
+        foreach (NREPPAdminSite.Models.Answer anAnswer in AnswerList)
+        {
+            if (anAnswer.AnswerId == inId)
+                return anAnswer.LongAnswer;
+        }
+
+        return "";
+    }
+}
+
+@using NREPPAdminSite
+
+<h2>Consensus</h2>
+
+<button id="toggleButton" data-state="Hide">Show In Dispute Only</button>
+<div>
+    <table id="consensusTable">
+        <tr>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px; background-color: lightblue;">Reported Effect</th>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;  background-color: lightblue;">Study Id</th>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;  background-color: lightblue;">Taxonomy Outcome</th>
+            <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;  background-color: lightblue;">Assessment Pd</th>
+            @foreach (NREPPAdminSite.Models.QoRAnswerType aType in Model.AnswerTypes)
+            {
+                <th colspan="2" style="border: 1px solid; padding-left: 2px; padding-right: 2px;">
+                    @aType.TypeName
+                </th>
+            }
+            <th><input type="checkbox" name="selectAll" /></th>
+        </tr>
+        <tr>
+            <th> </th>
+            <th> </th>
+            <th> </th>
+            @foreach (NREPPAdminSite.Models.QoRAnswerType aType in Model.AnswerTypes)
+            {
+                <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">@Model.AnswerList.ElementAt(0).ReviewerName</th>
+                <th style="border: 1px solid; padding-left: 2px; padding-right: 2px;">@Model.AnswerList.ElementAt(1).ReviewerName</th>
+            }
+        </tr>
+        @foreach (var OutcomeGroup in Model.AnswerList.GroupBy(x => x.OutcomeName))
+        {
+            foreach (var StudyGroup in OutcomeGroup.Where(s => s.OutcomeName == OutcomeGroup.Key).GroupBy(x => x.StudyId))
+            { 
+                <tr>
+                    <td style="border: 1px solid; padding-left: 2px; padding-right: 2px;">@OutcomeGroup.Key</td>
+                    <td style="border: 1px solid; padding-left: 2px; padding-right: 2px;">@StudyGroup.Key</td>
+                    <td style="border: 1px solid; padding-left: 2px; padding-right: 2px;">@OutcomeGroup.ToList()[0].TaxOutcomeName</td>
+                    <td style="border: 1px solid; padding-left: 2px; padding-right: 2px;">
+                        @getAnswerText(Model.AssessmentPd.ToList(), Model.OW.OutcomesMeasures.Where(x => x.OutcomeId == OutcomeGroup.ToList()[0].OutcomeId).Select(y => y.AssessmentPd).First())
+                    </td>
+                    <td style="border: 1px solid; padding-left: 2px; padding-right: 2px;">
+                        @getAnswerText(Model.SampleSize.ToList(), Model.OW.OutcomesMeasures.Where(x => x.OutcomeId == OutcomeGroup.ToList()[0].OutcomeId).Select(y => y.FullSample).First())
+                    </td>
+                    @foreach (var AnswerGroup in StudyGroup.Where(x => x.StudyId == StudyGroup.Key).GroupBy(s => s.AnswerTypeId))
+                    {
+                        NREPPAdminSite.Models.QoRAnswer one = AnswerGroup.ToList()[0];
+                        NREPPAdminSite.Models.QoRAnswer two = AnswerGroup.ToList()[1];
+                        @NREPPHtml.CompareBlock2(one, two, Model.AnswerTypes.Where(x => x.Id == one.AnswerTypeId).Select(y => y.Comparison).First())
+                    }
+                    <td><input type="checkbox" name="selectme" /></td>
+                </tr>
+            }
+        }
+    </table>
+    <br /><br />
+</div>
+
+<div>
+    <button onclick="GenEmail(); return false;">Generate Email</button>
+    <button>Mark Consensus As Complete</button>
+</div>
+
+<div id="dumpingGround" style="margin-top: 50px; border: 1px solid; width: 50%; padding-bottom: 10px;">
+    <p>Dear [Reviewer],</p>
+    <p>There are some issues with consensus in regard to your QoR Tool...</p>
+    <table id="resultsTable"></table>
+</div>
+
+<div id="TempModal" class="tempModal hidden">
+    <span style="padding-top: 3px; padding-bottom: 5px; font-weight: bold; font-size: 1.2em; margin-left: 30%">Update Record</span>
+    <span>Current Value:</span> <input type="text" id="currentVal" />
+    <span>Calculated Value:</span> <input type="text" id="calcVal" disabled="disabled" />
+
+    <span>Notes:</span>
+    <textarea id="notesText"></textarea>
+
+    <button id="btnUpdate" style="clear: left;" onclick="ClearView(); return false;">Update</button><button id="btnCancel" onclick="ClearView(); return false;">Cancel</button>
+</div>
+
+<script type="text/javascript">
+    var TableList = new Array();
+    function GetRow(inCrtl) {
+        var td = $(inCrtl).parent();
+        var innerHTML = $(td).parent("tr").html();
+        var ignoreme = /\<td\>\<input type="checkbox"\s/;
+        var location = innerHTML.search(ignoreme);
+
+        return "<tr>" + innerHTML.substring(0, location) + "</tr>";
+    }
+
+    $.fn.exists = function() {
+        return this.length !== 0;
+    }
+
+    function testFunc() {
+        alert(GetRow("#thisButton"));
+    }
+
+    function ShowUpdate(inString) {
+        var matchText = /\(.+\)/;
+        var matching = matchText.exec(inString);
+        if (matching !== null) {
+            $("#calcVal").val(matching[0].substring(1, matching[0].length - 1));
+            $("#currentVal").val(inString.substring(0, matching.index));
+        }
+        else {
+            $("#currentVal").val(inString);
+            $("#calcVal").val(inString);
+        }
+
+        $(".tempModal").removeClass("hidden");
+    }
+
+    function ClearView() {
+        $(".tempModal").addClass("hidden");
+    }
+
+    function GenEmail() {
+        //TableList.push("<tr>" + $($("#consensusTable tr")[0]).html() + "</tr>");
+
+        var firstRowHtml = $($("#consensusTable tr")[0]).html();
+        var ignoreme = /\<th\>\<input type="checkbox"\s/;
+        var ignoreLocation = firstRowHtml.search(ignoreme);
+        TableList.push("<tr>" + firstRowHtml.substring(0, ignoreLocation) + "</tr>");
+
+        TableList.push("<tr>" + $($("#consensusTable tr")[1]).html() + "</tr>");
+
+        $("input[name*='selectme']").each(function () {
+            if (this.checked)
+                TableList.push(GetRow(this));
+        });
+
+        if (TableList.length > 2)
+            $("#resultsTable").html(TableList.join(""));
+        TableList = [];
+    }
+
+    function DoCompare(val1, val2, compareString) {
+        return eval(compareString);
+    }
+
+    function ToggleAgreed() {
+        //$("td[data-formula]").parent().children(".InDispute").parent()
+        $("td[data-formula]").parent().each(function () {
+            if ($(this).children(".InDispute").exists() == false)
+                $(this).toggle();
+        })
+    }
+
+    $(document).ready(function () {
+        var ListOfItems = Array();
+        var dumpText = "";
+        var val1temp = 0.0;
+        var val2temp = 0.0;
+        var uFormula = "";
+        var InDispute = false;
+
+        $("#toggleButton").click(function () {
+            ToggleAgreed();
+
+            if ($(this).attr("data-state") == "Hide") {
+                $(this).text("Show All");
+                $(this).attr("data-state", "Show");
+            } else {
+                $(this).text("Show In Dispute Only");
+                $(this).attr("data-state", "Hide");
+            }
+
+            return false;
+        });
+
+        $("input[name*='selectAll']").click(function () {
+            if (this.checked)
+            {
+                $("input[name*='selectme']").each(function () {
+                    $(this).prop("checked", true);
+                });
+            } else {
+                $("input[name*='selectme']").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
+        });
+
+        @foreach (var ans in Model.AnswerList.GroupBy(x => x.IdString()).Distinct())
+        {
+        <text>
+        dumpText += $("td[name*=@ans.Key]")[0].innerText + " " + $("td[name*=@ans.Key]")[1].innerText + " | ";
+
+        val1temp = parseFloat($("td[name*=@ans.Key]")[0].innerText);
+        val2temp = parseFloat($("td[name*=@ans.Key]")[1].innerText);
+        uFormula = $("td[name*=@ans.Key]").attr("data-formula");
+
+        InDispute = DoCompare(val1temp, val2temp, uFormula);
+
+        $("td[name*=@ans.Key]").each(function () {
+            if (InDispute == false)
+                $(this).addClass("InDispute");
+
+            $(this).click(function () {
+                ShowUpdate($(this).text());
+            })
+        });
+
+        </text>
+        }
+
+        /*var someText = "";
+        $("td[name*='1']").each(function () {
+            someText += $(this).attr("data-formula");
+        });*/
+    });
+</script>
+
