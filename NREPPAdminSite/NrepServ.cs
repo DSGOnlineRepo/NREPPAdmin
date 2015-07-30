@@ -20,8 +20,8 @@ using System.Web;
 using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 using NREPPAdminSite.Utilities;
-using NREPPAdminSite.Security;
 using Microsoft.AspNet.Identity.EntityFramework;
+using NREPPAdminSite.Context;
 
 namespace NREPPAdminSite
 {
@@ -1462,8 +1462,6 @@ namespace NREPPAdminSite
             CheckConn();
 
             cmd.ExecuteNonQuery();
-
-            return true;
         }
 
         public bool SetSitePosting(bool postMe, int InvId)

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Web.Mvc;
-using System.Collections.Generic;
-using NREPPAdminSite.Models;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 
-namespace NREPPAdminSite {
+namespace NREPPAdminSite.Models {
 
     public static class NREPPHtml
     {

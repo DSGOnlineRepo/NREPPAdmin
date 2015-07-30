@@ -11,10 +11,10 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
-using NREPPAdminSite.Security;
 using System.Globalization;
 using System.Net.Mail;
 using DataTables.Mvc;
+using NREPPAdminSite.Context;
 using NREPPAdminSite.Utilities;
 
 namespace NREPPAdminSite.Controllers

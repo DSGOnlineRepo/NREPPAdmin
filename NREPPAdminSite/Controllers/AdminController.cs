@@ -10,9 +10,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using NREPPAdminSite.Models;
-using NREPPAdminSite.Security;
 using NREPPAdminSite.Utilities;
 using System.Net.Mail;
+using NREPPAdminSite.Context;
 
 namespace NREPPAdminSite.Controllers
 {

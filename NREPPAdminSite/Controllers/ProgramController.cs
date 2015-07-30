@@ -11,8 +11,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
-using NREPPAdminSite.Security;
 using System.Globalization;
+using NREPPAdminSite.Context;
 
 namespace NREPPAdminSite.Controllers
 {
