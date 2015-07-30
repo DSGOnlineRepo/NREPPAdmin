@@ -13,7 +13,9 @@ using NREPPAdminSite.Constants;
 using NREPPAdminSite.Models;
 using NREPPAdminSite.Security;
 using System.Globalization;
+using System.Net.Mail;
 using DataTables.Mvc;
+using NREPPAdminSite.Utilities;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -51,8 +53,8 @@ namespace NREPPAdminSite.Controllers
             ViewBag.EndDate = pd.EndDate.ToString("MMM", CultureInfo.InvariantCulture) + ", " + pd.EndDate.Year.ToString();
 
             // Fix this so that you don't need the "ReSubmission" page
-           
-            theIntervention = new Intervention(-1, "", "", User.Identity.Name, null, DateTime.Now, User.Identity.GetUserId(), "", -1, 0, "", false);
+
+            theIntervention = new Intervention(-1, "", "", User.Identity.Name, null, DateTime.Now, User.Identity.GetUserId(), "", -1, 0, "", false, User.Identity.Name);
             ExtendedUser me = _userManager.FindByName(User.Identity.Name);
 
             theIntervention.PrimaryName = me.FirstName + " " + me.LastName;
@@ -256,7 +258,7 @@ namespace NREPPAdminSite.Controllers
             UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
             UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
 
-            var list =_roleManager.FindByName("Lit Review").Users;
+            var list =_roleManager.FindByName("Lit Reviewer").Users;
 
             List<Destination> LitReviews = new List<Destination>();
             List<Tuple<string, string>> UserRoles = localService.GetUsersRoles(InvId).ToList();
@@ -265,7 +267,7 @@ namespace NREPPAdminSite.Controllers
             {
                 var nDest = new Destination();
                 var nUser = _userManager.FindById(role.UserId);
-                nDest.RoleName = "Lit Review";
+                nDest.RoleName = "Lit Reviewer";
                 nDest.UserId = nUser.Id;
                 nDest.UserName = nUser.FirstName + " " + nUser.LastName;
                 LitReviews.Add(nDest);
@@ -277,7 +279,7 @@ namespace NREPPAdminSite.Controllers
 
             foreach (Tuple<string, string> tuple in UserRoles)
             {
-                if (tuple.Item1 == "Lit Review")
+                if (tuple.Item1 == "Lit Reviewer")
                 {
                     model.HasReviewer = true;
                     ExtendedUser exu = _userManager.FindById(tuple.Item2);
@@ -372,7 +374,7 @@ namespace NREPPAdminSite.Controllers
             RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(db);
             RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>(roleStore);
 
-            var aRole = _roleManager.FindByName("Lit Review");
+            var aRole = _roleManager.FindByName("Lit Reviewer");
 
             localService.AssignUser(col["LitReview"], aRole.Id, int.Parse(col["InvId"]));
 
@@ -419,22 +421,187 @@ namespace NREPPAdminSite.Controllers
             
         }
 
+
+        [HttpPost]
+        public JsonResult UpdateStatus(string Id, bool Status)
+        {
+            var response = new NreppServiceResponseBase();
+            try
+            {
+                var user = new ExtendedUser();
+                user = _userManager.FindById(Id);
+                user.LockoutEnabled = Status;
+                _userManager.Update(user);
+                response.ResponseSet(true, "Status updated.");
+            }
+            catch (System.Exception ex)
+            {
+                response.ResponseSet(false, ex.Message);
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
         [Authorize]
         [HttpPost]
-        public ActionResult AssignReview(FormCollection col)
+        public JsonResult AssignReview(string id, string interventionId)
         {
-            int InterventionID = int.Parse(col["InterventionId"]);
-            MyIdentityDbContext db = new MyIdentityDbContext();
-            //string UserName = User.Identity.Name;
-            string UserID = col["ChosenReviewer"];
+            var response = new NreppServiceResponseBase();
+             try
+            {
+               NrepServ localService = NrepServ.GetLocalService();
+                GenerateReviewerInvitationLink(interventionId, id);
+                localService.InviteReviewer(Convert.ToInt32(interventionId), id);
+                response.ResponseSet(true, "Invitation Sent");
+            }
+            catch (System.Exception ex)
+            {
+                response.ResponseSet(false, ex.Message);
+            }
+            return Json(response,JsonRequestBehavior.AllowGet);
 
+        }
+
+        [Authorize]
+        [HttpPost]
+        public JsonResult RemoveReviewer(string id, string interventionId)
+        {
+            var response = new NreppServiceResponseBase();
+            try
+            {
+                NrepServ localService = NrepServ.GetLocalService();
+
+                var reviewer = localService.GetReviewer(id);
+
+                localService.UpdateReviewerStatus(Convert.ToInt32(interventionId), id, "Invitation Revoked");
+
+                localService.RemoveAssignedReviewer(Convert.ToInt32(interventionId), id);
+
+                response.ResponseSet(true, "Removed Assigner from Intervention");
+            }
+            catch (System.Exception ex)
+            {
+                response.ResponseSet(false, ex.Message);
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult JoinProgram(string id)
+        {
+            string decryptedString = PasswordHash.AESDecrypt(HttpUtility.UrlDecode(id));
+            string[] decryptedValues = decryptedString.Split(';');
+            var interventionId = int.Parse(decryptedValues[0]);
+            var reviewerId = decryptedValues[1];
+            var dateValidUntil = DateTime.Parse(decryptedValues[2]);
+            
             NrepServ localService = NrepServ.GetLocalService();
-            localService.AssignReviewer(InterventionID, UserID, "Invited Reviewer");
-            //localService.AssignUser(UserID, reviewerRole.Id, InterventionID);
+            JoinProgramModel jpm = new JoinProgramModel();
 
-            return RedirectToAction("AssignReviewers", new { InvId = InterventionID });
+            TimeSpan difference = DateTime.Now - dateValidUntil;
+            if (difference.Days > 5)
+            {
+                jpm.CanAccess = 3;
+                return View(jpm);
+            }
+           
+            List<ReviewerOnInterv> assignedReviewers = localService.GetReviewersByIntervention(interventionId);
+
+            foreach (ReviewerOnInterv rev in assignedReviewers)
+            {
+                if (rev.Id == reviewerId)
+                {
+                    if (rev.ReviewerStatus == "Invitation Declined")
+                    {
+                        jpm.CanAccess = 1;
+                        return View(jpm);
+                    }
+                    else if (rev.ReviewerStatus == "Invitation Accepted")
+                    {
+                        jpm.CanAccess = 2;
+                        return View(jpm);
+                    }
+                }
+            }
+            
+            
+            Intervention interv = localService.GetIntervention(interventionId, "admin");
+            List<RCDocument> docs = localService.GetRCDocuments(null, interventionId);
+            jpm = new JoinProgramModel(docs, interv);
+            return View(jpm);
+        }
+
+        public ActionResult GenerateReviewerInvitationLink(string interventionId, string reviewerId)
+        {
+            NrepServ localService = NrepServ.GetLocalService();
+            var intervention = localService.GetIntervention(Convert.ToInt32(interventionId), User.Identity.Name);
+
+            var reviewer = localService.GetReviewer(Convert.ToInt32(reviewerId));
+            var user = _userManager.FindByName(User.Identity.Name);
+
+            var programTypes = localService.GetMaskList("ProgramType").ToList<MaskValue>();
+            var selectedProgramTypes = "";
+            foreach (NREPPAdminSite.Models.MaskValue mask in MaskValue.SplitMask(programTypes, intervention.ProgramType))
+            {
+                if (mask.Selected)
+                {
+                    selectedProgramTypes += mask.Name + ",";
+                }
+            }
+            selectedProgramTypes = selectedProgramTypes.Trim(',');
+
+            string combinedString = HttpUtility.UrlEncode(PasswordHash.AESCrypt(string.Format("{0};{1};{2}", interventionId, reviewerId, DateTime.Now.AddDays(5))));
+            var confirmUrl = Url.Action("JoinProgram", "Program", new { temp = combinedString }, Request.Url.Scheme);
+            confirmUrl = confirmUrl.Replace("temp", "id");
+            var emailService = new EmailService();
+
+            var body = "Dear " + reviewer.FirstName + ", <br/>" +
+                       "As part of the NREPP process, I am inviting you to review the program listed below. " +
+                       "Please take a moment to confirm your availability to conduct this review." +
+                       "<br /><br />" +
+                       "<ul>" +
+                       "<li>Program Name: " + intervention.Title + "</li>" +
+                       "<li>Developer / Principal Contact: " + intervention.PrimaryName +
+                       "</li>" +
+                       "<li>Authors: " + "TBD" + "</li>" +
+                       "<li>Type of intervention: " + selectedProgramTypes + "</li>" + 
+                       "<li>Hours allotted for review: " + "TBD" + "</li>" +
+                       "<li>Number of studies/articles/outcomes to be reviewed: " + "TBD" +
+                       "</li>" +
+                       "<li>o Brief program description: " + intervention.FullDescription +
+                       "</li>" +
+                       "</ul><br />" +
+                       "<b>Please <a href='" + confirmUrl +
+                       "'>Click hear</a> to notify me of your availability by close of business on " + 
+                       DateTime.Now.AddDays(5).ToString("D") + ".</b><br/><br/>" +
+                       "If you are available, please make sure that your Consulting Agreement is up-to-date and that you have completed the Conflict of Interest form.<br/><br/>" +
+                       "I look forward to working with you throughout the review process. If you have any questions, please do not hesitate to ask.<br/><br/><br/>" +
+                       "Regards,<br/><br/>" + user.FirstName + " " + user.LastName;
+
+            var mailMessage = new MailMessage("donotreply@dsgonline.com",
+                string.IsNullOrEmpty(reviewer.Email) ? reviewer.Email : reviewer.WorkEmail,
+                "Intervention Status Changed", body)
+            {
+                IsBodyHtml = true
+            };
+            emailService.SendEmail(mailMessage);
+
+            return View();
         }
 
         #endregion
+
+        [Authorize]
+        [HttpPost]
+        public JsonResult MarkApprovedBySAMHSA(int id)
+        {
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+
+            localService.ChangeStatus(id, null, 7);
+
+            return Json(new { Status = "Success", Message = "Error while creating the reviewer!" });
+        }
     }
 }

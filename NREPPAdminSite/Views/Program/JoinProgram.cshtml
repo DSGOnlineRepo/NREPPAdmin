@@ -1,0 +1,76 @@
+﻿@model NREPPAdminSite.Models.JoinProgramModel
+
+@{
+    ViewBag.Title = "Accept Review";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Invitation to view program - @Model.TheIntervention.Title</h2><br /><br />
+
+@if (Model.CanAccess == 1)
+{ 
+    <div class="Program-Description">
+        You have previously declined the invitation to review this program. Please contact the administrator if this was done in error.
+    </div>
+}
+else if (Model.CanAccess == 2)
+{
+    <div class="Program-Description">
+        You have already accepted the invitation to review this program. Please login to complete the COI and access the program details.
+    </div>
+}
+else if (Model.CanAccess == 3)
+{
+    <div class="Program-Description">
+        The invitation link sent to you to accept expired. Please contact the administrator for further assistance.
+    </div>
+}
+else if (Model.CanAccess == 0)
+{
+    <div class="CantAccess">
+
+        <b>Program Description:</b> @Model.TheIntervention.FullDescription <br/><br/>
+
+        <h3>Documents Associated with the Program</h3>
+        <ul>
+            @foreach (NREPPAdminSite.Models.RCDocument doc in Model.Documents)
+            {
+                <li>@doc.Reference</li>
+            }
+        </ul>
+
+        <div>
+            @using (Html.BeginForm("InvitationResponse", "Admin"))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("ReviewerId", Model.UserId)
+                @Html.Hidden("InterventionId", Model.TheIntervention.Id)
+
+                <span>Please provide the reason for declining (only if you declining the invitation to the review the program): </span>
+                <span>You cannot view the conflict of interest form or accept this invitation until you log in.</span>
+                @Html.TextArea("reason")
+                <br/><br />
+                <input type="submit" name="ReviewerResponse" value="Decline" />
+                <input type="submit" name="ReviewerResponse" value="Accept" />
+                //@Html.ActionLink("Login", "Login", new {returnUrl = Request.Url.PathAndQuery})
+            }
+        </div>
+
+        <!-- TODO: Put Login Link here -->
+    </div>
+}
+else if (Model.CanAccess == 0)
+{
+    <div class="Program-Description">
+        COI Goes here when ready.
+    </div>
+}
+else
+{
+    <div>
+        You are not the indended audience of this page.
+    </div>
+}
+
+<!-- Use the "registered" information to show whether we're viewing this -->
+

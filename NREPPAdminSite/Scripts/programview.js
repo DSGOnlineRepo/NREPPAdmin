@@ -28,6 +28,11 @@ $("#AddStudy").click(function () {
     $(".Add-div").removeClass("hidden");
 });
 
+$("#btnCancelAddStudy").click(function () {
+    $(".AddStudy").removeClass("hidden");
+    $(".Add-div").addClass("hidden");
+});
+
 $("#AddOutcome").click(function () {
     $(".AddOutcome").addClass("hidden");
     $(".AddO-div").removeClass("hidden");

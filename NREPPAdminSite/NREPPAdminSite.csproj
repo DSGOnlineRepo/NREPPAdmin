@@ -357,7 +357,7 @@
     <Content Include="Views\Admin\Profile.cshtml" />
     <Content Include="Views\Admin\ChangePassword.cshtml" />
     <Content Include="Views\Admin\GenReviewLink.cshtml" />
-    <Content Include="Views\Admin\JoinProgram.cshtml" />
+    <Content Include="Views\Program\JoinProgram.cshtml" />
     <Content Include="Views\Admin\Reviewer.cshtml" />
     <Content Include="Views\Home\Users.cshtml" />
     <Content Include="Views\Home\_AddUser.cshtml" />

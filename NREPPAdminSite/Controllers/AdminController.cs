@@ -314,83 +314,35 @@ namespace NREPPAdminSite.Controllers
 
         }
 
-        public ActionResult JoinProgram(string ID)
-        {
-            string nonURLVersion = HttpUtility.UrlDecode(ID).Replace(' ', '+');
-            string decryptedString = PasswordHash.AESDecrypt(nonURLVersion);
-            string[] idBits = decryptedString.Split(';');
-            int InterventionID = int.Parse(idBits[0]);
-
-
-            TempClass aClass = new TempClass();
-            NrepServ localService = NrepServ.GetLocalService();
-            ExtendedUser exu = _userManager.FindById(idBits[1]);
-            List<ReviewerOnInterv> AlreadyAssigned = localService.GetReviewersByIntervention(InterventionID);
-
-            JoinProgramModel jpm = new JoinProgramModel();
-
-            foreach (ReviewerOnInterv rev in AlreadyAssigned)
-            {
-                if (rev.UserId == exu.Id && rev.ReviewerStatus != "Invited Reviewer")
-                {
-                    jpm.CanAccess = 1;
-                    return View(jpm);
-                }
-            }
-
-
-            // Check the date of the token
-            // TODO: There should be some logic to prevent people from declining multiple times (this is easy)
-
-            DateTime TokenDate = DateTime.Parse(idBits[2]);
-            TimeSpan difference = DateTime.Now - TokenDate;
-            if (difference.Days >  5) // This should be made into some kind of app setting/constant
-            {
-                jpm.CanAccess = 1;
-            }
-            else
-            {
-                
-                Intervention interv = localService.GetIntervention(InterventionID, exu.UserName);
-                List<RCDocument> docs = localService.GetRCDocuments(null, InterventionID);
-                jpm = new JoinProgramModel(docs, interv);
-                jpm.UserId = exu.Id;
-
-                if (User.Identity.IsAuthenticated && _userManager.FindByName(User.Identity.Name).Id == idBits[1]) // Check to see if you're logged in as the correct person
-                    jpm.CanAccess = 0; // You are signed in as the reviewer on this program.
-                else if (User.Identity.IsAuthenticated)
-                    jpm.CanAccess = 1; // You are signed in, but not the reviewer
-                else jpm.CanAccess = 2; // You are not signed in and not the reviewer
-                    
-            }
-
-            return View(jpm);
-        }
-
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult SimpleDecline(FormCollection col)
+        public ActionResult InvitationResponse(FormCollection col)
         {
+            string action = Request.Form["ReviewerResponse"];
+
             string ReviewerId = col["ReviewerId"];
             string declineReason = col["reason"];
             int InterventionId = int.Parse(col["InterventionId"]);
             NrepServ localService = NrepServ.GetLocalService();
 
-            localService.AssignReviewer(InterventionId, ReviewerId, "Declined Review");
+            if (action == "Accept")
+            {
+                localService.AssignReviewer(InterventionId, ReviewerId, "Invitation Accepted");
+                var reviewer = localService.GetReviewer(ReviewerId);
+                
+                var aRole = _roleManager.FindByName("Reviewer");
+                localService.AssignUser(reviewer.UserId, aRole.Id, InterventionId);
+                string combinedString = HttpUtility.UrlEncode(PasswordHash.AESCrypt(string.Format("{0};{1};{2}", InterventionId, ReviewerId, DateTime.Now.AddDays(1))));
+                return RedirectToAction("JoinProgram", "Program", new { id = combinedString });
+            }
+            else
+            {
+                localService.AssignReviewer(InterventionId, ReviewerId, "Invitation Declined");
+            }
 
             return View();
         }
-
-        public ActionResult GenReviewLink(string Id, string ReviewerId)
-        {
-            ViewBag.SomeString = "somestring";
-
-            string combinedString = string.Format("{0};{1};{2}", Id, ReviewerId, DateTime.Now.ToShortDateString());
-            ViewBag.OutString = HttpUtility.UrlEncode(PasswordHash.AESCrypt(combinedString));
-
-            return View();
-        }
-
+        
         [Authorize]
         public ActionResult Reviewers()
         {

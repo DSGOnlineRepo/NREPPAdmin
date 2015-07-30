@@ -346,6 +346,9 @@ namespace NREPPAdminSite.Models
     public class JoinProgramModel
     {
         private Intervention theIntervention;
+
+        public bool loginAccountExists = false;
+
         private List<RCDocument> documents;
 
         public Intervention TheIntervention

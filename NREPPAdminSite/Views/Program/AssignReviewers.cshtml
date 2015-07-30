@@ -4,81 +4,158 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Assign Reviewers to the Program</h2>
-
-<div>
-    <h3>Assigned Reviewers</h3>
-    <ul>
-        @foreach(NREPPAdminSite.Models.ReviewerOnInterv rev in Model.AssignedReviewers)
-        {
-            <li>@rev.Name - @rev.ReviewerStatus</li>
-        }
-    </ul>
-</div>
-
-
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-9">
-      <div class="col-sm-9 filter-list">
-        <div class="col-sm-9">
-        <span class="h3">Filters <a href="/Program/Submission1" class="pull-right"></a></span>
-          <br />
+    <div class="row">
+        <h2 class="header-container">Assign Reviewers to the Program</h2>
+    </div>
+    <div class="row">
+        @if (Model.AssignedReviewers.Any())
+        {
+            <h3>Current Reviewers</h3>
+            <br/>
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.Hidden("InterventionId", Model.InterventionId)
+                    <div class="table-responsive">
+                        <table id="tblCurrentReviewers" class="display table">
+                            <thead class="bg-info">
+                                <tr>
+                                    <th>Reviewer Name</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            @foreach (NREPPAdminSite.Models.ReviewerOnInterv rev in Model.AssignedReviewers)
+                            {
+                                <tr>
+                                    <td>@rev.Name</td>
+                                    <td>@rev.ReviewerStatus</td>
+                                    <td><a href="#" onclick="removeReviewer(@rev.Id);" title="Remove"><i class="fa fa-user-times"></i></a></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row">
+        
+        <div class="col-sm-12 filter-list">
+            <div class="col-sm-12">
+                <h3 class="header-container">Search reviewers in the system</h3>
+                <br />
+            </div>
+            <div class="col-sm-12">
+                <ul class="list" style="padding-left: 0">
+                    <li class="col-sm-4">
+                        <label for="ftrFirstName">First Name</label>
+                        <input id="ftrFirstName" type="text" class="form-control filter-input" placeholder="First Name" data-fieldname="FirstName" data-column="0">
+                    </li>
+                    <li class="col-sm-4" style="padding-bottom: 5px">
+                        <label for="ftrLastName">Last Name</label>
+                        <input id="ftrLastName" type="text" class="form-control filter-input" placeholder="Last Name" data-fieldname="LastName" data-column="1">
+                    </li>
+                    <li class="col-sm-4" style="padding-bottom: 5px">
+                        <label for="ftrEmployer">Employer</label>
+                        <input id="ftrEmployer" type="text" class="form-control filter-input" placeholder="Employer" data-fieldname="Employer" data-column="2">
+                    </li>
+                    <li class="col-sm-4" style="padding-bottom: 5px">
+                        <label for="ftrEmployer">Department</label>
+                        <input id="ftrDepartment" type="text" class="form-control filter-input" placeholder="Department" data-fieldname="Department" data-column="3">
+                    </li>
+                    <li class="col-sm-4" style="padding-bottom: 5px">
+                        <label for="ftrReviewerType">Reviewer Type</label>
+                        <input id="ftrReviewerType" type="text" class="form-control filter-input" placeholder="Reviewer Type" data-fieldname="ReviewerType" data-column="4">
+                    </li>
+                    <li class="col-sm-4" style="padding-bottom: 5px">
+                        <label for="ftrDegree">Degree</label>
+                        <input id="ftrDegree" type="text" class="form-control filter-input" placeholder="Degree" data-fieldname="Degree" data-column="5">
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="col-sm-9">
-          <ul class="list" style="padding-left:0">
-            <li class="col-sm-6">
-                <input type="text" class="form-control filter-input" placeholder="First Name" data-fieldname="FirstName" data-column="0">
-            </li>
-            <li class="col-sm-6" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" placeholder="Last Name" data-fieldname="LastName" data-column="1">
-            </li>
-            <br /><li class="col-sm-6" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" placeholder="Employer" data-fieldname="Employer" data-column="2">
-            </li>
-            <li class="col-sm-6" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" placeholder="Department" data-fieldname="Department" data-column="3">
-            </li>
-            <br /><li class="col-sm-6" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" placeholder="Reviewer Type" data-fieldname="ReviewerType" data-column="4">
-            </li>
-            <li class="col-sm-6" style="padding-bottom: 5px">
-                <input type="text" class="form-control filter-input" placeholder="Degree" data-fieldname="Degree" data-column="5">
-            </li>
-          </div>
+       
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            @Html.Hidden("InterventionId", Model.InterventionId)
+            <div class="table-responsive">
+                <table id="tblReviewers" class="display table">
+                    <thead class="bg-info">
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Employer</th>
+                            <th>Department</th>
+                            <th>Reviewer Type</th>
+                            <th>Degree</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
-  </div>
-</div>
 
-
-
-<div>
-    @using(Html.BeginForm("AssignReview", "Program"))
-    {
-        @Html.Hidden("ChosenReviewer")
-        @Html.Hidden("InterventionId", Model.InterventionId)
-        
-        <table id="tblReviewers" class="display">
-            <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Employer</th>
-                    <th>Department</th>
-                    <th>Reviewer Type</th>
-                    <th>Degree</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-        </table>
-    }
 </div>
 
 <script type="text/javascript">
 
-    function setChosenReviewer(inValue) {
-        $("#ChosenReviewer").val(inValue);
+    function assignReviewer(id) {
+        var request = { id: id, interventionId: $("#InterventionId").val() };
+        $.ajax({
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(request),
+            type: "POST",
+            url: "AssignReview",
+            async: true,
+            success: function (response) {
+                if (response.Success) {
+                    window.location.reload();
+                }
+                else {
+                    console.log(response.Message);
+                }
+            },
+            error: function (jqXHR, timeout, message) {
+                var contentType = jqXHR.getResponseHeader("Content-Type");
+                if (jqXHR.status === 200 && contentType.toLowerCase().indexOf("text/html") >= 0) {
+                    window.location.reload();
+                    return;
+                }
+
+            }
+        });
+    }
+
+    function removeReviewer(id) {
+        var request = { id: id, interventionId: $("#InterventionId").val() };
+        $.ajax({
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(request),
+            type: "POST",
+            url: "RemoveReviewer",
+            async: true,
+            success: function (response) {
+                if (response.Success) {
+                    window.location.reload();
+                }
+                else {
+                    console.log(response.Message);
+                }
+            },
+            error: function (jqXHR, timeout, message) {
+                var contentType = jqXHR.getResponseHeader("Content-Type");
+                if (jqXHR.status === 200 && contentType.toLowerCase().indexOf("text/html") >= 0) {
+                    window.location.reload();
+                    return;
+                }
+
+            }
+        });
     }
 
     $(document).ready(function () {
@@ -86,8 +163,6 @@
         var reviewerTable = $('#tblReviewers').DataTable({
             sDom: '<"top"pl>it<"clear">',
             ajax: "ReviewersList",
-            scrollX: true,
-            scrollCollapse: true,
             serverSide: true,
             columns: [
                 { "data": "FirstName" },
@@ -99,7 +174,7 @@
                 {
                     "data": "Id",
                     "render": function (data) {
-                        return "<input type='submit' onclick='setChosenReviewer(\"" + data + "\"); return true;' value='Assign' />";
+                        return '<a href="#" onclick="assignReviewer(' + data + ');" title="Invite to Review"><i class="fa fa-user-plus"></i></a>';
                     }
                 }
             ]

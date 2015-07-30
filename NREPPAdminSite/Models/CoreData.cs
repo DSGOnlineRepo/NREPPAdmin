@@ -9,6 +9,7 @@ namespace NREPPAdminSite.Models
         //private int id;
         
         [Display(Name = "Program Name")]
+        [Required]
         public string Title { get; set; }
 
         [Display(Name = "Previous Program Name")]
@@ -17,6 +18,7 @@ namespace NREPPAdminSite.Models
         public string SubmitterId { get; set; }
 
         [Display(Name = "Full Description")]
+        [Required]
         public string FullDescription { get; set; }
 
         [Display(Name = "Submitter")]
@@ -124,6 +126,9 @@ namespace NREPPAdminSite.Models
         [Display(Name = "Notes from Screening")]
         public string ScreeningNotes { get; set; }
 
+        [Display(Name = "Assigned To")]
+        public string AssignedTo { get; set; }
+
         public Intervention()
         {
             Id = -1;
@@ -141,7 +146,7 @@ namespace NREPPAdminSite.Models
         }
 
         public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate,
-            string submitterId, string status, int statusId, int programType, string acronym, bool fromLitSearch)
+            string submitterId, string status, int statusId, int programType, string acronym, bool fromLitSearch, string assignedTo)
         {
             Id = inId;
             Title = title;
@@ -155,6 +160,7 @@ namespace NREPPAdminSite.Models
             ProgramType = programType;
             Acronym = acronym;
             FromLitSearch = fromLitSearch;
+            AssignedTo = assignedTo;
         }
 
         // private int submitterId; Is this a thing?
@@ -420,7 +426,7 @@ namespace NREPPAdminSite.Models
 
     public struct ReviewerOnInterv
     {
-        public string UserId;
+        public string Id;
         public string Name;
         public string ReviewerStatus;
     }

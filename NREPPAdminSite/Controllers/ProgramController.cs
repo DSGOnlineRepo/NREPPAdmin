@@ -81,7 +81,7 @@ namespace NREPPAdminSite.Controllers
             }
             else
             {
-                theIntervention = new Intervention(-1, "", "", User.Identity.Name, null, DateTime.Now, User.Identity.GetUserId(), "", -1, 0, "", false);
+                theIntervention = new Intervention(-1, "", "", User.Identity.Name, null, DateTime.Now, User.Identity.GetUserId(), "", -1, 0, "", false, User.Identity.Name);
                 pageModel = new IntervPageModel();
                 documentz = new List<InterventionDoc>();
                 reviewerDocs = new List<RCDocument>();
@@ -100,11 +100,17 @@ namespace NREPPAdminSite.Controllers
             perms.Add("EditBaseSubmission");
             perms.Add("CanLitReview");
             perms.Add("AnswerPrescreen");
-
+            perms.Add("AssignLitReview");
+            perms.Add("Screen");
+            perms.Add("SubmitAddlProgramInformation");
+            perms.Add("MarkApprovedBySAMHSA");
+            perms.Add("AssignReviewers");
+            perms.Add("ViewScreenResults");
+            
             pageModel.SetPermissions(perms, User.Identity.Name, InvId);
             pageModel.TheIntervention = theIntervention;
 
-            var role = _roleManager.FindByName("Assigner");
+            var role = _roleManager.FindByName("Review Coordinator");
             var users = _context.Users.Where(x => x.Roles.Select(r => r.RoleId).Contains(role.Id)).ToList();
 
             var userList = users.Select(x =>
@@ -224,7 +230,7 @@ namespace NREPPAdminSite.Controllers
 
             List<string> perms = new List<string>();
 
-            perms.Add("ScreenInterv");
+            perms.Add("Screen");
 
             sm.SetPermissions(perms, User.Identity.Name, InvId);
 
@@ -287,16 +293,14 @@ namespace NREPPAdminSite.Controllers
             if (command.Equals("assign"))
             {
                 // Call action here...
-                localService.ChangeStatus(inInterv.TheIntervention.Id, Users, 3); // Hard coded. We need to fix this
+                localService.ChangeStatus(inInterv.TheIntervention.Id, Users, 4); // Hard coded. We need to fix this
             }
-            else
+            else if (command.Equals("reject"))
             {
                 // Call another action here...
                 localService.ChangeStatus(inInterv.TheIntervention.Id, Users, 92); // Hard coded. We need to fix this
             }
-
             
-
             //inInterv.TheIntervention.SubmitterId = User.Identity.GetUserId();
 
             return RedirectToAction("Programs", "Home");

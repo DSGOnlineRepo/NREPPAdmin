@@ -18,7 +18,7 @@
     int i = 0;
 }
 
-@if(Model.CanDo("ScreenInterv"))
+@if (Model.CanDo("Screen"))
 { 
 
 <div id="screening" class="table-responsive">
@@ -148,7 +148,7 @@
             <th class="withborder">Recommend For Review</th>
             <th class="withborder">Study #</th>
             <th class="withborder">Article #</th>
-            <th> </th>
+            <th>Action</th>
         </tr>
         
         @foreach (NREPPAdminSite.Models.Study study in Model.StudyDocuments)
@@ -225,7 +225,7 @@
 
                             <textarea name="newReference">@getReference(Model.TheDocuments.ToList(), study.DocumentId)</textarea><br />
                             <label>Year of Publication: </label>
-                            <br /><input type="text" name="PubYear" value="@getPubYear(Model.TheDocuments.ToList(), study.DocumentId)" /><br /><br />
+                            <br /><input type="number" name="PubYear" value="@getPubYear(Model.TheDocuments.ToList(), study.DocumentId)" /><br /><br />
 
                             <label style="margin-left: 2px;">Was this part of a Literature Search?</label> <input type="checkbox" name="IsLitSearch" />
                             <br />
@@ -257,7 +257,7 @@
                             <textarea name="Notes"></textarea><br />
 
                             <br /><br />
-                            <input type="submit" value="Submit" class="btn btn-primary" /> <button onclick="return false;" class="btn btn-secondary">Clear</button>
+                            <input type="submit" value="Submit" class="btn btn-primary" />
                         }
                     </div>
                     <button id="show_@i" onclick="toggleEdit('show_@i'); return false;">Edit</button>
@@ -274,62 +274,62 @@
 </div>
 
 <div class="Add-div hidden" style="padding-top: 10px; padding-bottom: 10px;">
-   @using (Html.BeginForm("AddStudy", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
-   {
-    @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
-    @Html.Hidden("ActualId");
-    @Html.Hidden("RCDocumentId")
-    @Html.Hidden("RCDocumentName");
+    @using (Html.BeginForm("AddStudy", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.Hidden("InterventionId", @Model.TheIntervention.Id)
+        @Html.Hidden("ActualId");
+        @Html.Hidden("RCDocumentId")
+        @Html.Hidden("RCDocumentName");
 
-    <label>New Reference: </label>
-    <br /><textarea name="newReference"></textarea>
-    
-    <br /><br /><label>Year of Publication: </label>
-    <br /><input type="text" name="PubYear" />
-    
-    <br /><label for="docDropdown">Article:</label>
-    <br />@Html.DropDownList("docDropdown", Docs, new { onchange = "GetDocumentInfo($(this).val(), this);", @class="mainDropDown" });
+        <label>New Reference: </label>
+        <br /><textarea name="newReference"></textarea>
 
-    <br /><br /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <input type="checkbox" name="IsLitSearch" />
-    
-    <br /><br />
+        <br /><br /><label>Year of Publication: </label>
+        <br /><input type="text" name="PubYear" />
 
-    <div>
-        Reason for Exclusion:
-        <br />@Html.DropDownList("Exclusion1", Exclusions)
-        
-        <br /><br />Overall Attrition Data Available:
-        <br />@Html.DropDownList("OverallAttrition", AttritionAnswers)
-        
-        <br /><br />Differential Attrition Data Available:
-        <br />@Html.DropDownList("DiffAttrition", AttritionAnswers)
-        
+        <br /><label for="docDropdown">Article:</label>
+        <br />@Html.DropDownList("docDropdown", Docs, new { onchange = "GetDocumentInfo($(this).val(), this);", @class = "mainDropDown" });
+
+        <br /><br /><label style="margin-left: 2px;">Was this part of a Literature Search?</label> <input type="checkbox" name="IsLitSearch" />
+
         <br /><br />
-    </div>
 
-    <label>What was the Study Design?</label>
-    <br />@Html.DropDownList("StudyDesign", StudyDesigns)
+        <div>
+            Reason for Exclusion:
+            <br />@Html.DropDownList("Exclusion1", Exclusions)
 
-    <br /><br /><label>Total Sample Size:</label>
-    <br /><input type="text" name="TotalSampleSize" />
-    
+            <br /><br />Overall Attrition Data Available:
+            <br />@Html.DropDownList("OverallAttrition", AttritionAnswers)
 
-    <br /><label>Longest Followup:</label>
-    <br /><input type="text" name="LongestFollowup" />
+            <br /><br />Differential Attrition Data Available:
+            <br />@Html.DropDownList("DiffAttrition", AttritionAnswers)
 
-    <br /><label>Recommend for Review</label> <input type="checkbox" name="recommendReview" />
-    
-    <br /><br /><label for="studyIdBox">Study #</label>
-    <br /><input type="text" name="StudyId" />
-    
-    <br /><br /><label for="articleIdBox">Article #</label>
-    <br /><input type="text" name="articleIdBox" />
+            <br /><br />
+        </div>
 
-    <br /><br /><label>Notes:</label>
-    <br /><textarea name="Notes"></textarea>
+        <label>What was the Study Design?</label>
+        <br />@Html.DropDownList("StudyDesign", StudyDesigns)
 
-    <br /><br /><input type="submit" value="Submit" class="btn btn-primary" /> <button onclick="return false;" class="btn btn-secondary">Clear</button>
-   }
+        <br /><br /><label>Total Sample Size:</label>
+        <br /><input type="text" name="TotalSampleSize" />
+
+
+        <br /><label>Longest Followup:</label>
+        <br /><input type="text" name="LongestFollowup" />
+
+        <br /><label>Recommend for Review</label> <input type="checkbox" name="recommendReview" />
+
+        <br /><br /><label for="studyIdBox">Study #</label>
+        <br /><input type="text" name="StudyId" />
+
+        <br /><br /><label for="articleIdBox">Article #</label>
+        <br /><input type="text" name="articleIdBox" />
+
+        <br /><br /><label>Notes:</label>
+        <br /><textarea name="Notes"></textarea>
+
+        <br /><br /><input type="submit" value="Submit" class="btn btn-primary" /> <button id="btnCancelAddStudy" onclick="return false;" class="btn btn-secondary">Cancel</button>
+    }
 </div>
 
 <div id="screening-table">
@@ -422,7 +422,7 @@
             <th>SAMHSA-Related Outcome</th>
             <th>Effect Size Reported</th>
             <th>Recommend For Review</th>
-            <th> </th>
+            <th>Action</th>
         </tr>
         @foreach (NREPPAdminSite.Models.OutcomeMeasure measure in Model.Outcomes.OutcomesMeasures)
         {
@@ -732,10 +732,9 @@ i++;
             <br /><input type="submit" value="Save Notes" class="btn btn-primary" />
         }
     </div>
-
-        <div>
-            @Html.ActionLink("Complete Pre-screening", "Assignment", new { InvId = Model.TheIntervention.Id })
-        </div>
+    <div>
+        <span class="btn btn-primary">@Html.ActionLink("Complete Screening", "Assignment", new {InvId = Model.TheIntervention.Id})</span>
+    </div>
 </div>
 }
 else
@@ -815,11 +814,15 @@ else
     function toggleEdit(this_id) {
         //alert(this_id);
         var crtl = $("#" + this_id).siblings("div");
-
-        if (crtl.hasClass("hidden"))
+        
+        if (crtl.hasClass("hidden")) {
             crtl.removeClass("hidden");
-        else
+            $("#" + this_id).html('Cancel');
+        }
+        else {
             crtl.addClass("hidden");
+            $("#" + this_id).html('Edit');
+        }
     }
     
 </script>

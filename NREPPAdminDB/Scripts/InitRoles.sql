@@ -13,7 +13,7 @@ Post-Deployment Script Template
 INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Data Entry');
 INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Assigner');							   
 INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Principal Investigator');
-INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Lit Review');
+INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Lit Reviewer');
 INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Review Coordinator');
 INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'DSG PRM');
 INSERT INTO AspNetRoles (Id, Name) VALUES (NEWID(), 'Mathematica Assigner');
@@ -186,7 +186,7 @@ Have the results of tehse studies been published in a peer reviewed journal, oth
 DECLARE @ROLEID1 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Data Entry'),
 		@ROLEID2 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Assigner'),
 		@ROLEID3 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Principal Investigator'), 
-		@ROLEID4 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Lit Review'), 
+		@ROLEID4 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Lit Reviewer'), 
 		@ROLEID5 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Review Coordinator'), 
 		@ROLEID6 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'DSG PRM'), 
 		@ROLEID7 NVARCHAR(128) = (SELECT ID FROM ASPNETROLES WHERE NAME = 'Mathematica Assigner'), 
