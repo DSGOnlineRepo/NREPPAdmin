@@ -20,7 +20,7 @@
 <div>
 
 <input type="checkbox" checked="checked" disabled="disabled" /> Editing Complete <button>Preview</button><br />
-<input type="checkbox" id="postChk" onclick="confirmPosting()" /> <span>Reviewed + Approved by SAMHSA (You must view the preview before posting)</span><label id="postLabel" class="hidden">Posted to Live Site</label><br />
+<input type="checkbox" id="postChk" disabled="disabled" onclick="confirmPosting()" /> <span>Reviewed + Approved by SAMHSA (You must view the preview before posting)</span><label id="postLabel" class="hidden">Posted to Live Site</label><br />
 
     <button id="emailButton">Email RC</button>
 
@@ -33,6 +33,7 @@
         if (isLive == "True") {
             $("#postLabel").removeClass("hidden");
             $("#postChk").prop("checked", true);
+            $("#postChk").prop("disabled", false);
         }
     });
 

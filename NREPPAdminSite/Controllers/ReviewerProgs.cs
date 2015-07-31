@@ -149,5 +149,20 @@ namespace NREPPAdminSite.Controllers
                 return Json("You posted!", JsonRequestBehavior.AllowGet);
             else return Json("You delisted", JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult RTFPost(FormCollection col)
+        {
+            RTFTemp temp = new RTFTemp();
+            temp.Text1 = col["html_content"];
+
+            return View("RTFTest", temp);
+        }
+    }
+
+    public class RTFTemp
+    {
+        public string Text1 { get; set; }
     }
 }

@@ -241,6 +241,12 @@ namespace NREPPAdminSite.Controllers
                 return View("ScreenResults", sm);
         }
 
+        public ActionResult RTFTest()
+        {
+            RTFTemp temp = new RTFTemp(){ Text1 = "<b>Some Text</b>"};
+            return View(temp);
+        }
+
         #endregion
 
         #region Post Methods

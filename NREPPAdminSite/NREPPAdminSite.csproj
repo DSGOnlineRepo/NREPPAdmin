@@ -313,6 +313,14 @@
     <Content Include="Scripts\DataTables\dataTables.tableTools.min.js" />
     <Content Include="Scripts\DataTables\jquery.dataTables.js" />
     <Content Include="Scripts\DataTables\jquery.dataTables.min.js" />
+    <Content Include="Scripts\dist\wysihtml5-0.2.0.js" />
+    <Content Include="Scripts\dist\wysihtml5-0.2.0.min.js" />
+    <Content Include="Scripts\dist\wysihtml5-0.3.0.js" />
+    <Content Include="Scripts\dist\wysihtml5-0.3.0.min.js" />
+    <Content Include="Scripts\dist\wysihtml5-0.3.0_rc1.js" />
+    <Content Include="Scripts\dist\wysihtml5-0.3.0_rc1.min.js" />
+    <Content Include="Scripts\dist\wysihtml5-0.3.0_rc2.js" />
+    <Content Include="Scripts\dist\wysihtml5-0.3.0_rc2.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -323,6 +331,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\parser_rules\advanced.js" />
+    <Content Include="Scripts\parser_rules\simple.js" />
     <Content Include="Scripts\programview.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -380,6 +390,7 @@
     <Content Include="Views\Program\Consensus.cshtml" />
     <Content Include="Views\Program\AnswerPartial.cshtml" />
     <Content Include="Views\Program\SAMHSAApprove.cshtml" />
+    <Content Include="Views\Program\RTFTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

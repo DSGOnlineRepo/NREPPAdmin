@@ -1,0 +1,53 @@
+﻿@model NREPPAdminSite.Controllers.RTFTemp
+
+@{
+    ViewBag.Title = "RTFTest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <script type="text/javascript" src="@Url.Content("/Scripts/parser_rules/advanced.js")"></script>
+    <script src="@Url.Content("/Scripts/dist/wysihtml5-0.3.0.min.js")"></script>
+
+<h2>RTFTest</h2>
+
+@using (Html.BeginForm("RTFPost", "Program", FormMethod.Post, new { name = "myform" }))
+{ 
+    <div id="wysihtml5-toolbar" style="display: none;">
+        <a data-wysihtml5-command="bold">bold</a>
+        <a data-wysihtml5-command="italic">italic</a>
+
+        <!-- Some wysihtml5 commands require extra parameters -->
+        <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red">red</a>
+        <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green">green</a>
+        <a data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue">blue</a>
+
+        <!-- Some wysihtml5 commands like 'createLink' require extra paramaters specified by the user (eg. href) -->
+        <a data-wysihtml5-command="createLink">insert link</a>
+        <div data-wysihtml5-dialog="createLink" style="display: none;">
+            <label>
+                Link:
+                <input data-wysihtml5-dialog-field="href" value="http://" class="text">
+            </label>
+            <a data-wysihtml5-dialog-action="save">OK</a> <a data-wysihtml5-dialog-action="cancel">Cancel</a>
+        </div>
+    </div>
+    <textarea id="wysihtml5-textarea" name="text1" placeholder="Enter your text..." autofocus rows="25" cols="30" style="width: 50%;"></textarea>
+    <input type="hidden" id="html" name="html_content" /> <br />
+    <input type="submit" value="Submit" />
+}
+
+<div>
+    @Html.Raw(Model.Text1);
+</div>
+
+<script>
+    var editor = new wysihtml5.Editor("wysihtml5-textarea", { // id of textarea element
+        toolbar: "wysihtml5-toolbar", // id of toolbar element
+        parserRules: wysihtml5ParserRules // defined in parser rules set 
+    });
+    $("form[name='myform'").submit(function () {
+        var html = $("#wysihtml5-textarea").val();
+        $("#html").val(html);
+    });
+
+</script>
