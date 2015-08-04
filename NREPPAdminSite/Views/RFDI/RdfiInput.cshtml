@@ -1,0 +1,680 @@
+﻿@using MvcCheckBoxList.Model
+@model RFDIWeb.Models.ProgramDetailModel
+@{
+    var locCount = 4;                      //By default it will show 5 rows in Implementation Location Table else Count will be shown
+    if (Model.ProgramId != 0)
+    {
+        locCount = Model.table1List.Count;
+    }
+    ViewBag.Title = "RFDIChecklist";
+}
+
+
+<link href="~/Scripts/bootstrap.css" rel="stylesheet" />
+<link href="~/Scripts/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-datepicker3.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.bootstrap.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.bootstrap.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<style>
+    * {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    input[type=text] {
+        width: 100%;
+        border: 1px solid #cccccc;
+    }
+
+
+    #rfdi_form ol {
+        padding: 0 17px;
+    }
+
+    #rfdi_form table {
+        margin-bottom: 10px;
+    }
+
+    #rfdi_form th {
+        background: #cccccc;
+    }
+
+    input[type=submit] {
+        padding: 10px;
+    }
+
+    #rfdi_form label {
+        font-weight: normal;
+    }
+</style>
+<div class="page-wrapper">
+    @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+    {
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert">×</a>
+            <h4>Validation Errors</h4>
+            @Html.ValidationSummary()
+        </div>
+    }
+</div>
+
+@if (ViewData.ModelState.Any(m => m.Value.Errors.Any()))
+{
+    <div class="alert alert-danger">
+        <a href="#" class="close" data-dismiss="alert">m</a>
+        <h4>Validation Errors</h4>
+        @Html.ValidationSummary()
+    </div>
+}
+
+
+
+@using (Html.BeginForm("InsertProgramDetail", "Home", new { @class = "form-horizontal" }, FormMethod.Post))
+{
+
+    <div class="container" id="rfdi_form">
+        <div class="row">
+            <div class="form-group">
+                <h3 class="text-center text-primary">NREPP Resources for Dissemination and Implementation (RFDI) Checklist </h3>
+            </div>
+
+
+            <div class='row'>
+                <div class='col-sm-11'>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ProgramDate, new { @class = "col-sm-4" })
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.ProgramDate, new { @class = "form-control", @Value = Model.ProgramDate, placeholder = "Date (MM-dd-yyyy)" })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-11'>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ProgramName, new { @class = " col-sm-4" })
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.ProgramName, new { @class = "form-control", placeholder = "Name Of Program" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-11'>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ProgramContact, new { @class = " col-sm-4" })
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.ProgramContact, new { @class = "form-control", placeholder = "Name Of Program Contact" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-11'>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, new { @class = " col-sm-4" })
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control data-error='invalid email'", type = "email", placeholder = "Email Of Program Contact" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-11'>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ProgramWebsite, new { @class = " col-sm-4" })
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.ProgramWebsite, new { @class = "form-control", placeholder = "Program Website" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-11'>
+                    @Html.HiddenFor(m => m.ProgramId)
+                </div>
+            </div>
+            <div class="offset2">
+
+                <h5>The NREPP Resources for Dissemination and Implementation (RFDI) Checklist is designed to help the public understand what types of training, education, and implementation supports are available for implementing an NREPP program. The RFDI checklist provides a program developer with an opportunity to identify available resources to facilitate the effective dissemination and implementation of their intervention. Resources may include print documents, electronic materials, trained personnel, or structured activities (e.g., textbooks, online training courses, or skilled trainers). When the review of your program is complete, the information provided in this Checklist will appear with your program’s profile, thus offering the public an inventory of all available program materials.</h5>
+
+            </div>
+            <div class="offset2">
+
+                <h5>Staff from Development Services Group, Inc., the SAMHSA NREPP contractor, will review your completed RFDI checklist and contact you if we have any questions. Please attach all of the materials you list in this Checklist or indicate links or locations for their download.<b>  If you previously sent or emailed materials to us when you originally submitted your application, you do not need to resubmit them. However, you do need to<u> send a completed RFDI Checklist</u> and <u>copies of new materials</u> (electronic or hard copies) that you have not previously submitted.</b></h5>
+
+            </div>
+
+            <table>
+                <tr>
+                    <td>
+                        <ol>
+                            <li>Please fill in <b>Table 1</b> below by estimating how many individuals or agencies have implemented the program, their locations, when their program started, and whether the program is still operational at this location.</li>
+
+                        </ol>
+
+                    </td>
+                </tr>
+                <tr>
+
+                    <td>
+                        <b>Table 1. Implementation Location(s)</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table id="tblImpLocations" class="table table-striped table-bordered">
+                            <tr>
+                                <th>Number of individuals or agencies that successfully implemented the program (please be specific)</th>
+                                <th>State(s) or locations of program</th>
+                                <th>Year program started by individual or agency </th>
+                                <th>Is the program still operational at this location (if known)?</th>
+                            </tr>
+                            @for (int i = 0; i < locCount; i++)
+                            {
+                                <tr>
+                                    <td> @Html.TextBoxFor(m => m.table1List[i].NumberofIndividuals)</td>
+                                    <td>  @Html.TextBoxFor(m => m.table1List[i].ProgramLocations)</td>
+                                    <td>  @Html.TextBoxFor(m => m.table1List[i].ProgramStartedYear)</td>
+                                    <td>  @Html.TextBoxFor(m => m.table1List[i].ActiveInLocation)</td>
+                                    <td style="display:none;">  @Html.HiddenFor(m => m.table1List[i].Id)</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="4">
+                                    <input type="button" id="btnAdd" value="Add Location" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <h5> @Html.DisplayFor(m=>m.Ques[0].Question)</h5>
+
+                        <div class="container-fluid">
+                            a
+                            <div>
+                                <table>
+
+                                    @for (int i = 0; i < Model.Ques2A.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+
+                                                <ol type="none">
+                                                    @Html.CheckBoxFor(m => m.Ques2A[i].isSelected, new { id = i+1 })
+                                                    @Html.LabelFor(m => m.Ques2A[i].isSelected, Model.Ques2A[i].name)
+                                                    @Html.HiddenFor(m => m.Ques2A[i].chkBoxid)
+                                                    @Html.HiddenFor(m => m.Ques2A[i].id)                                                                                                     
+                                                </ol>
+
+                                            </td>
+                                            <td>@Html.TextBoxFor(m => m.Ques2A[i].txtBoxSpecify)</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+
+                            <div>
+                                <h5> @Html.DisplayFor(m => m.Ques[1].Question)</h5>
+                                <div>
+                                    <table>
+
+                                        @for (int i = 0; i <Model.Ques2B.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>
+
+                                                    <ol type="none">
+                                                        @Html.CheckBoxFor(m => m.Ques2B[i].isSelected, new { id = i+1 })
+                                                        @Html.LabelFor(m => m.Ques2B[i].isSelected, Model.Ques2B[i].name)
+                                                        @Html.HiddenFor(m => m.Ques2B[i].chkBoxid)    
+                                                        @Html.HiddenFor(m => m.Ques2B[i].id)                                                      
+                                                    </ol>
+                                                </td>
+                                                <td>@if (Model.Ques2B[i].specify==true)
+                                                {
+                                                    @Html.TextBoxFor(m => m.Ques2B[i].txtBoxSpecify)
+                                                }</td>
+
+                                               
+                                                </tr>
+                                        }
+                                    </table>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <h5> @Html.DisplayFor(m => m.Ques[2].Question)</h5>
+                        <div class="container-fluid">
+                            <div>
+                                <table>
+
+                                    @for (int i = 0; i <Model.Ques3.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <ol type="none">
+                                                    @Html.CheckBoxFor(m => m.Ques3[i].isSelected, new { id = i+1 })                                                    
+                                                    @Html.LabelFor(m => m.Ques3[i].isSelected, Model.Ques3[i].name)
+                                                    @Html.HiddenFor(m => m.Ques3[i].chkBoxid)
+                                                    @Html.HiddenFor(m => m.Ques3[i].id)                                                    
+                                                </ol>
+                                            </td>
+                                            <td>
+                                                @if (Model.Ques3[i].specify == true)
+                                                {
+                                                    @Html.TextBoxFor(m => m.Ques3[i].txtBoxSpecify)
+                                                }
+                                        </td>
+
+                                            
+                                        </tr>
+
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <h5> @Html.DisplayFor(m => m.Ques[3].Question)</h5>
+                        <div class="container-fluid">
+
+                            <div>
+                                <table>
+
+                                    @for (int i = 0; i <Model.Ques4.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <ol type="none">
+                                                    @Html.CheckBoxFor(m => m.Ques4[i].isSelected, new { id = i+1 })
+                                                    @Html.LabelFor(m => m.Ques4[i].isSelected, Model.Ques4[i].name)
+                                                    @Html.HiddenFor(m => m.Ques4[i].chkBoxid)
+                                                    @Html.HiddenFor(m => m.Ques4[i].id)                                                    
+                                                </ol>
+                                            </td>
+                                            <td>
+                                                @if (Model.Ques4[i].specify == true)
+                                                {
+                                                    @Html.TextBoxFor(m => m.Ques4[i].txtBoxSpecify)
+                                                }
+                                        </td>
+
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <h5> @Html.DisplayFor(m => m.Ques[4].Question)</h5>
+                        <div class="container-fluid">
+                            <div>
+                                <table>
+
+                                    @for (int i = 0; i <Model.Ques5.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <ol type="none">
+                                                    @Html.CheckBoxFor(m => m.Ques5[i].isSelected, new { id = i+1 })
+                                                    @Html.LabelFor(m => m.Ques5[i].isSelected, Model.Ques5[i].name)
+                                                    @Html.HiddenFor(m => m.Ques5[i].chkBoxid)
+                                                    @Html.HiddenFor(m => m.Ques5[i].id)                                                    
+                                                </ol>
+                                            </td>
+                                            <td>
+                                                @if (Model.Ques5[i].specify == true)
+                                                {
+                                                    @Html.TextBoxFor(m => m.Ques5[i].txtBoxSpecify)
+                                                }
+                                        </td>
+
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <ol start="6"><li>Please fill in <b>Table 2</b> below to indicate which <b>items (i.e., implementation training)</b> are available to help an individual or agency implement the program as designed, the names of the items, where the items are available, in what other languages and formats they are available, whether the items are required or optional, and the typical costs.</li></ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Table 2. Implementation Training</b></td>
+                </tr>
+            </table>
+
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>Type of item</th>
+                    <th>Name of item (be as specific as possible) and brief description</th>
+                    <th>Intended Audience</th>
+                    <th>Where available (e.g., URL, drop box, address)</th>
+                    <th>Available in other languages or accessible formats (e.g., 508 compliant)</th>
+                    <th>Required or optional</th>
+                    <th>Typical cost   per unit (specify)</th>
+                </tr>
+
+                @for (int i = 0; i < Model.Table2.Count; i++)
+                {
+                    <tr>
+
+                        <td>@Html.DisplayFor(m => m.Table2[i].name)</td>                                                                                 
+                        <td> @Html.TextBoxFor(m => m.table2List[i].Nameofitem)</td>
+                        <td> @Html.TextBoxFor(m => m.table2List[i].IntendedAudience)</td>
+                        <td> @Html.TextBoxFor(m => m.table2List[i].Whereavailable)</td>                                   
+                        <td> @Html.TextBoxFor(m => m.table2List[i].AvailableLaunguages)</td>
+                        <td> @Html.TextBoxFor(m => m.table2List[i].Required)</td>
+                        <td> @Html.TextBoxFor(m => m.table2List[i].TypicalCost)</td>
+                        <td style="display:none;">  @Html.HiddenFor(m => m.table2List[i].Id)</td>
+                </tr>                                       
+                }
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <ol start="7"><li>Please fill in <b>Table 3</b> below to indicate what <b>types of program-specific training activities</b> are available to help an individual or agency implement the program, the name of the training, the delivery method, where the training is available, whether the training is available in other languages or formats, the duration of the training, and the typical cost.</li></ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Table 3.  Types of Training Available</b></td>
+                </tr>
+            </table>
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>Training Activities</th>
+                    <th>Name of training(please be specific)</th>
+                    <th>Training delivery method*</th>
+                    <th>Whereavailable (e.g., URL, drop box, address, etc.)</th>
+                    <th>Available in other languages or accessible formats (e.g., 508 compliant) (specify)</th>
+                    <th>Required or optional</th>
+                    <th>Duration of training(i.e., number of days)</th>
+                    <th>Typical cost   per unit (specify)</th>
+                </tr>
+
+               @for (int i = 0; i < Model.Table3.Count; i++)
+                {
+                <tr>
+
+                    <td>@Html.DisplayFor(m => m.Table3[i].name)</td>
+                    <td> @Html.TextBoxFor(m => m.table3List[i].Nameoftrng)</td>
+                    <td> @Html.TextBoxFor(m => m.table3List[i].Trngdeliverymethod)</td>
+                    <td> @Html.TextBoxFor(m => m.table3List[i].Whereavailable)</td>
+                    <td> @Html.TextBoxFor(m => m.table3List[i].AvailableLang)</td>
+                    <td> @Html.TextBoxFor(m => m.table3List[i].RequiredTraining)</td>
+                    <td> @Html.TextBoxFor(m => m.table3List[i].DurationTraining)</td>
+                    <td> @Html.TextBoxFor(m => m.table3List[i].TypicalTrainingCostPerUnit)</td>  
+                    <td style="display:none;">  @Html.HiddenFor(m => m.table3List[i].Id)</td>                 
+                </tr>
+               }
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <ol start="8"> <li>Please fill in <b>Table 4</b> below to describe what types of <b>program-specific technical assistance</b> (TA) are available upon request to help an individual or agency effectively implement the program, the name of the TA, what method is used to provide the TA, where the TA is available, in what other languages or formats it is available, whether it is required or optional, the duration of the TA, and the typical cost for each type.</li></ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Table 4. Program-Specific Technical Assistance</b></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class="table table-striped table-bordered">
+                            <tr>
+                                <th>Type of technical assistance (TA)</th>
+                                <th>Name of TA(please be specific)</th>
+                                <th>TA delivery method*</th>
+                                <th>Available in other languages or accessible formats? (specify)</th>
+                                <th>Required or optional</th>
+                                <th>Duration (i.e., number of days)</th>
+                                <th>Typical cost   per unit (specify)</th>
+                            </tr>
+                            @for (int i = 0; i < Model.Table4.Count; i++)
+                            {
+                                <tr>
+
+                                    <td>@Html.DisplayFor(m => m.Table4[i].name)</td>
+                                    <td> @Html.TextBoxFor(m => m.table4List[i].NameofTA)</td>
+                                    <td> @Html.TextBoxFor(m => m.table4List[i].TAdeliverymethod)</td>
+                                    <td> @Html.TextBoxFor(m => m.table4List[i].Accessibleformats)</td>
+                                    <td> @Html.TextBoxFor(m => m.table4List[i].RequiredTA)</td>
+                                    <td> @Html.TextBoxFor(m => m.table4List[i].Duration)</td>
+                                    <td> @Html.TextBoxFor(m => m.table4List[i].TypicalCostPerUnit)</td>
+                                    <td style="display:none;">  @Html.HiddenFor(m => m.table4List[i].Id)</td>
+                                </tr>
+                            }
+                        </table>
+                        <table>
+                            <tr>
+                                <td>
+                                    *Examples of technical assistance delivery methods include: in-person, teleconference, videoconference, online, Webinar, virtual groups (online), site visit
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <ol start="9"><li>Please fill in <b>Table 5</b> below to describe what types of program-specific <b>items</b> that are available to help an individual or agency <b>disseminate (or provide) program information</b> to stakeholders, family members, clients, and others; the name of the item, the dissemination format, where the item is available, in what other languages or formats the item is available, whether the item is required or optional, and the typical cost. Items might include brochures, videos, handouts, PowerPoint presentations, client testimonials, e-mail announcements, and press releases.</li></ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Table 5. Program-Specific Dissemination Information</b></td>
+                </tr>
+            </table>
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>Type of dissemination information</th>
+                    <th>Name of item(please be specific)</th>
+                    <th>Dissemi-nation format</th>
+                    <th>Available in other languages or accessible formats (e.g., 508 compliant) (specify)</th>
+                    <th>Whereavailable (e.g., URL, drop box, address, etc.)</th>
+                    <th>Required or optional</th>
+                    <th>Typical cost   per unit (specify)</th>
+                </tr>
+                @for (int i = 0; i < Model.Table5.Count; i++)
+                {
+                    <tr>
+
+                        <td>@Html.DisplayFor(m => m.Table5[i].name)</td>
+                        <td> @Html.TextBoxFor(m => m.table5List[i].NameofDissItem)</td>
+                        <td> @Html.TextBoxFor(m => m.table5List[i].Disseminationformat)</td>
+                        <td> @Html.TextBoxFor(m => m.table5List[i].DisseminationWhereavailable)</td>
+                        <td> @Html.TextBoxFor(m => m.table5List[i].DisseminationAvailableLang)</td>
+                        <td> @Html.TextBoxFor(m => m.table5List[i].DisseminationRequired)</td>
+                        <td> @Html.TextBoxFor(m => m.table5List[i].DisseminationTypicalCostPerUnit)</td>  
+                        <td style="display:none;">  @Html.HiddenFor(m => m.table5List[i].Id)</td>                      
+                    </tr>
+                }
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        *Examples of dissemination information may include: brochures, videos, handouts, PowerPoint presentations, client testimonials, e-mail announcements, and press releases
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <ol start="10"><li> Please fill in <b>Table 6</b>below to indicate what types of program-specific <b>items or activities</b> are available to an individual or agency <b>to ensure continued learning and ongoing quality assurance</b> in program implementation and sustainability; the name of the item or activity, the format, where the item or activity is available, in what other languages the item or activity is available, whether the item or activity is required or optional, the duration of the activity, and the cost.</li></ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Table 6. Continued Learning and Quality Assurance Materials  </b></td>
+                </tr>
+            </table>
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>Type of item/activity</th>
+                    <th>Name of item or activity(Please be specific.)</th>
+                    <th>Item/activity format*</th>
+                    <th>Available in other languages or accessible formats (e.g., 508 compliant) (specify)</th>
+                    <th>Whereavailable (e.g., URL, drop box, address, etc.)</th>
+                    <th>Required or optional</th>
+                    <th>Duration (i.e., number of days)**</th>
+                    <th>Typical cost   per unit (specify)</th>
+                </tr>
+                @for (int i = 0; i < Model.Table6.Count; i++)
+                {
+                    <tr>
+
+                        <td>@Html.DisplayFor(m => m.Table6[i].name)</td>
+                        <td> @Html.TextBoxFor(m => m.table6List[i].NameofQualityAssuranceItem)</td>
+                        <td> @Html.TextBoxFor(m => m.table6List[i].QualityAssuranceformat)</td>
+                        <td> @Html.TextBoxFor(m => m.table6List[i].QualityAssuranceWhereavailable)</td>
+                        <td> @Html.TextBoxFor(m => m.table6List[i].QualityAssuranceAvailableLang)</td>
+                        <td> @Html.TextBoxFor(m => m.table6List[i].QualityAssuranceRequired)</td>
+                        <td> @Html.TextBoxFor(m => m.table6List[i].QualityAssuranceDuration)</td>
+                        <td> @Html.TextBoxFor(m => m.table6List[i].QualityAssuranceTypicalCostPerUnit)</td>
+                        <td style="display:none;">  @Html.HiddenFor(m => m.table6List[i].Id)</td>
+                    </tr>
+                }
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        *Examples of dissemination information may include: brochures, videos, handouts, PowerPoint presentations, client testimonials, e-mail announcements, and press releases
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ** If applicable
+                    </td>
+                </tr>
+            </table>
+
+            <div align="center">
+                <table>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Submit Program Details" id="btnInsertRecord" class="btn btn-primary btn btn-info  btn-block">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('#ProgramDate').datepicker();
+        });
+    </script>
+    <script>
+        $(".validation-summary-errors").removeClass("validation-summary-errors");
+        $(".input-validation-error").removeClass("input-validation-error").parent().addClass("has-error");
+        $.validator.setDefaults({
+            showErrors: function (errorMap, errorList) {
+                this.defaultShowErrors();
+
+                // If an element is valid, it doesn't need a tooltip
+                $("." + this.settings.validClass).tooltip("destroy");
+
+                // Add tooltips
+                for (var i = 0; i < errorList.length; i++) {
+                    var error = errorList[i];
+                    $(error.element).tooltip({ trigger: "focus" }) // Activate the tooltip on focus
+                                    .attr("data-original-title", error.message);
+                }
+            }
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {           
+        var i = @locCount-1;
+        $("#btnAdd").on("click", function () {
+            i++;
+            $("#tblImpLocations tr:last").before("<tr><td><input type='text' name='table1List[" + i + "].NumberofIndividuals' ></td><td><input type='text'  name='table1List[" + i + "].ProgramLocations'></td><td><input type='text'  name='table1List[" + i + "].ProgramStartedYear'></td><td><input type='text'  name='table1List[" + i + "].ActiveInLocation'></td></tr>");
+        });
+    }
+    )
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

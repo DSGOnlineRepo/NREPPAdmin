@@ -5,9 +5,9 @@ using System.Linq;
 using System.Web.Mvc;
 using NREPPAdminSite.Models;
 using System.Data.Entity;
-using NREPPAdminSite.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using NREPPAdminSite.Context;
 
 namespace NREPPAdminSite.Controllers
 {

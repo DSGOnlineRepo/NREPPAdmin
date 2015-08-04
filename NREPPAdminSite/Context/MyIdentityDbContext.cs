@@ -1,8 +1,7 @@
-﻿using System.Data.Entity;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using NREPPAdminSite.Models;
 
-namespace NREPPAdminSite.Security
+namespace NREPPAdminSite.Context
 {
     public class MyIdentityDbContext : IdentityDbContext<ExtendedUser>
     {

@@ -1,8 +1,8 @@
 ﻿using System.Security.Principal;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using NREPPAdminSite.Context;
 using NREPPAdminSite.Models;
-using NREPPAdminSite.Security;
 
 namespace NREPPAdminSite.Utilities
 {

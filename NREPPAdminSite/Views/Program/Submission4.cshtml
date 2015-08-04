@@ -7,81 +7,88 @@
 
 
 <div class="col-sm-6 col-sm-offset-3 submission-scope">
-<h2>Step 2. Upload Your Documents</h2><br />
+    <h2>Step 2. Upload Your Documents</h2><br />
 
-@{
-    List<SelectListItem> DocTypez = new List<SelectListItem>();
+    @{
+        List<SelectListItem> DocTypez = new List<SelectListItem>();
 
-    foreach (NREPPAdminSite.Models.Answer ans in Model.DocumentType)
-    {
-        DocTypez.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
-    }
-}
-
-<div class="submission-table">
-    <table>
-        <tr>
-            <!-- Header -->
-            <th class="withborder" style="text-align: center;">Title</th>
-            <th class="withborder" style="text-align: center;">Brief Description</th>
-            <th class="withborder" style="text-align: center;">Type</th>
-            <th class="withborder" style="text-align: center;">&nbsp;</th>
-        </tr>
-        @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
+        foreach (NREPPAdminSite.Models.Answer ans in Model.DocumentType)
         {
-            <tr>
-                <td class="withborder">@Html.ActionLink(@doc.Title, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
-                <td class="withborder">@doc.FileDescription</td>
-                <td class="withborder">@doc.DocumentTypeName</td>
-                <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.InterventionId, DocId = doc.DocId,  Destination = "Submission4"})</td>
-            </tr>
+            DocTypez.Add(new SelectListItem() { Text = ans.ShortAnswer, Value = ans.AnswerId.ToString() });
         }
-    </table>
+    }
 
-</div>
+    <div class="container-fluid">
+        <div class="container_module">
+            <div>
+                <div class="table-responsive">
+                    <table id="tblPrograms" class="display table dataTable no-footer" cellspacing="0" width="100%">
+                        <thead class="bg-info">
+                            <tr>
+                                <th class="withborder" style="text-align: center;">Title</th>
+                                <th class="withborder" style="text-align: center;">Brief Description</th>
+                                <th class="withborder" style="text-align: center;">Type</th>
+                                <th class="withborder" style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
+                        {
+                            <tr>
+                                <td class="withborder">@Html.ActionLink(@doc.Title, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
+                                <td class="withborder">@doc.FileDescription</td>
+                                <td class="withborder">@doc.DocumentTypeName</td>
+                                <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.InterventionId, DocId = doc.DocId, Destination = "Submission4" })</td>
+                            </tr>
+                        }
+                    </table>
 
-<div>
-@using (Html.BeginForm("DocUpload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.ValidationSummary(false)
-    
-    @Html.Hidden("OnPage", "Sub4");
-    @Html.HiddenFor(m => m.InterventionId)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        @using (Html.BeginForm("DocUpload", "Program", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.ValidationSummary(false)
+
+            @Html.Hidden("OnPage", "Sub4");
+            @Html.HiddenFor(m => m.InterventionId)
 
 
-    if (Model.CanDo("UploadDocs")) // This should be status dependent anyway
-    {
-        <p>
-            You may now upload key documents relevant to the review of your program. This includes  program evaluations (journal articles, evaluation reports), , dissemination materials, and other supporting documents.
-        </p>
-    <ul>
-        <li><u>Program evaluation</u> materials include studies using an experimental or quasi-experimental design, with a comparison or control group (treatment as usual or no treatment, but not an alternative treatment) designed to assess the impact of the program on key outcomes.</li>
-        <li><u>Dissemination materials</u>, though no longer required, are encouraged. These include manuals, curricula, quality assurance materials, training materials, activity props, and such. You may upload documents electronically. Note: You will have the option to list materials that cannot be submitted electronically.</li>
-        <li><u>Other supporting</u> documents could include a more detailed description of your program, its conceptual framework or logic model, materials related to the reliability and validity of your measures, etc.</li>
-        </ul>
-            <br /><label>Upload a File: </label>
-            <input type="file" name="UploadedFile" /> <br />
-            @Html.LabelFor(m => m.UploadDocTitle)
-    @Html.TextBoxFor(m => m.UploadDocTitle)
-    @Html.ValidationMessageFor(m => m.UploadDocTitle)
-    <br />
-            @Html.LabelFor(m => m.UploadDescription)<br />
-            @Html.TextAreaFor(m => m.UploadDescription)<br /><br />
-            
-            <label>Please Select a Document Type: </label><br />
-            @Html.DropDownListFor(m => m.UploadDocType, DocTypez, "Document Types")
-            @Html.ValidationMessageFor(m => m.UploadDocType)
-    <br /><br />
-    <input type="submit" value="Attach" class="btn btn-primary" />
-   }
-}
-    <span>Note: You must upload at least one program evaluation meeting the creiteria stated in step 1 to continue.</span><br /><br />
-    <span class="submission-button1">
-    @Html.ActionLink("Edit Program Title and Type", "ReSubmission2", new { InvId = Model.InterventionId})
-    </span>
-    <span class="submission-button2">
-    @Html.ActionLink("Continue With Submission", "Submission6", new { InvId = Model.InterventionId })
-    </span>
+            if (Model.CanDo("UploadDocs")) // This should be status dependent anyway
+            {
+                <p>
+                    You may now upload key documents relevant to the review of your program. This includes  program evaluations (journal articles, evaluation reports), , dissemination materials, and other supporting documents.
+                </p>
+                <ul>
+                    <li><u>Program evaluation</u> materials include studies using an experimental or quasi-experimental design, with a comparison or control group (treatment as usual or no treatment, but not an alternative treatment) designed to assess the impact of the program on key outcomes.</li>
+                    <li><u>Dissemination materials</u>, though no longer required, are encouraged. These include manuals, curricula, quality assurance materials, training materials, activity props, and such. You may upload documents electronically. Note: You will have the option to list materials that cannot be submitted electronically.</li>
+                    <li><u>Other supporting</u> documents could include a more detailed description of your program, its conceptual framework or logic model, materials related to the reliability and validity of your measures, etc.</li>
+                </ul>
+                <br /><label>Upload a File: </label>
+                <input type="file" name="UploadedFile" /> <br />
+                @Html.LabelFor(m => m.UploadDocTitle)
+                @Html.TextBoxFor(m => m.UploadDocTitle)
+                @Html.ValidationMessageFor(m => m.UploadDocTitle)
+                <br />
+                @Html.LabelFor(m => m.UploadDescription)<br />
+                @Html.TextAreaFor(m => m.UploadDescription)<br /><br />
 
-</div>
+                <label>Please Select a Document Type: </label><br />
+                @Html.DropDownListFor(m => m.UploadDocType, DocTypez, "Document Types")
+                @Html.ValidationMessageFor(m => m.UploadDocType)
+                <br /><br />
+                <input type="submit" value="Attach" class="btn btn-primary" />
+            }
+        }
+        <span>Note: You must upload at least one program evaluation meeting the creiteria stated in step 1 to continue.</span><br /><br />
+        <span class="submission-button2">
+            @Html.ActionLink("Edit Program Title and Type", "ReSubmission2", new { InvId = Model.InterventionId })
+        </span>
+        <span class="submission-button1">
+            @Html.ActionLink("Continue With Submission", "Submission6", new { InvId = Model.InterventionId })
+        </span>
+
+    </div>
 </div>

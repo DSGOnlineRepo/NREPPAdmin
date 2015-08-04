@@ -15,11 +15,13 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Net.Mail;
+using System.Security.Policy;
 using System.Web;
+using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 using NREPPAdminSite.Utilities;
-using NREPPAdminSite.Security;
 using Microsoft.AspNet.Identity.EntityFramework;
+using NREPPAdminSite.Context;
 
 namespace NREPPAdminSite
 {
@@ -61,7 +63,7 @@ namespace NREPPAdminSite
                 CheckConn();
 
                 cmd.ExecuteNonQuery();
-
+                    
                 MyIdentityDbContext db = new MyIdentityDbContext();
                 UserStore<ExtendedUser> userStore = new UserStore<ExtendedUser>(db);
                 UserManager<ExtendedUser> _userManager = new UserManager<ExtendedUser>(userStore);
@@ -419,8 +421,6 @@ namespace NREPPAdminSite
 
             var reviewerSearchResult = new ReviewerSearchResult();
             var reviewerList = new List<Reviewer>();
-            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetInterventionList", conn);
-            cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
 
             var filteredColumns = requestModel.Columns.GetFilteredColumns();
             var sortedColumns = requestModel.Columns.GetSortedColumns();
@@ -472,23 +472,54 @@ namespace NREPPAdminSite
             List<Intervention> interventions = new List<Intervention>();
             SqlCommand cmdGetInterventions = new SqlCommand("SPGetInterventionList", conn);
             cmdGetInterventions.CommandType = CommandType.StoredProcedure;
+
+            bool hasPage = false;
+            bool hasPageLength = false;
+            
             Intervention inv;
 
             foreach (SqlParameter param in parameters)
+            {
                 cmdGetInterventions.Parameters.Add(param);
+                if (param.ParameterName == "@Page")
+                {
+                    hasPage = true;
+                }
+                if (param.ParameterName == "@PageLength")
+                {
+                    hasPageLength = true;
+                }
+            }
+
+            if (!hasPage)
+            {
+                //parameters.Add(new SqlParameter("@Page", 1));
+                cmdGetInterventions.Parameters.AddWithValue("@Page", 1);
+            }
+
+            if (!hasPageLength)
+            {
+                //parameters.Add(new SqlParameter("@PageLength", 10));
+                cmdGetInterventions.Parameters.AddWithValue("@PageLength", 10);
+            }
+
+            cmdGetInterventions.Parameters.Add(new SqlParameter() { ParameterName = "RETURN_VALUE", Direction = ParameterDirection.ReturnValue });
+
 
             try
             {
                 CheckConn();
-                DataTable interVs = new DataTable();
+                DataSet ds = new DataSet();
                 SqlDataAdapter da = new SqlDataAdapter(cmdGetInterventions);
-                da.Fill(interVs);
+                da.Fill(ds);
+
+                DataTable interVs = ds.Tables[0];
 
                 foreach (DataRow dr in interVs.Rows)
                 {
                     inv = new Intervention((int)dr["InterventionId"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), NullDate(dr["PublishDate"]),
                         Convert.ToDateTime(dr["UpdateDate"]), dr["SubmitterId"].ToString(), dr["StatusName"].ToString(), (int)dr["StatusId"],
-                        dr["ProgramType"] == DBNull.Value ? 0 : (int)dr["ProgramType"], dr["Acronym"].ToString(), false);
+                        dr["ProgramType"] == DBNull.Value ? 0 : (int)dr["ProgramType"], dr["Acronym"].ToString(), false, ""); // dr["Assignedto"].ToString()
 
                     inv.PreScreenMask = (int)dr["PreScreenAnswers"];
                     inv.UserPreScreenMask = dr.IsNull("UserPreScreenAnswer") ? 0 :  (int)dr["UserPreScreenAnswer"];
@@ -1339,14 +1370,79 @@ namespace NREPPAdminSite
             return;
         }
 
+        public void InviteReviewer(int InterventionId, string UserId)
+        {
+            SqlCommand cmd = new SqlCommand("SPInviteReviewer", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
+            cmd.Parameters.AddWithValue("@UserId", UserId);
+            cmd.Parameters.AddWithValue("@ReviewerStatus", "Invitation Sent");
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return;
+        }
+
+        public void UpdateReviewerStatus(int InterventionId, string UserId, string status)
+        {
+            SqlCommand cmd = new SqlCommand("SPUpdateReviewerStatus", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
+            cmd.Parameters.AddWithValue("@UserId", UserId);
+            cmd.Parameters.AddWithValue("@ReviewerStatus", status);
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return;
+        }
+
+        public void DeclineInvitation(int InterventionId, string UserId)
+        {
+            SqlCommand cmd = new SqlCommand("SPDeclineInvitation", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
+            cmd.Parameters.AddWithValue("@UserId", UserId);
+            cmd.Parameters.AddWithValue("@ReviewerStatus", "Invitation Declined");
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return;
+        }
+
         public void AssignReviewer(int InterventionId, string UserId, string ReviewerStatus)
         {
             SqlCommand cmd = new SqlCommand("SPAssignReviewer", conn);
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
-            cmd.Parameters.AddWithValue("@ReviewerId", UserId);
-            cmd.Parameters.AddWithValue("@ReviewerStatus", ReviewerStatus);
+            cmd.Parameters.AddWithValue("@UserId", UserId);
 
             try
             {
@@ -1359,6 +1455,19 @@ namespace NREPPAdminSite
             }
 
             return;
+        }
+
+        public void RemoveAssignedReviewer(int InterventionId, string UserId)
+        {
+            SqlCommand cmd = new SqlCommand("SPRemoveAssignReviewer", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
+            cmd.Parameters.AddWithValue("@UserId", UserId);
+
+            CheckConn();
+
+            cmd.ExecuteNonQuery();
         }
 
         public bool SetSitePosting(bool postMe, int InvId)
@@ -1481,7 +1590,7 @@ namespace NREPPAdminSite
         }
 
 
-        public ReviewerWrapper GetOutComesReviewer(int? id)
+        public ReviewerWrapper GetOutComesReviewer(int id)
         {
             ReviewerWrapper reviewerWrapper = new ReviewerWrapper();
             try
@@ -1499,9 +1608,9 @@ namespace NREPPAdminSite
         public Reviewer GetReviewer(int? id)
         {
             Reviewer reviewer = null; //= new Reviewer();
-            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewerList", conn);
+            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewers", conn);
             cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
-
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@Id", DBFunctions.ToDbNull(id)));
 
             try
             {
@@ -1518,7 +1627,10 @@ namespace NREPPAdminSite
                     Employer = dr["Employer"].ToString(),
                     Department = dr["Department"].ToString(),
                     ReviewerType = dr["ReviewerType"].ToString(),
-                    Degree = dr["Degree"].ToString()
+                    Degree = dr["Degree"].ToString(),
+                    Email = dr["Email"].ToString(),
+                    WorkEmail = dr["WorkEmail"].ToString()
+
                 };
                 return reviewer;
             }
@@ -1904,7 +2016,7 @@ namespace NREPPAdminSite
 
                 foreach (DataRow dr in users.Rows)
                 {
-                    outReviewers.Add(new ReviewerOnInterv() { UserId = dr["UserId"].ToString(),
+                    outReviewers.Add(new ReviewerOnInterv() { Id = dr["Id"].ToString(),
                         ReviewerStatus = dr["ReviewerStatus"].ToString(), Name = string.Format("{0} {1}", dr["FirstName"].ToString(), dr["LastName"].ToString()) });
                 }
 

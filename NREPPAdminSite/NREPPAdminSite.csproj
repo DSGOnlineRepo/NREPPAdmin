@@ -155,8 +155,28 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Constants\EmailConstants.cs" />
+    <Compile Include="Context\RFDIEntityContext.cs" />
+    <Compile Include="Controllers\RFDIController.cs" />
+    <Compile Include="Models\CheckBoxQuestion.cs" />
+    <Compile Include="Models\CheckBoxQuestions.cs" />
+    <Compile Include="Models\ChkBoxAnswers.cs" />
+    <Compile Include="Models\ContinuedLrngQualityAssuranceMaterials.cs" />
+    <Compile Include="Models\GetProgramDetails.cs" />
     <Compile Include="Models\HelperClasses.cs" />
+    <Compile Include="Models\ImplementationLocation.cs" />
+    <Compile Include="Models\ImplementationTraining.cs" />
+    <Compile Include="Models\PrgmSpecificDisseminationInformation.cs" />
+    <Compile Include="Models\ProgramDetail.cs" />
+    <Compile Include="Models\ProgramDetailModel.cs" />
+    <Compile Include="Models\ProgramSpecificTechnicalAssistance.cs" />
     <Compile Include="Models\SearchResultModels.cs" />
+    <Compile Include="Models\TablesItems.cs" />
+    <Compile Include="Models\TypeofTrngAvailable.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\DisableHtmlControlExtension.cs" />
     <Compile Include="Utilities\DBFunctions.cs" />
     <Compile Include="Constants\SystemConstants.cs" />
@@ -177,7 +197,7 @@
     <Compile Include="NrepServ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterDatatablesModelBinder.cs" />
-    <Compile Include="Security\MyIdentityDbContext.cs" />
+    <Compile Include="Context\MyIdentityDbContext.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\EmailService.cs" />
     <Compile Include="Utilities\IdentityExtensions.cs" />
@@ -288,6 +308,10 @@
     <Content Include="fonts\font-awesome\scss\_rotated-flipped.scss" />
     <Content Include="fonts\font-awesome\scss\_stacked.scss" />
     <Content Include="fonts\font-awesome\scss\_variables.scss" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen.jquery.min.js" />
     <Content Include="Scripts\DataTables\dataTables.autoFill.js" />
@@ -368,7 +392,7 @@
     <Content Include="Views\Admin\Profile.cshtml" />
     <Content Include="Views\Admin\ChangePassword.cshtml" />
     <Content Include="Views\Admin\GenReviewLink.cshtml" />
-    <Content Include="Views\Admin\JoinProgram.cshtml" />
+    <Content Include="Views\Program\JoinProgram.cshtml" />
     <Content Include="Views\Admin\Reviewer.cshtml" />
     <Content Include="Views\Home\Users.cshtml" />
     <Content Include="Views\Home\_AddUser.cshtml" />
@@ -391,6 +415,7 @@
     <Content Include="Views\Program\AnswerPartial.cshtml" />
     <Content Include="Views\Program\SAMHSAApprove.cshtml" />
     <Content Include="Views\Program\RTFTest.cshtml" />
+    <Content Include="Views\RFDI\RdfiInput.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

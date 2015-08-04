@@ -260,6 +260,7 @@ namespace NREPPAdminSite.Models
 
         public string WkRoleId { get; set; }
 
+        public Boolean IsAssignedToProgram { get; set; }
     }
 
     public class RegisterViewModel : Reviewer
@@ -291,6 +292,7 @@ namespace NREPPAdminSite.Models
         [Compare("CapImageText", ErrorMessage = "Captcha code Invalid")]
         public string CaptchaCodeText { get; set; }
         public string CapImageText { get; set; }
+        public string ReviewerId { get; set; }
     }
 
     public class ReviewerSearchResult

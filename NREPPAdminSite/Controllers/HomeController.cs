@@ -10,8 +10,8 @@ using DataTables.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
+using NREPPAdminSite.Context;
 using NREPPAdminSite.Models;
-using NREPPAdminSite.Security;
 using NREPPAdminSite.Utilities;
 
 namespace NREPPAdminSite.Controllers

@@ -13,10 +13,11 @@
       <div class="col-sm-6 col-sm-offset-3">
       	<div class="col-sm-12 filter-list">
           <div class="col-sm-12">
-            <h3>Filters <a href="/Program/Submission1" class="pull-right small">Add Program <i class="fa fa-plus-circle fa-lg add"></i></a></h3><br />
+              <h3>Filters</h3>
+              <a href="/Program/Submission1" class="pull-right btn btn-lg">Add New Program <span class="glyphicon glyphicon-plus"></span></a><br />
           </div>
 
-          <div class="col-md-6">
+          <div class="col-sm-6">
               <ul class="list">
                   <li class="col-xs-12">
                       <label for="ftrTitle">Title</label>
@@ -32,25 +33,28 @@
                   </li>
               </ul>
           </div>
-         
-          <div class="col-md-6">
-            <label class="control-label">View all programs</label>
-            <br />
-            <div data-toggle="buttons">
-                <label class="btn btn-primary active btn-block">
-                    <input type="radio" name="filter-input-opt" id="optOnlyMyPrograms" value="filter-group-user" checked>Submitted / Assigned to me
-                </label>
-                @if (!User.IsInIdentityRole("Principal Investigator"))
-                {
-                    <label class="btn btn-primary btn-block">
-                        <input type="radio" name="filter-input-opt" id="optAllSubmitted" value="filter-group-dsg">Submitted
-                    </label>
-                    <label class="btn btn-primary btn-block">
-                        <input type="radio" name="filter-input-opt" id="optAllInterventions" value="filter-group-admin">In the system
-                    </label>
-                }
-          </div>
-        </div>
+            @if (!User.IsInIdentityRole("Principal Investigator"))
+	        {
+	            <div class="col-sm-6">
+	                <label class="control-label">View all programs</label>
+	                <br/>
+	                <div data-toggle="buttons">
+	                    <label class="btn btn-primary active btn-block">
+	                        <input type="radio" name="filter-input-opt" id="optOnlyMyPrograms" value="filter-group-user" checked>Submitted / Assigned (Only to me)
+	                    </label>
+
+	                    <label class="btn btn-primary btn-block">
+	                        <input type="radio" name="filter-input-opt" id="optAllSubmitted" value="filter-group-dsg">All Submitted Programs
+	                    </label>
+                        @if (User.IsInIdentityRole("Administrator"))
+                        {
+                            <label class="btn btn-primary btn-block">
+                                <input type="radio" name="filter-input-opt" id="optAllInterventions" value="filter-group-admin">All the programs in the system
+                            </label>
+                        }
+	                </div>
+	            </div>
+            }
       </div>
     </div>
   </div>
@@ -62,82 +66,158 @@
 <div class="container-fluid">
     <div class="container_module">
         <div>
-            <div class="table-responsive"><table id="tblPrograms" class="display table" cellspacing="0" width="100%">
-                <thead class="bg-info">
+            <div class="table-responsive">
+                <table id="tblPrograms" class="display table" cellspacing="0" width="100%">
+                    <thead class="bg-info">
                     <tr>
                         <th>Title</th>
                         <th>Full Description</th>
                         <th>Status</th>
                         <th>Updated Date</th>
                         <th>Submitter</th>
+                        <th>AssignedTo</th>
                     </tr>
-                </thead>
-            </table></div>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#updatedDate").datepicker();
+@if (!User.IsInIdentityRole("Principal Investigator"))
+{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#updatedDate").datepicker();
 
-        var userTable = $('#tblPrograms').DataTable({
-            "dom": '<"top"i>rt<"bottom"lp><"clear">',
-            ajax: "ProgramsList",
-            serverSide: true,
-            paging: true,
-            columns: [
-                { "data": "Title", "bSortable": true },
-                { "data": "FullDescription" },
-                { "data": "Status" },
-                { "data": "UpdatedDate" },
-                { "data": "Submitter" },
-                { "data": "Id" },
-                { "data": "DummyColumnForFilter" }
-            ],
-            "searchCols": [
-               null,
-               null,
-               null,
-               null,
-               null,
-               null,
-               { "search": "filter-group-user" }
-            ],
-            order: [0, 'asc'],
-            columnDefs: [
-                {
-                    render: function (data, type, row) {
-                        if (row.Status !== "Pending Submission") {
-                            return '<a href="/Program/View?InvId=' + row["Id"] + '">' + data + '</a>';
-                        } else {
-                            return '<a href="/Program/ReSubmission2?InvId=' + row["Id"] + '">' + data + '</a>';
-                        }
+            var userTable = $('#tblPrograms').DataTable({
+                "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                ajax: "ProgramsList",
+                serverSide: true,
+                paging: true,
+                columns: [
+                    { "data": "Title", "bSortable": true },
+                    { "data": "FullDescription" },
+                    { "data": "Status" },
+                    { "data": "UpdatedDate" },
+                    { "data": "Submitter" },
+                    { "data": "AssignedTo" },
+                    { "data": "Id" },
+                    { "data": "DummyColumnForFilter" }
+                ],
+                "searchCols": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    { "search": "filter-group-user" }
+                ],
+                order: [0, 'asc'],
+                columnDefs: [
+                    {
+                        render: function(data, type, row) {
+                            if (row.Status !== "Pending Submission") {
+                                return '<a href="/Program/View?InvId=' + row["Id"] + '">' + data + '</a>';
+                            } else {
+                                return '<a href="/Program/ReSubmission2?InvId=' + row["Id"] + '">' + data + '</a>';
+                            }
+                        },
+                        targets: 0
                     },
-                    targets: 0
-                },
-                {
-                    render: function (data, type, row) {
-                        var uDate = new Date(parseInt(data.substr(6)));
-                        return uDate.toLocaleDateString("en-US");
+                    {
+                        render: function(data, type, row) {
+                            var uDate = new Date(parseInt(data.substr(6)));
+                            return uDate.toLocaleDateString("en-US");
+                        },
+                        targets: 3
                     },
-                    targets: 3
-                },
-                { visible: false, targets: [5] },
-                { visible: false, targets: [6] }
-            ],
-            tableTools: {
-                sRowSelect: "os",
-                sRowSelector: 'td:first-child'
-            }
-        });
+                    { visible: false, targets: [6] },
+                    { visible: false, targets: [7] }
+                ],
+                tableTools: {
+                    sRowSelect: "os",
+                    sRowSelector: 'td:first-child'
+                }
+            });
 
-        $(".filter-input-text").on("keyup", function () {
+            $(".filter-input-text").on("keyup", function() {
                 userTable.column($(this).attr('data-column')).search($(this).val()).draw();
-        });
+            });
 
-        $('input[type=radio][name=filter-input-opt]').change(function () {
+            $('input[type=radio][name=filter-input-opt]').change(function() {
+                userTable.column(7).search($(this).val()).draw();
+            });
+
+        });
+    </script>
+}
+else
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#updatedDate").datepicker();
+
+            var userTable = $('#tblPrograms').DataTable({
+                "dom": '<"top"i>rt<"bottom"lp><"clear">',
+                ajax: "ProgramsList",
+                serverSide: true,
+                paging: true,
+                columns: [
+                    { "data": "Title", "bSortable": true },
+                    { "data": "FullDescription" },
+                    { "data": "Status" },
+                    { "data": "UpdatedDate" },
+                    { "data": "Submitter" },
+                    { "data": "Id" },
+                    { "data": "DummyColumnForFilter" }
+                ],
+                "searchCols": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    { "search": "filter-group-user" }
+                ],
+                order: [0, 'asc'],
+                columnDefs: [
+                    {
+                        render: function (data, type, row) {
+                            if (row.Status !== "Pending Submission") {
+                                return '<a href="/Program/View?InvId=' + row["Id"] + '">' + data + '</a>';
+                            } else {
+                                return '<a href="/Program/ReSubmission2?InvId=' + row["Id"] + '">' + data + '</a>';
+                            }
+                        },
+                        targets: 0
+                    },
+                    {
+                        render: function (data, type, row) {
+                            var uDate = new Date(parseInt(data.substr(6)));
+                            return uDate.toLocaleDateString("en-US");
+                        },
+                        targets: 3
+                    },
+                    { visible: false, targets: [5] },
+                    { visible: false, targets: [6] }
+                ],
+                tableTools: {
+                    sRowSelect: "os",
+                    sRowSelector: 'td:first-child'
+                }
+            });
+
+            $(".filter-input-text").on("keyup", function () {
+                userTable.column($(this).attr('data-column')).search($(this).val()).draw();
+            });
+
+            $('input[type=radio][name=filter-input-opt]').change(function () {
                 userTable.column(6).search($(this).val()).draw();
-        });
+            });
 
-    });
-</script>
+        });
+    </script>
+}
