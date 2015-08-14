@@ -1237,6 +1237,15 @@ namespace NREPPAdminSite
             return retValue;
         }
 
+        public bool AcceptOrDeclineReview(int InvId, string UserId, bool isAccept)
+        {
+            if (isAccept)
+                this.AssignReviewer(InvId, UserId, null, "Accepted Review");
+            else this.AssignReviewer(InvId, UserId, null, "Declined Review");
+
+            return true;
+        }
+
         #endregion
 
         #region Workflow Functionality
@@ -1414,35 +1423,14 @@ namespace NREPPAdminSite
             return;
         }
 
-        public void DeclineInvitation(int InterventionId, string UserId)
-        {
-            SqlCommand cmd = new SqlCommand("SPDeclineInvitation", conn);
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
-            cmd.Parameters.AddWithValue("@UserId", UserId);
-            cmd.Parameters.AddWithValue("@ReviewerStatus", "Invitation Declined");
-            try
-            {
-                CheckConn();
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return;
-        }
-
-        public void AssignReviewer(int InterventionId, string UserId, string ReviewerStatus)
+        public void AssignReviewer(int InterventionId, string UserId, string ReviewerId, string ReviewerStatus)
         {
             SqlCommand cmd = new SqlCommand("SPAssignReviewer", conn);
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
             cmd.Parameters.AddWithValue("@UserId", UserId);
+            cmd.Parameters.AddWithValue("@ReviewerId", ReviewerId);
 
             try
             {
@@ -2074,6 +2062,20 @@ namespace NREPPAdminSite
             return pd.StartDate < DateTime.Now && pd.EndDate > DateTime.Now;
         }
 
+        public static string EncryptInvite(int InvId, string UserId, DateTime inDate)
+        {
+            string plainText = string.Format("{0};{1};{2}", InvId, UserId, inDate);
+
+            return PasswordHash.AESCrypt(plainText);
+        }
+
+        public static string[] DecryptInvite(string cipherText)
+        {
+            string plainText = PasswordHash.AESDecrypt(cipherText);
+
+            return plainText.Split(';');
+        }
+
         #endregion
     }
 
@@ -2276,6 +2278,14 @@ namespace NREPPAdminSite
     #endregion
 
     #region Constants
+
+    public class ReviewerStatus
+    {
+        public const string Invited = "Invited Reviewer";
+        public const string Declined = "Declined Review";
+        public const string Accepted = "Accepted Review";
+        public const string Completed = "Completed Review";
+    }
 
     #endregion
 }

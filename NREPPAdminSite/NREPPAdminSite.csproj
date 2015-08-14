@@ -416,6 +416,7 @@
     <Content Include="Views\Program\SAMHSAApprove.cshtml" />
     <Content Include="Views\Program\RTFTest.cshtml" />
     <Content Include="Views\RFDI\RdfiInput.cshtml" />
+    <Content Include="Views\Program\Invitation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

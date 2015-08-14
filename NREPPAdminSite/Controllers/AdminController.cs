@@ -338,7 +338,7 @@ namespace NREPPAdminSite.Controllers
 
             if (action == "Accept")
             {
-                localService.AssignReviewer(InterventionId, ReviewerId, "Invitation Accepted");
+                localService.AssignReviewer(InterventionId, null, ReviewerId, "Invitation Accepted");
                 var reviewer = localService.GetReviewer(ReviewerId);
                 
                 var aRole = _roleManager.FindByName("Reviewer");
@@ -348,7 +348,7 @@ namespace NREPPAdminSite.Controllers
             }
             else
             {
-                localService.AssignReviewer(InterventionId, ReviewerId, "Invitation Declined");
+                localService.AssignReviewer(InterventionId, null, ReviewerId, "Invitation Declined");
             }
 
             return View();
@@ -523,16 +523,20 @@ namespace NREPPAdminSite.Controllers
             }
         }
 
+        public ActionResult GenReviewLink(int InvId, string uName)
+        {
+            string token = "";
+            ExtendedUser user = _userManager.FindByName(uName);
+
+            token = NrepServ.EncryptInvite(InvId, user.Id, DateTime.Now);
+
+            return Json(new { Token = token }, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult Captcha()
         {
             var result = new { CapImage = "data:image/png;base64," + Convert.ToBase64String(new CaptchaUtil().VerificationTextGenerator()), CapImageText = Convert.ToString(Session["Captcha"]) };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-    }
-
-    public class TempClass
-    {
-        public bool CanView { get; set; }
-        public int InterventionId { get; set; }
     }
 }

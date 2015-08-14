@@ -150,6 +150,32 @@ namespace NREPPAdminSite.Controllers
             else return Json("You delisted", JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public ActionResult AcceptInvite(string Token)
+        {
+            string[] tokenResults = NrepServ.DecryptInvite(Token);
+            NrepServ localService = NrepServ.GetLocalService();
+
+            bool didWork = localService.AcceptOrDeclineReview(int.Parse(tokenResults[0]), tokenResults[1], true);
+
+            if (didWork)
+                return Json("Accepted!");
+            else return Json("Error!");
+        }
+
+        [HttpGet]
+        public ActionResult DeclineInvite(string Token)
+        {
+            string[] tokenResults = NrepServ.DecryptInvite(Token);
+            NrepServ localService = NrepServ.GetLocalService();
+
+            bool didWork = localService.AcceptOrDeclineReview(int.Parse(tokenResults[0]), tokenResults[1], false);
+
+            if (didWork)
+                return Json("Accepted!");
+            else return Json("Error!");
+        }
+
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult RTFPost(FormCollection col)

@@ -5,7 +5,7 @@ namespace NREPPAdminSite.Context
 {
     public class MyIdentityDbContext : IdentityDbContext<ExtendedUser>
     {
-        public MyIdentityDbContext() : base("LocalDev")
+        public MyIdentityDbContext() : base("RemoteDev")
         {
         }
     }

@@ -151,12 +151,6 @@ namespace NREPPAdminSite.Controllers
 
             documentz = localService.GetDocuments(InvId, null, null).ToList<InterventionDoc>();
 
-            //List<Destination> nDests = localService.GetDestinations(theIntervention.Id).ToList();
-
-            /*pageModel = new IntervPageModel(documentz, reviewerDocs, MaskValue.SplitMask(programTypes, theIntervention.ProgramType).ToList<MaskValue>(),
-                documentTypes, null, MaskValue.SplitMask(preScreen, theIntervention.PreScreenMask).ToList<MaskValue>(),
-                MaskValue.SplitMask(preScreen, theIntervention.UserPreScreenMask).ToList<MaskValue>());*/
-
             pageModel = new DocUploadPage(documentz, documentTypes);
 
             pageModel.InterventionId = InvId;
