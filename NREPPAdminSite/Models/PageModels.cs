@@ -859,6 +859,11 @@ namespace NREPPAdminSite.Models
             }
         }
 
+        public void SetManualPermission(string permission, bool setting)
+        {
+            permissionsList.Add(permission, setting);
+        }
+
         public bool CanDo(string permission)
         {
             if (permissionsList.ContainsKey(permission))

@@ -808,11 +808,15 @@ namespace NREPPAdminSite
                 // If we successfully save the file...
                 CheckConn();
 
-                cmdSaveFile.Parameters.Add(new SqlParameter("@FileName", nFileName));
+                cmdSaveFile.Parameters.Add(new SqlParameter("@FileName", fileName));
                 retValue = cmdSaveFile.ExecuteNonQuery();
 
                 // TODO: delete the file if the transaction failed.
 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             finally {
                 conn.Close();
@@ -824,6 +828,11 @@ namespace NREPPAdminSite
                 return -1;
         }
 
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="fileNum"></param>
+        /// <returns></returns>
         public byte[] GetFileFromDB(int fileNum)
         {
             byte[] outFile = null;
@@ -847,6 +856,50 @@ namespace NREPPAdminSite
                 fs.Close();
 
             } catch (Exception ex)
+            {
+                outFile = Encoding.ASCII.GetBytes(ex.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return outFile;
+
+        }
+
+        /// <summary>
+        /// Gets a File from the Database
+        /// </summary>
+        /// <param name="fileNum">Document Id</param>
+        /// <param name="InvId">Intervention Id</param>
+        /// <returns></returns>
+        public byte[] GetFileFromDB(int fileNum, int InvId)
+        {
+            byte[] outFile = null;
+            SqlCommand cmdFileInfo = new SqlCommand("SPGetAFileFromDB", conn);
+            SqlDataAdapter da = new SqlDataAdapter(cmdFileInfo);
+            DataTable dt = new DataTable();
+
+            cmdFileInfo.CommandType = CommandType.StoredProcedure;
+            cmdFileInfo.Parameters.Add(new SqlParameter("@FileId", fileNum));
+            string nDirectory = ConfigurationManager.AppSettings["fileLocation"].Trim('\\') + "\\" + InvId.ToString() + "\\";
+
+
+            try
+            {
+                CheckConn();
+                da.Fill(dt);
+                string fileName = dt.Rows[0]["FileName"].ToString();
+                string nFileName = nDirectory + fileName;
+                FileStream fs = new FileStream(nFileName, FileMode.Open, FileAccess.Read);
+
+                fs.Read(outFile, 0, Convert.ToInt32(fs.Length));
+
+                fs.Close();
+
+            }
+            catch (Exception ex)
             {
                 outFile = Encoding.ASCII.GetBytes(ex.Message);
             }

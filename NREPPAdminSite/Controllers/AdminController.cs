@@ -13,6 +13,7 @@ using NREPPAdminSite.Models;
 using NREPPAdminSite.Utilities;
 using System.Net.Mail;
 using NREPPAdminSite.Context;
+using System.Configuration;
 
 namespace NREPPAdminSite.Controllers
 {
@@ -284,6 +285,19 @@ namespace NREPPAdminSite.Controllers
             InterventionDoc doc = localService.GetDocuments(null, null, FileId).First();
 
             return File(doc.Link, MIMEType, Path.GetFileName(doc.Link));
+        }
+
+        [Authorize]
+        public FilePathResult GetFileNew(int FileId, int InvId)
+        {
+
+            string MIMEType = "application/unknown";
+            string nDirectory = ConfigurationManager.AppSettings["fileLocation"].Trim('\\') + "\\" + InvId.ToString() + "\\";
+
+            NrepServ localService = new NrepServ(NrepServ.ConnString);
+            InterventionDoc doc = localService.GetDocuments(InvId, null, FileId).First();
+
+            return File(nDirectory + doc.Link, MIMEType, doc.Link);
         }
 
         /// <summary>

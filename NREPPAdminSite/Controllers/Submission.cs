@@ -158,11 +158,12 @@ namespace NREPPAdminSite.Controllers
 
             List<string> perms = new List<string>();
 
-            perms.Add("UploadDocs");
+            pageModel.SetManualPermission("UploadDocs", true);
 
-            pageModel.SetPermissions(perms, User.Identity.Name, InvId);
-            //pageModel.TheIntervention = theIntervention;
+            /*perms.Add("UploadDocs");
 
+            pageModel.SetPermissions(perms, User.Identity.Name, InvId); */
+            
 
             return View(pageModel);
         }

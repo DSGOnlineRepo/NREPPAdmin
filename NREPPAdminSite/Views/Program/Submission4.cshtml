@@ -34,7 +34,7 @@
                         @foreach (NREPPAdminSite.Models.InterventionDoc doc in Model.Documents)
                         {
                             <tr>
-                                <td class="withborder">@Html.ActionLink(@doc.Title, "GetFile", "Admin", new { FileId = doc.DocId }, null)</td>
+                                <td class="withborder">@Html.ActionLink(@doc.Title, "GetFileNew", "Admin", new { FileId = doc.DocId,  InvId = Model.InterventionId}, null)</td>
                                 <td class="withborder">@doc.FileDescription</td>
                                 <td class="withborder">@doc.DocumentTypeName</td>
                                 <td class="withborder">@Html.ActionLink("Delete", "DeleteDocument", new { InvId = Model.InterventionId, DocId = doc.DocId, Destination = "Submission4" })</td>
