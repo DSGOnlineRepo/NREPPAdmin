@@ -157,8 +157,8 @@
                                             @Html.CheckBox("chkAddToReview_" + i.ToString(), @doc.AddToReview, new { disabled = "disabled" })
                                         </td>
                                         <td class="withborder">
-                                            <button name="btnEdit" onclick=" setedit(@i); return false; ">Edit</button>
-                                            <button name="cancel_@i" class="hidden" onclick=" clearedit(@i); return false; ">Cancel</button>
+                                            <button name="btnEdit" onclick="setedit(@i); return false;">Edit</button>
+                                            <button name="cancel_@i" class="hidden" onclick="clearedit(@i); return false;">Cancel</button>
                                             <input type="submit" value="Save" class="hidden" />
                                         </td>
                                     </tr>

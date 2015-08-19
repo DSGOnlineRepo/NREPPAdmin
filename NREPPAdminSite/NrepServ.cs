@@ -518,7 +518,7 @@ namespace NREPPAdminSite
                 foreach (DataRow dr in interVs.Rows)
                 {
                     inv = new Intervention((int)dr["InterventionId"], dr["Title"].ToString(), dr["FullDescription"].ToString(), dr["Submitter"].ToString(), NullDate(dr["PublishDate"]),
-                        Convert.ToDateTime(dr["UpdateDate"]), dr["SubmitterId"].ToString(), dr["StatusName"].ToString(), (int)dr["StatusId"],
+                        NullDate(dr["UpdateDate"]), dr["SubmitterId"].ToString(), dr["StatusName"].ToString(), (int)dr["StatusId"],
                         dr["ProgramType"] == DBNull.Value ? 0 : (int)dr["ProgramType"], dr["Acronym"].ToString(), false, ""); // dr["Assignedto"].ToString()
 
                     inv.PreScreenMask = (int)dr["PreScreenAnswers"];

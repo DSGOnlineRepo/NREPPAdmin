@@ -23,7 +23,7 @@ namespace NREPPAdminSite.Models
 
         [Display(Name = "Submitter")]
         public string Submitter { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public DateTime? PublishDate { get; set; }
 
         [Display(Name = "Status")]
@@ -147,7 +147,7 @@ namespace NREPPAdminSite.Models
             FromLitSearch = false;
         }
 
-        public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime updateDate,
+        public Intervention(int inId, string title, string fullDescription, string submitter, DateTime? publishDate, DateTime? updateDate,
             string submitterId, string status, int statusId, int programType, string acronym, bool fromLitSearch, string assignedTo)
         {
             Id = inId;

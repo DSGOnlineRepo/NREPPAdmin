@@ -107,7 +107,14 @@ namespace NREPPAdminSite.Controllers
             perms.Add("AssignReviewers");
             perms.Add("ViewScreenResults");
             
-            pageModel.SetPermissions(perms, User.Identity.Name, InvId);
+            //pageModel.SetPermissions(perms, User.Identity.Name, InvId); This needs to be returned 
+
+            // Turn off all the permissions
+            foreach (string perm in perms)
+            {
+                pageModel.SetManualPermission(perm, true);
+            }
+
             pageModel.TheIntervention = theIntervention;
 
             var role = _roleManager.FindByName("Review Coordinator");
