@@ -468,9 +468,11 @@ namespace NREPPAdminSite.Controllers
 
                 var reviewer = localService.GetReviewer(id);
 
-                localService.UpdateReviewerStatus(Convert.ToInt32(interventionId), id, "Invitation Revoked");
+                //localService.UpdateReviewerStatus(Convert.ToInt32(interventionId), id, "Invitation Revoked");
 
-                localService.RemoveAssignedReviewer(Convert.ToInt32(interventionId), id);
+                //localService.RemoveAssignedReviewer(Convert.ToInt32(interventionId), id);
+
+                localService.AssignReviewer(int.Parse(interventionId), null, id, "Removed from Review");
 
                 response.ResponseSet(true, "Removed Assigner from Intervention");
             }
@@ -533,8 +535,9 @@ namespace NREPPAdminSite.Controllers
             NrepServ localService = NrepServ.GetLocalService();
             var intervention = localService.GetIntervention(Convert.ToInt32(interventionId), User.Identity.Name);
 
-            var reviewer = localService.GetReviewer(Convert.ToInt32(reviewerId));
+            var reviewer = localService.GetReviewer(reviewerId);
             var user = _userManager.FindByName(User.Identity.Name);
+            var reviewerUser = _userManager.FindById(reviewer.UserId);
 
             var programTypes = localService.GetMaskList("ProgramType").ToList<MaskValue>();
             var selectedProgramTypes = "";
@@ -547,9 +550,12 @@ namespace NREPPAdminSite.Controllers
             }
             selectedProgramTypes = selectedProgramTypes.Trim(',');
 
-            string combinedString = HttpUtility.UrlEncode(PasswordHash.AESCrypt(string.Format("{0};{1};{2}", interventionId, reviewerId, DateTime.Now.AddDays(5))));
-            var confirmUrl = Url.Action("JoinProgram", "Program", new { temp = combinedString }, Request.Url.Scheme);
-            confirmUrl = confirmUrl.Replace("temp", "id");
+            localService.AssignReviewer(Convert.ToInt32(interventionId), null, reviewer.Id, "Invited Reviewer");
+
+            //string combinedString = HttpUtility.UrlEncode(PasswordHash.AESCrypt(string.Format("{0};{1};{2}", interventionId, reviewerId, DateTime.Now.AddDays(5))));
+            string strToken = NrepServ.EncryptInvite(int.Parse(interventionId), reviewer.UserId, DateTime.Now.AddDays(5));
+            var AcceptInvite = Url.Action("AcceptInvite", "Program", new { Token = strToken }, Request.Url.Scheme);
+            var DeclineInvite = Url.Action("DeclineInvite", "Program", new { Token = strToken }, Request.Url.Scheme);
             var emailService = new EmailService();
 
             var body = "Dear " + reviewer.FirstName + ", <br/>" +
@@ -568,15 +574,15 @@ namespace NREPPAdminSite.Controllers
                        "<li>o Brief program description: " + intervention.FullDescription +
                        "</li>" +
                        "</ul><br />" +
-                       "<b>Please <a href='" + confirmUrl +
-                       "'>Click hear</a> to notify me of your availability by close of business on " + 
-                       DateTime.Now.AddDays(5).ToString("D") + ".</b><br/><br/>" +
+                       "<b>Please <a href='" + AcceptInvite +
+                       "'>Click here</a> to notify Accept the invitation within " + 
+                       DateTime.Now.AddDays(5).ToString("D") + ".</b><br/><br/>If you would like to decline <a href='" + DeclineInvite + "'>Click here</a></b><br/><br/>" +
                        "If you are available, please make sure that your Consulting Agreement is up-to-date and that you have completed the Conflict of Interest form.<br/><br/>" +
                        "I look forward to working with you throughout the review process. If you have any questions, please do not hesitate to ask.<br/><br/><br/>" +
                        "Regards,<br/><br/>" + user.FirstName + " " + user.LastName;
 
             var mailMessage = new MailMessage("donotreply@dsgonline.com",
-                string.IsNullOrEmpty(reviewer.Email) ? reviewer.Email : reviewer.WorkEmail,
+                user.Email, // Use User email
                 "Intervention Status Changed", body)
             {
                 IsBodyHtml = true

@@ -159,8 +159,8 @@ namespace NREPPAdminSite.Controllers
             bool didWork = localService.AcceptOrDeclineReview(int.Parse(tokenResults[0]), tokenResults[1], true);
 
             if (didWork)
-                return Json("Accepted!");
-            else return Json("Error!");
+                return Json("Accepted!", JsonRequestBehavior.AllowGet);
+            else return Json("Error!", JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -172,8 +172,8 @@ namespace NREPPAdminSite.Controllers
             bool didWork = localService.AcceptOrDeclineReview(int.Parse(tokenResults[0]), tokenResults[1], false);
 
             if (didWork)
-                return Json("Accepted!");
-            else return Json("Error!");
+                return Json("Accepted!", JsonRequestBehavior.AllowGet);
+            else return Json("Error!", JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

@@ -1482,8 +1482,9 @@ namespace NREPPAdminSite
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
-            cmd.Parameters.AddWithValue("@UserId", UserId);
             cmd.Parameters.AddWithValue("@ReviewerId", ReviewerId);
+            cmd.Parameters.AddWithValue("@UserId", UserId);
+            cmd.Parameters.AddWithValue("@ReviewerStatus", ReviewerStatus);
 
             try
             {
@@ -1761,6 +1762,7 @@ namespace NREPPAdminSite
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 throw;
             }
 
@@ -1814,6 +1816,7 @@ namespace NREPPAdminSite
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 throw;
             }
 

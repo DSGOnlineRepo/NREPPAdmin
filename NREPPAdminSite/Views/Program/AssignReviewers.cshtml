@@ -30,7 +30,7 @@
                                 <tr>
                                     <td>@rev.Name</td>
                                     <td>@rev.ReviewerStatus</td>
-                                    <td><a href="#" onclick="removeReviewer(@rev.Id);" title="Remove"><i class="fa fa-user-times"></i></a></td>
+                                    <td><a href="#" onclick="removeReviewer('@rev.Id');" title="Remove"><i class="fa fa-user-times"></i></a></td>
                                 </tr>
                             }
                         </table>
@@ -174,13 +174,13 @@
                 {
                     "data": "Id",
                     "render": function (data) {
-                        return '<a href="#" onclick="assignReviewer(' + data + ');" title="Invite to Review"><i class="fa fa-user-plus"></i></a>';
+                        return '<a href="#" onclick="assignReviewer(\'' + data + '\');" title="Invite to Review"><i class="fa fa-user-plus"></i></a>';
                     }
                 }
             ]
         });
 
-        $(".filter-input").on("keyup", function () {
+        $(".filter-input").on("keyup", function () {6
             reviewerTable.column($(this).attr('data-column')).search($(this).val()).draw();
         });
     });
