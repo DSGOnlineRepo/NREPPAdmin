@@ -92,6 +92,7 @@
                             <th>Department</th>
                             <th>Reviewer Type</th>
                             <th>Degree</th>
+                            <th>Busy?</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -171,6 +172,15 @@
                 { "data": "Department" },
                 { "data": "ReviewerType" },
                 { "data": "Degree" },
+                {"data": "IsBusy",
+                "render": function(data) {
+                    if (data === true) {
+                        return "<span>Yes</span>";
+                    } else {
+                        return "<span>No</span>"
+                    }
+                }
+                },
                 {
                     "data": "Id",
                     "render": function (data) {

@@ -818,6 +818,37 @@ namespace NREPPAdminSite.Models
 
     #endregion
 
+    public class ReviewerAcceptancePageModel
+    {
+        private List<Answer> declineOptions = new List<Answer>();
+
+        public bool IsAccept { get; set; }
+        public string ReviewText { get; set; }
+
+        public IEnumerable<Answer> DeclineOptions
+        {
+            get { return declineOptions; }
+        }
+
+        public ReviewerAcceptancePageModel()
+        {
+            IsAccept = false;
+            ReviewText = "Default Constructor";
+        }
+
+        public ReviewerAcceptancePageModel(bool isAccept)
+        {
+            IsAccept = isAccept;
+            ReviewText = "[Your Text Goes Here]";
+        }
+
+        public ReviewerAcceptancePageModel(bool isAccept, List<Answer> inAnswer)
+            : this(isAccept)
+        {
+            declineOptions = inAnswer;
+        }
+    }
+
     #region Extra Stuff
 
     public class ReviewerDocsWrapper

@@ -1,0 +1,28 @@
+﻿@model NREPPAdminSite.Models.ReviewerAcceptancePageModel
+
+@{
+    ViewBag.Title = "Reviewer Confirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Thank you for Responding!</h2>
+
+<div id="MessageDiv">@Model.ReviewText</div>
+
+@if (!Model.IsAccept)
+{
+    using (Html.BeginForm("ReviewComment")) { 
+    <div class="AnswersDiv">
+           <h3>Sorry to hear you can't review @ViewBag.ProgramName for us, please indicate why below:</h3>
+        <ul>
+            @foreach (NREPPAdminSite.Models.Answer ans in Model.DeclineOptions)
+            {
+                <li><input type="radio" name="multiAnswer" value="@ans.AnswerId" /> @ans.LongAnswer</li>
+            }
+        </ul>
+
+        <span>Other Reason:</span><br /><textarea name="otherAnswer" style="width: 300px;"></textarea><br />
+        <input type="submit" value="Submit" />
+    </div>
+    }
+}

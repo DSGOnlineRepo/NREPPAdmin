@@ -169,11 +169,17 @@ namespace NREPPAdminSite.Controllers
             string[] tokenResults = NrepServ.DecryptInvite(Token);
             NrepServ localService = NrepServ.GetLocalService();
 
-            bool didWork = localService.AcceptOrDeclineReview(int.Parse(tokenResults[0]), tokenResults[1], false);
+            // Temporary
 
-            if (didWork)
+            //bool didWork = localService.AcceptOrDeclineReview(int.Parse(tokenResults[0]), tokenResults[1], false);
+
+            /*if (didWork)
                 return Json("Accepted!", JsonRequestBehavior.AllowGet);
-            else return Json("Error!", JsonRequestBehavior.AllowGet);
+            else return Json("Error!", JsonRequestBehavior.AllowGet);*/
+
+            return RedirectToAction("ReviewerResponse", new {Accept = false, InToken = Token});
+
+
         }
 
         [HttpPost]
@@ -185,7 +191,22 @@ namespace NREPPAdminSite.Controllers
 
             return View("RTFTest", temp);
         }
+
+        public ActionResult ReviewerResponse(bool Accept, string InToken)
+        {
+            List<Answer> TempAnswers = new List<Answer>(); // Replace this with the answers once you have them in DB
+
+            TempAnswers.Add(new Answer(1, "Answer Number 1", "One"));
+            TempAnswers.Add(new Answer(2, "Answer Number 2", "Two"));
+            TempAnswers.Add(new Answer(3, "Answer Write In", "Other"));
+
+            ReviewerAcceptancePageModel model = new ReviewerAcceptancePageModel(Accept, TempAnswers);
+            ViewBag.ProgramName = "[Program Name Goes Here]";
+
+            return View(model);
+        }
     }
+
 
     public class RTFTemp
     {
