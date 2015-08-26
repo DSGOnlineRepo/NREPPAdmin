@@ -367,6 +367,33 @@ namespace NREPPAdminSite.Controllers
 
             return View();
         }
+
+        /*[ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult ResetPwdEmail(FormCollection col)
+        {
+
+        }*/
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult ResetPassword(FormCollection col)
+        {
+            string userNameResult = col["InUserName"];
+
+            ExtendedUser user = _userManager.FindByName(userNameResult);
+            if (user == null)
+            {
+                user = _userManager.FindByEmail(userNameResult);
+            }
+
+            return View();
+        }
+
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
         
         [Authorize]
         public ActionResult Reviewers()
