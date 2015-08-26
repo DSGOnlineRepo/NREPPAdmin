@@ -824,6 +824,8 @@ namespace NREPPAdminSite.Models
 
         public bool IsAccept { get; set; }
         public string ReviewText { get; set; }
+        public string UserId { get; set; }
+        public int InvId { get; set; }
 
         public IEnumerable<Answer> DeclineOptions
         {

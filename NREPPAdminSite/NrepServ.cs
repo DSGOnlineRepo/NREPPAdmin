@@ -1476,7 +1476,7 @@ namespace NREPPAdminSite
             return;
         }
 
-        public void AssignReviewer(int InterventionId, string UserId, string ReviewerId, string ReviewerStatus)
+        /*public void AssignReviewer(int InterventionId, string UserId, string ReviewerId, string ReviewerStatus)
         {
             SqlCommand cmd = new SqlCommand("SPAssignReviewer", conn);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -1492,6 +1492,37 @@ namespace NREPPAdminSite
 
                 cmd.ExecuteNonQuery();
             } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return;
+        }*/
+
+        public void AssignReviewer(int InterventionId, string UserId, string ReviewerId, string ReviewerStatus)
+        {
+            this.AssignReviewer(InterventionId, UserId, ReviewerId, ReviewerStatus, null, null);
+        }
+
+        public void AssignReviewer(int InterventionId, string UserId, string ReviewerId, string ReviewerStatus, int? ReviewerResponse, string ReviewerComment)
+        {
+            SqlCommand cmd = new SqlCommand("SPAssignReviewer", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add(new SqlParameter("@InterventionID", InterventionId));
+            cmd.Parameters.AddWithValue("@ReviewerId", ReviewerId);
+            cmd.Parameters.AddWithValue("@UserId", UserId);
+            cmd.Parameters.AddWithValue("@ReviewerStatus", ReviewerStatus);
+            cmd.Parameters.AddWithValue("@ReviewerResponse", ReviewerResponse);
+            cmd.Parameters.AddWithValue("@ReviewerComment", ReviewerComment);
+
+            try
+            {
+                CheckConn();
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -1813,6 +1844,62 @@ namespace NREPPAdminSite
                     reviewer.IsLocked = reviewers.Rows[0]["Active"].ToString() == "1" ? true : false;
                 }
                 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+
+            return reviewer;
+        }
+
+        // TODO: Generalize this better
+
+        public RegisterViewModel GetReviewerByUserId(string UserId)
+        {
+            if (string.IsNullOrEmpty(UserId)) { return new RegisterViewModel(); }
+            SqlCommand cmdGetReviewerList = new SqlCommand("SPGetReviewers", conn);
+            cmdGetReviewerList.CommandType = CommandType.StoredProcedure;
+            cmdGetReviewerList.Parameters.Add(new SqlParameter("@UserId", UserId));
+            RegisterViewModel reviewer = new RegisterViewModel();
+            try
+            {
+                CheckConn();
+                DataTable reviewers = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmdGetReviewerList);
+                da.Fill(reviewers);
+
+                if (reviewers.Rows.Count > 0)
+                {
+                    reviewer.Id = reviewers.Rows[0]["Id"].ToString();
+                    reviewer.UserId = reviewers.Rows[0]["UserId"].ToString();
+                    reviewer.FirstName = reviewers.Rows[0]["FirstName"].ToString();
+                    reviewer.LastName = reviewers.Rows[0]["LastName"].ToString();
+                    reviewer.UserName = reviewers.Rows[0]["UserName"].ToString();
+                    reviewer.Degree = reviewers.Rows[0]["Degree"].ToString();
+                    reviewer.HomeAddressLine1 = reviewers.Rows[0]["HomeAddressLine1"].ToString();
+                    reviewer.HomeAddressLine2 = reviewers.Rows[0]["HomeAddressLine2"].ToString();
+                    reviewer.HomeCity = reviewers.Rows[0]["HomeCity"].ToString();
+                    reviewer.HomeState = reviewers.Rows[0]["HomeState"].ToString();
+                    reviewer.HomeZip = reviewers.Rows[0]["HomeZip"].ToString();
+                    reviewer.PhoneNumber = reviewers.Rows[0]["PhoneNumber"].ToString();
+                    reviewer.FaxNumber = reviewers.Rows[0]["FaxNumber"].ToString();
+                    reviewer.Email = reviewers.Rows[0]["Email"].ToString();
+                    reviewer.Employer = reviewers.Rows[0]["Employer"].ToString();
+                    reviewer.Department = reviewers.Rows[0]["Department"].ToString();
+                    reviewer.WorkAddressLine1 = reviewers.Rows[0]["WorkAddressLine1"].ToString();
+                    reviewer.WorkAddressLine2 = reviewers.Rows[0]["WorkAddressLine2"].ToString();
+                    reviewer.WorkCity = reviewers.Rows[0]["WorkCity"].ToString();
+                    reviewer.WorkState = reviewers.Rows[0]["WorkState"].ToString();
+                    reviewer.WorkZip = reviewers.Rows[0]["WorkZip"].ToString();
+                    reviewer.WorkPhoneNumber = reviewers.Rows[0]["WorkPhoneNumber"].ToString();
+                    reviewer.WorkFaxNumber = reviewers.Rows[0]["WorkFaxNumber"].ToString();
+                    reviewer.ExperienceSummary = reviewers.Rows[0]["ExperienceSummary"].ToString();
+                    reviewer.WorkEmail = reviewers.Rows[0]["WorkEmail"].ToString();
+                    reviewer.IsLocked = reviewers.Rows[0]["Active"].ToString() == "1" ? true : false;
+                }
+
             }
             catch (Exception ex)
             {

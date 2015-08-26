@@ -156,11 +156,17 @@ namespace NREPPAdminSite.Controllers
             string[] tokenResults = NrepServ.DecryptInvite(Token);
             NrepServ localService = NrepServ.GetLocalService();
 
+            // TODO: Collision Accept Twice
+
             bool didWork = localService.AcceptOrDeclineReview(int.Parse(tokenResults[0]), tokenResults[1], true);
 
-            if (didWork)
+            // TODO: Emails
+
+            /*if (didWork)
                 return Json("Accepted!", JsonRequestBehavior.AllowGet);
-            else return Json("Error!", JsonRequestBehavior.AllowGet);
+            else return Json("Error!", JsonRequestBehavior.AllowGet);*/
+
+            return RedirectToAction("ReviewerResponse", new {Accept = true, InToken = Token});
         }
 
         [HttpGet]
@@ -169,9 +175,12 @@ namespace NREPPAdminSite.Controllers
             string[] tokenResults = NrepServ.DecryptInvite(Token);
             NrepServ localService = NrepServ.GetLocalService();
 
-            // Temporary
+            // TODO: Collision (decline twice)
 
-            //bool didWork = localService.AcceptOrDeclineReview(int.Parse(tokenResults[0]), tokenResults[1], false);
+
+            bool didWork = localService.AcceptOrDeclineReview(int.Parse(tokenResults[0]), tokenResults[1], false);
+
+            // TODO: Emails
 
             /*if (didWork)
                 return Json("Accepted!", JsonRequestBehavior.AllowGet);
@@ -195,15 +204,40 @@ namespace NREPPAdminSite.Controllers
         public ActionResult ReviewerResponse(bool Accept, string InToken)
         {
             List<Answer> TempAnswers = new List<Answer>(); // Replace this with the answers once you have them in DB
+            string[] tokenResults = NrepServ.DecryptInvite(InToken);
+            NrepServ localService = NrepServ.GetLocalService();
+            List<Answer> responseAnswers = localService.GetAnswersByCategory("ReviewerResponse").ToList();
 
             TempAnswers.Add(new Answer(1, "Answer Number 1", "One"));
             TempAnswers.Add(new Answer(2, "Answer Number 2", "Two"));
             TempAnswers.Add(new Answer(3, "Answer Write In", "Other"));
 
-            ReviewerAcceptancePageModel model = new ReviewerAcceptancePageModel(Accept, TempAnswers);
+            ReviewerAcceptancePageModel model = new ReviewerAcceptancePageModel(Accept, responseAnswers);
+            model.InvId = int.Parse(tokenResults[0]);
+            model.UserId = tokenResults[1];
             ViewBag.ProgramName = "[Program Name Goes Here]";
 
             return View(model);
+        }
+        
+        [HttpPost]
+        public ActionResult SaveResponse(FormCollection col)
+        {
+            NrepServ localService = NrepServ.GetLocalService();
+
+            string userId = col["UserId"];
+            int InvId = int.Parse(col["InvId"]);
+            int responseVal = int.Parse(col["multiAnswer"]);
+
+            List<ReviewerOnInterv> assignedReviewers = localService.GetReviewersByIntervention(InvId);
+            RegisterViewModel rvm = localService.GetReviewerByUserId(userId);
+
+            string currentStatus = assignedReviewers.Where(x => x.Id == rvm.Id).Select(m => m.ReviewerStatus).First();
+
+            localService.AssignReviewer(InvId, userId, null, currentStatus, responseVal, col["otherAnswer"]);
+
+
+            return View("PostResponse");
         }
     }
 

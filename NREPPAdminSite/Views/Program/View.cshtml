@@ -128,7 +128,7 @@
                                         <td class="withborder">
                                             @Html.Hidden("hid_" + i.ToString(), @doc.DocId)
                                             @Html.Hidden("isdirty_" + i.ToString(), "false")
-                                            @doc.FileDescription
+                                            @Html.ActionLink(@doc.FileDescription, "GetFile", "Admin", new { FileId = doc.DocId }, null)
                                         </td>
                                         <td class="withborder">
                                             @doc.DocumentTypeName

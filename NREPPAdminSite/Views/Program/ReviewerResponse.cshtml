@@ -11,7 +11,9 @@
 
 @if (!Model.IsAccept)
 {
-    using (Html.BeginForm("ReviewComment")) { 
+    using (Html.BeginForm("SaveResponse", "Program")) {
+        @Html.HiddenFor(m => m.UserId)
+        @Html.HiddenFor(m => m.InvId)
     <div class="AnswersDiv">
            <h3>Sorry to hear you can't review @ViewBag.ProgramName for us, please indicate why below:</h3>
         <ul>
